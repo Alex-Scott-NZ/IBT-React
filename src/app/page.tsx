@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Article, Author, Media } from '../app/types/Article'
 
 // Assuming your .env.local file is correctly set up with NEXT_PUBLIC_WORDPRESS_API_URL
-const wpApiBaseUrl = process.env.;
+const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL
 console.log('API Base URL:', process.env.NEXT_PUBLIC_WORDPRESS_API_URL);
 
 
