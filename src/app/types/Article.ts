@@ -1,31 +1,40 @@
 export interface Article {
-    id: number;
-    title: { rendered: string };
-    content: { rendered: string };
-    meta: {
-      'display-on-front-page': string;
-      subtitle: string;
-      'table-of-contents-title-optional': string;
-      'publication-date': number;
-      'suppress-date': string;
-      'official-date-of-publication': string;
-      'source-optional': string;
-      'read-in-other-languages-optional': string;
+  id: string;
+  title: string;
+  content: string;
+  featuredImage: {
+    cursor: string;
+    node: {
+      altText: string;
+      uri: string;
+      title: string;
     };
-    _embedded: {
-      author: Author[];
-      'wp:featuredmedia': Media[];
-    };
-  }
-  
-  export interface Author {
-    id: number;
-    name: string;
-    link: string;
-  }
-  
-  export interface Media {
-    id: number;
-    source_url: string;
-  }
-  
+  };
+  articleDetails: {
+    displayDate: string;
+    displayOnFrontPage: string;
+    fieldGroupName: string;
+    publicationDate: string;
+    source: string;
+    subtitle: string;
+    suppressDate: string;
+    tableOfContentsTitle: string;
+  };
+}
+
+export interface Author {
+  id: string;
+  name: string;
+  link: string;
+}
+
+export interface Media {
+  id: string;
+  sourceUrl: string;
+}
+
+export interface ArticlesResponse {
+  articles: {
+    nodes: Article[];
+  };
+}
