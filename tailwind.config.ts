@@ -1,3 +1,5 @@
+// tailwind.config.ts
+
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -8,6 +10,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        'custom-bg': '#EAEAE2',
+        'custom-bar': '#B00909',
+      },
+      width: {
+        '360px': '360px',
+        '720px': '720px',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -17,4 +27,5 @@ const config: Config = {
   },
   plugins: [],
 };
+
 export default config;

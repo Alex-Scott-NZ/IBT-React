@@ -1,45 +1,38 @@
-"use client";
+import React from 'react';
+import { GraphQLClient } from 'graphql-request';
+import { GET_FRONT_PAGE_ARTICLES } from './graphql/queries/getFrontPageArticles';
+import { GET_GLOBAL_SETTINGS, GlobalSettingsData } from './graphql/queries/getGlobalSettings';
+import { Article, ArticlesResponse } from './types/Article';
+import Layout from './components/Layout';
 
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { Article, Author, Media } from '../app/types/Article'
+const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`);
 
-// Assuming your .env.local file is correctly set up with NEXT_PUBLIC_WORDPRESS_API_URL
-const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL
-console.log('API Base URL:', process.env.NEXT_PUBLIC_WORDPRESS_API_URL);
+async function fetchArticles() {
+  try {
+    const data = await graphQLClient.request<ArticlesResponse>(GET_FRONT_PAGE_ARTICLES);
+    return data.articles.nodes;
+  } catch (error) {
+    console.error('Error fetching articles:', error);
+    return [];
+  }
+}
 
+async function fetchBannerData() {
+  try {
+    const data = await graphQLClient.request<GlobalSettingsData>(GET_GLOBAL_SETTINGS);
+    return data.globalSettings.nodes[0]?.fGGlobalSettings.bannerImage.node || null;
+  } catch (error) {
+    console.error('Error fetching banner data:', error);
+    return null;
+  }
+}
 
-export default function Home() {
-  const [articles, setArticles] = useState<Article[]>([]); 
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(`${wpApiBaseUrl}/journal-articles?context=view&page=1&per_page=2&orderby=publication-date&order=desc&_embed&display_on_front_page=yes`)
-      .then(response => response.json())
-      .then(data => {
-        setArticles(data);
-        setLoading(false);
-      })
-      .catch(error => console.error('Error fetching articles:', error));
-  }, []);
+export default async function Home() {
+  const articles = await fetchArticles();
+  const bannerData = await fetchBannerData();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {/* Existing layout */}
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        {/* Article fetching status */}
-        {loading ? (
-          <p>Loading articles...</p>
-        ) : (
-          articles.map(article => (
-            <div key={article.id} className="mb-4">
-              <h2 dangerouslySetInnerHTML={{ __html: article.title.rendered }} />
-              <div dangerouslySetInnerHTML={{ __html: article.content.rendered }} />
-            </div>
-          ))
-        )}
-      </div>
-      {/* Rest of your existing layout goes here */}
-    </main>
+    <Layout bannerData={bannerData} articles={articles} />
   );
 }
