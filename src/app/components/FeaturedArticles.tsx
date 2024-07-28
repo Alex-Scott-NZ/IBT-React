@@ -21,7 +21,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
     return date.toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
   };
 
@@ -34,7 +34,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
       {articles.map((article) => (
         <Grid item xs={12} md={6} key={article.id}>
           <Card sx={{ position: 'relative', height: 225 }}>
-            <CardActionArea 
+            <CardActionArea
               onClick={() => handleArticleClick(article.slug)}
               sx={{ height: '100%' }}
             >
@@ -55,8 +55,9 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    background: 'linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)',
-                  }
+                    background:
+                      'linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)',
+                  },
                 }}
               />
               <Box
