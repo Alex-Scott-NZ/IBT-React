@@ -1,23 +1,29 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "npm: dev",
-        "type": "npm",
-        "script": "dev",
-        "isBackground": true,
-        "problemMatcher": {
-          "owner": "custom",
-          "pattern": {
-            "regexp": "^$"
-          },
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "label": "npm: dev",
+      "detail": "next dev",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": ".",
+              "file": 1,
+              "location": 2,
+              "message": 3
+            }
+          ],
           "background": {
             "activeOnStart": true,
-            "beginsPattern": "ready - started server on",
-            "endsPattern": "event - compiled successfully"
+            "beginsPattern": "started server on .+, url:",
+            "endsPattern": "ready in"
           }
         }
-      }
-    ]
-  }
-  
+      ]
+    }
+  ]
+}
