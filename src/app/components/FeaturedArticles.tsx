@@ -3,44 +3,91 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { FrontPageArticle } from '../types/Article';
 import { getImageUrl } from '../utils/imageHelpers';
+import { Card, CardActionArea, Typography, Grid, Box } from '@mui/material';
 
 interface FeaturedArticlesProps {
-    articles: FrontPageArticle[];
-  }
-  
-  const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
-    const router = useRouter();
-  
-    const handleArticleClick = (slug: string) => {
-      router.push(`/domain/article/${slug}`);
-    };
-  
-    return (
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-        {articles.map((article) => (
-          <div 
-            key={article.id}
-            className="relative cursor-pointer overflow-hidden rounded-lg shadow-md"
-            onClick={() => handleArticleClick(article.slug)}
-          >
-            {article.featuredImage?.node && (
-              <img 
-                src={getImageUrl(article.featuredImage, 768)}
-                alt={article.featuredImage.node.altText || article.title}
-                className="w-full h-64 object-cover"
-              />
-            )}
-            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-              <p className="text-sm">{new Date(article.articleDetails.publicationDate).toLocaleDateString()}</p>
-              <h2 className="text-xl font-bold">{article.title}</h2>
-              {article.articleDetails.subtitle && (
-                <p className="text-sm mt-1">{article.articleDetails.subtitle}</p>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
+  articles: FrontPageArticle[];
+}
+
+const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
+  const router = useRouter();
+
+  const handleArticleClick = (slug: string) => {
+    router.push(`/domain/article/${slug}`);
   };
-  
-  export default FeaturedArticles;
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  if (articles.length === 0) {
+    return <Typography>No featured articles available.</Typography>;
+  }
+
+  return (
+    <Grid container spacing={2}>
+      {articles.map((article) => (
+        <Grid item xs={12} md={6} key={article.id}>
+          <Card sx={{ position: 'relative', height: 225 }}>
+            <CardActionArea 
+              onClick={() => handleArticleClick(article.slug)}
+              sx={{ height: '100%' }}
+            >
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  backgroundImage: `url(${getImageUrl(article.featuredImage)})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)',
+                  }
+                }}
+              />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%',
+                  padding: 2,
+                  color: 'white',
+                  zIndex: 1,
+                }}
+              >
+                <Typography variant="body2" fontSize="0.8rem" gutterBottom>
+                  {formatDate(article.articleDetails.publicationDate)}
+                </Typography>
+                <Typography variant="h6" component="div" gutterBottom noWrap>
+                  {article.title}
+                </Typography>
+                {article.articleDetails.subtitle && (
+                  <Typography variant="body2" fontSize="0.8rem" noWrap>
+                    {article.articleDetails.subtitle}
+                  </Typography>
+                )}
+              </Box>
+            </CardActionArea>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
+
+export default FeaturedArticles;
