@@ -18,11 +18,15 @@ const Layout: React.FC<LayoutProps> = ({ bannerData, articles }) => {
       <Header bannerData={bannerData} />
       <div className="flex justify-center items-start flex-1 bg-custom-bg">
         <div className="flex w-full max-w-[1440px] mx-auto h-full">
-          <aside className="w-[360px] bg-custom-bg sticky top-0 h-screen overflow-auto">Left Sidebar</aside>
+          <aside className="w-[360px] bg-custom-bg sticky top-0 h-screen overflow-auto">
+            Left Sidebar
+          </aside>
           <main className="w-[720px] bg-custom-bg">
             <MainContent articles={articles} />
           </main>
-          <aside className="w-[360px] bg-custom-bg sticky top-0 h-screen overflow-auto">Right Sidebar</aside>
+          <aside className="w-[360px] bg-custom-bg sticky top-0 h-screen overflow-auto">
+            Right Sidebar
+          </aside>
         </div>
       </div>
       <BottomBar />

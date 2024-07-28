@@ -10,8 +10,8 @@ export interface FrontPageArticle {
       uri: string;
       title: string;
       sourceUrl: string;
-      srcSet: string;  
-      sizes: string;   
+      srcSet: string;
+      sizes: string;
     };
   };
   articleDetails: {
