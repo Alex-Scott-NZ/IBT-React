@@ -27,6 +27,7 @@ export const GET_FRONT_PAGE_ARTICLES = gql`
             altText
             uri
             title
+            srcSet
           }
         }
         articleDetails {

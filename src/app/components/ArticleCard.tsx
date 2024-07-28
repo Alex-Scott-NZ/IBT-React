@@ -1,7 +1,7 @@
 import React from 'react';
-import { Article } from '../types/Article';
+import { FrontPageArticle } from '../types/Article';
 
-const ArticleCard = ({ article }: { article: Article }) => {
+const ArticleCard = ({ article }: { article: FrontPageArticle }) => {
   return (
     <div className="border p-4 mb-4">
       <h2 className="text-xl font-bold" dangerouslySetInnerHTML={{ __html: article.title.rendered }} />

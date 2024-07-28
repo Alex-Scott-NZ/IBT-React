@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ArticleProvider } from "../app/context/ArticleContext"; // Make sure the path is correct
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ArticleProvider>
+          {children}
+        </ArticleProvider>
+      </body>
     </html>
   );
 }
