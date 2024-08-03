@@ -1,5 +1,3 @@
-// tailwind.config.js
-
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -11,6 +9,7 @@ module.exports = {
       colors: {
         'custom-bg': '#EAEAE2',
         'custom-bar': '#B00909',
+        'communist-red': '#B00909', // This will match the existing custom-bar color
       },
       width: {
         '360px': '360px',

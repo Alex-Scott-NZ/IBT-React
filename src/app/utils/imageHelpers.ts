@@ -1,7 +1,7 @@
 interface ImageNode {
   srcSet: string;
   sourceUrl: string;
-  [key: string]: any; // To allow for other properties
+  [key: string]: string | number | undefined;  // To allow for other properties
 }
 
 export function getImageUrl(
