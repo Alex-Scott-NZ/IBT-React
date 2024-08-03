@@ -23,16 +23,19 @@ const Header: React.FC<HeaderProps> = ({ bannerData }) => {
           style={{ margin: 0, padding: 0 }}
         >
           {bannerData && bannerData.sourceUrl ? (
-            <Image
-              src={bannerData.sourceUrl}
-              alt={bannerData.altText}
-              title={bannerData.title}
-              width={630}
-              height={110}
-              layout="fixed"
-              objectFit="contain"
-              style={{ margin: 0, padding: 0 }}
-            />
+            <div style={{ position: 'relative', width: '630px', height: '110px' }}>
+              <Image
+                src={bannerData.sourceUrl}
+                alt={bannerData.altText}
+                title={bannerData.title}
+                fill
+                sizes="630px"
+                priority
+                style={{
+                  objectFit: 'contain',
+                }}
+              />
+            </div>
           ) : (
             <Box
               display="flex"

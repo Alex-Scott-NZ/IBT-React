@@ -45,7 +45,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
                   left: 0,
                   width: '100%',
                   height: '100%',
-                  backgroundImage: `url(${getImageUrl(article.featuredImage)})`,
+                  backgroundImage: `url(${getImageUrl(article.featuredImage.node, 352)})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   '&::after': {
