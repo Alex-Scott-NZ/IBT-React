@@ -1,5 +1,5 @@
 import { gql } from 'graphql-request';
-import { DetailedArticle } from '../../types/Article';
+import { DetailedArticle } from '../../types/Article.js';
 
 export const GET_ARTICLE_BY_ID = gql`
   query GetArticleById($id: ID!) {

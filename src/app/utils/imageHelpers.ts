@@ -1,18 +1,21 @@
-// src/app/utils/imageHelpers.ts
-import { FrontPageArticle } from '../types/Article';
+interface ImageNode {
+  srcSet: string;
+  sourceUrl: string;
+  [key: string]: any; // To allow for other properties
+}
 
 export function getImageUrl(
-  featuredImage: FrontPageArticle['featuredImage'] | null | undefined,
+  imageNode: ImageNode | null | undefined,
   targetWidth: number = 768
 ): string {
-  if (!featuredImage || !featuredImage.node || !featuredImage.node.srcSet) {
-    return featuredImage?.node?.sourceUrl || ''; // fallback to full size or empty string
+  if (!imageNode || !imageNode.srcSet) {
+    return imageNode?.sourceUrl || ''; // Fallback to full size or empty string
   }
 
-  const srcSet = featuredImage.node.srcSet.split(', ');
-  let imageUrl = featuredImage.node.sourceUrl; // default to full size
+  const srcSet = imageNode.srcSet.split(', ');
+  let imageUrl = imageNode.sourceUrl; // Default to full size
 
-  // Find the image closest to but not less than our target width
+  // Find the image closest to but not less than the target width
   for (const src of srcSet) {
     const parts = src.split(' ');
     if (parts.length < 2) continue; // Skip this iteration if the format is unexpected
@@ -20,7 +23,7 @@ export function getImageUrl(
     const url = parts[0];
     const widthStr = parts[1];
 
-    if (!url || !widthStr) continue; // Skip if either url or width is missing
+    if (!url || !widthStr) continue; // Skip if either URL or width is missing
 
     const numWidth = parseInt(widthStr.replace('w', ''));
 
