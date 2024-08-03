@@ -1,17 +1,15 @@
-'use client';
-import React, { useState, useEffect } from 'react';
 import { GraphQLClient } from 'graphql-request';
-import { GET_FRONT_PAGE_ARTICLES } from '../app/graphql/queries/getFrontPageArticles';
-import { GET_GLOBAL_SETTINGS } from '../app/graphql/queries/getGlobalSettings';
+import { GET_FRONT_PAGE_ARTICLES } from './graphql/queries/getFrontPageArticles';
+import { GET_GLOBAL_SETTINGS } from './graphql/queries/getGlobalSettings';
 import {
   GlobalSettingsData,
   BannerImageNode,
   FrontPageArticle,
   ArticlesResponse,
-} from '../app/types/Article';
-import Layout from '../app/components/Layout';
+} from './types/Article';
+import HomeLayout from './layouts/HomeLayout';
 
-const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL; // Note: Changed from NEXT_PUBLIC_WORDPRESS_API_URL
 const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`);
 
 const fetchArticles = async (): Promise<FrontPageArticle[]> => {
@@ -39,27 +37,11 @@ const fetchBannerData = async (): Promise<BannerImageNode | null> => {
   }
 };
 
-export default function Home() {
-  const [articles, setArticles] = useState<FrontPageArticle[]>([]);
-  const [bannerData, setBannerData] = useState<BannerImageNode | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export default async function Home() {
+  const [articles, bannerData] = await Promise.all([
+    fetchArticles(),
+    fetchBannerData()
+  ]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const fetchedArticles = await fetchArticles();
-      const fetchedBannerData = await fetchBannerData();
-      setArticles(fetchedArticles);
-      setBannerData(fetchedBannerData);
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return <Layout bannerData={bannerData} articles={articles} />;
+  return <HomeLayout bannerData={bannerData} articles={articles} />;
 }
