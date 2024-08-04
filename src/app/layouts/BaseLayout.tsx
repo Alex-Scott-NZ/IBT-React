@@ -26,7 +26,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
 
         <div className="flex flex-1 justify-between mt-4">
           <aside className="w-360px">
-            <div className="sticky top-4 bg-gray-200 p-4">
+            <div className="sticky top-4 bg-custom-bg p-4">
               {leftSidebar}
             </div>
           </aside>
@@ -36,7 +36,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
           </main>
 
           <aside className="w-360px">
-            <div className="sticky top-4 bg-gray-200 p-4">
+            <div className="sticky top-4 bg-custom-bg p-4">
               {rightSidebar}
             </div>
           </aside>
