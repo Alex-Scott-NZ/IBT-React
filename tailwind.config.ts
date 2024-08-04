@@ -1,5 +1,3 @@
-// tailwind.config.ts
-
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -12,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         'custom-bg': '#EAEAE2',
-        'custom-bar': '#B00909',
+        'communist-red': '#B00909',
       },
       width: {
         '360px': '360px',
