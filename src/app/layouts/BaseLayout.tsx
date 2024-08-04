@@ -18,22 +18,31 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
   rightSidebar,
 }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-custom-bg relative">
+    <div className="bg-custom-bg min-h-screen flex flex-col">
       <TopBar />
-      <Header bannerData={bannerData} />
-      <div className="flex justify-center items-start flex-1 bg-custom-bg">
-        <div className="flex w-full max-w-[1440px] mx-auto h-full">
-          <aside className="w-[360px] bg-custom-bg sticky top-0 h-screen overflow-auto">
-            {leftSidebar}
+
+      <div className="w-[1440px] mx-auto flex-grow flex flex-col">
+        <Header bannerData={bannerData} />
+
+        <div className="flex flex-1 justify-between mt-4">
+          <aside className="w-360px">
+            <div className="sticky top-4 bg-gray-200 p-4">
+              {leftSidebar}
+            </div>
           </aside>
-          <main className="w-[720px] bg-custom-bg">
+
+          <main className="w-720px bg-white p-4 overflow-y-auto">
             {mainContent}
           </main>
-          <aside className="w-[360px] bg-custom-bg sticky top-0 h-screen overflow-auto">
-            {rightSidebar}
+
+          <aside className="w-360px">
+            <div className="sticky top-4 bg-gray-200 p-4">
+              {rightSidebar}
+            </div>
           </aside>
         </div>
       </div>
+
       <BottomBar />
     </div>
   );
