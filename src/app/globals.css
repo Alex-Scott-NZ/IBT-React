@@ -4,6 +4,7 @@
 
 body {
   @apply bg-custom-bg;
+  overflow-y: scroll; /* Force vertical scrollbar */
 }
 
 /* Global link styles */
