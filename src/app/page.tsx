@@ -10,12 +10,19 @@ import {
 import HomeLayout from './layouts/HomeLayout';
 
 const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL; // Note: Changed from NEXT_PUBLIC_WORDPRESS_API_URL
-const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`);
+const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`, {
+  headers: {
+    'Cache-Control': 'no-store'
+  }
+});
+
 
 const fetchArticles = async (): Promise<FrontPageArticle[]> => {
   try {
     const data = await graphQLClient.request<ArticlesResponse>(
-      GET_FRONT_PAGE_ARTICLES
+      GET_FRONT_PAGE_ARTICLES, 
+      {}, 
+      { cache: 'no-store' }
     );
     return data.articles.nodes;
   } catch (error) {
@@ -23,6 +30,7 @@ const fetchArticles = async (): Promise<FrontPageArticle[]> => {
     return [];
   }
 };
+
 
 const fetchBannerData = async (): Promise<BannerImageNode | null> => {
   try {
