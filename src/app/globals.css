@@ -5,3 +5,13 @@
 body {
   @apply bg-custom-bg;
 }
+
+/* Global link styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+}

@@ -15,7 +15,7 @@ const ArticleLayout: React.FC<ArticleLayoutProps> = ({ article, bannerData }) =>
       leftSidebar={<div>Article Left Sidebar</div>}
       mainContent={
         <div>
-          <h1>{article.title}</h1>
+          <h1 className='mt-0'>{article.title}</h1>
           {article.articleDetails?.subtitle && (
             <h2>{article.articleDetails.subtitle}</h2>
           )}

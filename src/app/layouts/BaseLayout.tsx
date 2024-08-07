@@ -3,6 +3,7 @@ import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';
 import Header from '../components/Header';
 import { BannerImageNode } from '../types/Article';
+import NavigationMenu from '../components/NavigationMenu';
 
 interface BaseLayoutProps {
   bannerData: BannerImageNode | null;
@@ -23,7 +24,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
 
       <div className="w-[1440px] mx-auto flex-grow flex flex-col">
         <Header bannerData={bannerData} />
-
+        <NavigationMenu />
         <div className="flex flex-1 justify-between mt-4">
           <aside className="w-360px">
             <div className="sticky top-4 bg-custom-bg p-4">

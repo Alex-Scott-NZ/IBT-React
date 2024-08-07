@@ -26,7 +26,7 @@ const MainContent: React.FC<MainContentProps> = ({ articles }) => {
       />
 
       {/* Render remaining articles */}
-      <div className="w-full mt-8">
+      <div className="w-full mt-4">
         {articles.slice(2).map((article) => (
           <ArticleSummary key={article.id} article={article} />
         ))}
