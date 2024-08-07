@@ -6,11 +6,17 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  important: '#__next', // Add this line
   theme: {
     extend: {
       colors: {
         'custom-bg': '#EAEAE2',
         'communist-red': '#B00909',
+      },
+      fontFamily: {
+        helvetica: ['var(--font-helvetica-neue)', 'Helvetica', 'Arial', 'sans-serif'],
+        telegrafico: ['var(--font-telegrafico)', 'sans-serif'],
+        cambay: ['var(--font-cambay)', 'sans-serif'],
       },
       width: {
         '360px': '360px',
@@ -24,6 +30,9 @@ const config: Config = {
     },
   },
   plugins: [],
+  corePlugins: {
+    preflight: false
+  }
 };
 
 export default config;
