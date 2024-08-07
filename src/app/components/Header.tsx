@@ -24,8 +24,14 @@ const Header: React.FC<HeaderProps> = ({ bannerData }) => {
           style={{ margin: 0, padding: 0 }}
         >
           {bannerData && bannerData.sourceUrl ? (
-            <Link href={process.env.NEXT_PUBLIC_ROOT_URL || '/'} passHref>
-              <div style={{ position: 'relative', width: '630px', height: '110px' }}>
+            <Link href="/" passHref>
+              <div
+                style={{
+                  position: 'relative',
+                  width: '630px',
+                  height: '110px',
+                }}
+              >
                 <Image
                   src={bannerData.sourceUrl}
                   alt={bannerData.altText}
