@@ -57,13 +57,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${cambay.variable} ${telegrafico.variable} ${helveticaNeue.variable}`}>
-      <body className="bg-custom-bg font-helvetica">
-        <div id="__next">
-          <ThemeProviderWrapper>
+      <ThemeProviderWrapper>
+        <body className="bg-custom-bg font-helvetica">
+          <div id="__next">
             <ArticleProvider>{children}</ArticleProvider>
-          </ThemeProviderWrapper>
-        </div>
-      </body>
+          </div>
+        </body>
+      </ThemeProviderWrapper>
     </html>
   );
+  
 }
