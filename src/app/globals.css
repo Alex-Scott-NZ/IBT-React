@@ -5,6 +5,7 @@
 body {
   @apply bg-custom-bg;
   overflow-y: scroll; /* Force vertical scrollbar */
+  font-family: var(--font-helvetica-neue); /* Apply your default font here */
 }
 
 /* Global link styles */

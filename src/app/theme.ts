@@ -12,16 +12,16 @@ const theme = createTheme({
     // You can customize other typography variants as needed
   },
   components: {
-    MuiLink: {
-      styleOverrides: {
-        root: {
-          textDecorationLine: 'none',
-          '&:hover': {
-            textDecorationLine: 'none',
-          },
-        },
-      },
-    },
+    // MuiLink: {
+    //   styleOverrides: {
+    //     root: {
+    //       textDecorationLine: 'none',
+    //       '&:hover': {
+    //         textDecorationLine: 'none',
+    //       },
+    //     },
+    //   },
+    // },
     MuiPopover: {
       defaultProps: {
         container: () => document.getElementById('__next'),
