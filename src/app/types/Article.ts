@@ -26,6 +26,61 @@ export interface FrontPageArticle {
   };
 }
 
+export interface Book {
+  id: string;
+  title: string;
+  slug: string;
+  authorDatabaseId: number;
+  contentTypeName: string;
+  featuredImageDatabaseId: number;
+  featuredImageId: number;
+  isComment: boolean;
+  isContentNode: boolean;
+  isFrontPage: boolean;
+  isPostsPage: boolean;
+  isPreview: boolean;
+  isRestricted: boolean;
+  isTermNode: boolean;
+  link: string;
+  modified: string;
+  modifiedGmt: string;
+  parentDatabaseId: number;
+  parentId: number;
+  password: string | null;
+  previewRevisionDatabaseId: number;
+  previewRevisionId: number;
+  status: string;
+  uri: string;
+  bookDetails: {
+    displayOnIbtBooks: boolean;
+    fieldGroupName: string;
+    subheading: string;
+    summary: string;
+  };
+  featuredImage: {
+    node: {
+      altText: string;
+      link: string;
+      mediaItemId: number;
+      mediaItemUrl: string;
+      description: string;
+      guid: string;
+      id: string;
+      sizes: string;
+      slug: string;
+      sourceUrl: string;
+      srcSet: string;
+    };
+  };
+}
+
+export interface BooksResponse {
+  books: {
+    nodes: Book[];
+  };
+}
+
+
 export interface DetailedArticle {
   articleId: number;
   content: string;
