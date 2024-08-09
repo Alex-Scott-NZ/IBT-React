@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import React, { useState } from 'react';
 import { Menu, MenuItem, Box, Divider, Button } from '@mui/material';
@@ -88,6 +88,7 @@ const NavigationMenu: React.FC = () => {
 
         <Divider {...separatorProps} />
 
+        <Link href="/journal" passHref>
         <Button
          className="text-communist-red font-cambay" sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}
           onMouseEnter={handleOpen(setAnchorElJournal)}
@@ -96,6 +97,7 @@ const NavigationMenu: React.FC = () => {
           1917 journal
           <KeyboardArrowDownRoundedIcon fontSize="small" sx={{ ml: 0 }} />
         </Button>
+        </Link>
         <StyledMenu
           anchorEl={anchorElJournal}
           open={Boolean(anchorElJournal)}
@@ -112,7 +114,7 @@ const NavigationMenu: React.FC = () => {
 
         <Divider {...separatorProps} />
 
-        <Link href="/books" passHref>
+        <Link href="/book" passHref>
           <Button className="text-communist-red font-cambay" sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}>
             books
           </Button>
