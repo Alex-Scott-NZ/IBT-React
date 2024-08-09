@@ -1,6 +1,6 @@
 import React from 'react';
 import { FrontPageArticle } from '../types/Article';
-import { getImageUrl } from '../utils/imageHelpers';
+// import { getImageUrl } from '../utils/imageHelpers';
 import Link from 'next/link';
 
 interface ArticleSummaryProps {
