@@ -28,7 +28,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles}) => {
       {articles.map((article) => (
         <Grid item xs={12} md={6} key={article.id}>
           <Link href={`/article/${article.slug}`} passHref>
-            <Card sx={{ position: 'relative', height: 225 }}>
+            <Card elevation={3} sx={{ position: 'relative', height: 225 }}>
               <CardActionArea sx={{ height: '100%' }}>
                 <Box
                   sx={{

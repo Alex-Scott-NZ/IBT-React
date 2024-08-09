@@ -8,8 +8,11 @@ import {
   BannerImageNode,
   FrontPageArticle,
   ArticlesResponse,
+  Book,
+  BooksResponse,
 } from './types/Article';
 import HomeLayout from './layouts/HomeLayout';
+import { GET_ALL_BOOKS } from './graphql/queries/getBooksAll';
 
 const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`, {
@@ -31,6 +34,18 @@ const fetchArticles = async (): Promise<FrontPageArticle[]> => {
   }
 };
 
+const fetchBooks = async (): Promise<Book[]> => {
+  try {
+    const data = await graphQLClient.request<BooksResponse>(
+      GET_ALL_BOOKS
+    );
+    return data.books.nodes;
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    return [];
+  }
+};
+
 const fetchBannerData = async (): Promise<BannerImageNode | null> => {
   try {
     const data =
@@ -45,10 +60,11 @@ const fetchBannerData = async (): Promise<BannerImageNode | null> => {
 };
 
 export default async function Home() {
-  const [articles, bannerData] = await Promise.all([
+  const [articles, bannerData, books] = await Promise.all([
     fetchArticles(),
-    fetchBannerData()
+    fetchBannerData(),
+    fetchBooks()
   ]);
 
-  return <HomeLayout bannerData={bannerData} articles={articles} />;
+  return <HomeLayout bannerData={bannerData} articles={articles} books={books}/>;
 }
