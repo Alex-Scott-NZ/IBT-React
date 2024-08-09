@@ -56,6 +56,27 @@ export interface Book {
     fieldGroupName: string;
     subheading: string;
     summary: string;
+    relatedArticles: {
+      edges: {
+        node: {
+          contentTypeName: string;
+          guid: string;
+          id: string;
+          link: string;
+          slug: string;
+          status: string;
+          title: string;
+          uri: string;
+          articleDetails: {
+            tableOfContentsTitle: string | null;
+            subtitle: string | null;
+            displayDate: string | null;
+            displayOnFrontPage: boolean;
+            publicationDate: string;
+          };
+        };
+      }[] | null;
+    };
   };
   featuredImage: {
     node: {
@@ -73,6 +94,7 @@ export interface Book {
     };
   };
 }
+
 
 export interface BooksResponse {
   books: {
@@ -176,6 +198,52 @@ export interface GetArticleByIdResponse {
   article: DetailedArticle;
 }
 
-export interface GetArticleByIdResponse {
-  article: DetailedArticle;
+export interface ArticleDetails {
+  displayDate: string | null;
+  displayOnFrontPage: boolean;
+  fieldGroupName: string;
+  publicationDate: string;
+  source: string | null;
+  subtitle: string | null;
+  suppressDate: boolean;
+  tableOfContentsTitle: string | null;
+}
+
+export interface ArticleNode {
+  id: string;
+  title: string;
+  slug: string;
+  articleDetails: ArticleDetails;
+}
+
+export interface ArticlesInJournal {
+  nodes: ArticleNode[];
+}
+
+export interface JournalIssueDetails {
+  articlesInJournal: ArticlesInJournal;
+  fieldGroupName: string;
+  publicationDate: string;
+}
+
+export interface FeaturedImageNode {
+  sourceUrl: string; 
+  altText: string | null;
+  mediaItemId: number;
+  srcSet: string | null;
+}
+
+export interface JournalIssueNode {
+  journalIssueDetails: JournalIssueDetails;
+  slug: string;
+  title: string;
+  featuredImage: {
+    node: FeaturedImageNode;
+  };
+}
+
+export interface JournalIssuesResponse {
+  journalIssues: {
+    nodes: JournalIssueNode[];
+  };
 }

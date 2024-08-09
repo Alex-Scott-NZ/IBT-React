@@ -52,11 +52,10 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
           alignItems: 'center',
         }}
       >
-        <Link href="/books" passHref>
+        <Link href="/book" passHref>
           <Typography
             className="font-telegrafico text-communist-red mt-0 mb-0 ml-3"
             variant="h5"
-            component="a" // Adding this to ensure the correct element is rendered
           >
             Books
           </Typography>
