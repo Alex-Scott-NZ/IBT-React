@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, MenuItem, Box, Divider, Button } from '@mui/material';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import Link from 'next/link'; 
@@ -9,6 +9,8 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import EmailIcon from '@mui/icons-material/Email';
 import { styled } from '@mui/system';
+import { JournalIssuesResponse, JournalIssueNode } from '../types/Article';
+
 
 // Custom styled component to apply pointer-events
 const StyledMenu = styled(Menu)({
@@ -17,10 +19,15 @@ const StyledMenu = styled(Menu)({
   },
 });
 
+// Set up revalidation and GraphQL client configuration
+export const revalidate = 60;
+
+
 const NavigationMenu: React.FC = () => {
   let timeoutId: NodeJS.Timeout | null = null;
   const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(null);
   const [anchorElCollection, setAnchorElCollection] = useState<null | HTMLElement>(null);
+  const [journalIssues, setJournalIssues] = useState<JournalIssueNode[]>([]);
 
   const handleOpen = (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => (event: React.MouseEvent<HTMLButtonElement>) => {
     if (!!timeoutId) {
@@ -40,6 +47,31 @@ const NavigationMenu: React.FC = () => {
       clearTimeout(timeoutId);
     }
   };
+
+useEffect(() => {
+  const fetchJournalIssues = async () => {
+    try {
+      console.log('Fetching journal issues...');
+      const response = await fetch('/api/journal-issues');
+      if (!response.ok) {
+        throw new Error('Failed to fetch journal issues');
+      }
+      const data: JournalIssueNode[] = await response.json();
+      console.log('Fetched data:', data);
+      if (Array.isArray(data)) {
+        const sortedIssues = data.sort((a, b) => b.slug.localeCompare(a.slug));
+        console.log('Sorted issues:', sortedIssues);
+        setJournalIssues(sortedIssues);
+      } else {
+        console.error('Unexpected data structure:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching journal issues:', error);
+    }
+  };
+
+  fetchJournalIssues();
+}, []);
 
   const linkStyle = {
     fontSize: '1.4rem',
@@ -90,27 +122,36 @@ const NavigationMenu: React.FC = () => {
 
         <Link href="/journal" passHref>
         <Button
-         className="text-communist-red font-cambay" sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}
+          className="text-communist-red font-cambay"
+          sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}
           onMouseEnter={handleOpen(setAnchorElJournal)}
           onMouseLeave={handleClose(setAnchorElJournal)}
         >
           1917 journal
           <KeyboardArrowDownRoundedIcon fontSize="small" sx={{ ml: 0 }} />
         </Button>
-        </Link>
-        <StyledMenu
-          anchorEl={anchorElJournal}
-          open={Boolean(anchorElJournal)}
-          onClose={handleClose(setAnchorElJournal)}
-          {...menuProps}
-          MenuListProps={{
-            onMouseEnter: handleMenuEnter,
-            onMouseLeave: handleClose(setAnchorElJournal),
-          }}
-        >
-          <MenuItem onClick={handleClose(setAnchorElJournal)}>Issue 1</MenuItem>
-          <MenuItem onClick={handleClose(setAnchorElJournal)}>Issue 2</MenuItem>
-        </StyledMenu>
+      </Link>
+      <StyledMenu
+        anchorEl={anchorElJournal}
+        open={Boolean(anchorElJournal)}
+        onClose={handleClose(setAnchorElJournal)}
+        {...menuProps}
+        MenuListProps={{
+          onMouseEnter: handleMenuEnter,
+          onMouseLeave: handleClose(setAnchorElJournal),
+        }}
+      >
+        {journalIssues.map((issue) => (
+          <MenuItem
+            key={issue.slug}
+            onClick={handleClose(setAnchorElJournal)}
+            component={Link}
+            href={`/journal/${issue.slug}`}
+          >
+            {issue.title}
+          </MenuItem>
+        ))}
+      </StyledMenu>
 
         <Divider {...separatorProps} />
 
