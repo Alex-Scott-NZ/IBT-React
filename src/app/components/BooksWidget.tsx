@@ -23,20 +23,19 @@ import 'swiper/swiper-bundle.css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
-import styles from './BooksWidget.module.css';
 
 interface BooksWidgetProps {
   books: Book[];
 }
 
 // Create a styled Divider using the Tailwind CSS color variable
-const StyledDivider = styled(Divider)(({ theme }) => ({
+const StyledDivider = styled(Divider)({
   borderColor: '#B00909',
   borderWidth: '1px',
   height: '20px', // Match the height of your buttons
   marginX: '20px', // Adjust spacing as needed
-  
-}));
+});
+
 
 const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null);
