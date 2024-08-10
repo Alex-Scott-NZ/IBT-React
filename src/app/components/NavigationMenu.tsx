@@ -9,7 +9,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import EmailIcon from '@mui/icons-material/Email';
 import { styled } from '@mui/system';
-import { JournalIssuesResponse, JournalIssueNode } from '../types/Article';
+import { JournalIssueNode } from '../types/Article';
 
 
 // Custom styled component to apply pointer-events
