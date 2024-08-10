@@ -22,7 +22,7 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article }) => {
         <div className="block mb-1 w-full cursor-pointer py-1.5 text-inherit hover:no-underline hover:text-inherit">
           <div className={`relative h-auto w-full flex flex-col`}>
             <div className="relative z-10 py-1 flex flex-col flex-grow">
-              <h3 className="text-lg font-bold text-communist-red mb-1 mt-1 leading-tight underline">
+              <h3 className="text-lg font-bold text-communist-red mb-1 mt-1 leading-tight">
                 {article.title}
               </h3>
               {article.articleDetails.subtitle && (
