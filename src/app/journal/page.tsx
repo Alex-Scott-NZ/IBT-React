@@ -20,45 +20,32 @@ import {
 import Link from 'next/link';
 import { getImageUrl } from '../utils/imageHelpers';
 
-/**
- * Function to fetch all journal issues from the backend.
- * It uses GraphQL to request data from the API and returns an array of journal issues.
- */
-async function fetchJournalIssues() {
-    try {
-      const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-      const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`);
-      
-      // Fetch journal issues data from the API
-      const { journalIssues } = await graphQLClient.request<{ journalIssues: { nodes: JournalIssueNode[] } }>(GET_ALL_JOURNAL_ISSUES);
-      
-      // This is where we order the results by slug to make the most recent at the top.
-      // We sort the journal issues by their slugs in reverse alphabetical order.
-      const orderedJournalIssues = journalIssues.nodes.sort((a, b) => {
-        return b.slug.localeCompare(a.slug);
-      });
-  
-      // Return the ordered list of journal issues
-      return orderedJournalIssues;
-    } catch (error) {
-      // Log any errors that occur during the fetch
-      console.error('Error fetching journal issues:', error);
-  
-      // Return an empty array if an error occurs
-      return [];
-    }
-  }
+export const revalidate = 60; // Ensure no caching
 
-/**
- * Function to fetch banner data from the backend.
- * It uses GraphQL to request data from the API and returns the banner image data or null if not found.
- */
+// Initialize the GraphQL client with cache-control headers
+const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`, {
+  headers: {
+    'Cache-Control': 'max-age=60',
+  },
+  fetch: (url, options) => fetch(url, { ...options, next: { revalidate: 60 } }),
+});
+
+// Function to fetch all journal issues
+async function fetchJournalIssues() {
+  try {
+    const { journalIssues } = await graphQLClient.request<{ journalIssues: { nodes: JournalIssueNode[] } }>(GET_ALL_JOURNAL_ISSUES);
+    const orderedJournalIssues = journalIssues.nodes.sort((a, b) => b.slug.localeCompare(a.slug));
+    return orderedJournalIssues;
+  } catch (error) {
+    console.error('Error fetching journal issues:', error);
+    return [];
+  }
+}
+
+// Function to fetch banner data
 async function fetchBannerData(): Promise<BannerImageNode | null> {
   try {
-    const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-    const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`);
-    
-    // Fetch global settings data to get the banner image
     const data = await graphQLClient.request<GlobalSettingsData>(GET_GLOBAL_SETTINGS);
     return data.globalSettings.nodes[0]?.fGGlobalSettings.bannerImage.node || null;
   } catch (error) {
@@ -67,12 +54,8 @@ async function fetchBannerData(): Promise<BannerImageNode | null> {
   }
 }
 
-/**
- * Main component for rendering the journal page.
- * It fetches journal issues and banner data and displays them in a grid layout.
- */
+// Main component for rendering the journal page
 const JournalPage = async () => {
-  // Fetch journal issues and banner data in parallel
   const [journalIssues, bannerData] = await Promise.all([
     fetchJournalIssues(),
     fetchBannerData(),
@@ -105,7 +88,6 @@ const JournalPage = async () => {
                   >
                     {issue.title}
                   </Typography>
-
                   <List>
                     {issue.journalIssueDetails.articlesInJournal?.nodes?.length ? (
                       issue.journalIssueDetails.articlesInJournal.nodes.map(
