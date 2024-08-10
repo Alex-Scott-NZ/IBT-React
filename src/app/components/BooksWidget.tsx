@@ -12,6 +12,8 @@ import {
   Typography,
   Box,
   IconButton,
+  ButtonGroup,
+  Divider, styled
 } from '@mui/material';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
@@ -26,6 +28,15 @@ import styles from './BooksWidget.module.css';
 interface BooksWidgetProps {
   books: Book[];
 }
+
+// Create a styled Divider using the Tailwind CSS color variable
+const StyledDivider = styled(Divider)(({ theme }) => ({
+  borderColor: '#B00909',
+  borderWidth: '1px',
+  height: '20px', // Match the height of your buttons
+  marginX: '20px', // Adjust spacing as needed
+  
+}));
 
 const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null);
@@ -46,6 +57,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   return (
     <div className="books-widget relative">
       <Box
+        marginBottom={1}
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -60,41 +72,42 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
             Books
           </Typography>
         </Link>
-        <Box
+        <ButtonGroup
           sx={{
-            display: 'flex',
-            alignItems: 'center',
+            boxShadow: 1,
+            backgroundColor: 'white',
+            borderRadius: '40px',
+            overflow: 'hidden',
           }}
         >
           <IconButton
             onClick={handlePrevious}
-            className={`${styles.customPrevButton} text-communist-red`}
-            sx={{
-              width: '40px',
-              height: '40px',
-              padding: '8px',
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              },
-            }}
+            sx={
+              {
+                // width: '40px',
+                // height: '40px',
+                // padding: '8px',
+                //  borderRadius: '40%'
+              }
+            }
           >
-            <ArrowBackIos fontSize="small" />
+            <ArrowBackIos sx = { { marginLeft:'5px'} } fontSize="small" className="text-communist-red" />
           </IconButton>
+          <StyledDivider orientation='vertical' variant='middle' />
           <IconButton
             onClick={handleNext}
-            className={`${styles.customNextButton} text-communist-red`}
-            sx={{
-              width: '40px',
-              height: '40px',
-              padding: '8px',
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              },
-            }}
+            sx={
+              {
+                // width: '40px',
+                // height: '40px',
+                // padding: '8px',
+                // borderRadius: '40%'
+              }
+            }
           >
-            <ArrowForwardIos fontSize="small" />
+            <ArrowForwardIos sx = { { marginLeft:'4px'} } fontSize="small" className="text-communist-red" />
           </IconButton>
-        </Box>
+        </ButtonGroup>
       </Box>
       <Swiper
         onSwiper={setSwiperRef}
@@ -105,6 +118,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
         effect="fade"
         fadeEffect={{ crossFade: true }}
         modules={[Navigation, EffectFade]}
+        loop={true}
         allowTouchMove={false}
         style={{
           width: 'calc(100% + 20px)',
@@ -158,11 +172,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                     />
                   </Box>
                   <Box sx={{ flex: '1 1 auto' }}>
-                    <Typography
-                      variant="h6"
-                      className="font-helvetica"
-     
-                    >
+                    <Typography variant="h6" className="font-helvetica">
                       {book.title}
                     </Typography>
                     <Typography

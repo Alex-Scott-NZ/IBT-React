@@ -221,7 +221,7 @@ export interface ArticlesInJournal {
 }
 
 export interface JournalIssueDetails {
-  articlesInJournal: ArticlesInJournal;
+  articlesInJournal: ArticlesInJournal | null;
   fieldGroupName: string;
   publicationDate: string;
 }
@@ -247,3 +247,20 @@ export interface JournalIssuesResponse {
     nodes: JournalIssueNode[];
   };
 }
+
+// Define the type for the JournalIssue response
+export interface JournalIssueLatest {
+  fieldGroupName: string;
+  publicationDate: string;
+  slug: string;
+  title: string;
+  featuredImage: {
+    node: {
+      altText: string;
+      mediaItemId: string;
+      srcSet: string;
+      sourceUrl: string;
+    };
+  };
+}
+
