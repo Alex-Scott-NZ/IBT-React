@@ -36,13 +36,18 @@ const ArticleLayout: React.FC<ArticleLayoutProps> = ({ article, bannerData }) =>
             <Image
             src={article.featuredImage.node.sourceUrl}
             alt={article.featuredImage.node.altText || article.title}
-            width={0}
-            height={0}
+             width={688}
+             height={0}
+            // fill
             sizes="100vw"
             priority={true} // Ensure it's not lazy-loaded
             quality={75} // Adjust image quality as needed
 className='w-full h-auto'
-           
+placeholder='blur'
+blurDataURL='data:image/png;base64,LEHLk~WB2yk8pyo0adR*.7kCMdnj'
+                   style={{
+          objectFit: 'contain',
+        }}
 
           />
 
