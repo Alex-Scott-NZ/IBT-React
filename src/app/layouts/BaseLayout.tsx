@@ -32,7 +32,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
             </div>
           </aside>
 
-          <main className="w-720px bg-white p-4 overflow-y-auto">
+          <main className="w-720px bg-custom-bg p-4 overflow-y-auto">
             {mainContent}
           </main>
 

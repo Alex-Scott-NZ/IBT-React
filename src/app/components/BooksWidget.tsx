@@ -13,12 +13,14 @@ import {
   Box,
   IconButton,
   ButtonGroup,
-  Divider, styled
+  Divider, styled,
+  lighten
 } from '@mui/material';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import 'swiper/swiper-bundle.css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -74,7 +76,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
         <ButtonGroup
           sx={{
             boxShadow: 1,
-            backgroundColor: 'white',
+            backgroundColor: lighten('#EAEAE2', 0.2),
             borderRadius: '40px',
             overflow: 'hidden',
           }}
@@ -90,7 +92,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
               }
             }
           >
-            <ArrowBackIos sx = { { marginLeft:'5px'} } fontSize="small" className="text-communist-red" />
+            <ArrowBackIos sx={{ marginLeft: '5px' }} fontSize="small" className="text-communist-red" />
           </IconButton>
           <StyledDivider orientation='vertical' variant='middle' />
           <IconButton
@@ -104,7 +106,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
               }
             }
           >
-            <ArrowForwardIos sx = { { marginLeft:'4px'} } fontSize="small" className="text-communist-red" />
+            <ArrowForwardIos sx={{ marginLeft: '4px' }} fontSize="small" className="text-communist-red" />
           </IconButton>
         </ButtonGroup>
       </Box>
@@ -128,12 +130,13 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
       >
         {books.map((book) => (
           <SwiperSlide key={book.id}>
-            <Card
+            <Card elevation={0}
               sx={{
                 maxWidth: '328px',
                 height: '200px',
                 display: 'flex',
                 flexDirection: 'column',
+                backgroundColor: 'transparent'
               }}
             >
               <CardActionArea
@@ -147,6 +150,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                     height: '100%',
                   }}
                 >
+
                   <Box
                     sx={{
                       width: '128px',
@@ -157,19 +161,14 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                       marginRight: '8px',
                     }}
                   >
-                    <img
+                    <Image
                       src={getImageUrl(book.featuredImage?.node, 128)}
                       alt={book.featuredImage?.node?.altText || book.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'fill',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                      }}
+                      layout="fill" // Fills the container dimensions
+                      objectFit="fill" // Ensures the image covers the entire box
                     />
                   </Box>
+
                   <Box sx={{ flex: '1 1 auto' }}>
                     <Typography variant="h6" className="font-helvetica">
                       {book.title}

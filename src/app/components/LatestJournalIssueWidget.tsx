@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface LatestJournalIssueWidgetProps {
   latestJournalIssue: JournalIssueLatest | null;
@@ -48,12 +49,15 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
           </Typography>
         </Link>
       </Box>
-      <Card
+      <Card elevation={0}
         sx={{
           maxWidth: '328px',
           display: 'flex',
           flexDirection: 'column',
           padding: '8px', // Add padding around the card content
+          background: 'transparent',
+          border: 'none'
+          
         }}
       >
         <CardActionArea
@@ -68,6 +72,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
               overflow: 'hidden',
             }}
           >
+
             <Box
               sx={{
                 width: '50%',
@@ -75,16 +80,20 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
                 overflow: 'hidden',
               }}
             >
-              <img
+              <Image
                 src={getImageUrl(latestJournalIssue.featuredImage?.node, 164)} // 50% of the card width (328px)
                 alt={latestJournalIssue.featuredImage?.node?.altText || latestJournalIssue.title}
+                width={328} // Set the width based on your design
+                height={0} // Automatically calculate height to maintain aspect ratio
                 style={{
                   width: '100%',
                   height: 'auto',
                   objectFit: 'cover',
                 }}
+                layout="responsive"
               />
             </Box>
+
             <Box
               sx={{
                 width: '50%',
