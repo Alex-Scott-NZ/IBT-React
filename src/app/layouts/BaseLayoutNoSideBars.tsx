@@ -21,7 +21,7 @@ const BaseLayoutNoSideBars: React.FC<BaseLayoutNoSideBarsProps> = ({
         <Header bannerData={bannerData} />
         <NavigationMenu />
         <div className="flex flex-1 justify-center mt-4">
-          <main className="w-[1440px] bg-white p-4 overflow-y-auto">
+          <main className="w-[1440px] bg-custom-bg p-4 overflow-y-auto">
             {children}
           </main>
         </div>
