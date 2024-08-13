@@ -105,7 +105,7 @@ export interface BooksResponse {
 
 export interface DetailedArticle {
   articleId: number;
-  content: string;
+  content: string | null;
   contentTypeName: string;
   databaseId: number;
   date: string;
@@ -134,6 +134,134 @@ export interface DetailedArticle {
     subtitle: string | null;
     suppressDate: boolean;
     tableOfContentsTitle: string | null;
+    relatedPdf?: {
+      nodes: Array<{
+        contentTypeName: string;
+        databaseId: number;
+        date: string;
+        dateGmt: string;
+        desiredSlug: string | null;
+        enclosure: string | null;
+        guid: string;
+        hasPassword: boolean;
+        id: string;
+        isComment: boolean;
+        isContentNode: boolean;
+        isFrontPage: boolean;
+        isPostsPage: boolean;
+        isPreview: boolean;
+        isRestricted: boolean;
+        isTermNode: boolean;
+        link: string;
+        modified: string;
+        modifiedGmt: string;
+        password: string | null;
+        pdfItemId: number;
+        previewRevisionDatabaseId: number | null;
+        previewRevisionId: string | null;
+        slug: string;
+        status: string;
+        title: string;
+        uri: string;
+        pdfItemDetails?: {
+          fieldGroupName: string;
+          pdfFile?: {
+            cursor: string;
+            node: {
+              fileSize: number;
+              link: string;
+              mediaDetails: {
+                file: string | null;
+                height: number | null;
+                width: number | null;
+                sizes: string | null;
+              };
+              slug: string;
+              sourceUrl: string | null;
+              srcSet: string | null;
+              contentTypeName: string;
+              contentType: {
+                node: {
+                  canExport: boolean | null;
+                  deleteWithUser: boolean | null;
+                  description: string;
+                  excludeFromSearch: boolean | null;
+                  graphqlPluralName: string;
+                  graphqlSingleName: string;
+                  hasArchive: boolean | null;
+                  hierarchical: boolean;
+                  id: string;
+                  isComment: boolean;
+                  isContentNode: boolean;
+                  isFrontPage: boolean;
+                  isPostsPage: boolean;
+                  isRestricted: boolean;
+                  isTermNode: boolean;
+                  label: string;
+                  menuIcon: string | null;
+                  menuPosition: number | null;
+                  name: string;
+                  public: boolean | null;
+                  publiclyQueryable: boolean | null;
+                  restBase: string | null;
+                  restControllerClass: string | null;
+                  showInAdminBar: boolean | null;
+                  showInGraphql: boolean;
+                  showInMenu: boolean | null;
+                  showInNavMenus: boolean | null;
+                  showInRest: boolean | null;
+                  showUi: boolean | null;
+                  uri: string | null;
+                };
+              };
+              mediaItemId: number;
+              mediaItemUrl: string;
+              mediaType: string;
+              mimeType: string;
+              sizes: string | null;
+              uri: string;
+              title: string;
+            };
+          };
+          relatedArticle?: {
+            nodes: Array<{
+              uri: string;
+              articleId: number;
+              content: string | null;
+              contentTypeName: string;
+              databaseId: number;
+              date: string;
+              dateGmt: string;
+              desiredSlug: string | null;
+              enclosure: string | null;
+              featuredImageDatabaseId: number;
+              featuredImageId: string;
+              guid: string;
+              hasPassword: boolean;
+              id: string;
+              isComment: boolean;
+              isContentNode: boolean;
+              isFrontPage: boolean;
+              isPostsPage: boolean;
+              isPreview: boolean;
+              isRestricted: boolean;
+              isTermNode: boolean;
+              link: string;
+              modified: string;
+              modifiedGmt: string;
+              parentDatabaseId: number | null;
+              parentId: string | null;
+              password: string | null;
+              previewRevisionDatabaseId: number | null;
+              previewRevisionId: string | null;
+              slug: string;
+              status: string;
+              title: string;
+            }>;
+          };
+        };
+      }>;
+    };
   };
   featuredImage: {
     cursor: string;
@@ -169,6 +297,8 @@ export interface DetailedArticle {
     };
   };
 }
+
+
 
 export interface BannerImageNode {
   sourceUrl: string;
