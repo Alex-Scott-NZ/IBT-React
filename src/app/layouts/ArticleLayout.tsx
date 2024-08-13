@@ -5,7 +5,7 @@ import BaseLayout from './BaseLayout';
 import Image from 'next/image';
 import { DetailedArticle, BannerImageNode } from '../types/Article';
 
-import { Worker, Viewer, SpecialZoomLevel, ViewMode, ScrollMode } from '@react-pdf-viewer/core';
+import { Worker, Viewer,  ViewMode, ScrollMode } from '@react-pdf-viewer/core';
 import { toolbarPlugin, ToolbarSlot } from '@react-pdf-viewer/toolbar';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
@@ -26,7 +26,7 @@ const ArticleLayout: React.FC<ArticleLayoutProps> = ({ article, bannerData }) =>
         const container = pagesContainer.closest('.js-viewer-container');
         return container instanceof HTMLElement ? container : pagesContainer;
       },
-      renderExitFullScreenButton: (props) => <></>,
+      renderExitFullScreenButton: () => <></>,
     },
   });
   const { Toolbar } = toolbarPluginInstance;
