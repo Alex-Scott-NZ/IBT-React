@@ -23,6 +23,27 @@ export interface FrontPageArticle {
     subtitle: string;
     suppressDate: string;
     tableOfContentsTitle: string;
+    relatedJournal?: {
+      edges: {
+        node: {
+          contentTypeName: string;
+          databaseId: number;
+          date: string;
+          dateGmt: string;
+          featuredImageDatabaseId: number;
+          featuredImageId: number;
+          guid: string;
+          id: string;
+          isContentNode: boolean;
+          journalIssueId: number;
+          link: string;
+          slug: string;
+          status: string;
+          uri: string;
+          title: string;
+        };
+      }[];
+    } | null; // Allow for null values
   };
 }
 
@@ -297,8 +318,6 @@ export interface DetailedArticle {
     };
   };
 }
-
-
 
 export interface BannerImageNode {
   sourceUrl: string;
