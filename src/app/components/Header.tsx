@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ bannerData }) => {
                   alt={bannerData.altText}
                   title={bannerData.title}
                   fill
-                  sizes="630px"
+                  sizes="631px"
                   priority
                   style={{
                     objectFit: 'contain',
