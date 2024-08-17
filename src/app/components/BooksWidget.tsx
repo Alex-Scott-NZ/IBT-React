@@ -67,7 +67,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
       >
         <Link href="/book" passHref>
           <Typography
-            className="font-telegrafico text-communist-red mt-0 mb-0 ml-3"
+            className="font-telegrafico text-communist-red mt-0 mb-0"
             variant="h5"
           >
             Books

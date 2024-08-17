@@ -1,249 +1,240 @@
-'use client'
-
+"use client"
 import React, { useState, useEffect } from 'react';
-import { Menu, MenuItem, Box, Divider, Button } from '@mui/material';
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import Link from 'next/link'; 
+import { AppBar, Toolbar, Button, Menu, MenuItem, IconButton, Box, Drawer, List, ListItemText, ListItemButton, ButtonGroup } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../theme/theme'; // Import your reusable theme
+import MenuIcon from '@mui/icons-material/Menu';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Link from 'next/link';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import EmailIcon from '@mui/icons-material/Email';
-import { styled } from '@mui/system';
 import { JournalIssueNode } from '../types/Article';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
 
-
-// Custom styled component to apply pointer-events
-const StyledMenu = styled(Menu)({
-  '& .MuiPaper-root': {
-    pointerEvents: 'auto',
-  },
-});
-
-// Set up revalidation and GraphQL client configuration
 export const revalidate = 60;
 
-
 const NavigationMenu: React.FC = () => {
-  let timeoutId: NodeJS.Timeout | null = null;
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(null);
   const [anchorElCollection, setAnchorElCollection] = useState<null | HTMLElement>(null);
   const [journalIssues, setJournalIssues] = useState<JournalIssueNode[]>([]);
+  const [journalOpen, setJournalOpen] = useState(false);
+  const [collectionOpen, setCollectionOpen] = useState(false);
 
-  const handleOpen = (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (!!timeoutId) {
-      clearTimeout(timeoutId);
-    }
+  useEffect(() => {
+    const fetchJournalIssues = async () => {
+      try {
+        const response = await fetch('/api/journal-issues');
+        if (!response.ok) throw new Error('Failed to fetch journal issues');
+        const data: JournalIssueNode[] = await response.json();
+        if (Array.isArray(data)) {
+          const sortedIssues = data.sort((a, b) => b.slug.localeCompare(a.slug));
+          setJournalIssues(sortedIssues);
+        } else {
+          console.error('Unexpected data structure:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching journal issues:', error);
+      }
+    };
+
+    fetchJournalIssues();
+  }, []);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleMenuOpen = (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => () => {
-    timeoutId = setTimeout(() => {
-      setAnchorEl(null);
-    }, 50);
+  const handleMenuClose = (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => () => {
+    setAnchorEl(null);
   };
 
-  const handleMenuEnter = () => {
-    if (!!timeoutId) {
-      clearTimeout(timeoutId);
-    }
+  const handleNestedListToggle = (setState: React.Dispatch<React.SetStateAction<boolean>>) => (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setState(prev => !prev);
   };
 
-useEffect(() => {
-  const fetchJournalIssues = async () => {
-    try {
-      console.log('Fetching journal issues...');
-      const response = await fetch('/api/journal-issues');
-      if (!response.ok) {
-        throw new Error('Failed to fetch journal issues');
-      }
-      const data: JournalIssueNode[] = await response.json();
-      console.log('Fetched data:', data);
-      if (Array.isArray(data)) {
-        const sortedIssues = data.sort((a, b) => b.slug.localeCompare(a.slug));
-        console.log('Sorted issues:', sortedIssues);
-        setJournalIssues(sortedIssues);
-      } else {
-        console.error('Unexpected data structure:', data);
-      }
-    } catch (error) {
-      console.error('Error fetching journal issues:', error);
-    }
-  };
+  const drawer = (
+    <Box sx={{ textAlign: 'center' }}>
+      <List>
+        <ListItemButton component={Link} href="/" onClick={handleDrawerToggle}>
+          <ListItemText primary="home" />
+        </ListItemButton>
 
-  fetchJournalIssues();
-}, []);
+        <ListItemButton onClick={handleNestedListToggle(setJournalOpen)}>
+          <ListItemText primary="1917 journal" />
+          {journalOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={journalOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton component={Link} href="/journal" sx={{ pl: 4 }} onClick={handleDrawerToggle}>
+              <ListItemText primary="journal home" />
+            </ListItemButton>
+            {journalIssues.map((issue) => (
+              <ListItemButton key={issue.slug} component={Link} href={`/journal/${issue.slug}`} sx={{ pl: 6 }} onClick={handleDrawerToggle}>
+                <ListItemText primary={issue.title} />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
 
-  const linkStyle = {
-    fontSize: '1.4rem',
-    fontWeight: 'bold',
-    letterSpacing: '0.03em',
-    textTransform: 'none', 
-    padding: 0,   
-    lineHeight: '1.5rem',
-  };
+        <ListItemButton component={Link} href="/book" onClick={handleDrawerToggle}>
+          <ListItemText primary="books" />
+        </ListItemButton>
 
-  const separatorProps = {
-    orientation: 'vertical' as const,
-    flexItem: true,
-    sx: {
-      mx: 2,
-      borderRightWidth: 2,
-    },
-    className: 'border-communist-red',
-  };
+        <ListItemButton onClick={handleNestedListToggle(setCollectionOpen)}>
+          <ListItemText primary="collection" />
+          {collectionOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={collectionOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4 }} onClick={handleDrawerToggle}>
+              <ListItemText primary="Item 1" />
+            </ListItemButton>
+            <ListItemButton sx={{ pl: 4 }} onClick={handleDrawerToggle}>
+              <ListItemText primary="Item 2" />
+            </ListItemButton>
+          </List>
+        </Collapse>
 
-  const menuProps = {
-    anchorOrigin: {
-      vertical: 'bottom' as const,
-      horizontal: 'left' as const,
-    },
-    transformOrigin: {
-      vertical: 'top' as const,
-      horizontal: 'left' as const,
-    },
-    sx: {
-      '& .MuiPaper-root': {
-        minWidth: '250px',
-        pointerEvents: 'auto', // Ensures you can interact with the menu
-      },
-    },
-  };
+        <ListItemButton component={Link} href="/marxist-archives" onClick={handleDrawerToggle}>
+          <ListItemText primary="marxist archives" />
+        </ListItemButton>
+
+        <ListItemButton component={Link} href="/about" onClick={handleDrawerToggle}>
+          <ListItemText primary="about" />
+        </ListItemButton>
+
+        <ListItemButton component={Link} href="/donate" onClick={handleDrawerToggle}>
+          <ListItemText primary="donate" />
+        </ListItemButton>
+      </List>
+    </Box>
+  );
 
   return (
-    <nav className="bg-custom-bg p-4">
-      <Box display="flex" alignItems="center" className="font-cambay">
-        <Link href="/" passHref>
-          <Button className="text-communist-red font-cambay" sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1, textTransform: 'none' }}>
-            home
-          </Button>
-        </Link>
+    <ThemeProvider theme={theme}>
+      <AppBar position="static" color="default" component="nav">
+        <Toolbar sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }} variant='dense' disableGutters>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            // edge="start"
+            size="large"
+            onClick={handleDrawerToggle}
+            sx={{
+              display: { sm: 'none' },
+              padding: '0',
+              fontSize: "large"
+            }}
 
-        <Divider {...separatorProps} />
-
-        <Link href="/journal" passHref>
-        <Button
-          className="text-communist-red font-cambay"
-          sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}
-          onMouseEnter={handleOpen(setAnchorElJournal)}
-          onMouseLeave={handleClose(setAnchorElJournal)}
-        >
-          1917 journal
-          <KeyboardArrowDownRoundedIcon fontSize="small" sx={{ ml: 0 }} />
-        </Button>
-      </Link>
-      <StyledMenu
-        anchorEl={anchorElJournal}
-        open={Boolean(anchorElJournal)}
-        onClose={handleClose(setAnchorElJournal)}
-        {...menuProps}
-        MenuListProps={{
-          onMouseEnter: handleMenuEnter,
-          onMouseLeave: handleClose(setAnchorElJournal),
-        }}
-      >
-        {journalIssues.map((issue) => (
-          <MenuItem
-            key={issue.slug}
-            onClick={handleClose(setAnchorElJournal)}
-            component={Link}
-            href={`/journal/${issue.slug}`}
           >
-            {issue.title}
-          </MenuItem>
-        ))}
-      </StyledMenu>
-
-        <Divider {...separatorProps} />
-
-        <Link href="/book" passHref>
-          <Button className="text-communist-red font-cambay" sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}>
-            books
-          </Button>
-        </Link>
-
-        <Divider {...separatorProps} />
-
-        <Button
-        className="text-communist-red font-cambay"
-          sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}
-          onMouseEnter={handleOpen(setAnchorElCollection)}
-          onMouseLeave={handleClose(setAnchorElCollection)}
-        >
-          collection
-          <KeyboardArrowDownRoundedIcon fontSize="small" sx={{ ml: 0 }} />
-        </Button>
-        <StyledMenu
-          anchorEl={anchorElCollection}
-          open={Boolean(anchorElCollection)}
-          onClose={handleClose(setAnchorElCollection)}
-          {...menuProps}
-          MenuListProps={{
-            onMouseEnter: handleMenuEnter,
-            onMouseLeave: handleClose(setAnchorElCollection),
+            <MenuIcon fontSize='large' />
+          </IconButton>
+          <Box
+            sx={{
+              display: { xs: 'none', sm: 'flex' },
+              flexGrow: 1,
+              alignItems: 'center',
+            }}
+          >
+            <ButtonGroup variant="text" aria-label="text button group">
+              {['home', 'books', 'marxist archives', 'about', 'donate'].map((item) => (
+                <Button
+                  key={item}
+                  component={Link}
+                  href={item === 'home' ? '/' : item === 'books' ? '/book' : `/${item.replace(' ', '-')}`} // Correct href for 'home'
+                >
+                  {item}
+                </Button>
+              ))}
+              <Button
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleMenuOpen(setAnchorElJournal)(event as React.MouseEvent<HTMLButtonElement>);
+                }}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                1917 journal
+              </Button>
+              <Menu
+                anchorEl={anchorElJournal}
+                open={Boolean(anchorElJournal)}
+                onClose={handleMenuClose(setAnchorElJournal)}
+              >
+                <MenuItem onClick={handleMenuClose(setAnchorElJournal)} component={Link} href="/journal">
+                  journal home
+                </MenuItem>
+                {journalIssues.map((issue) => (
+                  <MenuItem key={issue.slug} onClick={handleMenuClose(setAnchorElJournal)} component={Link} href={`/journal/${issue.slug}`}>
+                    {issue.title}
+                  </MenuItem>
+                ))}
+              </Menu>
+              <Button
+                onClick={handleMenuOpen(setAnchorElCollection)}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                collection
+              </Button>
+              <Menu
+                anchorEl={anchorElCollection}
+                open={Boolean(anchorElCollection)}
+                onClose={handleMenuClose(setAnchorElCollection)}
+              >
+                <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>Item 1</MenuItem>
+                <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>Item 2</MenuItem>
+              </Menu>
+            </ButtonGroup>
+          </Box>
+          {/* Social media icons */}
+          <Box sx={{
+            // display: 'flex',
+            gap: '1',
+            '& .MuiIconButton-root': {
+              // padding: '0',
+              fontSize: '2rem',
+            }
+          }}>
+            {[
+              { Icon: FacebookIcon, href: "https://www.facebook.com/Bolsheviks" },
+              { Icon: YouTubeIcon, href: "https://www.youtube.com/user/ibt1917" },
+              { Icon: TwitterIcon, href: "https://www.twitter.com/IBT1917" },
+              { Icon: EmailIcon, href: "mailto:ibt@bolshevik.org" }
+            ].map(({ Icon, href }, index) => (
+              <IconButton key={index} color="inherit" component={Link} href={href} target="_blank">
+                <Icon fontSize='inherit' />
+              </IconButton>
+            ))}
+          </Box>
+        </Toolbar>
+        {/* Drawer */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
           }}
         >
-          <MenuItem onClick={handleClose(setAnchorElCollection)}>Item 1</MenuItem>
-          <MenuItem onClick={handleClose(setAnchorElCollection)}>Item 2</MenuItem>
-        </StyledMenu>
-
-        <Divider {...separatorProps} />
-
-        <Link href="/marxist-archives" passHref>
-          <Button className="text-communist-red font-cambay" sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}>
-            marxist archives
-          </Button>
-        </Link>
-
-        <Divider {...separatorProps} />
-
-        <Link href="/about" passHref>
-          <Button className="text-communist-red font-cambay" sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}>
-            about
-          </Button>
-        </Link>
-
-        <Divider {...separatorProps} />
-
-        <Link href="/donate" passHref>
-          <Button className="text-communist-red font-cambay" sx={{ ...linkStyle, zIndex: (theme) => theme.zIndex.modal + 1 }}>
-            donate
-          </Button>
-        </Link>
-
-        <Box
-          ml="auto"
-          display="flex"
-          alignItems="center"
-          sx={{ gap: 2, height: '100%' }}
-        >
-          <Link href="https://www.facebook.com/Bolsheviks" passHref target="_blank">
-            <FacebookIcon
-              className="text-communist-red hover:text-communist-red"
-              sx={{ fontSize: 32, display: 'block', margin: 'auto' }}
-            />
-          </Link>
-          <Link href="https://www.youtube.com/user/ibt1917" passHref target="_blank">
-            <YouTubeIcon
-              className="text-communist-red hover:text-communist-red"
-              sx={{ fontSize: 32, display: 'block', margin: 'auto' }}
-            />
-          </Link>
-          <Link href="https://www.twitter.com/IBT1917" passHref target="_blank">
-            <TwitterIcon
-              className="text-communist-red hover:text-communist-red"
-              sx={{ fontSize: 32, display: 'block', margin: 'auto' }}
-            />
-          </Link>
-          <Link href="mailto:ibt@bolshevik.org" passHref>
-            <EmailIcon
-              className="text-communist-red hover:text-communist-red"
-              sx={{ fontSize: 32, display: 'block', margin: 'auto' }}
-            />
-          </Link>
-        </Box>
-      </Box>
-    </nav>
+          {drawer}
+        </Drawer>
+      </AppBar>
+    </ThemeProvider>
   );
+
 };
 
 export default NavigationMenu;
