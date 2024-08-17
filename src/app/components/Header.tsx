@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,50 +16,33 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ bannerData }) => {
   return (
     <header className="w-full bg-custom-bg text-white">
-      <Box display="flex" justifyContent="center" className="w-full">
-        <Box
-          width="1440px"
-          display="flex"
-          justifyContent="flex-start"
-          style={{ margin: 0, padding: 0 }}
+      <div className="flex justify-center w-full">
+        <div
+          className="w-full max-w-[1366px] flex justify-center lg:justify-start"
+          style={{ position: "relative", width: "100%", maxWidth: "1366px" }}
         >
           {bannerData && bannerData.sourceUrl ? (
-            <Link href="/" passHref>
-              <div
-                style={{
-                  position: 'relative',
-                  width: '630px',
-                  height: '110px',
-                }}
-              >
+            <div style={{ position: "relative", width: "100%", maxWidth: "630px" }}>
+              <Link href="/" passHref>
+
                 <Image
                   src={bannerData.sourceUrl}
                   alt={bannerData.altText}
                   title={bannerData.title}
-                  fill
-                  sizes="631px"
-                  priority
-                  style={{
-                    objectFit: 'contain',
-                    cursor: 'pointer', // Optional: change cursor to pointer to indicate it's clickable
-                  }}
+                  layout="responsive"
+                  width= {100}
+                  height= {100}
                 />
-              </div>
-            </Link>
+
+              </Link>
+            </div>
           ) : (
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              bgcolor="grey.300"
-              width="630px"
-              height="110px"
-            >
+            <div className="flex justify-center items-center bg-gray-300 w-full max-w-[630px] h-[110px]">
               <CircularProgress />
-            </Box>
+            </div>
           )}
-        </Box>
-      </Box>
+        </div>
+      </div>
     </header>
   );
 };
