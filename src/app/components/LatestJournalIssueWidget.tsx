@@ -40,7 +40,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
       >
         <Link href="/journal" passHref>
           <Typography
-            className="text-communist-red mt-0 mb-0 ml-3"
+            className="text-communist-red mt-0 mb-0"
             variant="h5"
             component="span"
           >
@@ -54,7 +54,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
           maxWidth: '328px',
           display: 'flex',
           flexDirection: 'column',
-          padding: '8px', // Add padding around the card content
+ 
           background: 'transparent',
           border: 'none'
           

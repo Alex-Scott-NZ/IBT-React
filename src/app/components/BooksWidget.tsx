@@ -111,6 +111,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
         </ButtonGroup>
       </Box>
       <Swiper
+      className='p-0'
         onSwiper={setSwiperRef}
         spaceBetween={30}
         slidesPerView={1}
@@ -122,15 +123,15 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
         loop={true}
         allowTouchMove={false}
         style={{
-          width: 'calc(100% + 20px)',
-          height: 'calc(200px + 20px)',
-          marginLeft: '-10px',
-          padding: '5px 10px 10px 10px',
+          // width: 'calc(100% + 20px)',
+          // height: 'calc(200px + 20px)',
+          // marginLeft: '-10px',
+          // padding: '5px 10px 10px 10px',
         }}
       >
         {books.map((book) => (
           <SwiperSlide key={book.id}>
-            <Card elevation={0}
+            <Card elevation={0} className='p-0'
               sx={{
                 maxWidth: '328px',
                 height: '200px',
@@ -141,7 +142,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
             >
               <CardActionArea
                 onClick={() => handleBookClick(book.id)}
-                sx={{ height: '100%', padding: '8px' }}
+                sx={{ height: '100%' }}
               >
                 <Box
                   sx={{
