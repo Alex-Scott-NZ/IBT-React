@@ -22,22 +22,22 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
     <div className="bg-custom-bg min-h-screen flex flex-col">
       <TopBar />
 
-      <div className="w-full max-w-[1366px] mx-auto pl-1 pr-1 flex-grow flex flex-col">
+      <div className="w-full max-w-[1366px] mx-auto pl-2 pr-2 flex-grow flex flex-col">
         <Header bannerData={bannerData} />
         <NavigationMenu />
-        <div className="flex flex-col lg:flex-row lg:justify-between mt-4">
-          <aside className="w-full lg:w-[25%] mb-4 lg:mb-0">
+        <div className="flex flex-col lg:flex-row lg:justify-between pt-4">
+          <aside className="w-full lg:w-[25%] mb-4 pt-2 lg:mb-0 pr-2">
             <div className="lg:sticky lg:top-4 bg-custom-bg">
               {leftSidebar}
             </div>
           </aside>
 
-          <main className="w-full lg:w-[720px] bg-custom-bg p-4 overflow-y-auto mb-4 lg:mb-0">
+          <main className="w-full lg:w-[720px] bg-custom-bg p-2 overflow-y-auto mb-4 lg:mb-0">
             {mainContent}
           </main>
 
-          <aside className="w-full lg:w-[25%]">
-            <div className="lg:sticky lg:top-4 bg-custom-bg p-4">
+          <aside className="w-full lg:w-[25%] pt-2 pl-2" >
+            <div className="lg:sticky lg:top-4 bg-custom-bg">
               {rightSidebar}
             </div>
           </aside>
