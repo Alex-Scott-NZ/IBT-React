@@ -19,13 +19,14 @@ interface BaseLayoutProps {
 }
 
 // Custom styled IconButton with lightened background and communist-red icons
-const CustomIconButton = styled(IconButton)(({ theme }) => ({
+const CustomIconButton = styled(IconButton)({
   backgroundColor: lighten('#B00909', 0.1),
   color: '#EAEAE2',
   '&:hover': {
     backgroundColor: lighten('#B00909', 0.2),
   },
-}));
+});
+
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({
   bannerData,
