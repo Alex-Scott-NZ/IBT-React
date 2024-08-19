@@ -14,7 +14,6 @@ import {
   IconButton,
   ButtonGroup,
   Divider, styled,
-  lighten
 } from '@mui/material';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
