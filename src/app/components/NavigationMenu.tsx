@@ -14,7 +14,6 @@ import { JournalIssueNode } from '../types/Article';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
-import { useMediaQuery, useTheme } from '@mui/material';
 
 export const revalidate = 60;
 
