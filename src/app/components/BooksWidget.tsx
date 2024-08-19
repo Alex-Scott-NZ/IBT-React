@@ -137,7 +137,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                   </Box>
 
                   <Box sx={{ flex: '1 1 auto' }}>
-                    <Typography variant="h6" className="font-helvetica">
+                    <Typography variant="h6" className="font-helvetica" fontSize={16} fontWeight={'bold'}>
                       {book.title}
                     </Typography>
                     <Typography
