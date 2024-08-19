@@ -116,7 +116,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
         anchor="left"
         open={leftDrawerOpen}
         onClose={toggleLeftDrawer(false)}
-        className="lg:hidden bg-custom-bg"
+        className="lg:hidden"
         sx={{
           '& .MuiDrawer-paper': {
             backgroundColor: '#EAEAE2', // Set the background color here

@@ -1,6 +1,19 @@
-"use client"
+'use client';
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Button, Menu, MenuItem, IconButton, Box, Drawer, List, ListItemText, ListItemButton, ButtonGroup } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Menu,
+  MenuItem,
+  IconButton,
+  Box,
+  Drawer,
+  List,
+  ListItemText,
+  ListItemButton,
+  ButtonGroup,
+} from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../theme/theme'; // Import your reusable theme
 import MenuIcon from '@mui/icons-material/Menu';
@@ -19,8 +32,11 @@ export const revalidate = 60;
 
 const NavigationMenu: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(null);
-  const [anchorElCollection, setAnchorElCollection] = useState<null | HTMLElement>(null);
+  const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElCollection, setAnchorElCollection] =
+    useState<null | HTMLElement>(null);
   const [journalIssues, setJournalIssues] = useState<JournalIssueNode[]>([]);
   const [journalOpen, setJournalOpen] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
@@ -32,7 +48,9 @@ const NavigationMenu: React.FC = () => {
         if (!response.ok) throw new Error('Failed to fetch journal issues');
         const data: JournalIssueNode[] = await response.json();
         if (Array.isArray(data)) {
-          const sortedIssues = data.sort((a, b) => b.slug.localeCompare(a.slug));
+          const sortedIssues = data.sort((a, b) =>
+            b.slug.localeCompare(a.slug)
+          );
           setJournalIssues(sortedIssues);
         } else {
           console.error('Unexpected data structure:', data);
@@ -49,18 +67,24 @@ const NavigationMenu: React.FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleMenuOpen = (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleMenuOpen =
+    (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
 
-  const handleMenuClose = (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => () => {
-    setAnchorEl(null);
-  };
+  const handleMenuClose =
+    (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) =>
+    () => {
+      setAnchorEl(null);
+    };
 
-  const handleNestedListToggle = (setState: React.Dispatch<React.SetStateAction<boolean>>) => (event: React.MouseEvent) => {
-    event.stopPropagation();
-    setState(prev => !prev);
-  };
+  const handleNestedListToggle =
+    (setState: React.Dispatch<React.SetStateAction<boolean>>) =>
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      setState((prev) => !prev);
+    };
 
   const drawer = (
     <Box sx={{ textAlign: 'center' }}>
@@ -75,18 +99,33 @@ const NavigationMenu: React.FC = () => {
         </ListItemButton>
         <Collapse in={journalOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton component={Link} href="/journal" sx={{ pl: 4 }} onClick={handleDrawerToggle}>
+            <ListItemButton
+              component={Link}
+              href="/journal"
+              sx={{ pl: 4 }}
+              onClick={handleDrawerToggle}
+            >
               <ListItemText primary="journal home" />
             </ListItemButton>
             {journalIssues.map((issue) => (
-              <ListItemButton key={issue.slug} component={Link} href={`/journal/${issue.slug}`} sx={{ pl: 6 }} onClick={handleDrawerToggle}>
+              <ListItemButton
+                key={issue.slug}
+                component={Link}
+                href={`/journal/${issue.slug}`}
+                sx={{ pl: 6 }}
+                onClick={handleDrawerToggle}
+              >
                 <ListItemText primary={issue.title} />
               </ListItemButton>
             ))}
           </List>
         </Collapse>
 
-        <ListItemButton component={Link} href="/book" onClick={handleDrawerToggle}>
+        <ListItemButton
+          component={Link}
+          href="/book"
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="books" />
         </ListItemButton>
 
@@ -105,15 +144,27 @@ const NavigationMenu: React.FC = () => {
           </List>
         </Collapse>
 
-        <ListItemButton component={Link} href="/marxist-archives" onClick={handleDrawerToggle}>
+        <ListItemButton
+          component={Link}
+          href="/marxist-archives"
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="marxist archives" />
         </ListItemButton>
 
-        <ListItemButton component={Link} href="/about" onClick={handleDrawerToggle}>
+        <ListItemButton
+          component={Link}
+          href="/about"
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="about" />
         </ListItemButton>
 
-        <ListItemButton component={Link} href="/donate" onClick={handleDrawerToggle}>
+        <ListItemButton
+          component={Link}
+          href="/donate"
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="donate" />
         </ListItemButton>
       </List>
@@ -123,20 +174,25 @@ const NavigationMenu: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static" color="default" component="nav">
-        <Toolbar sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }} className='-ml-2' disableGutters variant="dense">
+        <Toolbar
+          sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}
+          className="-ml-2"
+          disableGutters
+          variant="dense"
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
             // edge="start"
             size="large"
-            className='p-1'
+            className="p-1"
             onClick={handleDrawerToggle}
             sx={{
               display: { sm: 'none' },
-              fontSize: "large"
+              fontSize: 'large',
             }}
           >
-            <MenuIcon fontSize='large' />
+            <MenuIcon fontSize="large" />
           </IconButton>
           <Box
             sx={{
@@ -146,11 +202,15 @@ const NavigationMenu: React.FC = () => {
             }}
           >
             <ButtonGroup variant="text" aria-label="text button group">
-              <Button component={Link} href="/">home</Button>
+              <Button component={Link} href="/">
+                home
+              </Button>
               <Button
                 onClick={(event) => {
                   event.preventDefault();
-                  handleMenuOpen(setAnchorElJournal)(event as React.MouseEvent<HTMLButtonElement>);
+                  handleMenuOpen(setAnchorElJournal)(
+                    event as React.MouseEvent<HTMLButtonElement>
+                  );
                 }}
                 endIcon={<KeyboardArrowDownIcon />}
               >
@@ -161,21 +221,38 @@ const NavigationMenu: React.FC = () => {
                 open={Boolean(anchorElJournal)}
                 onClose={handleMenuClose(setAnchorElJournal)}
               >
-                <MenuItem onClick={handleMenuClose(setAnchorElJournal)} component={Link} href="/journal">
+                <MenuItem
+                  onClick={handleMenuClose(setAnchorElJournal)}
+                  component={Link}
+                  href="/journal"
+                >
                   journal home
                 </MenuItem>
                 {journalIssues.map((issue) => (
-                  <MenuItem key={issue.slug} onClick={handleMenuClose(setAnchorElJournal)} component={Link} href={`/journal/${issue.slug}`}>
+                  <MenuItem
+                    key={issue.slug}
+                    onClick={handleMenuClose(setAnchorElJournal)}
+                    component={Link}
+                    href={`/journal/${issue.slug}`}
+                    sx={{ pl: 6 }} // Add padding here
+                  >
                     {issue.title}
                   </MenuItem>
                 ))}
               </Menu>
-              <Button component={Link} href="/book">books</Button>
-              <Button component={Link} href="/marxist-archives">marxist archives</Button>
+
+              <Button component={Link} href="/book">
+                books
+              </Button>
+              <Button component={Link} href="/marxist-archives">
+                marxist archives
+              </Button>
               <Button
                 onClick={(event) => {
                   event.preventDefault();
-                  handleMenuOpen(setAnchorElCollection)(event as React.MouseEvent<HTMLButtonElement>);
+                  handleMenuOpen(setAnchorElCollection)(
+                    event as React.MouseEvent<HTMLButtonElement>
+                  );
                 }}
                 endIcon={<KeyboardArrowDownIcon />}
               >
@@ -186,30 +263,52 @@ const NavigationMenu: React.FC = () => {
                 open={Boolean(anchorElCollection)}
                 onClose={handleMenuClose(setAnchorElCollection)}
               >
-                <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>Item 1</MenuItem>
-                <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>Item 2</MenuItem>
+                <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>
+                  Item 1
+                </MenuItem>
+                <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>
+                  Item 2
+                </MenuItem>
               </Menu>
-              <Button component={Link} href="/about">about</Button>
-              <Button component={Link} href="/donate">donate</Button>
+              <Button component={Link} href="/about">
+                about
+              </Button>
+              <Button component={Link} href="/donate">
+                donate
+              </Button>
             </ButtonGroup>
           </Box>
           {/* Social media icons */}
-          <Box sx={{
-           display: 'flex',
-           justifyContent: 'flex-end',
-            gap: '1',
-            '& .MuiIconButton-root': {
-              fontSize: '2rem',
-            }
-          }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '1',
+              '& .MuiIconButton-root': {
+                fontSize: '2rem',
+              },
+            }}
+          >
             {[
-              { Icon: FacebookIcon, href: "https://www.facebook.com/Bolsheviks" },
-              { Icon: YouTubeIcon, href: "https://www.youtube.com/user/ibt1917" },
-              { Icon: TwitterIcon, href: "https://www.twitter.com/IBT1917" },
-              { Icon: EmailIcon, href: "mailto:ibt@bolshevik.org" }
+              {
+                Icon: FacebookIcon,
+                href: 'https://www.facebook.com/Bolsheviks',
+              },
+              {
+                Icon: YouTubeIcon,
+                href: 'https://www.youtube.com/user/ibt1917',
+              },
+              { Icon: TwitterIcon, href: 'https://www.twitter.com/IBT1917' },
+              { Icon: EmailIcon, href: 'mailto:ibt@bolshevik.org' },
             ].map(({ Icon, href }, index) => (
-              <IconButton key={index} color="inherit" component={Link} href={href} target="_blank">
-                <Icon fontSize='inherit' />
+              <IconButton
+                key={index}
+                color="inherit"
+                component={Link}
+                href={href}
+                target="_blank"
+              >
+                <Icon fontSize="inherit" />
               </IconButton>
             ))}
           </Box>
@@ -232,7 +331,6 @@ const NavigationMenu: React.FC = () => {
       </AppBar>
     </ThemeProvider>
   );
-
 };
 
 export default NavigationMenu;

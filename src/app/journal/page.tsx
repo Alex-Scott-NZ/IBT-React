@@ -63,7 +63,7 @@ const JournalPage = async () => {
 
   return (
     <BaseLayoutNoSideBars bannerData={bannerData}>
-      <div className="p-4">
+      <div>
         <h1 className="font-cambay text-communist-red">All Journal Issues</h1>
         <Grid container spacing={2}>
           {journalIssues.map((issue) => (

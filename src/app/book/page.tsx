@@ -52,7 +52,7 @@ const BooksPage = async () => {
 
   return (
     <BaseLayoutNoSideBars bannerData={bannerData}>
-      <div className="p-4">
+      <div>
         <h1 className="font-cambay text-communist-red">All Books</h1>
         <Grid container spacing={4}>
           {books.map((book) => (
