@@ -43,11 +43,13 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null);
   const router = useRouter();
 
-  const handlePrevious = useCallback(() => {
+  const handlePrevious = useCallback((event: React.MouseEvent) => {
+    event?.stopPropagation();
     swiperRef?.slidePrev();
   }, [swiperRef]);
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback((event: React.MouseEvent) => {
+    event?.stopPropagation();
     swiperRef?.slideNext();
   }, [swiperRef]);
 
@@ -73,42 +75,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
             Books
           </Typography>
         </Link>
-        <ButtonGroup
-          sx={{
-            boxShadow: 1,
-            backgroundColor: lighten('#EAEAE2', 0.4),
-            borderRadius: '40px',
-            overflow: 'hidden',
-          }}
-        >
-          <IconButton
-            onClick={handlePrevious}
-            sx={
-              {
-                // width: '40px',
-                // height: '40px',
-                // padding: '8px',
-                //  borderRadius: '40%'
-              }
-            }
-          >
-            <ArrowBackIos sx={{ marginLeft: '5px' }} fontSize="small" className="text-communist-red" />
-          </IconButton>
-          <StyledDivider orientation='vertical' variant='middle' />
-          <IconButton
-            onClick={handleNext}
-            sx={
-              {
-                // width: '40px',
-                // height: '40px',
-                // padding: '8px',
-                // borderRadius: '40%'
-              }
-            }
-          >
-            <ArrowForwardIos sx={{ marginLeft: '4px' }} fontSize="small" className="text-communist-red" />
-          </IconButton>
-        </ButtonGroup>
+
       </Box>
       <Swiper
       className='p-0'
@@ -133,7 +100,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
           <SwiperSlide key={book.id}>
             <Card elevation={0} className='p-0'
               sx={{
-                maxWidth: '100%',
+                Width: '100%',
                 height: '200px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -154,7 +121,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
 
                   <Box
                     sx={{
-                      width: '128px',
+                      width: '45%',
                       height: '100%',
                       position: 'relative',
                       overflow: 'hidden',
@@ -166,7 +133,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                       src={getImageUrl(book.featuredImage?.node, 128)}
                       alt={book.featuredImage?.node?.altText || book.title}
                       layout="fill" // Fills the container dimensions
-                      objectFit="fill" // Ensures the image covers the entire box
+                      objectFit="cover" // Ensures the image covers the entire box
                     />
                   </Box>
 
@@ -190,6 +157,57 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
           </SwiperSlide>
         ))}
       </Swiper>
+      <Box 
+  marginTop={1} 
+  sx={{ 
+    display: 'flex', 
+    justifyContent: 'center',  // Center the ButtonGroup within the Box
+    alignItems: 'center',       // Vertically center the ButtonGroup (optional)
+  }}
+>
+  <ButtonGroup
+    sx={{
+      boxShadow: 0.5,
+      backgroundColor: '#EAEAE2',
+      borderRadius: '5px',
+      overflow: 'hidden',
+      width: '100%',  // Set the width for the ButtonGroup
+      justifyContent: 'center', // Center the buttons within the ButtonGroup
+    }}
+  >
+    <IconButton
+      onClick={handlePrevious}
+      sx={{
+        flex: 1,                 // Make the button take equal space
+        justifyContent: 'center', // Center the icon within the button
+        borderRadius: '10px'
+      }}
+    >
+      <ArrowBackIos 
+        sx={{ marginLeft: '0px' }} // Remove margin if needed
+        fontSize="small" 
+        className="text-communist-red" 
+      />
+    </IconButton>
+    <StyledDivider orientation='vertical' variant='middle' />
+    <IconButton
+      onClick={handleNext}
+      sx={{
+        flex: 1,                 // Make the button take equal space
+        justifyContent: 'center', // Center the icon within the button
+        borderRadius: '10px'
+      }}
+    >
+      <ArrowForwardIos 
+        sx={{ marginLeft: '0px' }} // Remove margin if needed
+        fontSize="small" 
+        className="text-communist-red" 
+      />
+    </IconButton>
+  </ButtonGroup>
+</Box>
+
+
     </div>
   );
 };

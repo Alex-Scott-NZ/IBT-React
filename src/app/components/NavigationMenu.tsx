@@ -123,7 +123,7 @@ const NavigationMenu: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static" color="default" component="nav">
-        <Toolbar sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }} className='-ml-2' disableGutters>
+        <Toolbar sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }} className='-ml-2' disableGutters variant="dense">
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -135,7 +135,6 @@ const NavigationMenu: React.FC = () => {
               display: { sm: 'none' },
               fontSize: "large"
             }}
-
           >
             <MenuIcon fontSize='large' />
           </IconButton>
@@ -147,15 +146,7 @@ const NavigationMenu: React.FC = () => {
             }}
           >
             <ButtonGroup variant="text" aria-label="text button group">
-              {['home', 'books', 'marxist archives', 'about', 'donate'].map((item) => (
-                <Button
-                  key={item}
-                  component={Link}
-                  href={item === 'home' ? '/' : item === 'books' ? '/book' : `/${item.replace(' ', '-')}`} // Correct href for 'home'
-                >
-                  {item}
-                </Button>
-              ))}
+              <Button component={Link} href="/">home</Button>
               <Button
                 onClick={(event) => {
                   event.preventDefault();
@@ -179,8 +170,13 @@ const NavigationMenu: React.FC = () => {
                   </MenuItem>
                 ))}
               </Menu>
+              <Button component={Link} href="/book">books</Button>
+              <Button component={Link} href="/marxist-archives">marxist archives</Button>
               <Button
-                onClick={handleMenuOpen(setAnchorElCollection)}
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleMenuOpen(setAnchorElCollection)(event as React.MouseEvent<HTMLButtonElement>);
+                }}
                 endIcon={<KeyboardArrowDownIcon />}
               >
                 collection
@@ -193,6 +189,8 @@ const NavigationMenu: React.FC = () => {
                 <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>Item 1</MenuItem>
                 <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>Item 2</MenuItem>
               </Menu>
+              <Button component={Link} href="/about">about</Button>
+              <Button component={Link} href="/donate">donate</Button>
             </ButtonGroup>
           </Box>
           {/* Social media icons */}
@@ -201,7 +199,6 @@ const NavigationMenu: React.FC = () => {
            justifyContent: 'flex-end',
             gap: '1',
             '& .MuiIconButton-root': {
-              // padding: '0',
               fontSize: '2rem',
             }
           }}>
