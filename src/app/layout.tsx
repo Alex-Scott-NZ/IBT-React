@@ -4,6 +4,7 @@ import ThemeProviderWrapper from './ThemeProviderWrapper';
 import { ArticleProvider } from '../app/context/ArticleContext';
 import { Cambay } from 'next/font/google';
 import localFont from 'next/font/local';
+import Head from 'next/head'; // Import Head from next/head
 
 // Load Cambay font
 const cambay = Cambay({
@@ -57,6 +58,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${cambay.variable} ${telegrafico.variable} ${helveticaNeue.variable}`}>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      </Head>
       <ThemeProviderWrapper>
         <body className="bg-custom-bg font-helvetica">
           <div id="__next">
@@ -66,5 +70,4 @@ export default function RootLayout({
       </ThemeProviderWrapper>
     </html>
   );
-  
 }
