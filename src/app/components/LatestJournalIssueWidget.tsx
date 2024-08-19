@@ -51,7 +51,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
       </Box>
       <Card elevation={0}
         sx={{
-          maxWidth: '328px',
+          maxWidth: '100%',
           display: 'flex',
           flexDirection: 'column',
  

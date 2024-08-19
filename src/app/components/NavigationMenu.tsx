@@ -14,6 +14,7 @@ import { JournalIssueNode } from '../types/Article';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 export const revalidate = 60;
 
@@ -123,16 +124,16 @@ const NavigationMenu: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static" color="default" component="nav">
-        <Toolbar sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }} variant='dense' disableGutters>
+        <Toolbar sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }} className='-ml-2' disableGutters>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             // edge="start"
             size="large"
+            className='p-1'
             onClick={handleDrawerToggle}
             sx={{
               display: { sm: 'none' },
-              padding: '0',
               fontSize: "large"
             }}
 
@@ -197,7 +198,8 @@ const NavigationMenu: React.FC = () => {
           </Box>
           {/* Social media icons */}
           <Box sx={{
-            // display: 'flex',
+           display: 'flex',
+           justifyContent: 'flex-end',
             gap: '1',
             '& .MuiIconButton-root': {
               // padding: '0',

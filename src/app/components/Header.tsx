@@ -18,11 +18,11 @@ const Header: React.FC<HeaderProps> = ({ bannerData }) => {
     <header className="w-full bg-custom-bg text-white">
       <div className="flex justify-center w-full">
         <div
-          className="w-full max-w-[1366px] flex justify-center lg:justify-start"
+          className="w-full max-w-[1366px] flex justify-start"
           style={{ position: "relative", width: "100%", maxWidth: "1366px" }}
         >
           {bannerData && bannerData.sourceUrl ? (
-            <div style={{ position: "relative", width: "100%", maxWidth: "630px" }}>
+            <div style={{ position: "relative", width: "630px", maxHeight:"122px" }}>
               <Link href="/" passHref>
 
                 <Image

@@ -133,7 +133,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
           <SwiperSlide key={book.id}>
             <Card elevation={0} className='p-0'
               sx={{
-                maxWidth: '328px',
+                maxWidth: '100%',
                 height: '200px',
                 display: 'flex',
                 flexDirection: 'column',
