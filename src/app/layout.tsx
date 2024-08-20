@@ -48,9 +48,8 @@ const helveticaNeue = localFont({
 
 export const metadata: Metadata = {
   title: 'International Bolshevik Tendency',
-  description: 'Description',
-};
-
+  description: 'We stand for a working-class revolution to overthrow capitalism on a global scale. Our vision is a world without hunger, war and oppression, in which all human beings may develop their full potential while protecting the environment on which we depend.'
+}
 export default function RootLayout({
   children,
 }: Readonly<{
