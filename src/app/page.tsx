@@ -23,7 +23,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
     description: 'We stand for a working-class revolution to overthrow capitalism on a global scale. Our vision is a world without hunger, war and oppression, in which all human beings may develop their full potential while protecting the environment on which we depend.',
     openGraph: {
       title: 'International Bolshevik Tendency',
-      description: 'Main pge of the International Bolshevik Tendency website',
+      description: 'Main page of the International Bolshevik Tendency website',
       url: 'https://headless.saggitari.us', // Update with your website's URL
       siteName: 'International Bolshevik Tendency',
       images: [
