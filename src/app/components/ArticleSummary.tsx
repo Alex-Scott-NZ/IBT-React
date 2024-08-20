@@ -15,8 +15,14 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article }) => {
     return `${day} ${month} ${year}`;
   };
 
-  const journalSlug = article.articleDetails.relatedJournal?.edges[0]?.node.slug
+  // Get the journal details if they exist
+  const journalSlug = article.articleDetails.relatedJournal?.edges[0]?.node.slug;
   const journalTitle = article.articleDetails.relatedJournal?.edges[0]?.node.title;
+
+  // Determine which date to display
+  const dateToDisplay = article.articleDetails.suppressDate
+    ? article.articleDetails.displayDate
+    : formatDate(article.articleDetails.publicationDate);
 
   return (
     <>
@@ -36,8 +42,8 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article }) => {
           </div>
         </div>
       </Link>
-      <p className="text-sm mt-0 mb-1 mt-1 leading-tight text-black">
-        {formatDate(article.articleDetails.publicationDate)}
+      <p className="text-sm mb-1 mt-1 leading-tight text-black">
+        {dateToDisplay}
         {journalSlug && (
           <>
             {' '}
@@ -47,8 +53,6 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article }) => {
           </>
         )}
       </p>
-
-
     </>
   );
 };

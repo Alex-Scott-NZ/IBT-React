@@ -9,7 +9,7 @@ interface FeaturedArticlesProps {
   onArticleClick: (slug: string) => void;
 }
 
-const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles}) => {
+const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -64,7 +64,9 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles}) => {
                   }}
                 >
                   <Typography variant="body2" fontSize="0.8rem">
-                    {formatDate(article.articleDetails.publicationDate)}
+                    {article.articleDetails.suppressDate
+                      ? article.articleDetails.displayDate
+                      : formatDate(article.articleDetails.publicationDate)}
                   </Typography>
                   <Typography
                     variant="h6"
