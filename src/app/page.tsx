@@ -12,6 +12,7 @@ import {
   JournalIssueLatest,
 } from './types/Article';
 import HomeLayout from './layouts/HomeLayout';
+import { fetchGlobalSettings } from './utils/fetchGlobalSettings';
 import { GET_ALL_BOOKS } from './graphql/queries/getBooksAll';
 
 export const revalidate = 60; // Ensure no caching
@@ -86,21 +87,10 @@ const fetchBooks = async (): Promise<Book[]> => {
   }
 };
 
-const fetchGlobalSettingsData = async (): Promise<GlobalSettingsData | null> => {
-  try {
-    const data = await graphQLClient.request<GlobalSettingsData>(GET_GLOBAL_SETTINGS);
-    return data || null;
-  } catch (error) {
-    console.error('Error fetching global settings data:', error);
-    return null;
-  }
-};
-
-
 export default async function Home() {
   const [articles, globalSettings, books, latestJournalIssue] = await Promise.all([
     fetchArticles(),
-    fetchGlobalSettingsData(),
+    fetchGlobalSettings(),
     fetchBooks(),
     fetchLatestJournalIssue(),
   ]);

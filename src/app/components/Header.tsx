@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
   const notificationData = globalSettings?.globalSettings.fGGlobalSettings.notificationBar;
 
   return (
-    <header className="w-full bg-custom-bg text-white">
+    <header className="w-full bg-custom-bg text-white mt-2">
       <div className="flex justify-center w-full">
         <div
           className="w-full max-w-[1366px] flex justify-start"
@@ -39,13 +39,6 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
           )}
         </div>
       </div>
-
-      {/* Display site-wide notification bar if it is turned on */}
-      {notificationData?.notificationOnoff && (
-        <div className="w-full bg-notification-bar text-center py-2">
-          {notificationData.notificationMessage}
-        </div>
-      )}
     </header>
   );
 };

@@ -77,7 +77,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
 
       </Box>
       <Swiper
-      className='p-0'
+        className='p-0'
         onSwiper={setSwiperRef}
         spaceBetween={30}
         slidesPerView={1}
@@ -156,55 +156,55 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <Box 
-  marginTop={1} 
-  sx={{ 
-    display: 'flex', 
-    justifyContent: 'center',  // Center the ButtonGroup within the Box
-    alignItems: 'center',       // Vertically center the ButtonGroup (optional)
-  }}
->
-  <ButtonGroup
-    sx={{
-      boxShadow: 0.5,
-      backgroundColor: '#EAEAE2',
-      borderRadius: '5px',
-      overflow: 'hidden',
-      width: '100%',  // Set the width for the ButtonGroup
-      justifyContent: 'center', // Center the buttons within the ButtonGroup
-    }}
-  >
-    <IconButton
-      onClick={handlePrevious}
-      sx={{
-        flex: 1,                 // Make the button take equal space
-        justifyContent: 'center', // Center the icon within the button
-        borderRadius: '10px'
-      }}
-    >
-      <ArrowBackIos 
-        sx={{ marginLeft: '0px' }} // Remove margin if needed
-        fontSize="small" 
-        className="text-communist-red" 
-      />
-    </IconButton>
-    <StyledDivider orientation='vertical' variant='middle' />
-    <IconButton
-      onClick={handleNext}
-      sx={{
-        flex: 1,                 // Make the button take equal space
-        justifyContent: 'center', // Center the icon within the button
-        borderRadius: '10px'
-      }}
-    >
-      <ArrowForwardIos 
-        sx={{ marginLeft: '0px' }} // Remove margin if needed
-        fontSize="small" 
-        className="text-communist-red" 
-      />
-    </IconButton>
-  </ButtonGroup>
-</Box>
+      <Box
+        marginTop={1}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',  // Center the ButtonGroup within the Box
+          alignItems: 'center',       // Vertically center the ButtonGroup (optional)
+        }}
+      >
+        <ButtonGroup
+          sx={{
+            boxShadow: 0.5,
+            backgroundColor: '#EAEAE2',
+            borderRadius: '5px',
+            overflow: 'hidden',
+            width: '100%',  // Set the width for the ButtonGroup
+            justifyContent: 'center', // Center the buttons within the ButtonGroup
+          }}
+        >
+          <IconButton
+            onClick={handlePrevious}
+            sx={{
+              flex: 1,                 // Make the button take equal space
+              justifyContent: 'center', // Center the icon within the button
+              borderRadius: '10px'
+            }}
+          >
+            <ArrowBackIos
+              sx={{ marginLeft: '0px' }} // Remove margin if needed
+              fontSize="small"
+              className="text-communist-red"
+            />
+          </IconButton>
+          {/* <StyledDivider orientation='vertical' variant='middle' /> */}
+          <IconButton
+            onClick={handleNext}
+            sx={{
+              flex: 1,                 // Make the button take equal space
+              justifyContent: 'center', // Center the icon within the button
+              borderRadius: '10px'
+            }}
+          >
+            <ArrowForwardIos
+              sx={{ marginLeft: '0px' }} // Remove margin if needed
+              fontSize="small"
+              className="text-communist-red"
+            />
+          </IconButton>
+        </ButtonGroup>
+      </Box>
 
 
     </div>
