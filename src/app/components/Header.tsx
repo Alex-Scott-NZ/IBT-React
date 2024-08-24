@@ -2,18 +2,16 @@ import React from 'react';
 import { CircularProgress } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-
-interface BannerData {
-  sourceUrl: string;
-  altText: string;
-  title: string;
-}
+import { GlobalSettingsData } from '../types/Article'; // Import the GlobalSettingsData type
 
 interface HeaderProps {
-  bannerData: BannerData | null;
+  globalSettings: GlobalSettingsData | null; // Accept the entire globalSettings object
 }
 
-const Header: React.FC<HeaderProps> = ({ bannerData }) => {
+const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
+  const bannerData = globalSettings?.globalSettings.fGGlobalSettings.bannerImage.node;
+  const notificationData = globalSettings?.globalSettings.fGGlobalSettings.notificationBar;
+
   return (
     <header className="w-full bg-custom-bg text-white">
       <div className="flex justify-center w-full">
@@ -22,18 +20,16 @@ const Header: React.FC<HeaderProps> = ({ bannerData }) => {
           style={{ position: "relative", width: "100%", maxWidth: "1366px" }}
         >
           {bannerData && bannerData.sourceUrl ? (
-            <div style={{ position: "relative", width: "630px", maxHeight:"122px" }}>
+            <div style={{ position: "relative", width: "630px", maxHeight: "122px" }}>
               <Link href="/" passHref>
-
                 <Image
                   src={bannerData.sourceUrl}
                   alt={bannerData.altText}
-                  title={bannerData.title}
+                  title={bannerData.title || ''}
                   layout="responsive"
-                  width= {100}
-                  height= {100}
+                  width={100}
+                  height={100}
                 />
-
               </Link>
             </div>
           ) : (
@@ -43,6 +39,13 @@ const Header: React.FC<HeaderProps> = ({ bannerData }) => {
           )}
         </div>
       </div>
+
+      {/* Display site-wide notification bar if it is turned on */}
+      {notificationData?.notificationOnoff && (
+        <div className="w-full bg-notification-bar text-center py-2">
+          {notificationData.notificationMessage}
+        </div>
+      )}
     </header>
   );
 };

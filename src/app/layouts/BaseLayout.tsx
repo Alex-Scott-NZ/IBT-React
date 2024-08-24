@@ -4,7 +4,7 @@ import React, { ReactNode, useState } from 'react';
 import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';
 import Header from '../components/Header';
-import { BannerImageNode } from '../types/Article';
+import { GlobalSettingsData } from '../types/Article';
 import NavigationMenu from '../components/NavigationMenu';
 import { Drawer, IconButton } from '@mui/material';
 import ArrowBackIosNew from '@mui/icons-material/ArrowBackIosNew';
@@ -12,7 +12,7 @@ import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import { styled, lighten } from '@mui/material/styles';
 
 interface BaseLayoutProps {
-  bannerData: BannerImageNode | null;
+  globalSettings: GlobalSettingsData | null;
   leftSidebar: ReactNode;
   mainContent: ReactNode;
   rightSidebar: ReactNode;
@@ -29,7 +29,7 @@ const CustomIconButton = styled(IconButton)({
 
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({
-  bannerData,
+  globalSettings,
   leftSidebar,
   mainContent,
   rightSidebar,
@@ -50,7 +50,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
       <TopBar />
 
       <div className="w-full max-w-[1366px] mx-auto pl-2 pr-2 flex-grow flex flex-col">
-        <Header bannerData={bannerData} />
+        <Header globalSettings={globalSettings} />
         <NavigationMenu />
 
         <div className="flex flex-col lg:flex-row lg:justify-between pt-2 lg:pt-2">

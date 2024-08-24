@@ -3,7 +3,7 @@
 import React from 'react';
 import BaseLayout from './BaseLayout';
 import Image from 'next/image';
-import { DetailedArticle, BannerImageNode } from '../types/Article';
+import { DetailedArticle, GlobalSettingsData } from '../types/Article';
 
 import { Worker, Viewer,  ViewMode, ScrollMode } from '@react-pdf-viewer/core';
 import { toolbarPlugin, ToolbarSlot } from '@react-pdf-viewer/toolbar';
@@ -13,10 +13,10 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 interface ArticleLayoutProps {
   article: DetailedArticle;
-  bannerData: BannerImageNode | null;
+  globalSettings: GlobalSettingsData | null;
 }
 
-const ArticleLayout: React.FC<ArticleLayoutProps> = ({ article, bannerData }) => {
+const ArticleLayout: React.FC<ArticleLayoutProps> = ({ article, globalSettings }) => {
   const relatedPdf = article.articleDetails?.relatedPdf?.nodes?.[0];
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl;
 
@@ -33,7 +33,7 @@ const ArticleLayout: React.FC<ArticleLayoutProps> = ({ article, bannerData }) =>
 
   return (
     <BaseLayout
-      bannerData={bannerData}
+      globalSettings={globalSettings}
       leftSidebar={<div>Article Left Sidebar</div>}
       mainContent={
         <div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import BaseLayoutNoSideBars from '../layouts/BaseLayoutNoSideBars';
-import { BannerImageNode, Book, GlobalSettingsData } from '../types/Article';
+import { Book } from '../types/Article';
 import {
   Grid,
   Card,
@@ -11,14 +11,19 @@ import {
   ListItem,
 } from '@mui/material';
 import { GET_ALL_BOOKS } from '../graphql/queries/getBooksAll';
-import { GET_GLOBAL_SETTINGS } from '../graphql/queries/getGlobalSettings';
 import { GraphQLClient } from 'graphql-request';
+import { fetchGlobalSettings } from '../utils/fetchGlobalSettings';
 import Link from 'next/link';
 
 async function fetchBooks() {
   try {
     const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-    const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`);
+    const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`, {
+      headers: {
+        'Cache-Control': 'max-age=60',
+      },
+      fetch: (url, options) => fetch(url, { ...options, next: { revalidate: 60 } }),
+    });
     const { books } = await graphQLClient.request<{ books: { nodes: Book[] } }>(
       GET_ALL_BOOKS
     );
@@ -29,29 +34,14 @@ async function fetchBooks() {
   }
 }
 
-async function fetchBannerData(): Promise<BannerImageNode | null> {
-  try {
-    const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-    const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`);
-    const data =
-      await graphQLClient.request<GlobalSettingsData>(GET_GLOBAL_SETTINGS);
-    return (
-      data.globalSettings.nodes[0]?.fGGlobalSettings.bannerImage.node || null
-    );
-  } catch (error) {
-    console.error('Error fetching banner data:', error);
-    return null;
-  }
-}
-
 const BooksPage = async () => {
-  const [books, bannerData] = await Promise.all([
+  const [books, globalSettings] = await Promise.all([
     fetchBooks(),
-    fetchBannerData(),
+    fetchGlobalSettings(),
   ]);
 
   return (
-    <BaseLayoutNoSideBars bannerData={bannerData}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings}>
       <div>
         <h1 className="font-cambay text-communist-red">All Books</h1>
         <Grid container spacing={4}>

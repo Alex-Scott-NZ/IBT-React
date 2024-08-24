@@ -3,16 +3,16 @@ import BaseLayout from './BaseLayout';
 import MainContent from '../components/MainContent';
 import BooksWidget from '../components/BooksWidget';
 import LatestJournalIssueWidget from '../components/LatestJournalIssueWidget';
-import { FrontPageArticle, BannerImageNode, Book, JournalIssueLatest } from '../types/Article';
+import { FrontPageArticle, Book, JournalIssueLatest, GlobalSettingsData } from '../types/Article';
 
 type HomeLayoutProps = {
-  bannerData: BannerImageNode | null;
+  globalSettings: GlobalSettingsData | null;
   articles: FrontPageArticle[];
   books: Book[];
   latestJournalIssue: JournalIssueLatest | null;
 };
 
-const HomeLayout: React.FC<HomeLayoutProps> = ({ bannerData, articles, books, latestJournalIssue }) => {
+const HomeLayout: React.FC<HomeLayoutProps> = ({ globalSettings, articles, books, latestJournalIssue }) => {
   // Sort articles by publicationDate
   const sortedArticles = articles.sort((a, b) => {
     const dateA = new Date(a.articleDetails.publicationDate).getTime();
@@ -22,7 +22,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ bannerData, articles, books, la
 
   return (
     <BaseLayout
-      bannerData={bannerData}
+      globalSettings={globalSettings}
       leftSidebar={<BooksWidget books={books} />}
       mainContent={<MainContent articles={sortedArticles} />}
       rightSidebar={<LatestJournalIssueWidget latestJournalIssue={latestJournalIssue} />}

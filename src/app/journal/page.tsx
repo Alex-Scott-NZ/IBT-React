@@ -11,14 +11,12 @@ import {
 } from '@mui/material';
 import { GraphQLClient } from 'graphql-request';
 import { GET_ALL_JOURNAL_ISSUES } from '../graphql/queries/getJournalIssuesAll';
-import { GET_GLOBAL_SETTINGS } from '../graphql/queries/getGlobalSettings';
 import {
-  BannerImageNode,
   JournalIssueNode,
-  GlobalSettingsData,
 } from '../types/Article';
 import Link from 'next/link';
 import { getImageUrl } from '../utils/imageHelpers';
+import { fetchGlobalSettings } from '../utils/fetchGlobalSettings';
 
 export const revalidate = 60; // Ensure no caching
 
@@ -43,26 +41,17 @@ async function fetchJournalIssues() {
   }
 }
 
-// Function to fetch banner data
-async function fetchBannerData(): Promise<BannerImageNode | null> {
-  try {
-    const data = await graphQLClient.request<GlobalSettingsData>(GET_GLOBAL_SETTINGS);
-    return data.globalSettings.nodes[0]?.fGGlobalSettings.bannerImage.node || null;
-  } catch (error) {
-    console.error('Error fetching banner data:', error);
-    return null;
-  }
-}
+
 
 // Main component for rendering the journal page
 const JournalPage = async () => {
-  const [journalIssues, bannerData] = await Promise.all([
+  const [journalIssues, globalSettings] = await Promise.all([
     fetchJournalIssues(),
-    fetchBannerData(),
+    fetchGlobalSettings(),
   ]);
 
   return (
-    <BaseLayoutNoSideBars bannerData={bannerData}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings}>
       <div>
         <h1 className="font-cambay text-communist-red">All Journal Issues</h1>
         <Grid container spacing={2}>

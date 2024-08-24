@@ -1,21 +1,25 @@
 import { gql } from 'graphql-request';
 
 export const GET_GLOBAL_SETTINGS = gql`
-  query GlobalSettings {
+query GlobalSettings {
     globalSettings {
-      nodes {
         fGGlobalSettings {
-          bannerImage {
-            node {
-              altText
-              sourceUrl
-              title
+            bannerImage {
+                cursor
+                node {
+                    altText
+                    srcSet
+                    sourceUrl
+                }
             }
-          }
+            notificationBar {
+                fieldGroupName
+                notificationMessage
+                notificationOnoff
+            }
         }
-      }
     }
-  }
+}
 `;
 
 export interface BannerImageNode {

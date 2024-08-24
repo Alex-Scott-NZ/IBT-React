@@ -5,7 +5,6 @@ import { GET_GLOBAL_SETTINGS } from './graphql/queries/getGlobalSettings';
 import { GET_LATEST_JOURNAL_ISSUE } from './graphql/queries/getLatestJournal';
 import {
   GlobalSettingsData,
-  BannerImageNode,
   FrontPageArticle,
   ArticlesResponse,
   Book,
@@ -87,27 +86,28 @@ const fetchBooks = async (): Promise<Book[]> => {
   }
 };
 
-const fetchBannerData = async (): Promise<BannerImageNode | null> => {
+const fetchGlobalSettingsData = async (): Promise<GlobalSettingsData | null> => {
   try {
     const data = await graphQLClient.request<GlobalSettingsData>(GET_GLOBAL_SETTINGS);
-    return data.globalSettings.nodes[0]?.fGGlobalSettings.bannerImage.node || null;
+    return data || null;
   } catch (error) {
-    console.error('Error fetching banner data:', error);
+    console.error('Error fetching global settings data:', error);
     return null;
   }
 };
 
+
 export default async function Home() {
-  const [articles, bannerData, books, latestJournalIssue] = await Promise.all([
+  const [articles, globalSettings, books, latestJournalIssue] = await Promise.all([
     fetchArticles(),
-    fetchBannerData(),
+    fetchGlobalSettingsData(),
     fetchBooks(),
     fetchLatestJournalIssue(),
   ]);
 
   return (
     <HomeLayout
-      bannerData={bannerData}
+      globalSettings={globalSettings}
       articles={articles}
       books={books}
       latestJournalIssue={latestJournalIssue}
