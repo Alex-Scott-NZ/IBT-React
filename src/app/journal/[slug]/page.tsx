@@ -1,8 +1,7 @@
 import { GraphQLClient } from 'graphql-request';
 import { GET_JOURNAL_BY_URI } from '../../graphql/queries/getJournalIssueByUri';
 import { JournalIssue } from '../../types/ArticlesInJournal';
-import { GlobalSettingsData, BannerImageNode } from '../../types/Article';
-import { GET_GLOBAL_SETTINGS } from '../../graphql/queries/getGlobalSettings';
+import { fetchGlobalSettings } from '@/app/utils/fetchGlobalSettings';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
 import Image from 'next/image';
 import Link from 'next/link'; // Import Link for routing
@@ -21,20 +20,10 @@ async function fetchJournal(slug: string): Promise<JournalIssue | null> {
   }
 }
 
-async function fetchBannerData(): Promise<BannerImageNode | null> {
-  try {
-    const data = await graphQLClient.request<GlobalSettingsData>(GET_GLOBAL_SETTINGS);
-    return data.globalSettings.nodes[0]?.fGGlobalSettings.bannerImage.node || null;
-  } catch (error) {
-    console.error('Error fetching banner data:', error);
-    return null;
-  }
-}
-
 export default async function JournalPage({ params }: { params: { slug: string } }) {
-  const [journal, bannerData] = await Promise.all([
+  const [journal, globalSettings] = await Promise.all([
     fetchJournal(params.slug),
-    fetchBannerData()
+    fetchGlobalSettings()
   ]);
 
   if (!journal) {
@@ -45,7 +34,7 @@ export default async function JournalPage({ params }: { params: { slug: string }
   const imageUrl = featuredImage?.node.mediaItemUrl || '';
 
   return (
-    <BaseLayoutNoSideBars bannerData={bannerData}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings}>
       <div style={{ display: 'flex', alignItems: 'flex-start' }}>
         <div style={{ flex: '0 0 25%', marginRight: '20px' }}>
           <Image

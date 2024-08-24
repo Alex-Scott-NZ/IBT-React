@@ -325,15 +325,20 @@ export interface BannerImageNode {
   title: string;
 }
 
+export interface SiteNotificationData{
+  fieldGroupName: string;
+  notificationMessage: string;
+  notificationOnoff: boolean;
+}
+
 export interface GlobalSettingsData {
   globalSettings: {
-    nodes: {
       fGGlobalSettings: {
         bannerImage: {
           node: BannerImageNode;
         };
+        notificationBar: SiteNotificationData
       };
-    }[];
   };
 }
 
