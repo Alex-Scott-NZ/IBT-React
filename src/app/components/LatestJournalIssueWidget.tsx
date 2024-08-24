@@ -75,7 +75,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
 
             <Box
               sx={{
-                width: '50%',
+                width: '33%',
                 position: 'relative',
                 overflow: 'hidden',
               }}
@@ -96,7 +96,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
 
             <Box
               sx={{
-                width: '50%',
+                width: '67%',
                 paddingLeft: '8px', // Ensure padding on the left side of the text
                 display: 'flex',
                 flexDirection: 'column',

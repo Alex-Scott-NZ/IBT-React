@@ -6,6 +6,7 @@ import BottomBar from '../components/BottomBar';
 import Header from '../components/Header';
 import { GlobalSettingsData } from '../types/Article';
 import NavigationMenu from '../components/NavigationMenu';
+import SiteWideNotice from '../components/SiteWideNotice';
 import { Drawer, IconButton } from '@mui/material';
 import ArrowBackIosNew from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
@@ -52,6 +53,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
       <div className="w-full max-w-[1366px] mx-auto pl-2 pr-2 flex-grow flex flex-col">
         <Header globalSettings={globalSettings} />
         <NavigationMenu />
+        <SiteWideNotice notificationData={globalSettings?.globalSettings.fGGlobalSettings.notificationBar} />
 
         <div className="flex flex-col lg:flex-row lg:justify-between pt-2 lg:pt-2">
           {/* Drawer Icons */}
