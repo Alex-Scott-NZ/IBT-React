@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
 import { GraphQLClient } from 'graphql-request';
 import { GET_FRONT_PAGE_ARTICLES } from './graphql/queries/getFrontPageArticles';
-import { GET_GLOBAL_SETTINGS } from './graphql/queries/getGlobalSettings';
+// import { GET_GLOBAL_SETTINGS } from './graphql/queries/getGlobalSettings';
 import { GET_LATEST_JOURNAL_ISSUE } from './graphql/queries/getLatestJournal';
 import {
-  GlobalSettingsData,
+  // GlobalSettingsData,
   FrontPageArticle,
   ArticlesResponse,
   Book,

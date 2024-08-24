@@ -10,7 +10,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
   const bannerData = globalSettings?.globalSettings.fGGlobalSettings.bannerImage.node;
-  const notificationData = globalSettings?.globalSettings.fGGlobalSettings.notificationBar;
+  // const notificationData = globalSettings?.globalSettings.fGGlobalSettings.notificationBar;
 
   return (
     <header className="w-full bg-custom-bg text-white mt-2">
