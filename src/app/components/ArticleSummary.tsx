@@ -4,9 +4,10 @@ import Link from 'next/link';
 
 interface ArticleSummaryProps {
   article: FrontPageArticle;
+  className?: string; // Add optional className prop
 }
 
-const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article }) => {
+const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article, className }) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -15,17 +16,15 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article }) => {
     return `${day} ${month} ${year}`;
   };
 
-  // Get the journal details if they exist
   const journalSlug = article.articleDetails.relatedJournal?.edges[0]?.node.slug;
   const journalTitle = article.articleDetails.relatedJournal?.edges[0]?.node.title;
 
-  // Determine which date to display
   const dateToDisplay = article.articleDetails.suppressDate
     ? article.articleDetails.displayDate
     : formatDate(article.articleDetails.publicationDate);
 
   return (
-    <>
+    <div className={className}>
       <Link href={`/article/${article.slug}`} passHref>
         <div className="block mt-5 w-full cursor-pointer text-inherit hover:no-underline hover:text-inherit">
           <div className="relative h-auto w-full flex flex-col">
@@ -53,7 +52,7 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article }) => {
           </>
         )}
       </p>
-    </>
+    </div>
   );
 };
 

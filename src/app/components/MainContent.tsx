@@ -26,16 +26,22 @@ const MainContent: React.FC<MainContentProps> = ({ articles }) => {
 
   return (
     <div className="flex flex-col items-center justify-between w-full">
-      {/* Featured Articles */}
-      <FeaturedArticles
-        articles={sortedArticles.slice(0, 2)} // Use sorted articles for featured section
-        onArticleClick={handleArticleClick}
-      />
+      {/* Featured Articles - only visible on desktop */}
+      <div className="hidden lg:block w-full">
+        <FeaturedArticles
+          articles={sortedArticles.slice(0, 2)} // Display the first two articles as featured on desktop
+          onArticleClick={handleArticleClick}
+        />
+      </div>
 
-      {/* Render remaining articles */}
+      {/* Render all articles with the same layout on mobile and non-featured articles on desktop */}
       <div className="w-full mt-4">
-        {sortedArticles.slice(2).map((article) => (
-          <ArticleSummary key={article.id} article={article} />
+        {sortedArticles.map((article, index) => (
+          <ArticleSummary 
+            key={article.id} 
+            article={article} 
+            className={index < 2 ? 'lg:hidden' : ''} // Hide the first two articles on mobile if they are featured on desktop
+          />
         ))}
       </div>
     </div>
