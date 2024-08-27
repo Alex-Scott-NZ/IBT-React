@@ -65,7 +65,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = async ({
     <BaseLayout
       globalSettings={globalSettings}
       leftSidebar={<>{leftSidebarContent}</>}
-      mainContent={<MainContent articles={articles} />}
+      mainContent={<MainContent articles={articles} placeholders={placeholders} />}
       rightSidebar={<>{rightSidebarContent}</>}
     />
   );
