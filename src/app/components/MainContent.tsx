@@ -1,93 +1,51 @@
+'use client';
+
 import React from 'react';
-import BaseLayout from '../layouts/BaseLayout';
-import MainContent from '../components/MainContent';
-import BooksWidget from '../components/BooksWidget';
-import LatestJournalIssueWidget from '../components/LatestJournalIssueWidget';
-import { FrontPageArticle, Book, JournalIssueLatest, GlobalSettingsData } from '../types/Article';
-import { fetchPlaceHolderSettings } from '../utils/fetchPlaceHolderSettings';
-import { PlaceholderSettingsData, PlaceholderSetup } from '../graphql/queries/getPlaceHolderSettings';
+import { useRouter } from 'next/navigation';
+import { FrontPageArticle } from '../types/Article';
+import FeaturedArticles from './FeaturedArticles';
+import ArticleSummary from './ArticleSummary';
 
-type HomeLayoutProps = {
-  globalSettings: GlobalSettingsData | null;
+interface MainContentProps {
   articles: FrontPageArticle[];
-  books: Book[];
-  latestJournalIssue: JournalIssueLatest | null;
-};
+}
 
-const HomeLayout: React.FC<HomeLayoutProps> = async ({
-  globalSettings,
-  articles,
-  books,
-  latestJournalIssue,
-}) => {
-  // Fetch placeholder settings server-side
-  const placeholders: PlaceholderSettingsData | null = await fetchPlaceHolderSettings();
+const MainContent: React.FC<MainContentProps> = ({ articles }) => {
+  const router = useRouter();
 
-  if (!placeholders) {
-    return null; // Or a loading indicator
-  }
+  // Sort articles by publication date in descending order
+  const sortedArticles = articles.sort((a, b) => {
+    const dateA = new Date(a.articleDetails.publicationDate);
+    const dateB = new Date(b.articleDetails.publicationDate);
+    return dateB.getTime() - dateA.getTime(); // Newest articles first
+  });
 
-  // Map placeholders to their respective components
-  const renderPlaceholderContent = (setup: PlaceholderSetup) => {
-    const contentType = setup.contentSelector[0];
-    switch (contentType) {
-      case 'booksWidget':
-        return <BooksWidget books={books} />;
-      case 'latestJournalWidget':
-        return <LatestJournalIssueWidget latestJournalIssue={latestJournalIssue} />;
-      case 'freeText1':
-      case 'freeText2':
-      case 'freeText3':
-      case 'freeText4':
-        // Render the free text content if available
-        return <div className="free-text-content">{setup.textContent}</div>;
-      default:
-        return null;
-    }
+  const handleArticleClick = (slug: string) => {
+    router.push(`/article/${slug}`);
   };
 
-  const placeholderSettingsFields = placeholders.placeholderSettings.placeholderSettingsFields;
-
-  // Assign placeholders to leftSidebar and rightSidebar
-  const leftSidebarContent = placeholderSettingsFields.placeholderSetup
-    .filter((setup) =>
-      ['placeHolder1', 'placeHolder2', 'placeHolder3'].includes(setup.placeholderSelector[0])
-    )
-    .map((setup) => renderPlaceholderContent(setup));
-
-  const rightSidebarContent = placeholderSettingsFields.placeholderSetup
-    .filter((setup) =>
-      ['placeHolder4', 'placeHolder5', 'placeHolder6'].includes(setup.placeholderSelector[0])
-    )
-    .map((setup) => renderPlaceholderContent(setup));
-
-  // For mobile view, placeholders 1 and 4 go above the articles, and 2, 3, 5, and 6 go below
-  const mobilePlaceholdersTop = placeholderSettingsFields.placeholderSetup
-    .filter((setup) =>
-      ['placeHolder1', 'placeHolder4'].includes(setup.placeholderSelector[0])
-    )
-    .map((setup) => renderPlaceholderContent(setup));
-
-  const mobilePlaceholdersBottom = placeholderSettingsFields.placeholderSetup
-    .filter((setup) =>
-      ['placeHolder2', 'placeHolder3', 'placeHolder5', 'placeHolder6'].includes(setup.placeholderSelector[0])
-    )
-    .map((setup) => renderPlaceholderContent(setup));
-
   return (
-    <BaseLayout
-      globalSettings={globalSettings}
-      leftSidebar={<>{leftSidebarContent}</>}
-      mainContent={
-        <MainContent 
-          articles={articles} 
-          mobilePlaceholdersTop={mobilePlaceholdersTop}
-          mobilePlaceholdersBottom={mobilePlaceholdersBottom}
+    <div className="flex flex-col items-center justify-between w-full">
+      {/* Featured Articles - only visible on desktop */}
+      <div className="hidden lg:block w-full">
+        <FeaturedArticles
+          articles={sortedArticles.slice(0, 2)} // Display the first two articles as featured on desktop
+          onArticleClick={handleArticleClick}
         />
-      }
-      rightSidebar={<>{rightSidebarContent}</>}
-    />
+      </div>
+
+      {/* Render all articles with the same layout on mobile and non-featured articles on desktop */}
+      <div className="w-full mt-4">
+        {sortedArticles.map((article, index) => (
+          <ArticleSummary 
+            key={article.id} 
+            article={article} 
+            className={index < 2 ? 'lg:hidden' : ''} // Hide the first two articles on mobile if they are featured on desktop
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
-export default HomeLayout;
+export default MainContent;
