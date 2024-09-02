@@ -1,11 +1,13 @@
-import { Metadata } from 'next';
+import { Metadata, GetServerSideProps } from 'next';
 import HomeLayout from './layouts/HomeLayout';
-import { fetchGlobalSettings } from './utils/fetchGlobalSettings';
-import { fetchLatestJournalIssue } from './utils/fetchLatestJournalIssue';
-import { fetchArticles } from './utils/fetchArticles';
-import { fetchBooks } from './utils/fetchBooks';
-
-// export const revalidate = 60; // Ensure no caching
+import { 
+  useGetArticlesQuery, GetArticlesQuery,
+  useGetGlobalSettingsQuery, GetGlobalSettingsQuery,
+  useGetBooksQuery, GetBooksQuery,
+  useGetJournalIssuesLatestQuery, GetJournalIssuesQuery,
+  useGetPlaceholderSettingsQuery, GetPlaceholderSettingsQuery
+} from '../gql/gql-generated';
+import { serverFetch } from '../gql/query-utils';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   return {
@@ -35,20 +37,61 @@ export const generateMetadata = async (): Promise<Metadata> => {
   };
 };
 
-export default async function Home() {
-  const [articles, globalSettings, books, latestJournalIssue] = await Promise.all([
-    fetchArticles(),
-    fetchGlobalSettings(),
-    fetchBooks(),
-    fetchLatestJournalIssue(),
-  ]);
+// Define the types for the props
+type HomeProps = {
+  globalSettings: GetGlobalSettingsQuery;
+  articles: GetArticlesQuery;
+  books: GetBooksQuery;
+  latestJournalIssue: GetJournalIssuesQuery;
+  placeholders: GetPlaceholderSettingsQuery;
+};
 
+const Home = ({
+  globalSettings,
+  articles,
+  books,
+  latestJournalIssue,
+  placeholders,
+}: HomeProps) => {
   return (
     <HomeLayout
       globalSettings={globalSettings}
       articles={articles}
       books={books}
       latestJournalIssue={latestJournalIssue}
+      placeHolderSettings={placeholders}
     />
   );
-}
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const articlesData = await serverFetch(useGetArticlesQuery);
+  const globalSettingsData = await serverFetch(useGetGlobalSettingsQuery);
+  const booksData = await serverFetch(useGetBooksQuery);
+  const latestJournalIssueData = await serverFetch(useGetJournalIssuesLatestQuery);
+  const placeholdersData = await serverFetch(useGetPlaceholderSettingsQuery);
+
+  if (
+    !articlesData ||
+    !globalSettingsData ||
+    !booksData ||
+    !latestJournalIssueData ||
+    !placeholdersData
+  ) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      globalSettings: globalSettingsData.globalSettings,
+      articles: articlesData.articles,
+      books: booksData.books,
+      latestJournalIssue: latestJournalIssueData.journalIssues,
+      placeholders: placeholdersData.placeholderSettings,
+    },
+  };
+};
+
+export default Home;

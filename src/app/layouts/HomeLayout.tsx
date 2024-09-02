@@ -3,15 +3,14 @@ import BaseLayout from './BaseLayout';
 import MainContent from '../components/MainContent';
 import BooksWidget from '../components/BooksWidget';
 import LatestJournalIssueWidget from '../components/LatestJournalIssueWidget';
-import { FrontPageArticle, Book, JournalIssueLatest, GlobalSettingsData } from '../types/Article';
-import { fetchPlaceHolderSettings } from '../utils/fetchPlaceHolderSettings';
-import { PlaceholderSettingsData, PlaceholderSetup } from '../graphql/queries/getPlaceHolderSettings';
+import { GetPlaceholderSettingsQuery, GetArticlesQuery, GetBooksQuery, GetJournalIssuesQuery, GetGlobalSettingsQuery  } from '../../gql/gql-generated';
 
 type HomeLayoutProps = {
-  globalSettings: GlobalSettingsData | null;
-  articles: FrontPageArticle[];
-  books: Book[];
-  latestJournalIssue: JournalIssueLatest | null;
+  globalSettings: GetGlobalSettingsQuery;
+  articles: GetArticlesQuery;
+  books: GetBooksQuery;
+  latestJournalIssue: GetJournalIssuesQuery;
+  placeHolderSettings: GetPlaceholderSettingsQuery;
 };
 
 const HomeLayout: React.FC<HomeLayoutProps> = async ({
@@ -19,16 +18,14 @@ const HomeLayout: React.FC<HomeLayoutProps> = async ({
   articles,
   books,
   latestJournalIssue,
+  placeHolderSettings
 }) => {
   // Fetch placeholder settings server-side
-  const placeholders: PlaceholderSettingsData | null = await fetchPlaceHolderSettings();
+  const placeholderSetup = placeHolderSettings.placeholderSettings?.placeholderSettingsFields?.placeholderSetup
 
-  if (!placeholders) {
-    return null; // Or a loading indicator
-  }
+  const renderPlaceholderContent = (setup: NonNullable<typeof placeholderSetup>[number]) => {
+    if (!setup?.contentSelector) return null;
 
-  // Map placeholders to their respective components
-  const renderPlaceholderContent = (setup: PlaceholderSetup) => {
     const contentType = setup.contentSelector[0];
     switch (contentType) {
       case 'booksWidget':
@@ -39,33 +36,40 @@ const HomeLayout: React.FC<HomeLayoutProps> = async ({
       case 'freeText2':
       case 'freeText3':
       case 'freeText4':
-        // Render the free text content if available
-        return <div className="free-text-content">{setup.textContent}</div>;
+        if (setup.textContentGroup) {
+          return <div className="free-text-content">{setup.textContentGroup.textContent}</div>;
+        }
+        return null;
       default:
         return null;
     }
   };
 
-  const placeholderSettingsFields = placeholders.placeholderSettings.placeholderSettingsFields;
+  if (!placeholderSetup) {
+    return
+  }
 
-  // Assign placeholders to leftSidebar and rightSidebar
-  const leftSidebarContent = placeholderSettingsFields.placeholderSetup
+  const leftSidebarContent = placeholderSetup
     .filter((setup) =>
-      ['placeHolder1', 'placeHolder2', 'placeHolder3'].includes(setup.placeholderSelector[0])
+      setup?.placeholderSelector?.some((selector) =>
+        ['placeHolder1', 'placeHolder2', 'placeHolder3'].includes(selector ?? '')
+      )
     )
-    .map((setup) => renderPlaceholderContent(setup));
+    .map((setup, index) => <React.Fragment key={index}>{renderPlaceholderContent(setup)}</React.Fragment>);
 
-  const rightSidebarContent = placeholderSettingsFields.placeholderSetup
+  const rightSidebarContent = placeholderSetup
     .filter((setup) =>
-      ['placeHolder4', 'placeHolder5', 'placeHolder6'].includes(setup.placeholderSelector[0])
+      setup?.placeholderSelector?.some((selector) =>
+        ['placeHolder4', 'placeHolder5', 'placeHolder6'].includes(selector ?? '')
+      )
     )
-    .map((setup) => renderPlaceholderContent(setup));
+    .map((setup, index) => <React.Fragment key={index}>{renderPlaceholderContent(setup)}</React.Fragment>);
 
   return (
     <BaseLayout
       globalSettings={globalSettings}
       leftSidebar={<>{leftSidebarContent}</>}
-      mainContent={<MainContent articles={articles} placeholders={placeholders} />}
+      mainContent={<MainContent articles={articles} placeholders={placeholderSetup} />}
       rightSidebar={<>{rightSidebarContent}</>}
     />
   );

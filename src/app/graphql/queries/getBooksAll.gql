@@ -1,7 +1,4 @@
-import { gql } from 'graphql-request';
-
-export const GET_ALL_BOOKS = gql`
-query Books {
+query GetBooks {
     books {
         nodes {
             authorDatabaseId
@@ -75,5 +72,3 @@ query Books {
         }
     }
 }
-
-`;

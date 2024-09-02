@@ -1,7 +1,4 @@
-import { gql } from 'graphql-request';
-
-export const GET_LATEST_JOURNAL_ISSUE = gql`
-query JournalIssues {
+query GetJournalIssuesLatest {
     journalIssues(
         where: {
             metaQuery: [{ key: "publication_date", compare: "EXISTS" }]
@@ -28,4 +25,3 @@ query JournalIssues {
         }
     }
 }
-`;
