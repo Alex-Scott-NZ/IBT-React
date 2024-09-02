@@ -1,7 +1,5 @@
-import { gql } from 'graphql-request';
 
-export const GET_FRONT_PAGE_ARTICLES = gql`
-query Articles {
+query GetArticles {
     articles(
         first: 50
         where: {
@@ -60,4 +58,3 @@ query Articles {
         }
     }
 }
-`;

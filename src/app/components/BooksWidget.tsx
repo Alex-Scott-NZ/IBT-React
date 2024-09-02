@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Book } from '../types/Article';
+import { GetBooksQuery } from '../../gql/gql-generated';
 import { getImageUrl } from '../utils/imageHelpers';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -26,7 +26,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
 interface BooksWidgetProps {
-  books: Book[];
+  books: GetBooksQuery;
 }
 
 // Create a styled Divider using the Tailwind CSS color variable
@@ -36,7 +36,6 @@ interface BooksWidgetProps {
 //   height: '20px', // Match the height of your buttons
 //   marginX: '20px', // Adjust spacing as needed
 // });
-
 
 const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null);

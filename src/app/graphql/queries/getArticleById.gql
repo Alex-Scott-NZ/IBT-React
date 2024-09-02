@@ -1,7 +1,3 @@
-import { gql } from 'graphql-request';
-import { DetailedArticle } from '../../types/Article.js';
-
-export const GET_ARTICLE_BY_ID = gql`
   query GetArticleById($id: ID!) {
     article(id: $id, idType: DATABASE_ID) {
       articleId
@@ -41,10 +37,8 @@ export const GET_ARTICLE_BY_ID = gql`
           altText
           authorDatabaseId
           authorId
-          caption
           contentTypeName
           databaseId
-          date
           dateGmt
           description
           desiredSlug
@@ -70,8 +64,3 @@ export const GET_ARTICLE_BY_ID = gql`
       }
     }
   }
-`;
-
-export interface GetArticleByIdResponse {
-  article: DetailedArticle;
-}

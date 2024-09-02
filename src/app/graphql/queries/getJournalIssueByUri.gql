@@ -1,7 +1,3 @@
-import { gql } from 'graphql-request';
-import { JournalIssue } from '../../types/ArticlesInJournal';
-
-export const GET_JOURNAL_BY_URI = gql`
   query GetJournalByUri($uri: String!) {
     journalIssueBy(uri: $uri) {
       title
@@ -45,8 +41,3 @@ export const GET_JOURNAL_BY_URI = gql`
       }
     }
   }
-`;
-
-export interface GetJournalByUriResponse {
-  journalIssueBy: JournalIssue;
-}

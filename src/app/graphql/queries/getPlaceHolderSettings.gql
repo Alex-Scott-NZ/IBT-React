@@ -1,0 +1,46 @@
+query GetPlaceholderSettings {
+    placeholderSettings {
+        placeholderSettingsFields {
+            placeholderSetup {
+                contentSelector
+                placeholderSelector
+                textContentGroup {
+                    freeTextHeading
+                    freeTextImage {
+                        node {
+                            altText
+                            caption
+                            contentTypeName
+                            databaseId
+                            description
+                            guid
+                            id
+                            link
+                            mediaItemId
+                            mediaItemUrl
+                            mediaType
+                            slug
+                            sourceUrl
+                            srcSet
+                            uri
+                            dateGmt
+                        }
+                    }
+                    freeTextLink {
+                        nodes {
+                            contentTypeName
+                            databaseId
+                            id
+                            modifiedGmt
+                            slug
+                            status
+                            uri
+                            dateGmt
+                        }
+                    }
+                    textContent
+                }
+            }
+        }
+    }
+}

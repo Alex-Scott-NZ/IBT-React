@@ -1,7 +1,4 @@
-import { gql } from 'graphql-request';
-
-export const GET_ALL_JOURNAL_ISSUES = gql`
-query JournalIssues {
+query GetJournalIssues {
     journalIssues {
         nodes {
             journalIssueDetails {
@@ -40,4 +37,3 @@ query JournalIssues {
         }
     }
 }
-`;

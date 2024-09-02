@@ -1,8 +1,3 @@
-// src/graphql/queries/getArticleByUri.ts
-import { gql } from 'graphql-request';
-import { DetailedArticle } from '../../types/Article';
-
-export const GET_ARTICLE_BY_URI = gql`
   query GetArticleByUri($uri: ID!) {
     article(id: $uri, idType: URI) {
       articleId
@@ -390,9 +385,4 @@ export const GET_ARTICLE_BY_URI = gql`
             }
         }
     }
-}
-`;
-
-export interface GetArticleByUriResponse {
-  article: DetailedArticle;
 }
