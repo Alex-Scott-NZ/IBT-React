@@ -1,8 +1,10 @@
+// layouts/HomeLayout.tsx
 import React from 'react';
 import BaseLayout from './BaseLayout';
 import MainContent from '../components/MainContent';
 import BooksWidget from '../components/BooksWidget';
 import LatestJournalIssueWidget from '../components/LatestJournalIssueWidget';
+import FreeTextWidget from '../components/FreeTextWidget';
 import { FrontPageArticle, Book, JournalIssueLatest, GlobalSettingsData } from '../types/Article';
 import { fetchPlaceHolderSettings } from '../utils/fetchPlaceHolderSettings';
 import { PlaceholderSettingsData, PlaceholderSetup } from '../graphql/queries/getPlaceHolderSettings';
@@ -20,14 +22,12 @@ const HomeLayout: React.FC<HomeLayoutProps> = async ({
   books,
   latestJournalIssue,
 }) => {
-  // Fetch placeholder settings server-side
   const placeholders: PlaceholderSettingsData | null = await fetchPlaceHolderSettings();
 
   if (!placeholders) {
     return null; // Or a loading indicator
   }
 
-  // Map placeholders to their respective components
   const renderPlaceholderContent = (setup: PlaceholderSetup) => {
     const contentType = setup.contentSelector[0];
     switch (contentType) {
@@ -36,11 +36,14 @@ const HomeLayout: React.FC<HomeLayoutProps> = async ({
       case 'latestJournalWidget':
         return <LatestJournalIssueWidget latestJournalIssue={latestJournalIssue} />;
       case 'freeText1':
-      case 'freeText2':
-      case 'freeText3':
-      case 'freeText4':
-        // Render the free text content if available
-        return <div className="free-text-content">{setup.textContent}</div>;
+        return (
+          <FreeTextWidget
+            heading={setup.textContentGroup.freeTextHeading || ""}
+            content={setup.textContentGroup.textContent || ""}
+            imageUrl={setup.textContentGroup.freeTextImage?.node.srcSet.split(' ')[0] || ""}
+            imageAlt={setup.textContentGroup.freeTextHeading || "Free text image"}
+          />
+        );
       default:
         return null;
     }
@@ -48,25 +51,39 @@ const HomeLayout: React.FC<HomeLayoutProps> = async ({
 
   const placeholderSettingsFields = placeholders.placeholderSettings.placeholderSettingsFields;
 
-  // Assign placeholders to leftSidebar and rightSidebar
   const leftSidebarContent = placeholderSettingsFields.placeholderSetup
     .filter((setup) =>
       ['placeHolder1', 'placeHolder2', 'placeHolder3'].includes(setup.placeholderSelector[0])
     )
-    .map((setup) => renderPlaceholderContent(setup));
+    .map((setup, index) => (
+      <React.Fragment key={`left-${index}`}>
+        {renderPlaceholderContent(setup)}
+      </React.Fragment>
+    ));
 
   const rightSidebarContent = placeholderSettingsFields.placeholderSetup
     .filter((setup) =>
       ['placeHolder4', 'placeHolder5', 'placeHolder6'].includes(setup.placeholderSelector[0])
     )
-    .map((setup) => renderPlaceholderContent(setup));
+    .map((setup, index) => (
+      <React.Fragment key={`right-${index}`}>
+        {renderPlaceholderContent(setup)}
+      </React.Fragment>
+    ));
 
   return (
     <BaseLayout
       globalSettings={globalSettings}
-      leftSidebar={<>{leftSidebarContent}</>}
-      mainContent={<MainContent articles={articles} placeholders={placeholders} />}
-      rightSidebar={<>{rightSidebarContent}</>}
+      leftSidebar={<div className="hidden lg:block">{leftSidebarContent}</div>}
+      mainContent={
+        <MainContent 
+          articles={articles} 
+          placeholders={placeholders}
+          books={books}
+          latestJournalIssue={latestJournalIssue}
+        />
+      }
+      rightSidebar={<div className="hidden lg:block">{rightSidebarContent}</div>}
     />
   );
 };

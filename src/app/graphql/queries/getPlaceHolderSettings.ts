@@ -8,7 +8,15 @@ export const GET_PLACEHOLDER_SETTINGS = gql`
         placeholderSetup {
           contentSelector
           placeholderSelector
-          textContent
+          textContentGroup {
+            freeTextHeading
+            textContent
+            freeTextImage {
+              node {
+                srcSet
+              }
+            }
+          }
         }
       }
     }
@@ -16,10 +24,22 @@ export const GET_PLACEHOLDER_SETTINGS = gql`
 `;
 
 // Define TypeScript interfaces to type the response
+export interface FreeTextImage {
+  node: {
+    srcSet: string;
+  };
+}
+
+export interface TextContentGroup {
+  freeTextHeading: string;
+  textContent: string;
+  freeTextImage: FreeTextImage;
+}
+
 export interface PlaceholderSetup {
   contentSelector: string[];
   placeholderSelector: string[];
-  textContent: string[];
+  textContentGroup: TextContentGroup;
 }
 
 export interface PlaceholderSettingsFields {
