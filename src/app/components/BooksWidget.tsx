@@ -167,7 +167,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
         <ButtonGroup
           sx={{
             boxShadow: 0.5,
-            backgroundColor: '#EAEAE2',
+            backgroundColor: '#EAEBE6',
             borderRadius: '5px',
             overflow: 'hidden',
             width: '100%',  // Set the width for the ButtonGroup

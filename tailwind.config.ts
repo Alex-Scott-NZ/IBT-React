@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'custom-bg': '#EAEAE2',
+        'custom-bg': '#EAEBE6',
         'communist-red': '#B00909',
       },
       fontFamily: {

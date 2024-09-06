@@ -63,7 +63,7 @@ const theme = createTheme({
         root: {
           color: '#B00909',
           fontFamily: 'var(--font-cambay), sans-serif',
-          backgroundColor: '#EAEAE2',
+          backgroundColor: '#EAEBE6',
         },
       },
     },
