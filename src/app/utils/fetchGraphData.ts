@@ -9,7 +9,7 @@ const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`, {
   fetch: (url, options) => fetch(url, { ...options, next: { revalidate: 60 } }),
 });
 
-export const fetchGraphData = async <T>(query: string, variables?: Record<string, any>): Promise<T | null> => {
+export const fetchGraphData = async <T>(query: string, variables?: Record<string, unknown>): Promise<T | null> => {
   try {
     const data = await graphQLClient.request<T>(query, variables);
     return data;
