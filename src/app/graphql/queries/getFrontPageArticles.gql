@@ -13,15 +13,11 @@ query GetArticles {
             title
             content
             slug
-            featuredImage {
-                cursor
-                node {
-                    altText
-                    uri
-                    title
-                    srcSet
-                }
-            }
+      featuredImage {
+        node {
+          ...FragmentFeaturedImage
+        }
+      }
             articleDetails {
                 displayDate
                 displayOnFrontPage

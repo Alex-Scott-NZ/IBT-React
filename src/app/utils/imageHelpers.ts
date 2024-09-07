@@ -1,19 +1,19 @@
-interface ImageNode {
-  srcSet: string;
-  sourceUrl: string;
-  [key: string]: string | number | undefined;  // To allow for other properties
-}
+import { FragmentFeaturedImageFragment } from "@/gql/graphql";
 
 export function getImageUrl(
-  imageNode: ImageNode | null | undefined,
+  imageNode: FragmentFeaturedImageFragment | undefined,
   targetWidth: number = 768
 ): string {
-  if (!imageNode || !imageNode.srcSet) {
-    return imageNode?.sourceUrl || ''; // Fallback to full size or empty string
+  if (!imageNode) {
+    return ''; // Fallback to empty string if no image node
+  }
+
+  if (!imageNode.srcSet) {
+    return imageNode.sourceUrl || imageNode.mediaItemUrl || ''; // Fallback to sourceUrl, mediaItemUrl, or empty string
   }
 
   const srcSet = imageNode.srcSet.split(', ');
-  let imageUrl = imageNode.sourceUrl; // Default to full size
+  let imageUrl = imageNode.sourceUrl || imageNode.mediaItemUrl || ''; // Default to sourceUrl, mediaItemUrl, or empty string
 
   // Find the image closest to but not less than the target width
   for (const src of srcSet) {
@@ -35,5 +35,3 @@ export function getImageUrl(
 
   return imageUrl;
 }
-
-

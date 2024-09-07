@@ -32,34 +32,8 @@
         tableOfContentsTitle
       }
       featuredImage {
-        cursor
         node {
-          altText
-          authorDatabaseId
-          authorId
-          contentTypeName
-          databaseId
-          dateGmt
-          description
-          desiredSlug
-          fileSize
-          guid
-          hasPassword
-          id
-          mediaItemId
-          mediaItemUrl
-          mediaType
-          mimeType
-          modified
-          modifiedGmt
-          parentDatabaseId
-          parentId
-          sizes
-          slug
-          sourceUrl
-          srcSet
-          title
-          uri
+          ...FragmentFeaturedImage
         }
       }
     }
