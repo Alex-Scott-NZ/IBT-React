@@ -8,7 +8,7 @@ import { GetArticlesQuery, PlaceholderSettingsFieldsPlaceholderSetup } from '@/g
 
 interface MainContentProps {
   articles: GetArticlesQuery
-  placeholders: PlaceholderSettingsFieldsPlaceholderSetup;
+  placeholders: PlaceholderSettingsFieldsPlaceholderSetup[];
 }
 
 const MainContent: React.FC<MainContentProps> = ({ articles }) => {

@@ -33,7 +33,31 @@ const config: CodegenConfig = {
         // Allows us to specify a custom fetcher function that will leverage
         // Next.js caching fetaures within our generated query hooks.
         fetcher: './fetcher#fetcher',
+        dedupeFragments: true,
+        inlineFragments: 'combine',
+        exportFragmentSpreadSubTypes: true,
+        useTypeImports: true,
       },
+    },
+    // Add a new output file for fragment types
+    'src/gql/fragment-types.ts': {
+      plugins: ['fragment-matcher'],
+    },
+    'src/gql/': {
+      preset: 'client',
+      plugins: [],
+      presetConfig: {
+        gqlTagName: 'gql',
+        fragmentMasking: { unmaskFunctionName: 'getFragmentData' }
+      },
+      config: {
+        useTypeImports: true,
+        dedupeFragments: true,
+        defaultScalarType: 'unknown',
+        skipTypename: false,
+        enumsAsTypes: true,
+        avoidOptionals: false,
+      }
     },
   },
 };

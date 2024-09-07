@@ -14,7 +14,7 @@ type FetchOptions = {
   ) => {
     return async (): Promise<TData> => {
       const { next, cache, ...restOptions } = options || {};
-      const res = await fetch("http://backend.saggitari.us/graphql", {
+      const res = await fetch("https://backend.saggitari.us/graphql", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

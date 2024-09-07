@@ -55,6 +55,8 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
     router.push(`/book/${bookId}`);
   };
 
+  const booksList = books?.books?.nodes || [];
+
   return (
     <div className="books-widget relative">
       <Box
@@ -94,7 +96,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
           // padding: '5px 10px 10px 10px',
         }}
       >
-        {books.map((book) => (
+        {booksList.map((book) => (
           <SwiperSlide key={book.id}>
             <Card elevation={0} className='p-0'
               sx={{
@@ -129,7 +131,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                   >
                     <Image
                       src={getImageUrl(book.featuredImage?.node, 128)}
-                      alt={book.featuredImage?.node?.altText || book.title}
+                      alt={book.featuredImage?.node?.altText || book.title || ''}
                       layout="fill" // Fills the container dimensions
                       objectFit="cover" // Ensures the image covers the entire box
                     />
@@ -146,7 +148,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                       className="font-helvetica"
                       sx={{ marginTop: '8px' }}
                     >
-                      {book.bookDetails.subheading}
+                      {book.bookDetails?.subheading}
                     </Typography>
                   </Box>
                 </Box>

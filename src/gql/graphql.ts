@@ -1,5 +1,5 @@
-import { useQuery, useSuspenseQuery, type UseQueryOptions, type UseSuspenseQueryOptions } from '@tanstack/react-query';
-import type { fetcher } from './fetcher';
+/* eslint-disable */
+import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -7,14 +7,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-
-            type FetchOptions = {
-              cache?: RequestCache;
-              next?: NextFetchRequestConfig;
-            };
-            type RequestInit = {
-              headers: (HeadersInit & FetchOptions) | FetchOptions;
-            };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -427,14 +419,13 @@ export type ArticleDetails_FieldsRelatedPdfArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum ArticleIdType {
+export type ArticleIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Article type and the article type */
 export type ArticleToPreviewConnectionEdge = ArticleConnectionEdge & Edge & OneToOneConnection & {
@@ -661,14 +652,13 @@ export type AudioItemDetails_FieldsRelatedArticleArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum AudioItemIdType {
+export type AudioItemIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the AudioItem type and the audioItem type */
 export type AudioItemToPreviewConnectionEdge = AudioItemConnectionEdge & Edge & OneToOneConnection & {
@@ -707,16 +697,15 @@ export type Avatar = {
 };
 
 /** What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are judged in that order. Default is the value of the 'avatar_rating' option */
-export enum AvatarRatingEnum {
+export type AvatarRatingEnum =
   /** Indicates a G level avatar rating level. */
-  G = 'G',
+  | 'G'
   /** Indicates a PG level avatar rating level. */
-  Pg = 'PG',
+  | 'PG'
   /** Indicates an R level avatar rating level. */
-  R = 'R',
+  | 'R'
   /** Indicates an X level avatar rating level. */
-  X = 'X'
-}
+  | 'X';
 
 /** The book type */
 export type Book = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & WithAcfBookDetails & {
@@ -940,14 +929,13 @@ export type BookDetails_FieldsRelatedArticlesArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum BookIdType {
+export type BookIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Book type and the book type */
 export type BookToPreviewConnectionEdge = BookConnectionEdge & Edge & OneToOneConnection & {
@@ -1110,18 +1098,17 @@ export type CategoryConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum CategoryIdType {
+export type CategoryIdType =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Category type and the category type */
 export type CategoryToAncestorsCategoryConnection = CategoryConnection & Connection & {
@@ -1568,24 +1555,22 @@ export type CommentConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single comment node. Default is "ID". To be used along with the "id" field. */
-export enum CommentNodeIdTypeEnum {
+export type CommentNodeIdTypeEnum =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID'
-}
+  | 'ID';
 
 /** The status of the comment object. */
-export enum CommentStatusEnum {
+export type CommentStatusEnum =
   /** Comments with the Approved status */
-  Approve = 'APPROVE',
+  | 'APPROVE'
   /** Comments with the Unapproved status */
-  Hold = 'HOLD',
+  | 'HOLD'
   /** Comments with the Spam status */
-  Spam = 'SPAM',
+  | 'SPAM'
   /** Comments with the Bin status */
-  Trash = 'TRASH'
-}
+  | 'TRASH';
 
 /** Connection between the Comment type and the Comment type */
 export type CommentToCommentConnection = CommentConnection & Connection & {
@@ -1798,40 +1783,39 @@ export type CommenterConnectionEdge = {
 };
 
 /** Options for ordering the connection */
-export enum CommentsConnectionOrderbyEnum {
+export type CommentsConnectionOrderbyEnum =
   /** Order by browser user agent of the commenter. */
-  CommentAgent = 'COMMENT_AGENT',
+  | 'COMMENT_AGENT'
   /** Order by approval status of the comment. */
-  CommentApproved = 'COMMENT_APPROVED',
+  | 'COMMENT_APPROVED'
   /** Order by name of the comment author. */
-  CommentAuthor = 'COMMENT_AUTHOR',
+  | 'COMMENT_AUTHOR'
   /** Order by e-mail of the comment author. */
-  CommentAuthorEmail = 'COMMENT_AUTHOR_EMAIL',
+  | 'COMMENT_AUTHOR_EMAIL'
   /** Order by IP address of the comment author. */
-  CommentAuthorIp = 'COMMENT_AUTHOR_IP',
+  | 'COMMENT_AUTHOR_IP'
   /** Order by URL address of the comment author. */
-  CommentAuthorUrl = 'COMMENT_AUTHOR_URL',
+  | 'COMMENT_AUTHOR_URL'
   /** Order by the comment contents. */
-  CommentContent = 'COMMENT_CONTENT',
+  | 'COMMENT_CONTENT'
   /** Order by date/time timestamp of the comment. */
-  CommentDate = 'COMMENT_DATE',
+  | 'COMMENT_DATE'
   /** Order by GMT timezone date/time timestamp of the comment. */
-  CommentDateGmt = 'COMMENT_DATE_GMT',
+  | 'COMMENT_DATE_GMT'
   /** Order by the globally unique identifier for the comment object */
-  CommentId = 'COMMENT_ID',
+  | 'COMMENT_ID'
   /** Order by the array list of comment IDs listed in the where clause. */
-  CommentIn = 'COMMENT_IN',
+  | 'COMMENT_IN'
   /** Order by the comment karma score. */
-  CommentKarma = 'COMMENT_KARMA',
+  | 'COMMENT_KARMA'
   /** Order by the comment parent ID. */
-  CommentParent = 'COMMENT_PARENT',
+  | 'COMMENT_PARENT'
   /** Order by the post object ID. */
-  CommentPostId = 'COMMENT_POST_ID',
+  | 'COMMENT_POST_ID'
   /** Order by the the type of comment, such as 'comment', 'pingback', or 'trackback'. */
-  CommentType = 'COMMENT_TYPE',
+  | 'COMMENT_TYPE'
   /** Order by the user ID. */
-  UserId = 'USER_ID'
-}
+  | 'USER_ID';
 
 /** A plural connection from one Node Type in the Graph to another Node Type, with support for relational data via &quot;edges&quot;. */
 export type Connection = {
@@ -1954,14 +1938,13 @@ export type ContentNodeConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum ContentNodeIdTypeEnum {
+export type ContentNodeIdTypeEnum =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the ContentNode type and the ContentType type */
 export type ContentNodeToContentTypeConnectionEdge = ContentTypeConnectionEdge & Edge & OneToOneConnection & {
@@ -2185,34 +2168,32 @@ export type ContentTypeConnectionPageInfo = {
 };
 
 /** Allowed Content Types */
-export enum ContentTypeEnum {
+export type ContentTypeEnum =
   /** The Type of Content object */
-  Article = 'ARTICLE',
+  | 'ARTICLE'
   /** The Type of Content object */
-  Attachment = 'ATTACHMENT',
+  | 'ATTACHMENT'
   /** The Type of Content object */
-  AudioItem = 'AUDIO_ITEM',
+  | 'AUDIO_ITEM'
   /** The Type of Content object */
-  Book = 'BOOK',
+  | 'BOOK'
   /** The Type of Content object */
-  JournalIssue = 'JOURNAL_ISSUE',
+  | 'JOURNAL_ISSUE'
   /** The Type of Content object */
-  Page = 'PAGE',
+  | 'PAGE'
   /** The Type of Content object */
-  PdfItem = 'PDF_ITEM',
+  | 'PDF_ITEM'
   /** The Type of Content object */
-  Post = 'POST',
+  | 'POST'
   /** The Type of Content object */
-  VideoItem = 'VIDEO_ITEM'
-}
+  | 'VIDEO_ITEM';
 
 /** The Type of Identifier used to fetch a single Content Type node. To be used along with the "id" field. Default is "ID". */
-export enum ContentTypeIdTypeEnum {
+export type ContentTypeIdTypeEnum =
   /** The globally unique ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the content type. */
-  Name = 'NAME'
-}
+  | 'NAME';
 
 /** Connection between the ContentType type and the ContentNode type */
 export type ContentTypeToContentNodeConnection = Connection & ContentNodeConnection & {
@@ -2321,22 +2302,19 @@ export type ContentTypeToTaxonomyConnectionPageInfo = PageInfo & TaxonomyConnect
 };
 
 /** Allowed Content Types of the Category taxonomy. */
-export enum ContentTypesOfCategoryEnum {
+export type ContentTypesOfCategoryEnum =
   /** The Type of Content object */
-  Post = 'POST'
-}
+  | 'POST';
 
 /** Allowed Content Types of the PostFormat taxonomy. */
-export enum ContentTypesOfPostFormatEnum {
+export type ContentTypesOfPostFormatEnum =
   /** The Type of Content object */
-  Post = 'POST'
-}
+  | 'POST';
 
 /** Allowed Content Types of the Tag taxonomy. */
-export enum ContentTypesOfTagEnum {
+export type ContentTypesOfTagEnum =
   /** The Type of Content object */
-  Post = 'POST'
-}
+  | 'POST';
 
 /** Input for the createArticle mutation. */
 export type CreateArticleInput = {
@@ -4022,14 +4000,13 @@ export type JournalIssueDetails_FieldsArticlesInJournalArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum JournalIssueIdType {
+export type JournalIssueIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the JournalIssue type and the journalIssue type */
 export type JournalIssueToPreviewConnectionEdge = Edge & JournalIssueConnectionEdge & OneToOneConnection & {
@@ -4301,18 +4278,17 @@ export type MediaItemConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum MediaItemIdType {
+export type MediaItemIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Identify a media item by its source url */
-  SourceUrl = 'SOURCE_URL',
+  | 'SOURCE_URL'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Meta connected to a MediaItem */
 export type MediaItemMeta = {
@@ -4344,34 +4320,32 @@ export type MediaItemMeta = {
 };
 
 /** The size of the media item object. */
-export enum MediaItemSizeEnum {
+export type MediaItemSizeEnum =
   /** MediaItem with the large size */
-  Large = 'LARGE',
+  | 'LARGE'
   /** MediaItem with the medium size */
-  Medium = 'MEDIUM',
+  | 'MEDIUM'
   /** MediaItem with the medium_large size */
-  MediumLarge = 'MEDIUM_LARGE',
+  | 'MEDIUM_LARGE'
   /** MediaItem with the post-thumbnail size */
-  PostThumbnail = 'POST_THUMBNAIL',
+  | 'POST_THUMBNAIL'
   /** MediaItem with the thumbnail size */
-  Thumbnail = 'THUMBNAIL',
+  | 'THUMBNAIL'
   /** MediaItem with the 1536x1536 size */
-  '1536X1536' = '_1536X1536',
+  | '_1536X1536'
   /** MediaItem with the 2048x2048 size */
-  '2048X2048' = '_2048X2048'
-}
+  | '_2048X2048';
 
 /** The status of the media item object. */
-export enum MediaItemStatusEnum {
+export type MediaItemStatusEnum =
   /** Objects with the auto-draft status */
-  AutoDraft = 'AUTO_DRAFT',
+  | 'AUTO_DRAFT'
   /** Objects with the inherit status */
-  Inherit = 'INHERIT',
+  | 'INHERIT'
   /** Objects with the private status */
-  Private = 'PRIVATE',
+  | 'PRIVATE'
   /** Objects with the trash status */
-  Trash = 'TRASH'
-}
+  | 'TRASH';
 
 /** Connection between the MediaItem type and the Comment type */
 export type MediaItemToCommentConnection = CommentConnection & Connection & {
@@ -4675,12 +4649,11 @@ export type MenuItemLinkableConnectionEdge = {
 };
 
 /** The Type of Identifier used to fetch a single node. Default is "ID". To be used along with the "id" field. */
-export enum MenuItemNodeIdTypeEnum {
+export type MenuItemNodeIdTypeEnum =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID'
-}
+  | 'ID';
 
 /** Deprecated in favor of MenuItemLinkeable Interface */
 export type MenuItemObjectUnion = Article | AudioItem | Book | Category | JournalIssue | Page | PdfItem | Post | PostFormat | Tag | VideoItem;
@@ -4749,26 +4722,24 @@ export type MenuItemToMenuItemLinkableConnectionEdge = Edge & MenuItemLinkableCo
 };
 
 /** Registered menu locations */
-export enum MenuLocationEnum {
+export type MenuLocationEnum =
   /** Put the menu in the footer location */
-  Footer = 'FOOTER',
+  | 'FOOTER'
   /** Put the menu in the primary location */
-  Primary = 'PRIMARY'
-}
+  | 'PRIMARY';
 
 /** The Type of Identifier used to fetch a single node. Default is "ID". To be used along with the "id" field. */
-export enum MenuNodeIdTypeEnum {
+export type MenuNodeIdTypeEnum =
   /** Identify a menu node by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a menu node by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a menu node by the slug of menu location to which it is assigned */
-  Location = 'LOCATION',
+  | 'LOCATION'
   /** Identify a menu node by its name */
-  Name = 'NAME',
+  | 'NAME'
   /** Identify a menu node by its slug */
-  Slug = 'SLUG'
-}
+  | 'SLUG';
 
 /** Connection between the Menu type and the MenuItem type */
 export type MenuToMenuItemConnection = Connection & MenuItemConnection & {
@@ -4828,188 +4799,187 @@ export type MetaQueryInput = {
 };
 
 /** The MimeType of the object */
-export enum MimeTypeEnum {
+export type MimeTypeEnum =
   /** application/java mime type. */
-  ApplicationJava = 'APPLICATION_JAVA',
+  | 'APPLICATION_JAVA'
   /** application/msword mime type. */
-  ApplicationMsword = 'APPLICATION_MSWORD',
+  | 'APPLICATION_MSWORD'
   /** application/octet-stream mime type. */
-  ApplicationOctetStream = 'APPLICATION_OCTET_STREAM',
+  | 'APPLICATION_OCTET_STREAM'
   /** application/onenote mime type. */
-  ApplicationOnenote = 'APPLICATION_ONENOTE',
+  | 'APPLICATION_ONENOTE'
   /** application/oxps mime type. */
-  ApplicationOxps = 'APPLICATION_OXPS',
+  | 'APPLICATION_OXPS'
   /** application/pdf mime type. */
-  ApplicationPdf = 'APPLICATION_PDF',
+  | 'APPLICATION_PDF'
   /** application/rar mime type. */
-  ApplicationRar = 'APPLICATION_RAR',
+  | 'APPLICATION_RAR'
   /** application/rtf mime type. */
-  ApplicationRtf = 'APPLICATION_RTF',
+  | 'APPLICATION_RTF'
   /** application/ttaf+xml mime type. */
-  ApplicationTtafXml = 'APPLICATION_TTAF_XML',
+  | 'APPLICATION_TTAF_XML'
   /** application/vnd.apple.keynote mime type. */
-  ApplicationVndAppleKeynote = 'APPLICATION_VND_APPLE_KEYNOTE',
+  | 'APPLICATION_VND_APPLE_KEYNOTE'
   /** application/vnd.apple.numbers mime type. */
-  ApplicationVndAppleNumbers = 'APPLICATION_VND_APPLE_NUMBERS',
+  | 'APPLICATION_VND_APPLE_NUMBERS'
   /** application/vnd.apple.pages mime type. */
-  ApplicationVndApplePages = 'APPLICATION_VND_APPLE_PAGES',
+  | 'APPLICATION_VND_APPLE_PAGES'
   /** application/vnd.ms-access mime type. */
-  ApplicationVndMsAccess = 'APPLICATION_VND_MS_ACCESS',
+  | 'APPLICATION_VND_MS_ACCESS'
   /** application/vnd.ms-excel mime type. */
-  ApplicationVndMsExcel = 'APPLICATION_VND_MS_EXCEL',
+  | 'APPLICATION_VND_MS_EXCEL'
   /** application/vnd.ms-excel.addin.macroEnabled.12 mime type. */
-  ApplicationVndMsExcelAddinMacroenabled_12 = 'APPLICATION_VND_MS_EXCEL_ADDIN_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_EXCEL_ADDIN_MACROENABLED_12'
   /** application/vnd.ms-excel.sheet.binary.macroEnabled.12 mime type. */
-  ApplicationVndMsExcelSheetBinaryMacroenabled_12 = 'APPLICATION_VND_MS_EXCEL_SHEET_BINARY_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_EXCEL_SHEET_BINARY_MACROENABLED_12'
   /** application/vnd.ms-excel.sheet.macroEnabled.12 mime type. */
-  ApplicationVndMsExcelSheetMacroenabled_12 = 'APPLICATION_VND_MS_EXCEL_SHEET_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_EXCEL_SHEET_MACROENABLED_12'
   /** application/vnd.ms-excel.template.macroEnabled.12 mime type. */
-  ApplicationVndMsExcelTemplateMacroenabled_12 = 'APPLICATION_VND_MS_EXCEL_TEMPLATE_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_EXCEL_TEMPLATE_MACROENABLED_12'
   /** application/vnd.ms-powerpoint mime type. */
-  ApplicationVndMsPowerpoint = 'APPLICATION_VND_MS_POWERPOINT',
+  | 'APPLICATION_VND_MS_POWERPOINT'
   /** application/vnd.ms-powerpoint.addin.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointAddinMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_ADDIN_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_ADDIN_MACROENABLED_12'
   /** application/vnd.ms-powerpoint.presentation.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointPresentationMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_PRESENTATION_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_PRESENTATION_MACROENABLED_12'
   /** application/vnd.ms-powerpoint.slideshow.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointSlideshowMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_SLIDESHOW_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_SLIDESHOW_MACROENABLED_12'
   /** application/vnd.ms-powerpoint.slide.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointSlideMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_SLIDE_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_SLIDE_MACROENABLED_12'
   /** application/vnd.ms-powerpoint.template.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointTemplateMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_TEMPLATE_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_TEMPLATE_MACROENABLED_12'
   /** application/vnd.ms-project mime type. */
-  ApplicationVndMsProject = 'APPLICATION_VND_MS_PROJECT',
+  | 'APPLICATION_VND_MS_PROJECT'
   /** application/vnd.ms-word.document.macroEnabled.12 mime type. */
-  ApplicationVndMsWordDocumentMacroenabled_12 = 'APPLICATION_VND_MS_WORD_DOCUMENT_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_WORD_DOCUMENT_MACROENABLED_12'
   /** application/vnd.ms-word.template.macroEnabled.12 mime type. */
-  ApplicationVndMsWordTemplateMacroenabled_12 = 'APPLICATION_VND_MS_WORD_TEMPLATE_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_WORD_TEMPLATE_MACROENABLED_12'
   /** application/vnd.ms-write mime type. */
-  ApplicationVndMsWrite = 'APPLICATION_VND_MS_WRITE',
+  | 'APPLICATION_VND_MS_WRITE'
   /** application/vnd.ms-xpsdocument mime type. */
-  ApplicationVndMsXpsdocument = 'APPLICATION_VND_MS_XPSDOCUMENT',
+  | 'APPLICATION_VND_MS_XPSDOCUMENT'
   /** application/vnd.oasis.opendocument.chart mime type. */
-  ApplicationVndOasisOpendocumentChart = 'APPLICATION_VND_OASIS_OPENDOCUMENT_CHART',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_CHART'
   /** application/vnd.oasis.opendocument.database mime type. */
-  ApplicationVndOasisOpendocumentDatabase = 'APPLICATION_VND_OASIS_OPENDOCUMENT_DATABASE',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_DATABASE'
   /** application/vnd.oasis.opendocument.formula mime type. */
-  ApplicationVndOasisOpendocumentFormula = 'APPLICATION_VND_OASIS_OPENDOCUMENT_FORMULA',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_FORMULA'
   /** application/vnd.oasis.opendocument.graphics mime type. */
-  ApplicationVndOasisOpendocumentGraphics = 'APPLICATION_VND_OASIS_OPENDOCUMENT_GRAPHICS',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_GRAPHICS'
   /** application/vnd.oasis.opendocument.presentation mime type. */
-  ApplicationVndOasisOpendocumentPresentation = 'APPLICATION_VND_OASIS_OPENDOCUMENT_PRESENTATION',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_PRESENTATION'
   /** application/vnd.oasis.opendocument.spreadsheet mime type. */
-  ApplicationVndOasisOpendocumentSpreadsheet = 'APPLICATION_VND_OASIS_OPENDOCUMENT_SPREADSHEET',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_SPREADSHEET'
   /** application/vnd.oasis.opendocument.text mime type. */
-  ApplicationVndOasisOpendocumentText = 'APPLICATION_VND_OASIS_OPENDOCUMENT_TEXT',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_TEXT'
   /** application/vnd.openxmlformats-officedocument.presentationml.presentation mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentPresentationmlPresentation = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_PRESENTATION',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_PRESENTATION'
   /** application/vnd.openxmlformats-officedocument.presentationml.slide mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentPresentationmlSlide = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_SLIDE',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_SLIDE'
   /** application/vnd.openxmlformats-officedocument.presentationml.slideshow mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentPresentationmlSlideshow = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_SLIDESHOW',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_SLIDESHOW'
   /** application/vnd.openxmlformats-officedocument.presentationml.template mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentPresentationmlTemplate = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_TEMPLATE',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_TEMPLATE'
   /** application/vnd.openxmlformats-officedocument.spreadsheetml.sheet mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_SHEET',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_SHEET'
   /** application/vnd.openxmlformats-officedocument.spreadsheetml.template mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlTemplate = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_TEMPLATE',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_TEMPLATE'
   /** application/vnd.openxmlformats-officedocument.wordprocessingml.document mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentWordprocessingmlDocument = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_DOCUMENT',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_DOCUMENT'
   /** application/vnd.openxmlformats-officedocument.wordprocessingml.template mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentWordprocessingmlTemplate = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_TEMPLATE',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_TEMPLATE'
   /** application/wordperfect mime type. */
-  ApplicationWordperfect = 'APPLICATION_WORDPERFECT',
+  | 'APPLICATION_WORDPERFECT'
   /** application/x-7z-compressed mime type. */
-  ApplicationX_7ZCompressed = 'APPLICATION_X_7Z_COMPRESSED',
+  | 'APPLICATION_X_7Z_COMPRESSED'
   /** application/x-gzip mime type. */
-  ApplicationXGzip = 'APPLICATION_X_GZIP',
+  | 'APPLICATION_X_GZIP'
   /** application/x-tar mime type. */
-  ApplicationXTar = 'APPLICATION_X_TAR',
+  | 'APPLICATION_X_TAR'
   /** application/zip mime type. */
-  ApplicationZip = 'APPLICATION_ZIP',
+  | 'APPLICATION_ZIP'
   /** audio/aac mime type. */
-  AudioAac = 'AUDIO_AAC',
+  | 'AUDIO_AAC'
   /** audio/flac mime type. */
-  AudioFlac = 'AUDIO_FLAC',
+  | 'AUDIO_FLAC'
   /** audio/midi mime type. */
-  AudioMidi = 'AUDIO_MIDI',
+  | 'AUDIO_MIDI'
   /** audio/mpeg mime type. */
-  AudioMpeg = 'AUDIO_MPEG',
+  | 'AUDIO_MPEG'
   /** audio/ogg mime type. */
-  AudioOgg = 'AUDIO_OGG',
+  | 'AUDIO_OGG'
   /** audio/wav mime type. */
-  AudioWav = 'AUDIO_WAV',
+  | 'AUDIO_WAV'
   /** audio/x-matroska mime type. */
-  AudioXMatroska = 'AUDIO_X_MATROSKA',
+  | 'AUDIO_X_MATROSKA'
   /** audio/x-ms-wax mime type. */
-  AudioXMsWax = 'AUDIO_X_MS_WAX',
+  | 'AUDIO_X_MS_WAX'
   /** audio/x-ms-wma mime type. */
-  AudioXMsWma = 'AUDIO_X_MS_WMA',
+  | 'AUDIO_X_MS_WMA'
   /** audio/x-realaudio mime type. */
-  AudioXRealaudio = 'AUDIO_X_REALAUDIO',
+  | 'AUDIO_X_REALAUDIO'
   /** image/avif mime type. */
-  ImageAvif = 'IMAGE_AVIF',
+  | 'IMAGE_AVIF'
   /** image/bmp mime type. */
-  ImageBmp = 'IMAGE_BMP',
+  | 'IMAGE_BMP'
   /** image/gif mime type. */
-  ImageGif = 'IMAGE_GIF',
+  | 'IMAGE_GIF'
   /** image/heic mime type. */
-  ImageHeic = 'IMAGE_HEIC',
+  | 'IMAGE_HEIC'
   /** image/jpeg mime type. */
-  ImageJpeg = 'IMAGE_JPEG',
+  | 'IMAGE_JPEG'
   /** image/png mime type. */
-  ImagePng = 'IMAGE_PNG',
+  | 'IMAGE_PNG'
   /** image/tiff mime type. */
-  ImageTiff = 'IMAGE_TIFF',
+  | 'IMAGE_TIFF'
   /** image/webp mime type. */
-  ImageWebp = 'IMAGE_WEBP',
+  | 'IMAGE_WEBP'
   /** image/x-icon mime type. */
-  ImageXIcon = 'IMAGE_X_ICON',
+  | 'IMAGE_X_ICON'
   /** text/calendar mime type. */
-  TextCalendar = 'TEXT_CALENDAR',
+  | 'TEXT_CALENDAR'
   /** text/css mime type. */
-  TextCss = 'TEXT_CSS',
+  | 'TEXT_CSS'
   /** text/csv mime type. */
-  TextCsv = 'TEXT_CSV',
+  | 'TEXT_CSV'
   /** text/plain mime type. */
-  TextPlain = 'TEXT_PLAIN',
+  | 'TEXT_PLAIN'
   /** text/richtext mime type. */
-  TextRichtext = 'TEXT_RICHTEXT',
+  | 'TEXT_RICHTEXT'
   /** text/tab-separated-values mime type. */
-  TextTabSeparatedValues = 'TEXT_TAB_SEPARATED_VALUES',
+  | 'TEXT_TAB_SEPARATED_VALUES'
   /** text/vtt mime type. */
-  TextVtt = 'TEXT_VTT',
+  | 'TEXT_VTT'
   /** video/3gpp mime type. */
-  Video_3Gpp = 'VIDEO_3GPP',
+  | 'VIDEO_3GPP'
   /** video/3gpp2 mime type. */
-  Video_3Gpp2 = 'VIDEO_3GPP2',
+  | 'VIDEO_3GPP2'
   /** video/avi mime type. */
-  VideoAvi = 'VIDEO_AVI',
+  | 'VIDEO_AVI'
   /** video/divx mime type. */
-  VideoDivx = 'VIDEO_DIVX',
+  | 'VIDEO_DIVX'
   /** video/mp4 mime type. */
-  VideoMp4 = 'VIDEO_MP4',
+  | 'VIDEO_MP4'
   /** video/mpeg mime type. */
-  VideoMpeg = 'VIDEO_MPEG',
+  | 'VIDEO_MPEG'
   /** video/ogg mime type. */
-  VideoOgg = 'VIDEO_OGG',
+  | 'VIDEO_OGG'
   /** video/quicktime mime type. */
-  VideoQuicktime = 'VIDEO_QUICKTIME',
+  | 'VIDEO_QUICKTIME'
   /** video/webm mime type. */
-  VideoWebm = 'VIDEO_WEBM',
+  | 'VIDEO_WEBM'
   /** video/x-flv mime type. */
-  VideoXFlv = 'VIDEO_X_FLV',
+  | 'VIDEO_X_FLV'
   /** video/x-matroska mime type. */
-  VideoXMatroska = 'VIDEO_X_MATROSKA',
+  | 'VIDEO_X_MATROSKA'
   /** video/x-ms-asf mime type. */
-  VideoXMsAsf = 'VIDEO_X_MS_ASF',
+  | 'VIDEO_X_MS_ASF'
   /** video/x-ms-wm mime type. */
-  VideoXMsWm = 'VIDEO_X_MS_WM',
+  | 'VIDEO_X_MS_WM'
   /** video/x-ms-wmv mime type. */
-  VideoXMsWmv = 'VIDEO_X_MS_WMV',
+  | 'VIDEO_X_MS_WMV'
   /** video/x-ms-wmx mime type. */
-  VideoXMsWmx = 'VIDEO_X_MS_WMX'
-}
+  | 'VIDEO_X_MS_WMX';
 
 /** An object with an ID */
 export type Node = {
@@ -5167,12 +5137,11 @@ export type OneToOneConnection = {
 };
 
 /** The cardinality of the connection order */
-export enum OrderEnum {
+export type OrderEnum =
   /** Sort the query result set in an ascending order */
-  Asc = 'ASC',
+  | 'ASC'
   /** Sort the query result set in a descending order */
-  Desc = 'DESC'
-}
+  | 'DESC';
 
 /** The page type */
 export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & {
@@ -5391,14 +5360,13 @@ export type PageConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PageIdType {
+export type PageIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Information about pagination in a connection. */
 export type PageInfo = {
@@ -5792,16 +5760,15 @@ export type PdfItemDetails_FieldsRelatedArticleArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PdfItemIdType {
+export type PdfItemIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the PdfItem type and the pdfItem type */
 export type PdfItemToParentConnectionEdge = Edge & OneToOneConnection & PdfItemConnectionEdge & {
@@ -6726,22 +6693,21 @@ export type PluginConnectionPageInfo = {
 };
 
 /** The status of the WordPress plugin. */
-export enum PluginStatusEnum {
+export type PluginStatusEnum =
   /** The plugin is currently active. */
-  Active = 'ACTIVE',
+  | 'ACTIVE'
   /** The plugin is a drop-in plugin. */
-  DropIn = 'DROP_IN',
+  | 'DROP_IN'
   /** The plugin is currently inactive. */
-  Inactive = 'INACTIVE',
+  | 'INACTIVE'
   /** The plugin is a must-use plugin. */
-  MustUse = 'MUST_USE',
+  | 'MUST_USE'
   /** The plugin is technically active but was paused while loading. */
-  Paused = 'PAUSED',
+  | 'PAUSED'
   /** The plugin was active recently. */
-  RecentlyActive = 'RECENTLY_ACTIVE',
+  | 'RECENTLY_ACTIVE'
   /** The plugin has an upgrade available. */
-  Upgrade = 'UPGRADE'
-}
+  | 'UPGRADE';
 
 /** The post type */
 export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & NodeWithTrackbacks & Previewable & UniformResourceIdentifiable & {
@@ -7151,18 +7117,17 @@ export type PostFormatConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PostFormatIdType {
+export type PostFormatIdType =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the PostFormat type and the ContentNode type */
 export type PostFormatToContentNodeConnection = Connection & ContentNodeConnection & {
@@ -7346,60 +7311,56 @@ export type PostFormatToTaxonomyConnectionEdge = Edge & OneToOneConnection & Tax
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PostIdType {
+export type PostIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** The format of post field data. */
-export enum PostObjectFieldFormatEnum {
+export type PostObjectFieldFormatEnum =
   /** Provide the field value directly from database. Null on unauthenticated requests. */
-  Raw = 'RAW',
+  | 'RAW'
   /** Provide the field value as rendered by WordPress. Default. */
-  Rendered = 'RENDERED'
-}
+  | 'RENDERED';
 
 /** The column to use when filtering by date */
-export enum PostObjectsConnectionDateColumnEnum {
+export type PostObjectsConnectionDateColumnEnum =
   /** The date the comment was created in local time. */
-  Date = 'DATE',
+  | 'DATE'
   /** The most recent modification date of the comment. */
-  Modified = 'MODIFIED'
-}
+  | 'MODIFIED';
 
 /** Field to order the connection by */
-export enum PostObjectsConnectionOrderbyEnum {
+export type PostObjectsConnectionOrderbyEnum =
   /** Order by author */
-  Author = 'AUTHOR',
+  | 'AUTHOR'
   /** Order by the number of comments it has acquired */
-  CommentCount = 'COMMENT_COUNT',
+  | 'COMMENT_COUNT'
   /** Order by publish date */
-  Date = 'DATE',
+  | 'DATE'
   /** Preserve the ID order given in the IN array */
-  In = 'IN',
+  | 'IN'
   /** Order by the menu order value */
-  MenuOrder = 'MENU_ORDER',
+  | 'MENU_ORDER'
   /** Order by meta value */
-  MetaValue = 'META_VALUE',
+  | 'META_VALUE'
   /** Order by numeric meta value */
-  MetaValueNum = 'META_VALUE_NUM',
+  | 'META_VALUE_NUM'
   /** Order by last modified date */
-  Modified = 'MODIFIED',
+  | 'MODIFIED'
   /** Preserve slug order given in the NAME_IN array */
-  NameIn = 'NAME_IN',
+  | 'NAME_IN'
   /** Order by parent ID */
-  Parent = 'PARENT',
+  | 'PARENT'
   /** Order by slug */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Order by title */
-  Title = 'TITLE'
-}
+  | 'TITLE';
 
 /** Options for ordering the connection */
 export type PostObjectsConnectionOrderbyInput = {
@@ -7430,34 +7391,33 @@ export type PostPostFormatsNodeInput = {
 };
 
 /** The status of the object. */
-export enum PostStatusEnum {
+export type PostStatusEnum =
   /** Objects with the acf-disabled status */
-  AcfDisabled = 'ACF_DISABLED',
+  | 'ACF_DISABLED'
   /** Objects with the auto-draft status */
-  AutoDraft = 'AUTO_DRAFT',
+  | 'AUTO_DRAFT'
   /** Objects with the draft status */
-  Draft = 'DRAFT',
+  | 'DRAFT'
   /** Objects with the future status */
-  Future = 'FUTURE',
+  | 'FUTURE'
   /** Objects with the inherit status */
-  Inherit = 'INHERIT',
+  | 'INHERIT'
   /** Objects with the pending status */
-  Pending = 'PENDING',
+  | 'PENDING'
   /** Objects with the private status */
-  Private = 'PRIVATE',
+  | 'PRIVATE'
   /** Objects with the publish status */
-  Publish = 'PUBLISH',
+  | 'PUBLISH'
   /** Objects with the request-completed status */
-  RequestCompleted = 'REQUEST_COMPLETED',
+  | 'REQUEST_COMPLETED'
   /** Objects with the request-confirmed status */
-  RequestConfirmed = 'REQUEST_CONFIRMED',
+  | 'REQUEST_CONFIRMED'
   /** Objects with the request-failed status */
-  RequestFailed = 'REQUEST_FAILED',
+  | 'REQUEST_FAILED'
   /** Objects with the request-pending status */
-  RequestPending = 'REQUEST_PENDING',
+  | 'REQUEST_PENDING'
   /** Objects with the trash status */
-  Trash = 'TRASH'
-}
+  | 'TRASH';
 
 /** Set relationships between the post to tags */
 export type PostTagsInput = {
@@ -8177,12 +8137,11 @@ export type RegisterUserPayload = {
 };
 
 /** The logical relation between each item in the array when there are more than one. */
-export enum RelationEnum {
+export type RelationEnum =
   /** The logical AND condition returns true if both operands are true, otherwise, it returns false. */
-  And = 'AND',
+  | 'AND'
   /** The logical OR condition returns false if both operands are false, otherwise, it returns true. */
-  Or = 'OR'
-}
+  | 'OR';
 
 /** Input for the resetUserPassword mutation. */
 export type ResetUserPasswordInput = {
@@ -10938,12 +10897,11 @@ export type RootQueryToVideoItemConnectionWhereArgs = {
 };
 
 /** The strategy to use when loading the script */
-export enum ScriptLoadingStrategyEnum {
+export type ScriptLoadingStrategyEnum =
   /** Use the script `async` attribute */
-  Async = 'ASYNC',
+  | 'ASYNC'
   /** Use the script `defer` attribute */
-  Defer = 'DEFER'
-}
+  | 'DEFER';
 
 /** Input for the sendPasswordResetEmail mutation. */
 export type SendPasswordResetEmailInput = {
@@ -11131,18 +11089,17 @@ export type TagConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum TagIdType {
+export type TagIdType =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Tag type and the ContentNode type */
 export type TagToContentNodeConnection = Connection & ContentNodeConnection & {
@@ -11421,22 +11378,20 @@ export type TaxonomyConnectionPageInfo = {
 };
 
 /** Allowed taxonomies */
-export enum TaxonomyEnum {
+export type TaxonomyEnum =
   /** Taxonomy enum category */
-  Category = 'CATEGORY',
+  | 'CATEGORY'
   /** Taxonomy enum post_format */
-  Postformat = 'POSTFORMAT',
+  | 'POSTFORMAT'
   /** Taxonomy enum post_tag */
-  Tag = 'TAG'
-}
+  | 'TAG';
 
 /** The Type of Identifier used to fetch a single Taxonomy node. To be used along with the "id" field. Default is "ID". */
-export enum TaxonomyIdTypeEnum {
+export type TaxonomyIdTypeEnum =
   /** The globally unique ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the taxonomy */
-  Name = 'NAME'
-}
+  | 'NAME';
 
 /** Connection between the Taxonomy type and the ContentType type */
 export type TaxonomyToContentTypeConnection = Connection & ContentTypeConnection & {
@@ -11595,18 +11550,17 @@ export type TermNodeConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is "ID". To be used along with the "id" field. */
-export enum TermNodeIdTypeEnum {
+export type TermNodeIdTypeEnum =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the TermNode type and the EnqueuedScript type */
 export type TermNodeToEnqueuedScriptConnection = Connection & EnqueuedScriptConnection & {
@@ -11675,22 +11629,21 @@ export type TermNodeToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetC
 };
 
 /** Options for ordering the connection by */
-export enum TermObjectsConnectionOrderbyEnum {
+export type TermObjectsConnectionOrderbyEnum =
   /** Order the connection by item count. */
-  Count = 'COUNT',
+  | 'COUNT'
   /** Order the connection by description. */
-  Description = 'DESCRIPTION',
+  | 'DESCRIPTION'
   /** Order the connection by name. */
-  Name = 'NAME',
+  | 'NAME'
   /** Order the connection by slug. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Order the connection by term group. */
-  TermGroup = 'TERM_GROUP',
+  | 'TERM_GROUP'
   /** Order the connection by term id. */
-  TermId = 'TERM_ID',
+  | 'TERM_ID'
   /** Order the connection by term order. */
-  TermOrder = 'TERM_ORDER'
-}
+  | 'TERM_ORDER';
 
 /** A theme object */
 export type Theme = Node & {
@@ -12516,20 +12469,19 @@ export type UserConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single User node. To be used along with the "id" field. Default is "ID". */
-export enum UserNodeIdTypeEnum {
+export type UserNodeIdTypeEnum =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The Email of the User */
-  Email = 'EMAIL',
+  | 'EMAIL'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The slug of the User */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI',
+  | 'URI'
   /** The username the User uses to login with */
-  Username = 'USERNAME'
-}
+  | 'USERNAME';
 
 /** A user role object */
 export type UserRole = Node & {
@@ -12577,18 +12529,17 @@ export type UserRoleConnectionPageInfo = {
 };
 
 /** Names of available user roles */
-export enum UserRoleEnum {
+export type UserRoleEnum =
   /** User role with specific capabilities */
-  Administrator = 'ADMINISTRATOR',
+  | 'ADMINISTRATOR'
   /** User role with specific capabilities */
-  Author = 'AUTHOR',
+  | 'AUTHOR'
   /** User role with specific capabilities */
-  Contributor = 'CONTRIBUTOR',
+  | 'CONTRIBUTOR'
   /** User role with specific capabilities */
-  Editor = 'EDITOR',
+  | 'EDITOR'
   /** User role with specific capabilities */
-  Subscriber = 'SUBSCRIBER'
-}
+  | 'SUBSCRIBER';
 
 /** Connection between the User type and the Comment type */
 export type UserToCommentConnection = CommentConnection & Connection & {
@@ -13115,24 +13066,23 @@ export type UserToUserRoleConnectionPageInfo = PageInfo & UserRoleConnectionPage
 };
 
 /** Field to order the connection by */
-export enum UsersConnectionOrderbyEnum {
+export type UsersConnectionOrderbyEnum =
   /** Order by display name */
-  DisplayName = 'DISPLAY_NAME',
+  | 'DISPLAY_NAME'
   /** Order by email address */
-  Email = 'EMAIL',
+  | 'EMAIL'
   /** Order by login */
-  Login = 'LOGIN',
+  | 'LOGIN'
   /** Preserve the login order given in the LOGIN_IN array */
-  LoginIn = 'LOGIN_IN',
+  | 'LOGIN_IN'
   /** Order by nice name */
-  NiceName = 'NICE_NAME',
+  | 'NICE_NAME'
   /** Preserve the nice name order given in the NICE_NAME_IN array */
-  NiceNameIn = 'NICE_NAME_IN',
+  | 'NICE_NAME_IN'
   /** Order by registration date */
-  Registered = 'REGISTERED',
+  | 'REGISTERED'
   /** Order by URL */
-  Url = 'URL'
-}
+  | 'URL';
 
 /** Options for ordering the connection */
 export type UsersConnectionOrderbyInput = {
@@ -13143,18 +13093,17 @@ export type UsersConnectionOrderbyInput = {
 };
 
 /** Column used for searching for users. */
-export enum UsersConnectionSearchColumnEnum {
+export type UsersConnectionSearchColumnEnum =
   /** The user's email address. */
-  Email = 'EMAIL',
+  | 'EMAIL'
   /** The globally unique ID. */
-  Id = 'ID',
+  | 'ID'
   /** The username the User uses to login with. */
-  Login = 'LOGIN',
+  | 'LOGIN'
   /** A URL-friendly name for the user. The default is the user's username. */
-  Nicename = 'NICENAME',
+  | 'NICENAME'
   /** The URL of the user's website. */
-  Url = 'URL'
-}
+  | 'URL';
 
 /** The videoItem type */
 export type VideoItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & {
@@ -13306,16 +13255,15 @@ export type VideoItemConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum VideoItemIdType {
+export type VideoItemIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the VideoItem type and the videoItem type */
 export type VideoItemToParentConnectionEdge = Edge & OneToOneConnection & VideoItemConnectionEdge & {
@@ -13452,31 +13400,43 @@ export type WritingSettings = {
   useSmilies?: Maybe<Scalars['Boolean']['output']>;
 };
 
-export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null };
+export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } & { ' $fragmentName'?: 'FragmentFeaturedImageFragment' };
 
 export type GetArticleByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetArticleByIdQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } } | null } | null };
+export type GetArticleByIdQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+        { __typename?: 'MediaItem' }
+        & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
+      ) } | null } | null };
 
 export type GetArticleByUriQueryVariables = Exact<{
   uri: Scalars['ID']['input'];
 }>;
 
 
-export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'Book', bookId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'MediaItem', altText?: string | null, authorDatabaseId?: number | null, authorId?: string | null, caption?: string | null, commentCount?: number | null, commentStatus?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, description?: string | null, desiredSlug?: string | null, enclosure?: string | null, fileSize?: number | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'Page' } | { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, password?: string | null, pdfItemId: number, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, sizes?: string | null, uri?: string | null, title?: string | null, mediaDetails?: { __typename?: 'MediaDetails', file?: string | null, height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null, contentType?: { __typename?: 'ContentNodeToContentTypeConnectionEdge', node: { __typename?: 'ContentType', canExport?: boolean | null, deleteWithUser?: boolean | null, description?: string | null, excludeFromSearch?: boolean | null, graphqlPluralName?: string | null, graphqlSingleName?: string | null, hasArchive?: boolean | null, hierarchical?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isRestricted?: boolean | null, isTermNode: boolean, label?: string | null, menuIcon?: string | null, menuPosition?: number | null, name?: string | null, public?: boolean | null, publiclyQueryable?: boolean | null, restBase?: string | null, restControllerClass?: string | null, showInAdminBar?: boolean | null, showInGraphql?: boolean | null, showInMenu?: boolean | null, showInNavMenus?: boolean | null, showInRest?: boolean | null, showUi?: boolean | null, uri?: string | null } } | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem', uri?: string | null, slug?: string | null } | { __typename?: 'Book', uri?: string | null, slug?: string | null } | { __typename?: 'JournalIssue', uri?: string | null, slug?: string | null } | { __typename?: 'MediaItem', uri?: string | null, slug?: string | null } | { __typename?: 'Page', uri?: string | null, slug?: string | null } | { __typename?: 'PdfItem', uri?: string | null, slug?: string | null } | { __typename?: 'Post', uri?: string | null, slug?: string | null } | { __typename?: 'VideoItem', uri?: string | null, slug?: string | null }> } | null } | null } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } } | null } | null };
+export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'Book', bookId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'MediaItem', altText?: string | null, authorDatabaseId?: number | null, authorId?: string | null, caption?: string | null, commentCount?: number | null, commentStatus?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, description?: string | null, desiredSlug?: string | null, enclosure?: string | null, fileSize?: number | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'Page' } | { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, password?: string | null, pdfItemId: number, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, sizes?: string | null, uri?: string | null, title?: string | null, mediaDetails?: { __typename?: 'MediaDetails', file?: string | null, height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null, contentType?: { __typename?: 'ContentNodeToContentTypeConnectionEdge', node: { __typename?: 'ContentType', canExport?: boolean | null, deleteWithUser?: boolean | null, description?: string | null, excludeFromSearch?: boolean | null, graphqlPluralName?: string | null, graphqlSingleName?: string | null, hasArchive?: boolean | null, hierarchical?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isRestricted?: boolean | null, isTermNode: boolean, label?: string | null, menuIcon?: string | null, menuPosition?: number | null, name?: string | null, public?: boolean | null, publiclyQueryable?: boolean | null, restBase?: string | null, restControllerClass?: string | null, showInAdminBar?: boolean | null, showInGraphql?: boolean | null, showInMenu?: boolean | null, showInNavMenus?: boolean | null, showInRest?: boolean | null, showUi?: boolean | null, uri?: string | null } } | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem', uri?: string | null, slug?: string | null } | { __typename?: 'Book', uri?: string | null, slug?: string | null } | { __typename?: 'JournalIssue', uri?: string | null, slug?: string | null } | { __typename?: 'MediaItem', uri?: string | null, slug?: string | null } | { __typename?: 'Page', uri?: string | null, slug?: string | null } | { __typename?: 'PdfItem', uri?: string | null, slug?: string | null } | { __typename?: 'Post', uri?: string | null, slug?: string | null } | { __typename?: 'VideoItem', uri?: string | null, slug?: string | null }> } | null } | null } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+        { __typename?: 'MediaItem' }
+        & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
+      ) } | null } | null };
 
 export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBooksQuery = { __typename?: 'RootQuery', books?: { __typename?: 'RootQueryToBookConnection', nodes: Array<{ __typename?: 'Book', contentTypeName: string, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article', contentTypeName: string, guid?: string | null, id: string, link?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', tableOfContentsTitle?: string | null, subtitle?: string | null, displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } } | null }> } | null };
+export type GetBooksQuery = { __typename?: 'RootQuery', books?: { __typename?: 'RootQueryToBookConnection', nodes: Array<{ __typename?: 'Book', contentTypeName: string, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article', contentTypeName: string, guid?: string | null, id: string, link?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', tableOfContentsTitle?: string | null, subtitle?: string | null, displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+          { __typename?: 'MediaItem' }
+          & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
+        ) } | null }> } | null };
 
 export type GetArticlesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetArticlesQuery = { __typename?: 'RootQuery', articles?: { __typename?: 'RootQueryToArticleConnection', nodes: Array<{ __typename?: 'Article', id: string, title?: string | null, content?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } } | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, isContentNode: boolean, journalIssueId: number, link?: string | null, slug?: string | null, status?: string | null, uri?: string | null, title?: string | null } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null }> } | null };
+export type GetArticlesQuery = { __typename?: 'RootQuery', articles?: { __typename?: 'RootQueryToArticleConnection', nodes: Array<{ __typename?: 'Article', id: string, title?: string | null, content?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+          { __typename?: 'MediaItem' }
+          & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
+        ) } | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, isContentNode: boolean, journalIssueId: number, link?: string | null, slug?: string | null, status?: string | null, uri?: string | null, title?: string | null } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null }> } | null };
 
 export type GetGlobalSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -13488,1080 +13448,39 @@ export type GetJournalByUriQueryVariables = Exact<{
 }>;
 
 
-export type GetJournalByUriQuery = { __typename?: 'RootQuery', journalIssueBy?: { __typename?: 'JournalIssue', title?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } } | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null } | null };
+export type GetJournalByUriQuery = { __typename?: 'RootQuery', journalIssueBy?: { __typename?: 'JournalIssue', title?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+        { __typename?: 'MediaItem' }
+        & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
+      ) } | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null } | null };
 
 export type GetJournalIssuesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetJournalIssuesQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', title?: string | null, slug?: string | null, id: string, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } } | null }> } | null };
+export type GetJournalIssuesQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', title?: string | null, slug?: string | null, id: string, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+          { __typename?: 'MediaItem' }
+          & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
+        ) } | null }> } | null };
 
 export type GetJournalIssuesLatestQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetJournalIssuesLatestQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } } | null }> } | null };
+export type GetJournalIssuesLatestQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+          { __typename?: 'MediaItem' }
+          & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
+        ) } | null }> } | null };
 
 export type GetPlaceholderSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetPlaceholderSettingsQuery = { __typename?: 'RootQuery', placeholderSettings?: { __typename?: 'PlaceholderSettings', placeholderSettingsFields?: { __typename?: 'PlaceholderSettingsFields', placeholderSetup: Array<{ __typename?: 'PlaceholderSettingsFieldsPlaceholderSetup', contentSelector: Array<string | null>, placeholderSelector: Array<string | null>, textContentGroup: { __typename?: 'PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup', freeTextHeading?: string | null, textContent?: string | null, freeTextImage?: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, contentTypeName: string, databaseId: number, description?: string | null, guid?: string | null, id: string, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, uri?: string | null, dateGmt?: string | null } } | null, freeTextLink?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'AudioItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Book', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'MediaItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Page', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Post', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null }> } | null } } | null> } | null } | null };
 
-
-export const FragmentFeaturedImageFragmentDoc = `
-    fragment FragmentFeaturedImage on MediaItem {
-  altText
-  link
-  mediaItemId
-  mediaItemUrl
-  description
-  guid
-  id
-  sizes
-  slug
-  sourceUrl
-  srcSet
-}
-    `;
-export const GetArticleByIdDocument = `
-    query GetArticleById($id: ID!) {
-  article(id: $id, idType: DATABASE_ID) {
-    articleId
-    content
-    contentTypeName
-    databaseId
-    date
-    dateGmt
-    featuredImageDatabaseId
-    featuredImageId
-    id
-    isTermNode
-    modified
-    modifiedGmt
-    parentDatabaseId
-    parentId
-    password
-    previewRevisionDatabaseId
-    previewRevisionId
-    slug
-    status
-    title
-    uri
-    articleDetails {
-      displayDate
-      displayOnFrontPage
-      fieldGroupName
-      publicationDate
-      source
-      subtitle
-      suppressDate
-      tableOfContentsTitle
-    }
-    featuredImage {
-      node {
-        ...FragmentFeaturedImage
-      }
-    }
-  }
-}
-    ${FragmentFeaturedImageFragmentDoc}`;
-
-export const useGetArticleByIdQuery = <
-      TData = GetArticleByIdQuery,
-      TError = unknown
-    >(
-      variables: GetArticleByIdQueryVariables,
-      options?: Omit<UseQueryOptions<GetArticleByIdQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticleByIdQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetArticleByIdQuery, TError, TData>(
-      {
-    queryKey: ['GetArticleById', variables],
-    queryFn: fetcher<GetArticleByIdQuery, GetArticleByIdQueryVariables>(GetArticleByIdDocument, variables),
-    ...options
-  }
-    )};
-
-useGetArticleByIdQuery.getKey = (variables: GetArticleByIdQueryVariables) => ['GetArticleById', variables];
-
-export const useSuspenseGetArticleByIdQuery = <
-      TData = GetArticleByIdQuery,
-      TError = unknown
-    >(
-      variables: GetArticleByIdQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetArticleByIdQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticleByIdQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetArticleByIdQuery, TError, TData>(
-      {
-    queryKey: ['GetArticleByIdSuspense', variables],
-    queryFn: fetcher<GetArticleByIdQuery, GetArticleByIdQueryVariables>(GetArticleByIdDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetArticleByIdQuery.getKey = (variables: GetArticleByIdQueryVariables) => ['GetArticleByIdSuspense', variables];
-
-
-useGetArticleByIdQuery.fetcher = (variables: GetArticleByIdQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticleByIdQuery, GetArticleByIdQueryVariables>(GetArticleByIdDocument, variables, options);
-
-export const GetArticleByUriDocument = `
-    query GetArticleByUri($uri: ID!) {
-  article(id: $uri, idType: URI) {
-    articleId
-    content
-    contentTypeName
-    databaseId
-    date
-    dateGmt
-    featuredImageDatabaseId
-    featuredImageId
-    id
-    isTermNode
-    modified
-    modifiedGmt
-    parentDatabaseId
-    parentId
-    password
-    previewRevisionDatabaseId
-    previewRevisionId
-    slug
-    status
-    title
-    uri
-    articleDetails {
-      displayDate
-      displayOnFrontPage
-      fieldGroupName
-      publicationDate
-      source
-      subtitle
-      suppressDate
-      tableOfContentsTitle
-      relatedPdf {
-        nodes {
-          ... on PdfItem {
-            contentTypeName
-            databaseId
-            date
-            dateGmt
-            desiredSlug
-            enclosure
-            guid
-            hasPassword
-            id
-            isComment
-            isContentNode
-            isFrontPage
-            isPostsPage
-            isPreview
-            isRestricted
-            isTermNode
-            link
-            modified
-            modifiedGmt
-            password
-            pdfItemId
-            previewRevisionDatabaseId
-            previewRevisionId
-            slug
-            status
-            title
-            uri
-            pdfItemDetails {
-              fieldGroupName
-              pdfFile {
-                cursor
-                node {
-                  fileSize(size: null)
-                  link
-                  mediaDetails {
-                    file
-                    height
-                    width
-                    sizes {
-                      file
-                      fileSize
-                      height
-                      mimeType
-                      name
-                      sourceUrl
-                      width
-                    }
-                  }
-                  slug
-                  sourceUrl
-                  srcSet
-                  contentTypeName
-                  contentType {
-                    node {
-                      canExport
-                      deleteWithUser
-                      description
-                      excludeFromSearch
-                      graphqlPluralName
-                      graphqlSingleName
-                      hasArchive
-                      hierarchical
-                      id
-                      isComment
-                      isContentNode
-                      isFrontPage
-                      isPostsPage
-                      isRestricted
-                      isTermNode
-                      label
-                      menuIcon
-                      menuPosition
-                      name
-                      public
-                      publiclyQueryable
-                      restBase
-                      restControllerClass
-                      showInAdminBar
-                      showInGraphql
-                      showInMenu
-                      showInNavMenus
-                      showInRest
-                      showUi
-                      uri
-                    }
-                  }
-                  mediaItemId
-                  mediaItemUrl
-                  mediaType
-                  mimeType
-                  sizes
-                  uri
-                  title
-                }
-              }
-              relatedArticle {
-                nodes {
-                  uri
-                  ... on Article {
-                    articleId
-                    content
-                    contentTypeName
-                    databaseId
-                    date
-                    dateGmt
-                    desiredSlug
-                    enclosure
-                    featuredImageDatabaseId
-                    featuredImageId
-                    guid
-                    hasPassword
-                    id
-                    isComment
-                    isContentNode
-                    isFrontPage
-                    isPostsPage
-                    isPreview
-                    isRestricted
-                    isTermNode
-                    link
-                    modified
-                    modifiedGmt
-                    parentDatabaseId
-                    parentId
-                    password
-                    previewRevisionDatabaseId
-                    previewRevisionId
-                    slug
-                    status
-                    title
-                    uri
-                  }
-                  slug
-                }
-              }
-            }
-          }
-          ... on JournalIssue {
-            contentTypeName
-            databaseId
-            date
-            dateGmt
-            desiredSlug
-            enclosure
-            featuredImageDatabaseId
-            featuredImageId
-            guid
-            hasPassword
-            id
-            isComment
-            isContentNode
-            isFrontPage
-            isPostsPage
-            isPreview
-            isRestricted
-            isTermNode
-            journalIssueId
-            link
-            modified
-            modifiedGmt
-            parentDatabaseId
-            parentId
-            password
-            previewRevisionDatabaseId
-            previewRevisionId
-            slug
-            status
-            title
-            uri
-          }
-          ... on AudioItem {
-            audioItemId
-            contentTypeName
-            databaseId
-            date
-            dateGmt
-            desiredSlug
-            enclosure
-            guid
-            hasPassword
-            id
-            isComment
-            isContentNode
-            isFrontPage
-            isPostsPage
-            isPreview
-            isRestricted
-            isTermNode
-            link
-            modified
-            modifiedGmt
-            parentDatabaseId
-            parentId
-            password
-            previewRevisionDatabaseId
-            previewRevisionId
-            slug
-            status
-            title
-            uri
-          }
-          ... on MediaItem {
-            altText
-            authorDatabaseId
-            authorId
-            caption
-            commentCount
-            commentStatus
-            contentTypeName
-            databaseId
-            date
-            dateGmt
-            description
-            desiredSlug
-            enclosure
-            fileSize
-            guid
-            hasPassword
-            id
-            isComment
-            isContentNode
-            isFrontPage
-            isPostsPage
-            isPreview
-            isRestricted
-            isTermNode
-            link
-            mediaItemId
-            mediaItemUrl
-            mediaType
-            mimeType
-            modified
-            modifiedGmt
-            parentDatabaseId
-            parentId
-            password
-            previewRevisionDatabaseId
-            previewRevisionId
-            sizes
-            slug
-            sourceUrl
-            srcSet
-            status
-            title
-            uri
-          }
-          ... on Book {
-            bookId
-            contentTypeName
-            databaseId
-            date
-            dateGmt
-            desiredSlug
-            enclosure
-            featuredImageDatabaseId
-            featuredImageId
-            guid
-            hasPassword
-            id
-            isComment
-            isContentNode
-            isFrontPage
-            isPostsPage
-            isPreview
-            isRestricted
-            isTermNode
-            link
-            modified
-            modifiedGmt
-            parentDatabaseId
-            parentId
-            password
-            previewRevisionDatabaseId
-            previewRevisionId
-            slug
-            status
-            title
-            uri
-          }
-          ... on Article {
-            articleId
-            content
-            contentTypeName
-            databaseId
-            date
-            dateGmt
-            desiredSlug
-            enclosure
-            featuredImageDatabaseId
-            featuredImageId
-            guid
-            hasPassword
-            id
-            isComment
-            isContentNode
-            isFrontPage
-            isPostsPage
-            isPreview
-            isRestricted
-            isTermNode
-            link
-            modified
-            modifiedGmt
-            parentDatabaseId
-            parentId
-            password
-            previewRevisionDatabaseId
-            previewRevisionId
-            slug
-            status
-            title
-            uri
-          }
-        }
-      }
-    }
-    featuredImage {
-      node {
-        ...FragmentFeaturedImage
-      }
-    }
-  }
-}
-    ${FragmentFeaturedImageFragmentDoc}`;
-
-export const useGetArticleByUriQuery = <
-      TData = GetArticleByUriQuery,
-      TError = unknown
-    >(
-      variables: GetArticleByUriQueryVariables,
-      options?: Omit<UseQueryOptions<GetArticleByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticleByUriQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetArticleByUriQuery, TError, TData>(
-      {
-    queryKey: ['GetArticleByUri', variables],
-    queryFn: fetcher<GetArticleByUriQuery, GetArticleByUriQueryVariables>(GetArticleByUriDocument, variables),
-    ...options
-  }
-    )};
-
-useGetArticleByUriQuery.getKey = (variables: GetArticleByUriQueryVariables) => ['GetArticleByUri', variables];
-
-export const useSuspenseGetArticleByUriQuery = <
-      TData = GetArticleByUriQuery,
-      TError = unknown
-    >(
-      variables: GetArticleByUriQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetArticleByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticleByUriQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetArticleByUriQuery, TError, TData>(
-      {
-    queryKey: ['GetArticleByUriSuspense', variables],
-    queryFn: fetcher<GetArticleByUriQuery, GetArticleByUriQueryVariables>(GetArticleByUriDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetArticleByUriQuery.getKey = (variables: GetArticleByUriQueryVariables) => ['GetArticleByUriSuspense', variables];
-
-
-useGetArticleByUriQuery.fetcher = (variables: GetArticleByUriQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticleByUriQuery, GetArticleByUriQueryVariables>(GetArticleByUriDocument, variables, options);
-
-export const GetBooksDocument = `
-    query GetBooks {
-  books {
-    nodes {
-      contentTypeName
-      featuredImageDatabaseId
-      featuredImageId
-      id
-      isComment
-      isContentNode
-      isFrontPage
-      isPostsPage
-      isPreview
-      isRestricted
-      isTermNode
-      link
-      modified
-      modifiedGmt
-      parentDatabaseId
-      parentId
-      password
-      previewRevisionDatabaseId
-      previewRevisionId
-      slug
-      status
-      title
-      uri
-      bookDetails {
-        displayOnIbtBooks
-        fieldGroupName
-        subheading
-        summary
-        relatedArticles {
-          edges {
-            node {
-              ... on Article {
-                contentTypeName
-                guid
-                id
-                link
-                slug
-                status
-                title
-                uri
-                articleDetails {
-                  tableOfContentsTitle
-                  subtitle
-                  displayDate
-                  displayOnFrontPage
-                  publicationDate
-                }
-              }
-            }
-          }
-        }
-      }
-      featuredImage {
-        node {
-          ...FragmentFeaturedImage
-        }
-      }
-    }
-  }
-}
-    ${FragmentFeaturedImageFragmentDoc}`;
-
-export const useGetBooksQuery = <
-      TData = GetBooksQuery,
-      TError = unknown
-    >(
-      variables?: GetBooksQueryVariables,
-      options?: Omit<UseQueryOptions<GetBooksQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetBooksQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetBooksQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetBooks'] : ['GetBooks', variables],
-    queryFn: fetcher<GetBooksQuery, GetBooksQueryVariables>(GetBooksDocument, variables),
-    ...options
-  }
-    )};
-
-useGetBooksQuery.getKey = (variables?: GetBooksQueryVariables) => variables === undefined ? ['GetBooks'] : ['GetBooks', variables];
-
-export const useSuspenseGetBooksQuery = <
-      TData = GetBooksQuery,
-      TError = unknown
-    >(
-      variables?: GetBooksQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetBooksQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetBooksQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetBooksQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetBooksSuspense'] : ['GetBooksSuspense', variables],
-    queryFn: fetcher<GetBooksQuery, GetBooksQueryVariables>(GetBooksDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetBooksQuery.getKey = (variables?: GetBooksQueryVariables) => variables === undefined ? ['GetBooksSuspense'] : ['GetBooksSuspense', variables];
-
-
-useGetBooksQuery.fetcher = (variables?: GetBooksQueryVariables, options?: RequestInit['headers']) => fetcher<GetBooksQuery, GetBooksQueryVariables>(GetBooksDocument, variables, options);
-
-export const GetArticlesDocument = `
-    query GetArticles {
-  articles(
-    first: 50
-    where: {orderby: {field: META_VALUE_NUM, order: DESC}, metaKey: "publication_date", metaQuery: [{key: "display_on_front_page", compare: "=", value: "1"}]}
-  ) {
-    nodes {
-      id
-      title
-      content
-      slug
-      featuredImage {
-        node {
-          ...FragmentFeaturedImage
-        }
-      }
-      articleDetails {
-        displayDate
-        displayOnFrontPage
-        fieldGroupName
-        publicationDate
-        source
-        subtitle
-        suppressDate
-        tableOfContentsTitle
-        relatedJournal {
-          edges {
-            node {
-              ... on JournalIssue {
-                contentTypeName
-                databaseId
-                date
-                dateGmt
-                featuredImageDatabaseId
-                featuredImageId
-                guid
-                id
-                isContentNode
-                journalIssueId
-                link
-                slug
-                status
-                uri
-                title
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    ${FragmentFeaturedImageFragmentDoc}`;
-
-export const useGetArticlesQuery = <
-      TData = GetArticlesQuery,
-      TError = unknown
-    >(
-      variables?: GetArticlesQueryVariables,
-      options?: Omit<UseQueryOptions<GetArticlesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticlesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetArticlesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetArticles'] : ['GetArticles', variables],
-    queryFn: fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables),
-    ...options
-  }
-    )};
-
-useGetArticlesQuery.getKey = (variables?: GetArticlesQueryVariables) => variables === undefined ? ['GetArticles'] : ['GetArticles', variables];
-
-export const useSuspenseGetArticlesQuery = <
-      TData = GetArticlesQuery,
-      TError = unknown
-    >(
-      variables?: GetArticlesQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetArticlesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticlesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetArticlesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetArticlesSuspense'] : ['GetArticlesSuspense', variables],
-    queryFn: fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetArticlesQuery.getKey = (variables?: GetArticlesQueryVariables) => variables === undefined ? ['GetArticlesSuspense'] : ['GetArticlesSuspense', variables];
-
-
-useGetArticlesQuery.fetcher = (variables?: GetArticlesQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables, options);
-
-export const GetGlobalSettingsDocument = `
-    query GetGlobalSettings {
-  globalSettings {
-    fGGlobalSettings {
-      bannerImage {
-        cursor
-        node {
-          altText
-          srcSet
-          sourceUrl
-        }
-      }
-      notificationBar {
-        fieldGroupName
-        notificationMessage
-        notificationOnoff
-      }
-    }
-  }
-}
-    `;
-
-export const useGetGlobalSettingsQuery = <
-      TData = GetGlobalSettingsQuery,
-      TError = unknown
-    >(
-      variables?: GetGlobalSettingsQueryVariables,
-      options?: Omit<UseQueryOptions<GetGlobalSettingsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetGlobalSettingsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetGlobalSettingsQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetGlobalSettings'] : ['GetGlobalSettings', variables],
-    queryFn: fetcher<GetGlobalSettingsQuery, GetGlobalSettingsQueryVariables>(GetGlobalSettingsDocument, variables),
-    ...options
-  }
-    )};
-
-useGetGlobalSettingsQuery.getKey = (variables?: GetGlobalSettingsQueryVariables) => variables === undefined ? ['GetGlobalSettings'] : ['GetGlobalSettings', variables];
-
-export const useSuspenseGetGlobalSettingsQuery = <
-      TData = GetGlobalSettingsQuery,
-      TError = unknown
-    >(
-      variables?: GetGlobalSettingsQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetGlobalSettingsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetGlobalSettingsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetGlobalSettingsQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetGlobalSettingsSuspense'] : ['GetGlobalSettingsSuspense', variables],
-    queryFn: fetcher<GetGlobalSettingsQuery, GetGlobalSettingsQueryVariables>(GetGlobalSettingsDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetGlobalSettingsQuery.getKey = (variables?: GetGlobalSettingsQueryVariables) => variables === undefined ? ['GetGlobalSettingsSuspense'] : ['GetGlobalSettingsSuspense', variables];
-
-
-useGetGlobalSettingsQuery.fetcher = (variables?: GetGlobalSettingsQueryVariables, options?: RequestInit['headers']) => fetcher<GetGlobalSettingsQuery, GetGlobalSettingsQueryVariables>(GetGlobalSettingsDocument, variables, options);
-
-export const GetJournalByUriDocument = `
-    query GetJournalByUri($uri: String!) {
-  journalIssueBy(uri: $uri) {
-    title
-    featuredImage {
-      node {
-        ...FragmentFeaturedImage
-      }
-    }
-    journalIssueDetails {
-      fieldGroupName
-      publicationDate
-      articlesInJournal {
-        nodes {
-          slug
-          ... on Article {
-            articleDetails {
-              displayDate
-              displayOnFrontPage
-              fieldGroupName
-              publicationDate
-              source
-              subtitle
-              suppressDate
-              tableOfContentsTitle
-            }
-            title
-            uri
-          }
-        }
-      }
-    }
-  }
-}
-    ${FragmentFeaturedImageFragmentDoc}`;
-
-export const useGetJournalByUriQuery = <
-      TData = GetJournalByUriQuery,
-      TError = unknown
-    >(
-      variables: GetJournalByUriQueryVariables,
-      options?: Omit<UseQueryOptions<GetJournalByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetJournalByUriQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetJournalByUriQuery, TError, TData>(
-      {
-    queryKey: ['GetJournalByUri', variables],
-    queryFn: fetcher<GetJournalByUriQuery, GetJournalByUriQueryVariables>(GetJournalByUriDocument, variables),
-    ...options
-  }
-    )};
-
-useGetJournalByUriQuery.getKey = (variables: GetJournalByUriQueryVariables) => ['GetJournalByUri', variables];
-
-export const useSuspenseGetJournalByUriQuery = <
-      TData = GetJournalByUriQuery,
-      TError = unknown
-    >(
-      variables: GetJournalByUriQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetJournalByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetJournalByUriQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetJournalByUriQuery, TError, TData>(
-      {
-    queryKey: ['GetJournalByUriSuspense', variables],
-    queryFn: fetcher<GetJournalByUriQuery, GetJournalByUriQueryVariables>(GetJournalByUriDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetJournalByUriQuery.getKey = (variables: GetJournalByUriQueryVariables) => ['GetJournalByUriSuspense', variables];
-
-
-useGetJournalByUriQuery.fetcher = (variables: GetJournalByUriQueryVariables, options?: RequestInit['headers']) => fetcher<GetJournalByUriQuery, GetJournalByUriQueryVariables>(GetJournalByUriDocument, variables, options);
-
-export const GetJournalIssuesDocument = `
-    query GetJournalIssues {
-  journalIssues {
-    nodes {
-      journalIssueDetails {
-        articlesInJournal {
-          nodes {
-            ... on Article {
-              articleDetails {
-                displayDate
-                displayOnFrontPage
-                fieldGroupName
-                publicationDate
-                source
-                subtitle
-                suppressDate
-                tableOfContentsTitle
-              }
-              title
-              slug
-              id
-            }
-            slug
-          }
-        }
-        fieldGroupName
-        publicationDate
-      }
-      slug
-      title
-      featuredImage {
-        node {
-          ...FragmentFeaturedImage
-        }
-      }
-    }
-  }
-}
-    ${FragmentFeaturedImageFragmentDoc}`;
-
-export const useGetJournalIssuesQuery = <
-      TData = GetJournalIssuesQuery,
-      TError = unknown
-    >(
-      variables?: GetJournalIssuesQueryVariables,
-      options?: Omit<UseQueryOptions<GetJournalIssuesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetJournalIssuesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetJournalIssuesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetJournalIssues'] : ['GetJournalIssues', variables],
-    queryFn: fetcher<GetJournalIssuesQuery, GetJournalIssuesQueryVariables>(GetJournalIssuesDocument, variables),
-    ...options
-  }
-    )};
-
-useGetJournalIssuesQuery.getKey = (variables?: GetJournalIssuesQueryVariables) => variables === undefined ? ['GetJournalIssues'] : ['GetJournalIssues', variables];
-
-export const useSuspenseGetJournalIssuesQuery = <
-      TData = GetJournalIssuesQuery,
-      TError = unknown
-    >(
-      variables?: GetJournalIssuesQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetJournalIssuesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetJournalIssuesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetJournalIssuesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetJournalIssuesSuspense'] : ['GetJournalIssuesSuspense', variables],
-    queryFn: fetcher<GetJournalIssuesQuery, GetJournalIssuesQueryVariables>(GetJournalIssuesDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetJournalIssuesQuery.getKey = (variables?: GetJournalIssuesQueryVariables) => variables === undefined ? ['GetJournalIssuesSuspense'] : ['GetJournalIssuesSuspense', variables];
-
-
-useGetJournalIssuesQuery.fetcher = (variables?: GetJournalIssuesQueryVariables, options?: RequestInit['headers']) => fetcher<GetJournalIssuesQuery, GetJournalIssuesQueryVariables>(GetJournalIssuesDocument, variables, options);
-
-export const GetJournalIssuesLatestDocument = `
-    query GetJournalIssuesLatest {
-  journalIssues(
-    where: {metaQuery: [{key: "publication_date", compare: "EXISTS"}], orderby: {field: META_VALUE_NUM, order: DESC}, metaKey: "publication_date"}
-    first: 1
-  ) {
-    nodes {
-      journalIssueDetails {
-        fieldGroupName
-        publicationDate
-      }
-      slug
-      title
-      featuredImage {
-        node {
-          ...FragmentFeaturedImage
-        }
-      }
-    }
-  }
-}
-    ${FragmentFeaturedImageFragmentDoc}`;
-
-export const useGetJournalIssuesLatestQuery = <
-      TData = GetJournalIssuesLatestQuery,
-      TError = unknown
-    >(
-      variables?: GetJournalIssuesLatestQueryVariables,
-      options?: Omit<UseQueryOptions<GetJournalIssuesLatestQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetJournalIssuesLatestQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetJournalIssuesLatestQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetJournalIssuesLatest'] : ['GetJournalIssuesLatest', variables],
-    queryFn: fetcher<GetJournalIssuesLatestQuery, GetJournalIssuesLatestQueryVariables>(GetJournalIssuesLatestDocument, variables),
-    ...options
-  }
-    )};
-
-useGetJournalIssuesLatestQuery.getKey = (variables?: GetJournalIssuesLatestQueryVariables) => variables === undefined ? ['GetJournalIssuesLatest'] : ['GetJournalIssuesLatest', variables];
-
-export const useSuspenseGetJournalIssuesLatestQuery = <
-      TData = GetJournalIssuesLatestQuery,
-      TError = unknown
-    >(
-      variables?: GetJournalIssuesLatestQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetJournalIssuesLatestQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetJournalIssuesLatestQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetJournalIssuesLatestQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetJournalIssuesLatestSuspense'] : ['GetJournalIssuesLatestSuspense', variables],
-    queryFn: fetcher<GetJournalIssuesLatestQuery, GetJournalIssuesLatestQueryVariables>(GetJournalIssuesLatestDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetJournalIssuesLatestQuery.getKey = (variables?: GetJournalIssuesLatestQueryVariables) => variables === undefined ? ['GetJournalIssuesLatestSuspense'] : ['GetJournalIssuesLatestSuspense', variables];
-
-
-useGetJournalIssuesLatestQuery.fetcher = (variables?: GetJournalIssuesLatestQueryVariables, options?: RequestInit['headers']) => fetcher<GetJournalIssuesLatestQuery, GetJournalIssuesLatestQueryVariables>(GetJournalIssuesLatestDocument, variables, options);
-
-export const GetPlaceholderSettingsDocument = `
-    query GetPlaceholderSettings {
-  placeholderSettings {
-    placeholderSettingsFields {
-      placeholderSetup {
-        contentSelector
-        placeholderSelector
-        textContentGroup {
-          freeTextHeading
-          freeTextImage {
-            node {
-              altText
-              caption
-              contentTypeName
-              databaseId
-              description
-              guid
-              id
-              link
-              mediaItemId
-              mediaItemUrl
-              mediaType
-              slug
-              sourceUrl
-              srcSet
-              uri
-              dateGmt
-            }
-          }
-          freeTextLink {
-            nodes {
-              contentTypeName
-              databaseId
-              id
-              modifiedGmt
-              slug
-              status
-              uri
-              dateGmt
-            }
-          }
-          textContent
-        }
-      }
-    }
-  }
-}
-    `;
-
-export const useGetPlaceholderSettingsQuery = <
-      TData = GetPlaceholderSettingsQuery,
-      TError = unknown
-    >(
-      variables?: GetPlaceholderSettingsQueryVariables,
-      options?: Omit<UseQueryOptions<GetPlaceholderSettingsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetPlaceholderSettingsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetPlaceholderSettingsQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetPlaceholderSettings'] : ['GetPlaceholderSettings', variables],
-    queryFn: fetcher<GetPlaceholderSettingsQuery, GetPlaceholderSettingsQueryVariables>(GetPlaceholderSettingsDocument, variables),
-    ...options
-  }
-    )};
-
-useGetPlaceholderSettingsQuery.getKey = (variables?: GetPlaceholderSettingsQueryVariables) => variables === undefined ? ['GetPlaceholderSettings'] : ['GetPlaceholderSettings', variables];
-
-export const useSuspenseGetPlaceholderSettingsQuery = <
-      TData = GetPlaceholderSettingsQuery,
-      TError = unknown
-    >(
-      variables?: GetPlaceholderSettingsQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetPlaceholderSettingsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetPlaceholderSettingsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetPlaceholderSettingsQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetPlaceholderSettingsSuspense'] : ['GetPlaceholderSettingsSuspense', variables],
-    queryFn: fetcher<GetPlaceholderSettingsQuery, GetPlaceholderSettingsQueryVariables>(GetPlaceholderSettingsDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetPlaceholderSettingsQuery.getKey = (variables?: GetPlaceholderSettingsQueryVariables) => variables === undefined ? ['GetPlaceholderSettingsSuspense'] : ['GetPlaceholderSettingsSuspense', variables];
-
-
-useGetPlaceholderSettingsQuery.fetcher = (variables?: GetPlaceholderSettingsQueryVariables, options?: RequestInit['headers']) => fetcher<GetPlaceholderSettingsQuery, GetPlaceholderSettingsQueryVariables>(GetPlaceholderSettingsDocument, variables, options);
+export const FragmentFeaturedImageFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}}]}}]} as unknown as DocumentNode<FragmentFeaturedImageFragment, unknown>;
+export const GetArticleByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetArticleById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"article"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"idType"},"value":{"kind":"EnumValue","value":"DATABASE_ID"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}}]}}]} as unknown as DocumentNode<GetArticleByIdQuery, GetArticleByIdQueryVariables>;
+export const GetArticleByUriDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetArticleByUri"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uri"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"article"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uri"}}},{"kind":"Argument","name":{"kind":"Name","value":"idType"},"value":{"kind":"EnumValue","value":"URI"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"relatedPdf"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PdfItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"pdfItemId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"pdfItemDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"pdfFile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fileSize"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"size"},"value":{"kind":"NullValue"}}]},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"canExport"}},{"kind":"Field","name":{"kind":"Name","value":"deleteWithUser"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"excludeFromSearch"}},{"kind":"Field","name":{"kind":"Name","value":"graphqlPluralName"}},{"kind":"Field","name":{"kind":"Name","value":"graphqlSingleName"}},{"kind":"Field","name":{"kind":"Name","value":"hasArchive"}},{"kind":"Field","name":{"kind":"Name","value":"hierarchical"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"menuIcon"}},{"kind":"Field","name":{"kind":"Name","value":"menuPosition"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"public"}},{"kind":"Field","name":{"kind":"Name","value":"publiclyQueryable"}},{"kind":"Field","name":{"kind":"Name","value":"restBase"}},{"kind":"Field","name":{"kind":"Name","value":"restControllerClass"}},{"kind":"Field","name":{"kind":"Name","value":"showInAdminBar"}},{"kind":"Field","name":{"kind":"Name","value":"showInGraphql"}},{"kind":"Field","name":{"kind":"Name","value":"showInMenu"}},{"kind":"Field","name":{"kind":"Name","value":"showInNavMenus"}},{"kind":"Field","name":{"kind":"Name","value":"showInRest"}},{"kind":"Field","name":{"kind":"Name","value":"showUi"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaType"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"relatedArticle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"JournalIssue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"journalIssueId"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AudioItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"audioItemId"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"authorDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"caption"}},{"kind":"Field","name":{"kind":"Name","value":"commentCount"}},{"kind":"Field","name":{"kind":"Name","value":"commentStatus"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaType"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Book"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookId"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}}]}}]} as unknown as DocumentNode<GetArticleByUriQuery, GetArticleByUriQueryVariables>;
+export const GetBooksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"bookDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayOnIbtBooks"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"subheading"}},{"kind":"Field","name":{"kind":"Name","value":"summary"}},{"kind":"Field","name":{"kind":"Name","value":"relatedArticles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}}]}}]} as unknown as DocumentNode<GetBooksQuery, GetBooksQueryVariables>;
+export const GetArticlesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetArticles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articles"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"50"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"orderby"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"field"},"value":{"kind":"EnumValue","value":"META_VALUE_NUM"}},{"kind":"ObjectField","name":{"kind":"Name","value":"order"},"value":{"kind":"EnumValue","value":"DESC"}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"metaKey"},"value":{"kind":"StringValue","value":"publication_date","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"metaQuery"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"StringValue","value":"display_on_front_page","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"compare"},"value":{"kind":"StringValue","value":"=","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"value"},"value":{"kind":"StringValue","value":"1","block":false}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"relatedJournal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"JournalIssue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"journalIssueId"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}}]}}]} as unknown as DocumentNode<GetArticlesQuery, GetArticlesQueryVariables>;
+export const GetGlobalSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGlobalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"globalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fGGlobalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bannerImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"notificationBar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"notificationMessage"}},{"kind":"Field","name":{"kind":"Name","value":"notificationOnoff"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGlobalSettingsQuery, GetGlobalSettingsQueryVariables>;
+export const GetJournalByUriDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetJournalByUri"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uri"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"journalIssueBy"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"uri"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uri"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"journalIssueDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"articlesInJournal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}}]}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}}]}}]} as unknown as DocumentNode<GetJournalByUriQuery, GetJournalByUriQueryVariables>;
+export const GetJournalIssuesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetJournalIssues"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"journalIssues"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"journalIssueDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articlesInJournal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}}]}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}}]}}]} as unknown as DocumentNode<GetJournalIssuesQuery, GetJournalIssuesQueryVariables>;
+export const GetJournalIssuesLatestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetJournalIssuesLatest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"journalIssues"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"metaQuery"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"StringValue","value":"publication_date","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"compare"},"value":{"kind":"StringValue","value":"EXISTS","block":false}}]}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"orderby"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"field"},"value":{"kind":"EnumValue","value":"META_VALUE_NUM"}},{"kind":"ObjectField","name":{"kind":"Name","value":"order"},"value":{"kind":"EnumValue","value":"DESC"}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"metaKey"},"value":{"kind":"StringValue","value":"publication_date","block":false}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"1"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"journalIssueDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}}]}}]} as unknown as DocumentNode<GetJournalIssuesLatestQuery, GetJournalIssuesLatestQueryVariables>;
+export const GetPlaceholderSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlaceholderSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"placeholderSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"placeholderSettingsFields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"placeholderSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentSelector"}},{"kind":"Field","name":{"kind":"Name","value":"placeholderSelector"}},{"kind":"Field","name":{"kind":"Name","value":"textContentGroup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"freeTextHeading"}},{"kind":"Field","name":{"kind":"Name","value":"freeTextImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"caption"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaType"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"freeTextLink"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"textContent"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetPlaceholderSettingsQuery, GetPlaceholderSettingsQueryVariables>;

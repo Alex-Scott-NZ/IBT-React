@@ -27,13 +27,11 @@ query GetJournalIssues {
             }
             slug
             title
-            featuredImage {
-                node {
-                    altText
-                    mediaItemId
-                    srcSet
-                }
-            }
+      featuredImage {
+        node {
+          ...FragmentFeaturedImage
+        }
+      }
         }
     }
 }

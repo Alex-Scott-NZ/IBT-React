@@ -1,0 +1,15 @@
+export const FEATURED_IMAGE_FRAGMENT = gql`
+  fragment FragmentFeaturedImage on MediaItem {
+    altText
+    link
+    mediaItemId
+    mediaItemUrl
+    description
+    guid
+    id
+    sizes
+    slug
+    sourceUrl
+    srcSet
+  }
+`;

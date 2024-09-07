@@ -3,17 +3,7 @@
       title
       featuredImage {
         node {
-          mediaDetails {
-            file
-            height
-            width
-          }
-          mediaItemId
-          srcSet
-          slug
-          mediaItemUrl
-          mediaType
-          mimeType
+          ...FragmentFeaturedImage
         }
       }
       journalIssueDetails {

@@ -280,8 +280,6 @@
                         uri
                     }
                     ... on Book {
-                        authorDatabaseId
-                        authorId
                         bookId
                         contentTypeName
                         databaseId
@@ -351,38 +349,10 @@
                 }
             }
         }
-        featuredImage {
-            cursor
-            node {
-                altText
-                authorDatabaseId
-                authorId
-                caption
-                contentTypeName
-                databaseId
-                date
-                dateGmt
-                description
-                desiredSlug
-                fileSize
-                guid
-                hasPassword
-                id
-                mediaItemId
-                mediaItemUrl
-                mediaType
-                mimeType
-                modified
-                modifiedGmt
-                parentDatabaseId
-                parentId
-                sizes
-                slug
-                sourceUrl
-                srcSet
-                title
-                uri
-            }
+      featuredImage {
+        node {
+          ...FragmentFeaturedImage
         }
+      }
     }
 }
