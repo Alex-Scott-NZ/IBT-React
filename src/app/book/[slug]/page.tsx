@@ -1,4 +1,4 @@
-import { GetJournalByUriQuery, useGetJournalByUriQuery, GetGlobalSettingsQuery, useGetGlobalSettingsQuery } from '../../../gql/gql-generated';
+import { BookByUriQuery, useBookByUriQuery, GetGlobalSettingsQuery, useGetGlobalSettingsQuery } from '../../../gql/gql-generated';
 import { serverFetch } from '../../../gql/query-utils';
 
 import React from 'react';
@@ -16,20 +16,20 @@ type ArticleNode = {
   } | null;
 };
 
-export default async function JournalPage({ params }: { params: { slug: string } }) {
-  const uri = `/journal/${params.slug}`;
+export default async function BookPage({ params }: { params: { slug: string } }) {
+  const uri = `/book/${params.slug}`;
 
-  const journalData: GetJournalByUriQuery = await serverFetch(useGetJournalByUriQuery, { variables: { uri } });
+  const bookData: BookByUriQuery = await serverFetch(useBookByUriQuery, { variables: { uri } });
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
 
-  const journal = journalData.journalIssueBy;
+  const book = bookData.bookBy;
   const globalSettings = globalSettingsData.globalSettings;
 
-  if (!journal) {
-    return <div>Journal not found</div>;
+  if (!book) {
+    return <div>Book not found</div>;
   }
 
-  const { title, journalIssueDetails, featuredImage } = journal;
+  const { title, bookDetails, featuredImage } = book;
   const imageUrl = featuredImage?.node?.mediaItemUrl || '';
 
   return (
@@ -38,7 +38,7 @@ export default async function JournalPage({ params }: { params: { slug: string }
         <div style={{ flex: '0 0 25%', marginRight: '20px' }}>
           <Image
             src={imageUrl}
-            alt={title || 'Journal cover'}
+            alt={title || 'Book cover'}
             width={300}
             height={450}
             style={{ objectFit: 'cover', width: '100%', height: 'auto' }}
@@ -46,10 +46,17 @@ export default async function JournalPage({ params }: { params: { slug: string }
         </div>
         <div style={{ flex: '1' }}>
           <h1 style={{ margin: '0 0 20px', fontSize: '2rem', fontWeight: 'bold' }}>{title}</h1>
-          {journalIssueDetails?.articlesInJournal?.nodes?.map((node, index) => {
+          {bookDetails?.subheading && (
+            <h2 style={{ margin: '0 0 20px', fontSize: '1.5rem' }}>{bookDetails.subheading}</h2>
+          )}
+          {bookDetails?.summary && (
+            <p style={{ margin: '0 0 20px' }}>{bookDetails.summary}</p>
+          )}
+          <h3 style={{ margin: '20px 0', fontSize: '1.2rem' }}>Related Articles:</h3>
+          {bookDetails?.relatedArticles?.nodes?.map((node, index) => {
             const article = node as ArticleNode;
-            if (article.articleDetails) {
-              const articleTitle = article.articleDetails.tableOfContentsTitle || article.title;
+            if (article) {
+              const articleTitle = article.articleDetails?.tableOfContentsTitle || article.title;
               return (
                 <div key={index} className='mb-2'>
                   <Link href={`/article/${article.slug}`} passHref>
@@ -59,7 +66,7 @@ export default async function JournalPage({ params }: { params: { slug: string }
               );
             }
             return null;
-          }).filter(Boolean) ?? <p>No articles found.</p>}
+          }).filter(Boolean) ?? <p>No related articles found.</p>}
         </div>
       </div>
     </BaseLayoutNoSideBars>

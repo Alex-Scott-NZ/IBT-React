@@ -1,11 +1,10 @@
 'use client';
 import React from 'react';
 
+import { FgGlobalSettingsNotificationBar } from '@/gql/graphql';
+
 interface SiteWideNoticeProps {
-  notificationData: {
-    notificationOnoff: boolean;
-    notificationMessage: string;
-  } | undefined;
+  notificationData: FgGlobalSettingsNotificationBar | null | undefined
 }
 
 const SiteWideNotice: React.FC<SiteWideNoticeProps> = ({ notificationData }) => {
