@@ -2,14 +2,14 @@ import React from 'react';
 import { CircularProgress } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { GlobalSettingsData } from '../types/Article'; // Import the GlobalSettingsData type
+import { GetGlobalSettingsQuery } from '@/gql/gql-generated';
 
 interface HeaderProps {
-  globalSettings: GlobalSettingsData | null; // Accept the entire globalSettings object
+  globalSettings: GetGlobalSettingsQuery['globalSettings'] // Accept the entire globalSettings object
 }
 
 const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
-  const bannerData = globalSettings?.globalSettings.fGGlobalSettings.bannerImage.node;
+  const bannerData = globalSettings?.fGGlobalSettings?.bannerImage
   // const notificationData = globalSettings?.globalSettings.fGGlobalSettings.notificationBar;
 
   return (
@@ -19,13 +19,13 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
           className="w-full max-w-[1366px] flex justify-start"
           style={{ position: "relative", width: "100%", maxWidth: "1366px" }}
         >
-          {bannerData && bannerData.sourceUrl ? (
+          {bannerData && bannerData.node.sourceUrl ? (
             <div style={{ position: "relative", width: "630px", maxHeight: "122px" }}>
               <Link href="/" passHref>
                 <Image
-                  src={bannerData.sourceUrl}
-                  alt={bannerData.altText}
-                  title={bannerData.title || ''}
+                  src={bannerData.node.sourceUrl}
+                  alt={bannerData.node.altText || 'Banner Image'}
+                  // title={bannerData.title || ''}
                   layout="responsive"
                   width={100}
                   height={100}

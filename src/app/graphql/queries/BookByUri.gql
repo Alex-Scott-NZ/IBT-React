@@ -1,0 +1,49 @@
+query BookByUri($uri: String!) {
+    bookBy(uri: $uri) {
+        bookDetails {
+            displayOnIbtBooks
+            fieldGroupName
+            summary
+            subheading
+            relatedArticles {
+                nodes {
+                    ... on Article {
+                        contentTypeName
+                        guid
+                        id
+                        link
+                        slug
+                        status
+                        title
+                        uri
+                        articleDetails {
+                            tableOfContentsTitle
+                            subtitle
+                            displayDate
+                            displayOnFrontPage
+                            publicationDate
+                        }
+                    }
+                }
+            }
+        }
+        contentTypeName
+        featuredImageDatabaseId
+        featuredImageId
+        id
+        link
+        modified
+        modifiedGmt
+        parentDatabaseId
+        parentId
+        slug
+        status
+        title
+        uri
+        featuredImage {
+            node {
+                ...FragmentFeaturedImage
+            }
+        }
+    }
+}

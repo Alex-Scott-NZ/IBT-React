@@ -2,12 +2,13 @@ import React, { ReactNode } from 'react';
 import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';
 import Header from '../components/Header';
-import { GlobalSettingsData } from '../types/Article';
+// import { GlobalSettingsData } from '../types/Article';
+import { GetGlobalSettingsQuery } from '@/gql/gql-generated';
 import NavigationMenu from '../components/NavigationMenu';
 import SiteWideNotice from '../components/SiteWideNotice';
 
 interface BaseLayoutProps {
-  globalSettings: GlobalSettingsData | null;
+  globalSettings: GetGlobalSettingsQuery['globalSettings'];
   leftSidebar: ReactNode;
   mainContent: ReactNode;
   rightSidebar: ReactNode;
@@ -26,7 +27,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
       <div className="w-full max-w-[1366px] mx-auto pl-2 pr-2 flex-grow flex flex-col">
         <Header globalSettings={globalSettings} />
         <NavigationMenu />
-        <SiteWideNotice notificationData={globalSettings?.globalSettings.fGGlobalSettings.notificationBar} />
+        <SiteWideNotice notificationData={globalSettings?.fGGlobalSettings?.notificationBar} />
 
         <div className="flex flex-col lg:flex-row lg:justify-between pt-2 lg:pt-2">
           <aside className="hidden lg:block w-full lg:w-[20%] mb-4 lg:pt-2 lg:pr-4">

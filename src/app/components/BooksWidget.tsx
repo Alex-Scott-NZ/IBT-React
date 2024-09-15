@@ -58,7 +58,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   const booksList = books?.books?.nodes || [];
 
   return (
-    <div className="books-widget relative">
+    <div className="books-widget relative mb-4">
       <Box
         marginBottom={1}
         sx={{

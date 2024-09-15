@@ -1,6 +1,6 @@
 import React from 'react';
 import BaseLayoutNoSideBars from '../layouts/BaseLayoutNoSideBars';
-import { Book } from '../types/Article';
+
 import {
   Grid,
   Card,
@@ -10,35 +10,17 @@ import {
   List,
   ListItem,
 } from '@mui/material';
-import { GET_ALL_BOOKS } from '../graphql/queries/getBooksAll';
-import { GraphQLClient } from 'graphql-request';
-import { fetchGlobalSettings } from '../utils/fetchGlobalSettings';
-import Link from 'next/link';
 
-async function fetchBooks() {
-  try {
-    const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-    const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`, {
-      headers: {
-        'Cache-Control': 'max-age=60',
-      },
-      fetch: (url, options) => fetch(url, { ...options, next: { revalidate: 60 } }),
-    });
-    const { books } = await graphQLClient.request<{ books: { nodes: Book[] } }>(
-      GET_ALL_BOOKS
-    );
-    return books.nodes;
-  } catch (error) {
-    console.error('Error fetching books:', error);
-    return [];
-  }
-}
+import Link from 'next/link';
+import { GetBooksQuery, useGetBooksQuery, GetGlobalSettingsQuery, useGetGlobalSettingsQuery } from '@/gql/gql-generated';
+import { serverFetch } from '@/gql/query-utils';
 
 const BooksPage = async () => {
-  const [books, globalSettings] = await Promise.all([
-    fetchBooks(),
-    fetchGlobalSettings(),
-  ]);
+const booksData: GetBooksQuery = await serverFetch(useGetBooksQuery);
+const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
+
+const books = booksData.books?.nodes || [];
+const globalSettings = globalSettingsData.globalSettings;
 
   return (
     <BaseLayoutNoSideBars globalSettings={globalSettings}>
@@ -51,8 +33,8 @@ const BooksPage = async () => {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={book.featuredImage.node.sourceUrl}
-                  alt={book.featuredImage.node.altText}
+                  image={book.featuredImage?.node.sourceUrl || '/placeholder-book-image.jpg'}
+                  alt={book.featuredImage?.node.altText || book.title || 'Book Cover'}
                 />
                 <CardContent>
                   <Typography
@@ -67,34 +49,9 @@ const BooksPage = async () => {
                     color="text.secondary"
                     className="font-cambay"
                   >
-                    {book.bookDetails.subheading}
+                    {book.bookDetails?.subheading}
                   </Typography>
-                  <List>
-                    {book.bookDetails.relatedArticles?.edges?.map(
-                      (articleEdge) => (
-                        <ListItem key={articleEdge.node.id}>
-                          <Link
-                            href={`/article/${articleEdge.node.slug}`}
-                            passHref
-                          >
-                            <Typography
-                              variant="body2"
-                              className="font-cambay"
-                            >
-                              {articleEdge.node.articleDetails
-                                .tableOfContentsTitle || articleEdge.node.title}
-                            </Typography>
-                          </Link>
-                        </ListItem>
-                      )
-                    ) || (
-                      <ListItem>
-                        <Typography variant="body2" className="font-cambay">
-                          No related articles
-                        </Typography>
-                      </ListItem>
-                    )}
-                  </List>
+
                 </CardContent>
               </Card>
             </Grid>

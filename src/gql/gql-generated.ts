@@ -13452,6 +13452,13 @@ export type WritingSettings = {
   useSmilies?: Maybe<Scalars['Boolean']['output']>;
 };
 
+export type BookByUriQueryVariables = Exact<{
+  uri: Scalars['String']['input'];
+}>;
+
+
+export type BookByUriQuery = { __typename?: 'RootQuery', bookBy?: { __typename?: 'Book', contentTypeName: string, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, summary?: string | null, subheading?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', contentTypeName: string, guid?: string | null, id: string, link?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', tableOfContentsTitle?: string | null, subtitle?: string | null, displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null } } | null } | null };
+
 export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null };
 
 export type GetArticleByIdQueryVariables = Exact<{
@@ -13521,6 +13528,97 @@ export const FragmentFeaturedImageFragmentDoc = `
   srcSet
 }
     `;
+export const BookByUriDocument = `
+    query BookByUri($uri: String!) {
+  bookBy(uri: $uri) {
+    bookDetails {
+      displayOnIbtBooks
+      fieldGroupName
+      summary
+      subheading
+      relatedArticles {
+        nodes {
+          ... on Article {
+            contentTypeName
+            guid
+            id
+            link
+            slug
+            status
+            title
+            uri
+            articleDetails {
+              tableOfContentsTitle
+              subtitle
+              displayDate
+              displayOnFrontPage
+              publicationDate
+            }
+          }
+        }
+      }
+    }
+    contentTypeName
+    featuredImageDatabaseId
+    featuredImageId
+    id
+    link
+    modified
+    modifiedGmt
+    parentDatabaseId
+    parentId
+    slug
+    status
+    title
+    uri
+    featuredImage {
+      node {
+        ...FragmentFeaturedImage
+      }
+    }
+  }
+}
+    ${FragmentFeaturedImageFragmentDoc}`;
+
+export const useBookByUriQuery = <
+      TData = BookByUriQuery,
+      TError = unknown
+    >(
+      variables: BookByUriQueryVariables,
+      options?: Omit<UseQueryOptions<BookByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<BookByUriQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<BookByUriQuery, TError, TData>(
+      {
+    queryKey: ['BookByUri', variables],
+    queryFn: fetcher<BookByUriQuery, BookByUriQueryVariables>(BookByUriDocument, variables),
+    ...options
+  }
+    )};
+
+useBookByUriQuery.getKey = (variables: BookByUriQueryVariables) => ['BookByUri', variables];
+
+export const useSuspenseBookByUriQuery = <
+      TData = BookByUriQuery,
+      TError = unknown
+    >(
+      variables: BookByUriQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<BookByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<BookByUriQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<BookByUriQuery, TError, TData>(
+      {
+    queryKey: ['BookByUriSuspense', variables],
+    queryFn: fetcher<BookByUriQuery, BookByUriQueryVariables>(BookByUriDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseBookByUriQuery.getKey = (variables: BookByUriQueryVariables) => ['BookByUriSuspense', variables];
+
+
+useBookByUriQuery.fetcher = (variables: BookByUriQueryVariables, options?: RequestInit['headers']) => fetcher<BookByUriQuery, BookByUriQueryVariables>(BookByUriDocument, variables, options);
+
 export const GetArticleByIdDocument = `
     query GetArticleById($id: ID!) {
   article(id: $id, idType: DATABASE_ID) {

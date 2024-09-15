@@ -3,13 +3,14 @@ import BaseLayout from './BaseLayout';
 import MainContent from '../components/MainContent';
 import BooksWidget from '../components/BooksWidget';
 import LatestJournalIssueWidget from '../components/LatestJournalIssueWidget';
-import { GetPlaceholderSettingsQuery, GetArticlesQuery, GetBooksQuery, GetJournalIssuesQuery, GetGlobalSettingsQuery, PlaceholderSettingsFieldsPlaceholderSetup } from '../../gql/gql-generated';
+import PlaceholderWidget from '../components/PlaceholderWidget';
+import { GetPlaceholderSettingsQuery, GetArticlesQuery, GetBooksQuery, GetJournalIssuesLatestQuery, GetGlobalSettingsQuery, PlaceholderSettingsFieldsPlaceholderSetup } from '../../gql/gql-generated';
 
 type HomeLayoutProps = {
   globalSettings: GetGlobalSettingsQuery;
   articles: GetArticlesQuery;
   books: GetBooksQuery;
-  latestJournalIssue: GetJournalIssuesQuery;
+  latestJournalIssue: GetJournalIssuesLatestQuery;
   placeHolderSettings: GetPlaceholderSettingsQuery;
 };
 
@@ -31,21 +32,9 @@ const HomeLayout: React.FC<HomeLayoutProps> = async ({
         return <LatestJournalIssueWidget latestJournalIssue={latestJournalIssue} />;
       case 'freeText':
         return (
-          <div className="free-text-content">
-            {setup.textContentGroup?.freeTextHeading && <h3>{setup.textContentGroup.freeTextHeading}</h3>}
-            {setup.textContentGroup?.textContent && <p>{setup.textContentGroup.textContent}</p>}
-            {setup.textContentGroup?.freeTextImage?.node && (
-              <img 
-                src={setup.textContentGroup.freeTextImage.node.srcSet?.split(' ')[0] || ''}
-                alt={setup.textContentGroup.freeTextImage.node.altText || ''}
-              />
-            )}
-            {setup.textContentGroup?.freeTextLink?.nodes && setup.textContentGroup.freeTextLink.nodes.length > 0 && (
-              <a href={setup.textContentGroup.freeTextLink.nodes[0].link || ''}>
-                {setup.textContentGroup.freeTextLink.nodes[0].slug || 'Link'}
-              </a>
-            )}
-          </div>
+          <PlaceholderWidget
+            textContentGroup={setup.textContentGroup}
+          />
         );
       default:
         return null;
@@ -68,7 +57,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = async ({
 
   return (
     <BaseLayout
-      globalSettings={globalSettings}
+      globalSettings={globalSettings.globalSettings}
       leftSidebar={<>{leftSidebarContent}</>}
       mainContent={<MainContent articles={articles} placeholders={validPlaceholderSetup} />}
       rightSidebar={<>{rightSidebarContent}</>}

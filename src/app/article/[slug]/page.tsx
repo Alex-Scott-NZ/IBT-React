@@ -1,32 +1,26 @@
-import { GraphQLClient } from 'graphql-request';
-import { GET_ARTICLE_BY_URI, GetArticleByUriResponse } from '../../graphql/queries/getArticlesByUri';
-import { DetailedArticle } from '../../types/Article';
+import { GetArticleByUriQuery, useGetArticleByUriQuery, GetGlobalSettingsQuery, useGetGlobalSettingsQuery } from '../../../gql/gql-generated';
 import ArticleLayout from '../../layouts/ArticleLayout';
-import { fetchGlobalSettings } from '@/app/utils/fetchGlobalSettings';
+import { serverFetch } from '@/gql/query-utils';
 
-const wpApiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-const graphQLClient = new GraphQLClient(`${wpApiBaseUrl}/graphql`);
+const ArticlePage = async ({ params }: { params: { slug: string } }) => {
+  const uri = `/article/${params.slug}/`;
 
-async function fetchArticle(slug: string): Promise<DetailedArticle | null> {
-  try {
-    const uri = `/article/${slug}/`;
-    const data: GetArticleByUriResponse = await graphQLClient.request(GET_ARTICLE_BY_URI, { uri });
-    return data.article;
-  } catch (error) {
-    console.error('Error fetching article:', error);
-    return null;
-  }
-}
+  // Fetch the required data using serverFetch
+  const articleData: GetArticleByUriQuery = await serverFetch(useGetArticleByUriQuery, { variables: { uri } });
+  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
 
-export default async function ArticlePage({ params }: { params: { slug: string } }) {
-  const [article, globalSettings] = await Promise.all([
-    fetchArticle(params.slug),
-    fetchGlobalSettings()
-  ]);
-
-  if (!article) {
+  // Check if the article exists
+  if (!articleData.article) {
     return <div>Article not found</div>;
   }
 
-  return <ArticleLayout article={article} globalSettings={globalSettings} />;
-}
+  // Render the ArticleLayout with the data as props
+  return (
+    <ArticleLayout
+      article={articleData.article}
+      globalSettings={globalSettingsData.globalSettings}
+    />
+  );
+};
+
+export default ArticlePage;

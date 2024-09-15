@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { JournalIssueLatest } from '../types/Article';
+import { GetJournalIssuesLatestQuery } from '../../gql/gql-generated';
 import { getImageUrl } from '../utils/imageHelpers';
 import {
   Card,
@@ -14,22 +14,26 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 interface LatestJournalIssueWidgetProps {
-  latestJournalIssue: JournalIssueLatest | null;
+  latestJournalIssue: GetJournalIssuesLatestQuery
 }
 
 const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ latestJournalIssue }) => {
   const router = useRouter();
 
-  if (!latestJournalIssue) {
+  if (!latestJournalIssue ) {
     return <p>No latest journal issue available.</p>;
   }
 
-  const handleJournalClick = (slug: string) => {
-    router.push(`/journal/${slug}`);
+  const latestIssue = latestJournalIssue.journalIssues?.nodes[0];
+
+  const handleJournalClick = (slug: string | null | undefined) => {
+    if (slug) {
+      router.push(`/journal/${slug}`);
+    }
   };
 
   return (
-    <div className="latest-journal-issue-widget relative">
+    <div className="latest-journal-issue-widget relative mb-4">
       <Box
         marginBottom={1}
         sx={{
@@ -44,8 +48,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
             variant="h5"
             component="span"
           >
-            <span className="font-telegrafico">Latest </span>
-            <span className="font-telegrafico"> Journal</span>
+            <span className="font-telegrafico">Latest Journal</span>
           </Typography>
         </Link>
       </Box>
@@ -54,14 +57,14 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
           maxWidth: '100%',
           display: 'flex',
           flexDirection: 'column',
- 
+
           background: 'transparent',
           border: 'none'
-          
+
         }}
       >
         <CardActionArea
-          onClick={() => handleJournalClick(latestJournalIssue.slug)}
+          onClick={() => handleJournalClick(latestIssue?.slug)}
           sx={{ width: '100%' }}
         >
           <Box
@@ -81,8 +84,8 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
               }}
             >
               <Image
-                src={getImageUrl(latestJournalIssue.featuredImage?.node, 164)} // 50% of the card width (328px)
-                alt={latestJournalIssue.featuredImage?.node?.altText || latestJournalIssue.title}
+                src={getImageUrl(latestIssue?.featuredImage?.node, 164)} // 50% of the card width (328px)
+                alt={latestIssue?.featuredImage?.node?.altText || latestIssue?.title || 'Latest Journal Issue'}
                 width={328} // Set the width based on your design
                 height={0} // Automatically calculate height to maintain aspect ratio
                 style={{
@@ -110,7 +113,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
           </Box>
           <Box sx={{ paddingTop: '8px', textAlign: 'center' }}>
             <Typography variant="h6" className="font-cambay" sx={{ marginTop: '8px' }}>
-              {latestJournalIssue.title}
+              {latestIssue?.title}
             </Typography>
           </Box>
         </CardActionArea>
