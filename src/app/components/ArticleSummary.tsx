@@ -1,14 +1,15 @@
 import React from 'react';
-import { FrontPageArticle } from '../types/Article';
+import { GetArticlesQuery } from '@/gql/gql-generated';
 import Link from 'next/link';
 
 interface ArticleSummaryProps {
-  article: FrontPageArticle;
-  className?: string; // Add optional className prop
+  article: NonNullable<GetArticlesQuery['articles']>['nodes'][number]; // Note the [number] to get a single article
+  className?: string;
 }
 
 const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article, className }) => {
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString?: string | null) => {
+    if (!dateString) return '';
     const date = new Date(dateString);
     const day = date.getDate();
     const month = date.toLocaleString('default', { month: 'long' });
@@ -16,12 +17,22 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article, className }) =
     return `${day} ${month} ${year}`;
   };
 
-  const journalSlug = article.articleDetails.relatedJournal?.edges[0]?.node.slug;
-  const journalTitle = article.articleDetails.relatedJournal?.edges[0]?.node.title;
+  // Type guard to check if the node is a JournalIssue
+  const isJournalIssue = (node: any): node is { 
+    __typename: 'JournalIssue';
+    slug?: string | null;
+    title?: string | null;
+  } => {
+    return node.__typename === 'JournalIssue';
+  };
 
-  const dateToDisplay = article.articleDetails.suppressDate
-    ? article.articleDetails.displayDate
-    : formatDate(article.articleDetails.publicationDate);
+  const journalNode = article.articleDetails?.relatedJournal?.edges?.[0]?.node;
+  const journalSlug = journalNode && isJournalIssue(journalNode) ? journalNode.slug : null;
+  const journalTitle = journalNode && isJournalIssue(journalNode) ? journalNode.title : null;
+
+  const dateToDisplay = article.articleDetails?.suppressDate
+    ? article.articleDetails?.displayDate
+    : formatDate(article.articleDetails?.publicationDate);
 
   return (
     <div className={className}>
@@ -32,7 +43,7 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article, className }) =
               <h3 className="text-lg font-bold text-communist-red mb-1 mt-1 leading-tight">
                 {article.title}
               </h3>
-              {article.articleDetails.subtitle && (
+              {article.articleDetails?.subtitle && (
                 <p className="text-lg font-medium truncate mb-1 mt-1 leading-tight text-black">
                   {article.articleDetails.subtitle}
                 </p>
