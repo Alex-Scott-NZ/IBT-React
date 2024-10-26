@@ -13,10 +13,10 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
   // const notificationData = globalSettings?.globalSettings.fGGlobalSettings.notificationBar;
 
   return (
-    <header className="w-full bg-custom-bg text-white mt-2">
+    <header className="w-full bg-custom-bg text-white">
       <div className="flex justify-center w-full">
         <div
-          className="w-full max-w-[1366px] flex justify-start"
+          className="w-full max-w-[1366px] flex justify-start mt-4"
           style={{ position: "relative", width: "100%", maxWidth: "1366px" }}
         >
           {bannerData && bannerData.node.sourceUrl ? (

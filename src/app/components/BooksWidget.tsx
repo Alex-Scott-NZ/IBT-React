@@ -51,8 +51,8 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
     swiperRef?.slideNext();
   }, [swiperRef]);
 
-  const handleBookClick = (bookId: string) => {
-    router.push(`/book/${bookId}`);
+  const handleBookClick = (bookSlug: string) => {
+    router.push(`/book/${bookSlug}`);
   };
 
   const booksList = books?.books?.nodes || [];
@@ -108,7 +108,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
               }}
             >
               <CardActionArea
-                onClick={() => handleBookClick(book.id)}
+                onClick={() => book.slug && handleBookClick(book.slug)}
                 sx={{ height: '100%' }}
               >
                 <Box
