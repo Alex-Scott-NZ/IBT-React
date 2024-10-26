@@ -126,7 +126,7 @@ export interface BooksResponse {
 
 export interface DetailedArticle {
   articleId: number;
-  content: string | null;
+  content: string | null | undefined;
   contentTypeName: string;
   databaseId: number;
   date: string;
@@ -333,14 +333,23 @@ export interface SiteNotificationData{
 
 export interface GlobalSettingsData {
   globalSettings: {
-      fGGlobalSettings: {
-        bannerImage: {
-          node: BannerImageNode;
+    fGGlobalSettings: {
+      bannerImage: {
+        node: {
+          sourceUrl: string;
+          altText: string;
+          title: string;
         };
-        notificationBar: SiteNotificationData
       };
+      notificationBar: {
+        fieldGroupName: string;
+        notificationMessage: string;
+        notificationOnoff: boolean;
+      };
+    };
   };
 }
+
 
 export interface ArticlesResponse {
   articles: {
