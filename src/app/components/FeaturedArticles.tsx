@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
-import { FrontPageArticle } from '../types/Article';
+// import { FrontPageArticle } from '../types/Article';
+import { GetArticlesQuery } from '@/gql/gql-generated';
 import { getImageUrl } from '../utils/imageHelpers';
 import { Card, CardActionArea, Typography, Grid, Box } from '@mui/material';
 import { FragmentFeaturedImageFragment } from '@/gql/graphql';
@@ -8,12 +9,13 @@ import { FragmentFeaturedImageFragment } from '@/gql/graphql';
 
 
 interface FeaturedArticlesProps {
-  articles: FrontPageArticle[];
+  articles: NonNullable<GetArticlesQuery['articles']>['nodes'];
   onArticleClick: (slug: string) => void;
 }
 
 const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString?: string): string => {
+    if (!dateString) return ''; // Return an empty string if dateString is undefined or null
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       day: 'numeric',
@@ -22,6 +24,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
     }).replace(',', ''); // Removing commas if any
   };
 
+
   if (articles.length === 0) {
     return <Typography>No featured articles available.</Typography>;
   }
@@ -29,7 +32,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
   return (
     <Grid container spacing={2}>
       {articles.map((article) => {
-        const image = article.featuredImage?.node as Partial<FragmentFeaturedImageFragment> | undefined;;
+        const image = article.featuredImage?.node as Partial<FragmentFeaturedImageFragment> | undefined;
         return (
           <Grid item xs={12} md={6} key={article.id}>
             <Link href={`/article/${article.slug}`} passHref>
@@ -69,9 +72,9 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
                     }}
                   >
                     <Typography variant="body2" fontSize="0.8rem">
-                      {article.articleDetails.suppressDate
+                      {article.articleDetails?.suppressDate
                         ? article.articleDetails.displayDate
-                        : formatDate(article.articleDetails.publicationDate)}
+                        : formatDate(article.articleDetails?.publicationDate)}
                     </Typography>
                     <Typography
                       variant="h6"
@@ -89,7 +92,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
                     >
                       {article.title}
                     </Typography>
-                    {article.articleDetails.subtitle && (
+                    {article.articleDetails?.subtitle && (
                       <Typography variant="body2" fontSize="0.8rem" noWrap>
                         {article.articleDetails.subtitle}
                       </Typography>
@@ -100,7 +103,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
             </Link>
           </Grid>
         )
-})}
+      })}
     </Grid>
   );
 };
