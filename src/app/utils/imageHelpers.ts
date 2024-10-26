@@ -1,7 +1,7 @@
 import { FragmentFeaturedImageFragment } from "@/gql/graphql";
 
 export function getImageUrl(
-  imageNode: FragmentFeaturedImageFragment | undefined,
+  imageNode: Partial<FragmentFeaturedImageFragment> | undefined,
   targetWidth: number = 768
 ): string {
   if (!imageNode) {
