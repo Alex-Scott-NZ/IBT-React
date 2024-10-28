@@ -13488,7 +13488,7 @@ export type GetArticlesQuery = { __typename?: 'RootQuery', articles?: { __typena
 export type GetGlobalSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGlobalSettingsQuery = { __typename?: 'RootQuery', globalSettings?: { __typename?: 'GlobalSettings', fGGlobalSettings?: { __typename?: 'FGGlobalSettings', bannerImage?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, srcSet?: string | null, sourceUrl?: string | null } } | null, notificationBar?: { __typename?: 'FGGlobalSettingsNotificationBar', fieldGroupName?: string | null, notificationMessage?: string | null, notificationOnoff?: boolean | null } | null } | null } | null };
+export type GetGlobalSettingsQuery = { __typename?: 'RootQuery', globalSettings?: { __typename?: 'GlobalSettings', fGGlobalSettings?: { __typename?: 'FGGlobalSettings', bannerImage?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } } | null, notificationBar?: { __typename?: 'FGGlobalSettingsNotificationBar', fieldGroupName?: string | null, notificationMessage?: string | null, notificationOnoff?: boolean | null } | null } | null } | null };
 
 export type GetJournalByUriQueryVariables = Exact<{
   uri: Scalars['String']['input'];
@@ -14309,6 +14309,10 @@ export const GetGlobalSettingsDocument = `
           altText
           srcSet
           sourceUrl
+          mediaDetails {
+            height
+            width
+          }
         }
       }
       notificationBar {

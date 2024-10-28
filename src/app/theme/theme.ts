@@ -2,6 +2,15 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
+  breakpoints: {    // Add this section
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 1075,     // This is the breakpoint we want for the navigation
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   shadows: Array(25).fill('none') as [
     'none',
     'none',

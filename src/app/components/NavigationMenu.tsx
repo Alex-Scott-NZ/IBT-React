@@ -32,11 +32,8 @@ export const revalidate = 60;
 
 const NavigationMenu: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElCollection, setAnchorElCollection] =
-    useState<null | HTMLElement>(null);
+  const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(null);
+  const [anchorElCollection, setAnchorElCollection] = useState<null | HTMLElement>(null);
   const [journalIssues, setJournalIssues] = useState<JournalIssueNode[]>([]);
   const [journalOpen, setJournalOpen] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
@@ -69,22 +66,22 @@ const NavigationMenu: React.FC = () => {
 
   const handleMenuOpen =
     (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(event.currentTarget);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+      };
 
   const handleMenuClose =
     (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) =>
-    () => {
-      setAnchorEl(null);
-    };
+      () => {
+        setAnchorEl(null);
+      };
 
   const handleNestedListToggle =
     (setState: React.Dispatch<React.SetStateAction<boolean>>) =>
-    (event: React.MouseEvent) => {
-      event.stopPropagation();
-      setState((prev) => !prev);
-    };
+      (event: React.MouseEvent) => {
+        event.stopPropagation();
+        setState((prev) => !prev);
+      };
 
   const drawer = (
     <Box sx={{ textAlign: 'center' }}>
@@ -188,7 +185,7 @@ const NavigationMenu: React.FC = () => {
             className="p-1"
             onClick={handleDrawerToggle}
             sx={{
-              display: { sm: 'none' },
+              display: { md: 'none' },
               fontSize: 'large',
             }}
           >
@@ -196,7 +193,7 @@ const NavigationMenu: React.FC = () => {
           </IconButton>
           <Box
             sx={{
-              display: { xs: 'none', sm: 'flex' },
+              display: { xs: 'none', md: 'flex' },
               flexGrow: 1,
               alignItems: 'center',
             }}
@@ -322,7 +319,7 @@ const NavigationMenu: React.FC = () => {
             keepMounted: true,
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
           }}
         >
