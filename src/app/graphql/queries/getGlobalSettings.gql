@@ -18,6 +18,18 @@ query GetGlobalSettings {
                 notificationMessage
                 notificationOnoff
             }
+            bannerImageTwitter {
+                cursor
+                node {
+                    altText
+                    srcSet
+                    sourceUrl
+                    mediaDetails {
+                        height
+                        width
+                    }
+                }
+            }
         }
     }
 }
