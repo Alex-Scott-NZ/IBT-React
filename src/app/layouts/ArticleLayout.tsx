@@ -21,9 +21,8 @@ interface ArticleLayoutProps {
 }
 
 const ArticleLayout: React.FC<ArticleLayoutProps> = ({ article, globalSettings }) => {
-  // const relatedPdf = article.articleDetails?.relatedPdf?.nodes?.[0];
+
   const relatedPdf = article?.articleDetails?.relatedPdf?.nodes?.[0] as PdfItem
-  // const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl;
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl || '';
 
   const toolbarPluginInstance = toolbarPlugin({
