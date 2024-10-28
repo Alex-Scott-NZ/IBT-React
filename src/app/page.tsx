@@ -12,22 +12,45 @@ import {
   useGetPlaceholderSettingsQuery,
 } from '../gql/gql-generated';
 import { serverFetch } from '../gql/query-utils';
+import { Metadata } from 'next';
 
-export const generateMetadata = async () => {
+// Helper function to get largest image info
+const getLargestImageInfo = (srcSet: string): { url: string; width: number; height: number } => {
+  const images = srcSet.split(', ').map(img => {
+    const [url, size] = img.split(' ');
+    const width = parseInt(size.replace('w', ''));
+    const dimensions = url.match(/-(\d+)x(\d+)\.png$/);
+    const height = dimensions ? parseInt(dimensions[2]) : 0;
+    return { url, width, height };
+  });
+
+  const largestImage = images.reduce((prev, current) =>
+    (prev.width > current.width) ? prev : current
+  );
+
+  return largestImage;
+};
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
+
+  const bannerImage = globalSettingsData?.globalSettings?.fGGlobalSettings?.bannerImage?.node;
+  const mediaDetails = bannerImage?.mediaDetails;
+
   return {
     title: 'International Bolshevik Tendency',
     description: 'We stand for a working-class revolution to overthrow capitalism on a global scale.',
     openGraph: {
       title: 'International Bolshevik Tendency',
       description: 'Main page of the International Bolshevik Tendency website',
-      url: 'https://headless.saggitari.us', // Update with your website's URL
+      url: 'https://headless.saggitari.us',
       siteName: 'International Bolshevik Tendency',
       images: [
         {
-          url: 'https://backend.saggitari.us/wp-content/uploads/2024/08/banner-IBT-1200-640.jpg', // Update with the correct image URL
-          width: 1200,
-          height: 630,
-          alt: 'International Bolshevik Tendency website banner',
+          url: bannerImage?.sourceUrl || '',
+          width: mediaDetails?.width || 1024,
+          height: mediaDetails?.height || 174,
+          alt: bannerImage?.altText || 'International Bolshevik Tendency website banner',
         },
       ],
       type: 'website',
@@ -36,7 +59,7 @@ export const generateMetadata = async () => {
       card: 'summary_large_image',
       title: 'International Bolshevik Tendency',
       description: 'We stand for a working-class revolution to overthrow capitalism on a global scale.',
-      images: ['https://backend.saggitari.us/wp-content/uploads/2024/08/banner-IBT-1200-640.jpg'], // Update with the correct image URL
+      images: [bannerImage?.sourceUrl || ''],
     },
   };
 };

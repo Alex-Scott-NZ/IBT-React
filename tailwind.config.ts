@@ -9,6 +9,9 @@ const config: Config = {
   important: '#__next', // Add this line
   theme: {
     extend: {
+      screens: {        // Add this section
+        'nav': '1075px',
+      },
       colors: {
         'custom-bg': '#EAEAE2',
         'communist-red': '#B00909',

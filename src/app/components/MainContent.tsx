@@ -28,7 +28,7 @@ const MainContent: React.FC<MainContentProps> = ({ articles }) => {
   return (
     <div className="flex flex-col items-center justify-between w-full">
       {/* Featured Articles - only visible on desktop */}
-      <div className="hidden lg:block w-full">
+      <div className="hidden nav:block w-full">
         <FeaturedArticles
           articles={sortedArticles!.slice(0, 2)} // Display the first two articles as featured on desktop
           onArticleClick={handleArticleClick}
