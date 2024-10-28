@@ -35,6 +35,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
 
   const bannerImage = globalSettingsData?.globalSettings?.fGGlobalSettings?.bannerImage?.node;
+  const twitterBannerImage = globalSettingsData?.globalSettings?.fGGlobalSettings?.bannerImageTwitter?.node;
   const mediaDetails = bannerImage?.mediaDetails;
 
   return {
@@ -57,9 +58,10 @@ export const generateMetadata = async (): Promise<Metadata> => {
     },
     twitter: {
       card: 'summary_large_image',
+      site: '@IBT1917',
       title: 'International Bolshevik Tendency',
       description: 'We stand for a working-class revolution to overthrow capitalism on a global scale.',
-      images: [bannerImage?.sourceUrl || ''],
+      images: [twitterBannerImage?.sourceUrl || ''],
     },
   };
 };
