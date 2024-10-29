@@ -96,8 +96,6 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
                   width: '100%',
                   height: 'auto',
                   objectFit: 'cover',
-                  width: "100%",
-                  height: "auto"
                 }} />
             </Box>
 
