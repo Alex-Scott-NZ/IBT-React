@@ -39,14 +39,23 @@ const JournalPage = async () => {
     (b.slug || '').localeCompare(a.slug || '')
   );
 
+  const fallbackSVG = `data:image/svg+xml;base64,${Buffer.from(
+    `
+    <svg width="768" height="131" viewBox="0 0 768 131" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="768" height="131" fill="#4B5563"/>
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9CA3AF" font-family="system-ui" font-size="16">
+        Image Not Found
+      </text>
+    </svg>
+    `
+  ).toString('base64')}`;
+
   return (
     <BaseLayoutNoSideBars globalSettings={globalSettings}>
-      <div className="container">
+      <div className="w-full">
         <h2 className="font-cambay text-communist-red text-3xl mb-4 mt-2">
           All Journal Issues
         </h2>
-
-        
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {orderedJournalIssues.map((issue) => {
@@ -60,21 +69,17 @@ const JournalPage = async () => {
                 <Link href={`/journal/${issue.slug}`} className="block">
                   <div className="relative aspect-[2/3]">
                     <Image
-                      src={
-                        featuredImage
-                          ? getImageUrl(featuredImage, 440)
-                          : '/placeholder-image.jpg'
-                      }
+                      src={featuredImage?.mediaItemUrl || fallbackSVG}
                       alt={
                         featuredImage?.altText || issue.title || 'Journal cover'
                       }
                       fill
                       className="object-cover"
                       placeholder="blur"
-                      blurDataURL={
-                        featuredImage?.thumbhash ||
-                        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/2wBDAR0XFyAeIB4gHh4dIB0gHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k='
-                      }
+                      blurDataURL={featuredImage?.thumbhash || fallbackSVG}
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
+                      quality={75}
+                      loading="lazy"
                     />
                   </div>
                 </Link>

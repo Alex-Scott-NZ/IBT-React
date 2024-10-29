@@ -1,3 +1,4 @@
+// 'use client'
 import React from 'react';
 import { CircularProgress } from '@mui/material';
 import Image from 'next/image';
@@ -33,15 +34,12 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
               <div className="relative aspect-[768/131] max-h-[122px]">
                 <Image
                   src={
-                    bannerData.node.mediaDetails.sizes?.find(
-                      (size) => size?.name === 'medium_large'
-                    )?.sourceUrl ||
                     bannerData.node.sourceUrl ||
                     fallbackSVG
                   }
                   alt={bannerData.node.altText || 'Banner Image'}
                   fill
-                  priority
+                  priority={true}
                   className="object-contain"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
