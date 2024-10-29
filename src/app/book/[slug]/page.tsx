@@ -45,8 +45,7 @@ export default async function BookPage({ params }: { params: { slug: string } })
               objectFit: 'cover',
               width: '100%',
               height: 'auto',
-              maxWidth: "100%",
-              height: "auto"
+              maxWidth: "100%"
             }} />
         </div>
         <div style={{ flex: '1' }}>
