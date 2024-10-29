@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import BaseLayout from './BaseLayout';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { GetGlobalSettingsQuery, GetArticleByUriQuery, PdfItem } from '@/gql/gql-generated';
 import { getImagePlaceholder } from '../actions/getPlaceHolder';
 import PdfViewerComponent from './PdfViewerComponent';
