@@ -3,7 +3,7 @@ import { serverFetch } from '../../../gql/query-utils';
 
 import React from 'react';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import Link from 'next/link';
 
 // Define a type for the possible node types

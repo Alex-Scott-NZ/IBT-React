@@ -19,7 +19,7 @@ import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import 'swiper/swiper-bundle.css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
