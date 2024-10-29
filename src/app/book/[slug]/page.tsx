@@ -3,7 +3,7 @@ import { serverFetch } from '../../../gql/query-utils';
 
 import React from 'react';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from 'next/link';
 
 // Define a type for the possible node types
@@ -33,7 +33,7 @@ export default async function BookPage({ params }: { params: { slug: string } })
   const imageUrl = featuredImage?.node?.mediaItemUrl || '';
 
   return (
-    <BaseLayoutNoSideBars globalSettings={globalSettings}>
+    (<BaseLayoutNoSideBars globalSettings={globalSettings}>
       <div style={{ display: 'flex', alignItems: 'flex-start' }}>
         <div style={{ flex: '0 0 25%', marginRight: '20px' }}>
           <Image
@@ -41,8 +41,13 @@ export default async function BookPage({ params }: { params: { slug: string } })
             alt={title || 'Book cover'}
             width={300}
             height={450}
-            style={{ objectFit: 'cover', width: '100%', height: 'auto' }}
-          />
+            style={{
+              objectFit: 'cover',
+              width: '100%',
+              height: 'auto',
+              maxWidth: "100%",
+              height: "auto"
+            }} />
         </div>
         <div style={{ flex: '1' }}>
           <h1 style={{ margin: '0 0 20px', fontSize: '2rem', fontWeight: 'bold' }}>{title}</h1>
@@ -69,6 +74,6 @@ export default async function BookPage({ params }: { params: { slug: string } })
           }).filter(Boolean) ?? <p>No related articles found.</p>}
         </div>
       </div>
-    </BaseLayoutNoSideBars>
+    </BaseLayoutNoSideBars>)
   );
 }

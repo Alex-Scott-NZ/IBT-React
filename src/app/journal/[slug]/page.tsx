@@ -3,7 +3,7 @@ import { serverFetch } from '../../../gql/query-utils';
 
 import React from 'react';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from 'next/link';
 
 // Define a type for the possible node types
@@ -34,34 +34,52 @@ export default async function JournalPage({ params }: { params: { slug: string }
 
   return (
     <BaseLayoutNoSideBars globalSettings={globalSettings}>
-      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-        <div style={{ flex: '0 0 25%', marginRight: '20px' }}>
-          <Image
-            src={imageUrl}
-            alt={title || 'Journal cover'}
-            width={300}
-            height={450}
-            style={{ objectFit: 'cover', width: '100%', height: 'auto' }}
-          />
-        </div>
-        <div style={{ flex: '1' }}>
-          <h1 style={{ margin: '0 0 20px', fontSize: '2rem', fontWeight: 'bold' }}>{title}</h1>
-          {journalIssueDetails?.articlesInJournal?.nodes?.map((node, index) => {
-            const article = node as ArticleNode;
-            if (article.articleDetails) {
-              const articleTitle = article.articleDetails.tableOfContentsTitle || article.title;
-              return (
-                <div key={index} className='mb-2'>
-                  <Link href={`/article/${article.slug}`} passHref>
-                    <span className='text-communist-red text-xl font-Helvetica'>{articleTitle}</span>
-                  </Link>
-                </div>
-              );
-            }
-            return null;
-          }).filter(Boolean) ?? <p>No articles found.</p>}
+      <div className="container">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Left column with image */}
+          <div className="md:col-span-1">
+            <div className="relative aspect-[2/3] w-full">
+              <Image
+                src={imageUrl}
+                alt={title || 'Journal cover'}
+                fill
+                className="object-cover rounded-lg shadow-md"
+                placeholder='blur'
+                blurDataURL={
+                  featuredImage?.node.thumbhash ||
+                  'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/2wBDAR0XFyAeIB4gHh4dIB0gHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k='
+                }
+              />
+            </div>
+          </div>
+
+          {/* Right column with title and articles */}
+          <div className="md:col-span-2">
+            <h1 className="font-cambay text-communist-red text-3xl mb-8">{title}</h1>
+            
+            <div className="space-y-4">
+              {journalIssueDetails?.articlesInJournal?.nodes?.map((node, index) => {
+                const article = node as ArticleNode;
+                if (article.articleDetails) {
+                  const articleTitle = article.articleDetails.tableOfContentsTitle || article.title;
+                  return (
+                    <div key={index}>
+                      <Link 
+                        href={`/article/${article.slug}`}
+                        className="font-helvetica text-xl text-gray-700 hover:text-communist-red transition-colors"
+                      >
+                        {articleTitle}
+                      </Link>
+                    </div>
+                  );
+                }
+                return null;
+              }).filter(Boolean) ?? <p className="text-gray-500">No articles found.</p>}
+            </div>
+          </div>
         </div>
       </div>
     </BaseLayoutNoSideBars>
   );
 }
+

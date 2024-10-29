@@ -1,26 +1,27 @@
 fragment FragmentFeaturedImage on MediaItem {
-    altText
-    link
-    mediaItemId
-    mediaItemUrl
-    description
-    guid
-    id
-    sizes
-    slug
-    sourceUrl
-    srcSet
-    mediaDetails {
-        height
-        width
-        sizes {
-            file
-            fileSize
-            height
-            mimeType
-            name
-            sourceUrl
-            width
-        }
+  altText
+  link
+  mediaItemId
+  mediaItemUrl
+  description
+  guid
+  id
+  sizes
+  slug
+  sourceUrl
+  srcSet
+  thumbhash
+  mediaDetails {
+    height
+    width
+    sizes {
+      file
+      fileSize
+      height
+      mimeType
+      name
+      sourceUrl
+      width
     }
+  }
 }
