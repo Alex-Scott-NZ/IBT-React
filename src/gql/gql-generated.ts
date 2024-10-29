@@ -3339,8 +3339,14 @@ export type FgGlobalSettings = AcfFieldGroup & AcfFieldGroupFields & FgGlobalSet
   __typename?: 'FGGlobalSettings';
   /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;FGGlobalSettings&quot; Field Group */
   bannerImage?: Maybe<AcfMediaItemConnectionEdge>;
-  /** This banner image only displays when a link to the main page is posted to Twitter. This image must be 1200px by 630px - and should be scaled up to 1200px width - with space added above and below the banner if necessary to take the height to 630px. This is required so that twitter can display the banner correctly when the main page is linked to from Twitter. */
+  /**
+   * This banner is specifically for the summary_large_image Twitter card. This card is sometimes displayed when a link to the main page is posted - depending on the platform, and has a 2:1 aspect ratio.
+   * 
+   * This banner image only displays when a link to the main page is posted to Twitter. This image must be 1200px by 630px - and should be scaled up to 1200px width - with space added above and below the banner if necessary to take the height to 630px. This is required so that twitter can display the banner correctly when the main page is linked to from Twitter.
+   */
   bannerImageTwitter?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;FGGlobalSettings&quot; Field Group */
+  bannerImageTwitterSquare?: Maybe<AcfMediaItemConnectionEdge>;
   /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;FGGlobalSettings&quot; Field Group */
   booksWidget?: Maybe<FgGlobalSettingsBooksWidget>;
   /**
@@ -3424,8 +3430,14 @@ export type FgGlobalSettingsNotificationBar_Fields = {
 export type FgGlobalSettings_Fields = {
   /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;FGGlobalSettings&quot; Field Group */
   bannerImage?: Maybe<AcfMediaItemConnectionEdge>;
-  /** This banner image only displays when a link to the main page is posted to Twitter. This image must be 1200px by 630px - and should be scaled up to 1200px width - with space added above and below the banner if necessary to take the height to 630px. This is required so that twitter can display the banner correctly when the main page is linked to from Twitter. */
+  /**
+   * This banner is specifically for the summary_large_image Twitter card. This card is sometimes displayed when a link to the main page is posted - depending on the platform, and has a 2:1 aspect ratio.
+   * 
+   * This banner image only displays when a link to the main page is posted to Twitter. This image must be 1200px by 630px - and should be scaled up to 1200px width - with space added above and below the banner if necessary to take the height to 630px. This is required so that twitter can display the banner correctly when the main page is linked to from Twitter.
+   */
   bannerImageTwitter?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;FGGlobalSettings&quot; Field Group */
+  bannerImageTwitterSquare?: Maybe<AcfMediaItemConnectionEdge>;
   /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;FGGlobalSettings&quot; Field Group */
   booksWidget?: Maybe<FgGlobalSettingsBooksWidget>;
   /**
@@ -13494,7 +13506,7 @@ export type GetArticlesQuery = { __typename?: 'RootQuery', articles?: { __typena
 export type GetGlobalSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGlobalSettingsQuery = { __typename?: 'RootQuery', globalSettings?: { __typename?: 'GlobalSettings', fGGlobalSettings?: { __typename?: 'FGGlobalSettings', bannerImage?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } } | null, notificationBar?: { __typename?: 'FGGlobalSettingsNotificationBar', fieldGroupName?: string | null, notificationMessage?: string | null, notificationOnoff?: boolean | null } | null, bannerImageTwitter?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } } | null } | null } | null };
+export type GetGlobalSettingsQuery = { __typename?: 'RootQuery', globalSettings?: { __typename?: 'GlobalSettings', fGGlobalSettings?: { __typename?: 'FGGlobalSettings', bannerImage?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, notificationBar?: { __typename?: 'FGGlobalSettingsNotificationBar', fieldGroupName?: string | null, notificationMessage?: string | null, notificationOnoff?: boolean | null } | null, bannerImageTwitter?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } } | null, bannerImageTwitterSquare?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } } | null } | null } | null };
 
 export type GetJournalByUriQueryVariables = Exact<{
   uri: Scalars['String']['input'];
@@ -14326,13 +14338,7 @@ export const GetGlobalSettingsDocument = `
       bannerImage {
         cursor
         node {
-          altText
-          srcSet
-          sourceUrl
-          mediaDetails {
-            height
-            width
-          }
+          ...FragmentFeaturedImage
         }
       }
       notificationBar {
@@ -14352,10 +14358,22 @@ export const GetGlobalSettingsDocument = `
           }
         }
       }
+      bannerImageTwitterSquare {
+        cursor
+        node {
+          altText
+          srcSet
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
     }
   }
 }
-    `;
+    ${FragmentFeaturedImageFragmentDoc}`;
 
 export const useGetGlobalSettingsQuery = <
       TData = GetGlobalSettingsQuery,

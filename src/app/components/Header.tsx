@@ -1,48 +1,60 @@
 import React from 'react';
 import { CircularProgress } from '@mui/material';
-import Image from "next/image";
+import Image from 'next/image';
 import Link from 'next/link';
 import { GetGlobalSettingsQuery } from '@/gql/gql-generated';
 
 interface HeaderProps {
-  globalSettings: GetGlobalSettingsQuery['globalSettings'] // Accept the entire globalSettings object
+  globalSettings: GetGlobalSettingsQuery['globalSettings']; // Accept the entire globalSettings object
 }
 
 const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
-  const bannerData = globalSettings?.fGGlobalSettings?.bannerImage
-  // const notificationData = globalSettings?.globalSettings.fGGlobalSettings.notificationBar;
+  const bannerData = globalSettings?.fGGlobalSettings?.bannerImage;
+
+  const fallbackSVG = `data:image/svg+xml;base64,${Buffer.from(
+    `
+    <svg width="768" height="131" viewBox="0 0 768 131" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="768" height="131" fill="#4B5563"/>
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9CA3AF" font-family="system-ui" font-size="16">
+        Image Not Found
+      </text>
+    </svg>
+    `
+  ).toString('base64')}`;
 
   return (
-    (<header className="w-full bg-custom-bg text-white">
-      <div className="flex justify-center w-full">
-        <div
-          className="w-full max-w-[1366px] flex justify-start mt-4"
-          style={{ position: "relative", width: "100%", maxWidth: "1366px" }}
-        >
-          {bannerData && bannerData.node.sourceUrl ? (
-            <div style={{ position: "relative", width: "630px", maxHeight: "122px" }}>
-              <Link href="/" passHref>
+    <header className="w-full bg-custom-bg text-white">
+      <div className="mx-auto max-w-[1366px] pt-6">
+        <div className="w-full md:w-1/2">
+          {' '}
+          {/* Full width on mobile, 50% on desktop */}
+          <Link href="/" className="block">
+            {bannerData && bannerData.node.mediaDetails ? (
+              <div className="relative aspect-[768/131] max-h-[122px]">
                 <Image
-                  src={bannerData.node.sourceUrl}
+                  src={
+                    bannerData.node.mediaDetails.sizes?.find(
+                      (size) => size?.name === 'medium_large'
+                    )?.sourceUrl ||
+                    bannerData.node.sourceUrl ||
+                    fallbackSVG
+                  }
                   alt={bannerData.node.altText || 'Banner Image'}
+                  fill
                   priority
-                  width={100}
-                  height={100}
-                  sizes="100vw"
-                  style={{
-                    width: "100%",
-                    height: "auto"
-                  }} />
-              </Link>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center bg-gray-300 w-full max-w-[630px] h-[110px]">
-              <CircularProgress />
-            </div>
-          )}
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+            ) : (
+              <div className="aspect-[768/131] max-h-[122px] flex justify-center items-center bg-gray-300">
+                <CircularProgress />
+              </div>
+            )}
+          </Link>
         </div>
       </div>
-    </header>)
+    </header>
   );
 };
 
