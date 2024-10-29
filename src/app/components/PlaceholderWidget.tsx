@@ -77,9 +77,7 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
                   style={{
                     width: '100%',
                     height: 'auto',
-                    objectFit: 'cover',
-                    width: "100%",
-                    height: "auto"
+                    objectFit: 'cover'
                   }} />
               </Box>
             )}
