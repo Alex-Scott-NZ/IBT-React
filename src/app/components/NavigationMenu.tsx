@@ -173,7 +173,7 @@ const NavigationMenu: React.FC = () => {
       <AppBar position="static" color="default" component="nav">
         <Toolbar
           sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}
-          className="-ml-2"
+          className="-ml-2 mt-4"
           disableGutters
           variant="dense"
         >

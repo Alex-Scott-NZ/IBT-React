@@ -4,6 +4,17 @@ query GetGlobalSettings {
             bannerImage {
                 cursor
                 node {
+                    ...FragmentFeaturedImage
+                }
+            }
+            notificationBar {
+                fieldGroupName
+                notificationMessage
+                notificationOnoff
+            }
+            bannerImageTwitter {
+                cursor
+                node {
                     altText
                     srcSet
                     sourceUrl
@@ -13,12 +24,7 @@ query GetGlobalSettings {
                     }
                 }
             }
-            notificationBar {
-                fieldGroupName
-                notificationMessage
-                notificationOnoff
-            }
-            bannerImageTwitter {
+            bannerImageTwitterSquare {
                 cursor
                 node {
                     altText
