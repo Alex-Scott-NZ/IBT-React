@@ -35,7 +35,7 @@ export default async function JournalPage({ params }: { params: { slug: string }
   return (
     <BaseLayoutNoSideBars globalSettings={globalSettings}>
       <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Left column with image */}
           <div className="md:col-span-1">
             <div className="relative aspect-[2/3] w-full">
@@ -55,7 +55,7 @@ export default async function JournalPage({ params }: { params: { slug: string }
 
           {/* Right column with title and articles */}
           <div className="md:col-span-2">
-            <h1 className="font-cambay text-communist-red text-3xl mb-8">{title}</h1>
+            <h2 className="font-cambay text-communist-red text-3xl mb-4 mt-2">{title}</h2>
             
             <div className="space-y-4">
               {journalIssueDetails?.articlesInJournal?.nodes?.map((node, index) => {

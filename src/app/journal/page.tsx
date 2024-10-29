@@ -42,7 +42,7 @@ const JournalPage = async () => {
   return (
     <BaseLayoutNoSideBars globalSettings={globalSettings}>
       <div className="container">
-        <h2 className="font-cambay text-communist-red text-3xl mb-8">
+        <h2 className="font-cambay text-communist-red text-3xl mb-4 mt-2">
           All Journal Issues
         </h2>
 
