@@ -50,6 +50,13 @@ export const metadata: Metadata = {
     'We stand for a working-class revolution to overthrow capitalism on a global scale. Our vision is a world without hunger, war and oppression, in which all human beings may develop their full potential while protecting the environment on which we depend.',
 };
 
+export const generateViewport = () => ({
+  width: 'device-width',
+  initialScale: 1.0,
+  maximumScale: 1.0,
+  userScalable: 'no',
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -60,12 +67,6 @@ export default function RootLayout({
       lang="en"
       className={`${cambay.variable} ${telegrafico.variable} ${helveticaNeue.variable}`}
     >
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </Head>
       <Providers>
         <ThemeProviderWrapper>
           <body className="bg-custom-bg font-helvetica">

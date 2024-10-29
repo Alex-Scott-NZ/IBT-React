@@ -27,6 +27,7 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
                   alt={bannerData.node.altText || 'Banner Image'}
                   // title={bannerData.title || ''}
                   layout="responsive"
+                  priority
                   width={100}
                   height={100}
                 />
