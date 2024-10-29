@@ -19,7 +19,7 @@ import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import 'swiper/swiper-bundle.css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -58,7 +58,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   const booksList = books?.books?.nodes || [];
 
   return (
-    <div className="books-widget relative mb-4">
+    (<div className="books-widget relative mb-4">
       <Box
         marginBottom={1}
         sx={{
@@ -132,9 +132,11 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                     <Image
                       src={getImageUrl(book.featuredImage?.node, 128)}
                       alt={book.featuredImage?.node?.altText || book.title || ''}
-                      layout="fill" // Fills the container dimensions
-                      objectFit="cover" // Ensures the image covers the entire box
-                    />
+                      fill
+                      sizes="(max-width: 768px) 100vw, 45vw"
+                      style={{
+                        objectFit: "cover"
+                      }} />
                   </Box>
 
                   <Box sx={{ flex: '1 1 auto' }}>
@@ -206,9 +208,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
           </IconButton>
         </ButtonGroup>
       </Box>
-
-
-    </div>
+    </div>)
   );
 };
 

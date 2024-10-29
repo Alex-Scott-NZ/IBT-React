@@ -1,6 +1,6 @@
 import React from 'react';
 import { CircularProgress } from '@mui/material';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from 'next/link';
 import { GetGlobalSettingsQuery } from '@/gql/gql-generated';
 
@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
   // const notificationData = globalSettings?.globalSettings.fGGlobalSettings.notificationBar;
 
   return (
-    <header className="w-full bg-custom-bg text-white">
+    (<header className="w-full bg-custom-bg text-white">
       <div className="flex justify-center w-full">
         <div
           className="w-full max-w-[1366px] flex justify-start mt-4"
@@ -25,12 +25,14 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
                 <Image
                   src={bannerData.node.sourceUrl}
                   alt={bannerData.node.altText || 'Banner Image'}
-                  // title={bannerData.title || ''}
-                  layout="responsive"
                   priority
                   width={100}
                   height={100}
-                />
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: "auto"
+                  }} />
               </Link>
             </div>
           ) : (
@@ -40,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
           )}
         </div>
       </div>
-    </header>
+    </header>)
   );
 };
 

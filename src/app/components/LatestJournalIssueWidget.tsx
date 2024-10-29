@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 interface LatestJournalIssueWidgetProps {
   latestJournalIssue: GetJournalIssuesLatestQuery
@@ -33,7 +33,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
   };
 
   return (
-    <div className="latest-journal-issue-widget relative mb-4">
+    (<div className="latest-journal-issue-widget relative mb-4">
       <Box
         marginBottom={1}
         sx={{
@@ -84,17 +84,21 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
               }}
             >
               <Image
-                src={getImageUrl(latestIssue?.featuredImage?.node, 164)} // 50% of the card width (328px)
+                // 50% of the card width (328px)
+                src={getImageUrl(latestIssue?.featuredImage?.node, 164)}
                 alt={latestIssue?.featuredImage?.node?.altText || latestIssue?.title || 'Latest Journal Issue'}
-                width={328} // Set the width based on your design
-                height={0} // Automatically calculate height to maintain aspect ratio
+                // Set the width based on your design
+                width={328}
+                // Automatically calculate height to maintain aspect ratio
+                height={0}
+                sizes="100vw"
                 style={{
                   width: '100%',
                   height: 'auto',
                   objectFit: 'cover',
-                }}
-                layout="responsive"
-              />
+                  width: "100%",
+                  height: "auto"
+                }} />
             </Box>
 
             <Box
@@ -118,7 +122,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
           </Box>
         </CardActionArea>
       </Card>
-    </div>
+    </div>)
   );
 };
 

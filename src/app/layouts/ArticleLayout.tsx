@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import BaseLayout from './BaseLayout';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { GetGlobalSettingsQuery, GetArticleByUriQuery, PdfItem } from '@/gql/gql-generated';
-import { getImagePlaceholder } from '../actions/getPlaceHolder';
 import PdfViewerComponent from './PdfViewerComponent';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
@@ -20,14 +19,8 @@ interface ImagePlaceholder {
   placeholder: string;
 }
 
-const DEFAULT_PLACEHOLDER = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mOsa2yqBwAFCAICLICSyQAAAABJRU5ErkJggg==';
-
 const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
-  const [imageWithPlaceholder, setImageWithPlaceholder] = useState<ImagePlaceholder>({
-    src: '',
-    placeholder: DEFAULT_PLACEHOLDER
-  });
-
+  
   const relatedPdf = article?.articleDetails?.relatedPdf?.nodes?.[0] as PdfItem;
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl || '';
 
@@ -38,21 +31,8 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
 
   const imageUrl = mediumLarge?.sourceUrl || featuredImage?.sourceUrl || '';
 
-  useEffect(() => {
-    if (imageUrl) {
-      getImagePlaceholder(imageUrl).then(result => {
-        if (result) {
-          setImageWithPlaceholder({
-            src: result.src,
-            placeholder: result.placeholder || DEFAULT_PLACEHOLDER
-          });
-        }
-      });
-    }
-  }, [imageUrl]);
-
   return (
-    <BaseLayout
+    (<BaseLayout
       globalSettings={globalSettings}
       leftSidebar={<div>Article Left Sidebar</div>}
       mainContent={
@@ -69,14 +49,17 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
                   alt={featuredImage?.altText || article.title || ''}
                   width={Number(mediumLarge?.width || featuredImage?.mediaDetails?.width || 0)}
                   height={Number(mediumLarge?.height || featuredImage?.mediaDetails?.height || 0)}
-                  sizes="100vw"
                   priority={true}
                   quality={75}
                   className="w-full h-auto"
                   placeholder="blur"
-                  blurDataURL={imageWithPlaceholder.placeholder}
-                  style={{ objectFit: 'contain' }}
-                />
+                  blurDataURL={featuredImage?.thumbhash || 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/2wBDAR0XFyAeIB4gHh4dIB0gHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k='}
+                  sizes="100vw"
+                  style={{
+                    objectFit: 'contain',
+                    maxWidth: "100%",
+                    height: "auto"
+                  }} />
               )}
             </>
           )}
@@ -97,7 +80,7 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
         </div>
       }
       rightSidebar={<div>Article Right Sidebar</div>}
-    />
+    />)
   );
 };
 

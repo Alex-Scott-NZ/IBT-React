@@ -9,7 +9,7 @@ import {
   Box,
 } from '@mui/material';
 import Link from 'next/link';
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 type PlaceholderProps = {
   textContentGroup: PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup;
@@ -19,7 +19,7 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
   if (!textContentGroup) return null;
 
   return (
-    <div className="placeholder-widget relative mb-4">
+    (<div className="placeholder-widget relative mb-4">
       <Box
         marginBottom={1}
         sx={{
@@ -73,13 +73,14 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
                   alt={textContentGroup.freeTextImage.node.altText || ''}
                   width={328}
                   height={0}
+                  sizes="100vw"
                   style={{
                     width: '100%',
                     height: 'auto',
                     objectFit: 'cover',
-                  }}
-                  layout="responsive"
-                />
+                    width: "100%",
+                    height: "auto"
+                  }} />
               </Box>
             )}
             <Box
@@ -105,7 +106,7 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
           )}
         </CardActionArea>
       </Card>
-    </div>
+    </div>)
   );
 };
 
