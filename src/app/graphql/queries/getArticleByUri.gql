@@ -1,0 +1,54 @@
+query GetArticleByUri($uri: ID!) {
+  article(id: $uri, idType: URI) {
+    articleId
+    content
+    contentTypeName
+    databaseId
+    date
+    dateGmt
+    featuredImageDatabaseId
+    featuredImageId
+    id
+    isTermNode
+    modified
+    modifiedGmt
+    slug
+    status
+    title
+    uri
+    articleDetails {
+      displayDate
+      displayOnFrontPage
+      fieldGroupName
+      publicationDate
+      source
+      subtitle
+      suppressDate
+      tableOfContentsTitle
+      relatedPdf {
+        nodes {
+          ... on PdfItem {
+            ...FragmentPdfItem
+          }
+        }
+      }
+      relatedAudio {
+        nodes {
+          ... on AudioItem {
+            ...FragmentAudioItem
+          }
+        }
+      }
+    }
+    featuredImage {
+      node {
+        ...FragmentFeaturedImage
+      }
+    }
+    terms {
+      nodes {
+        ...FragmentTerms
+      }
+    }
+  }
+}

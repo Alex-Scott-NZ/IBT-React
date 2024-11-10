@@ -163,6 +163,8 @@ export type Article = ContentNode & DatabaseIdentifier & HierarchicalContentNode
   parentId?: Maybe<Scalars['ID']['output']>;
   /** The password for the article object. */
   password?: Maybe<Scalars['String']['output']>;
+  /** Connection between the Article type and the place type */
+  places?: Maybe<ArticleToPlaceConnection>;
   /** Connection between the Article type and the article type */
   preview?: Maybe<ArticleToPreviewConnectionEdge>;
   /** The database id of the preview node */
@@ -175,8 +177,12 @@ export type Article = ContentNode & DatabaseIdentifier & HierarchicalContentNode
   status?: Maybe<Scalars['String']['output']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the Article type and the TermNode type */
+  terms?: Maybe<ArticleToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
+  /** Connection between the Article type and the topic type */
+  topics?: Maybe<ArticleToTopicConnection>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -227,8 +233,38 @@ export type ArticleEnqueuedStylesheetsArgs = {
 
 
 /** The article type */
+export type ArticlePlacesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ArticleToPlaceConnectionWhereArgs>;
+};
+
+
+/** The article type */
+export type ArticleTermsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ArticleToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The article type */
 export type ArticleTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The article type */
+export type ArticleTopicsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ArticleToTopicConnectionWhereArgs>;
 };
 
 /** Connection to article Nodes */
@@ -427,6 +463,105 @@ export type ArticleIdType =
   /** Identify a resource by the URI. */
   | 'URI';
 
+/** Set relationships between the article to places */
+export type ArticlePlacesInput = {
+  /** If true, this will append the place to existing related places. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<ArticlePlacesNodeInput>>>;
+};
+
+/** List of places to connect the article to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type ArticlePlacesNodeInput = {
+  /** The description of the place. This field is used to set a description of the place if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the place. If present, this will be used to connect to the article. If no existing place exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** The name of the place. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The slug of the place. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Article type and the place type */
+export type ArticleToPlaceConnection = Connection & PlaceConnection & {
+  __typename?: 'ArticleToPlaceConnection';
+  /** Edges for the ArticleToPlaceConnection connection */
+  edges: Array<ArticleToPlaceConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Place>;
+  /** Information about pagination in a connection. */
+  pageInfo: ArticleToPlaceConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type ArticleToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
+  __typename?: 'ArticleToPlaceConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Place;
+};
+
+/** Page Info on the &quot;ArticleToPlaceConnection&quot; */
+export type ArticleToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
+  __typename?: 'ArticleToPlaceConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the ArticleToPlaceConnection connection */
+export type ArticleToPlaceConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** Connection between the Article type and the article type */
 export type ArticleToPreviewConnectionEdge = ArticleConnectionEdge & Edge & OneToOneConnection & {
   __typename?: 'ArticleToPreviewConnectionEdge';
@@ -434,6 +569,186 @@ export type ArticleToPreviewConnectionEdge = ArticleConnectionEdge & Edge & OneT
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
   node: Article;
+};
+
+/** Connection between the Article type and the TermNode type */
+export type ArticleToTermNodeConnection = Connection & TermNodeConnection & {
+  __typename?: 'ArticleToTermNodeConnection';
+  /** Edges for the ArticleToTermNodeConnection connection */
+  edges: Array<ArticleToTermNodeConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<TermNode>;
+  /** Information about pagination in a connection. */
+  pageInfo: ArticleToTermNodeConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type ArticleToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
+  __typename?: 'ArticleToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: TermNode;
+};
+
+/** Page Info on the &quot;ArticleToTermNodeConnection&quot; */
+export type ArticleToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
+  __typename?: 'ArticleToTermNodeConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the ArticleToTermNodeConnection connection */
+export type ArticleToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Connection between the Article type and the topic type */
+export type ArticleToTopicConnection = Connection & TopicConnection & {
+  __typename?: 'ArticleToTopicConnection';
+  /** Edges for the ArticleToTopicConnection connection */
+  edges: Array<ArticleToTopicConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Topic>;
+  /** Information about pagination in a connection. */
+  pageInfo: ArticleToTopicConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type ArticleToTopicConnectionEdge = Edge & TopicConnectionEdge & {
+  __typename?: 'ArticleToTopicConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Topic;
+};
+
+/** Page Info on the &quot;ArticleToTopicConnection&quot; */
+export type ArticleToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
+  __typename?: 'ArticleToTopicConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the ArticleToTopicConnection connection */
+export type ArticleToTopicConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Set relationships between the article to topics */
+export type ArticleTopicsInput = {
+  /** If true, this will append the topic to existing related topics. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<ArticleTopicsNodeInput>>>;
+};
+
+/** List of topics to connect the article to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type ArticleTopicsNodeInput = {
+  /** The description of the topic. This field is used to set a description of the topic if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the topic. If present, this will be used to connect to the article. If no existing topic exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** The name of the topic. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The slug of the topic. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The audioItem type */
@@ -506,6 +821,8 @@ export type AudioItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   parentId?: Maybe<Scalars['ID']['output']>;
   /** The password for the audio-item object. */
   password?: Maybe<Scalars['String']['output']>;
+  /** Connection between the AudioItem type and the place type */
+  places?: Maybe<AudioItemToPlaceConnection>;
   /** Connection between the AudioItem type and the audioItem type */
   preview?: Maybe<AudioItemToPreviewConnectionEdge>;
   /** The database id of the preview node */
@@ -518,8 +835,12 @@ export type AudioItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   status?: Maybe<Scalars['String']['output']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the AudioItem type and the TermNode type */
+  terms?: Maybe<AudioItemToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
+  /** Connection between the AudioItem type and the topic type */
+  topics?: Maybe<AudioItemToTopicConnection>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -564,8 +885,38 @@ export type AudioItemEnqueuedStylesheetsArgs = {
 
 
 /** The audioItem type */
+export type AudioItemPlacesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<AudioItemToPlaceConnectionWhereArgs>;
+};
+
+
+/** The audioItem type */
+export type AudioItemTermsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<AudioItemToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The audioItem type */
 export type AudioItemTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The audioItem type */
+export type AudioItemTopicsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<AudioItemToTopicConnectionWhereArgs>;
 };
 
 /** Connection to audioItem Nodes */
@@ -660,6 +1011,105 @@ export type AudioItemIdType =
   /** Identify a resource by the URI. */
   | 'URI';
 
+/** Set relationships between the audioItem to places */
+export type AudioItemPlacesInput = {
+  /** If true, this will append the place to existing related places. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<AudioItemPlacesNodeInput>>>;
+};
+
+/** List of places to connect the audioItem to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type AudioItemPlacesNodeInput = {
+  /** The description of the place. This field is used to set a description of the place if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the place. If present, this will be used to connect to the audioItem. If no existing place exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** The name of the place. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The slug of the place. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the AudioItem type and the place type */
+export type AudioItemToPlaceConnection = Connection & PlaceConnection & {
+  __typename?: 'AudioItemToPlaceConnection';
+  /** Edges for the AudioItemToPlaceConnection connection */
+  edges: Array<AudioItemToPlaceConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Place>;
+  /** Information about pagination in a connection. */
+  pageInfo: AudioItemToPlaceConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type AudioItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
+  __typename?: 'AudioItemToPlaceConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Place;
+};
+
+/** Page Info on the &quot;AudioItemToPlaceConnection&quot; */
+export type AudioItemToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
+  __typename?: 'AudioItemToPlaceConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the AudioItemToPlaceConnection connection */
+export type AudioItemToPlaceConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** Connection between the AudioItem type and the audioItem type */
 export type AudioItemToPreviewConnectionEdge = AudioItemConnectionEdge & Edge & OneToOneConnection & {
   __typename?: 'AudioItemToPreviewConnectionEdge';
@@ -667,6 +1117,186 @@ export type AudioItemToPreviewConnectionEdge = AudioItemConnectionEdge & Edge & 
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
   node: AudioItem;
+};
+
+/** Connection between the AudioItem type and the TermNode type */
+export type AudioItemToTermNodeConnection = Connection & TermNodeConnection & {
+  __typename?: 'AudioItemToTermNodeConnection';
+  /** Edges for the AudioItemToTermNodeConnection connection */
+  edges: Array<AudioItemToTermNodeConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<TermNode>;
+  /** Information about pagination in a connection. */
+  pageInfo: AudioItemToTermNodeConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type AudioItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
+  __typename?: 'AudioItemToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: TermNode;
+};
+
+/** Page Info on the &quot;AudioItemToTermNodeConnection&quot; */
+export type AudioItemToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
+  __typename?: 'AudioItemToTermNodeConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the AudioItemToTermNodeConnection connection */
+export type AudioItemToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Connection between the AudioItem type and the topic type */
+export type AudioItemToTopicConnection = Connection & TopicConnection & {
+  __typename?: 'AudioItemToTopicConnection';
+  /** Edges for the AudioItemToTopicConnection connection */
+  edges: Array<AudioItemToTopicConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Topic>;
+  /** Information about pagination in a connection. */
+  pageInfo: AudioItemToTopicConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type AudioItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
+  __typename?: 'AudioItemToTopicConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Topic;
+};
+
+/** Page Info on the &quot;AudioItemToTopicConnection&quot; */
+export type AudioItemToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
+  __typename?: 'AudioItemToTopicConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the AudioItemToTopicConnection connection */
+export type AudioItemToTopicConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Set relationships between the audioItem to topics */
+export type AudioItemTopicsInput = {
+  /** If true, this will append the topic to existing related topics. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<AudioItemTopicsNodeInput>>>;
+};
+
+/** List of topics to connect the audioItem to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type AudioItemTopicsNodeInput = {
+  /** The description of the topic. This field is used to set a description of the topic if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the topic. If present, this will be used to connect to the audioItem. If no existing topic exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** The name of the topic. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The slug of the topic. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Avatars are profile images for users. WordPress by default uses the Gravatar service to host and fetch avatars from. */
@@ -2306,6 +2936,17 @@ export type ContentTypesOfCategoryEnum =
   /** The Type of Content object */
   | 'POST';
 
+/** Allowed Content Types of the Place taxonomy. */
+export type ContentTypesOfPlaceEnum =
+  /** The Type of Content object */
+  | 'ARTICLE'
+  /** The Type of Content object */
+  | 'AUDIO_ITEM'
+  /** The Type of Content object */
+  | 'PDF_ITEM'
+  /** The Type of Content object */
+  | 'VIDEO_ITEM';
+
 /** Allowed Content Types of the PostFormat taxonomy. */
 export type ContentTypesOfPostFormatEnum =
   /** The Type of Content object */
@@ -2315,6 +2956,17 @@ export type ContentTypesOfPostFormatEnum =
 export type ContentTypesOfTagEnum =
   /** The Type of Content object */
   | 'POST';
+
+/** Allowed Content Types of the Topic taxonomy. */
+export type ContentTypesOfTopicEnum =
+  /** The Type of Content object */
+  | 'ARTICLE'
+  /** The Type of Content object */
+  | 'AUDIO_ITEM'
+  /** The Type of Content object */
+  | 'PDF_ITEM'
+  /** The Type of Content object */
+  | 'VIDEO_ITEM';
 
 /** Input for the createArticle mutation. */
 export type CreateArticleInput = {
@@ -2330,12 +2982,16 @@ export type CreateArticleInput = {
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the article and places */
+  places?: InputMaybe<ArticlePlacesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']['input']>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the article and topics */
+  topics?: InputMaybe<ArticleTopicsInput>;
 };
 
 /** The payload for the createArticle mutation. */
@@ -2359,12 +3015,16 @@ export type CreateAudioItemInput = {
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the audioItem and places */
+  places?: InputMaybe<AudioItemPlacesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']['input']>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the audioItem and topics */
+  topics?: InputMaybe<AudioItemTopicsInput>;
 };
 
 /** The payload for the createAudioItem mutation. */
@@ -2584,12 +3244,16 @@ export type CreatePdfItemInput = {
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the pdfItem and places */
+  places?: InputMaybe<PdfItemPlacesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']['input']>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the pdfItem and topics */
+  topics?: InputMaybe<PdfItemTopicsInput>;
 };
 
 /** The payload for the createPdfItem mutation. */
@@ -2599,6 +3263,31 @@ export type CreatePdfItemPayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
   pdfItem?: Maybe<PdfItem>;
+};
+
+/** Input for the createPlace mutation. */
+export type CreatePlaceInput = {
+  /** The slug that the place will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']['input']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The description of the place object */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The name of the place object to mutate */
+  name: Scalars['String']['input'];
+  /** The ID of the place that should be set as the parent */
+  parentId?: InputMaybe<Scalars['ID']['input']>;
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The payload for the createPlace mutation. */
+export type CreatePlacePayload = {
+  __typename?: 'CreatePlacePayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The created place */
+  place?: Maybe<Place>;
 };
 
 /** Input for the createPostFormat mutation. */
@@ -2694,6 +3383,31 @@ export type CreateTagPayload = {
   tag?: Maybe<Tag>;
 };
 
+/** Input for the createTopic mutation. */
+export type CreateTopicInput = {
+  /** The slug that the topic will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']['input']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The description of the topic object */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The name of the topic object to mutate */
+  name: Scalars['String']['input'];
+  /** The ID of the topic that should be set as the parent */
+  parentId?: InputMaybe<Scalars['ID']['input']>;
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The payload for the createTopic mutation. */
+export type CreateTopicPayload = {
+  __typename?: 'CreateTopicPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The created topic */
+  topic?: Maybe<Topic>;
+};
+
 /** Input for the createUser mutation. */
 export type CreateUserInput = {
   /** User's AOL IM account. */
@@ -2753,12 +3467,16 @@ export type CreateVideoItemInput = {
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the videoItem and places */
+  places?: InputMaybe<VideoItemPlacesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']['input']>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the videoItem and topics */
+  topics?: InputMaybe<VideoItemTopicsInput>;
 };
 
 /** The payload for the createVideoItem mutation. */
@@ -3022,6 +3740,25 @@ export type DeletePdfItemPayload = {
   pdfItem?: Maybe<PdfItem>;
 };
 
+/** Input for the deletePlace mutation. */
+export type DeletePlaceInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the place to delete */
+  id: Scalars['ID']['input'];
+};
+
+/** The payload for the deletePlace mutation. */
+export type DeletePlacePayload = {
+  __typename?: 'DeletePlacePayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The ID of the deleted object */
+  deletedId?: Maybe<Scalars['ID']['output']>;
+  /** The deleted term object */
+  place?: Maybe<Place>;
+};
+
 /** Input for the deletePostFormat mutation. */
 export type DeletePostFormatInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -3081,6 +3818,25 @@ export type DeleteTagPayload = {
   deletedId?: Maybe<Scalars['ID']['output']>;
   /** The deleted term object */
   tag?: Maybe<Tag>;
+};
+
+/** Input for the deleteTopic mutation. */
+export type DeleteTopicInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the topic to delete */
+  id: Scalars['ID']['input'];
+};
+
+/** The payload for the deleteTopic mutation. */
+export type DeleteTopicPayload = {
+  __typename?: 'DeleteTopicPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The ID of the deleted object */
+  deletedId?: Maybe<Scalars['ID']['output']>;
+  /** The deleted term object */
+  topic?: Maybe<Topic>;
 };
 
 /** Input for the deleteUser mutation. */
@@ -4674,7 +5430,7 @@ export type MenuItemNodeIdTypeEnum =
   | 'ID';
 
 /** Deprecated in favor of MenuItemLinkeable Interface */
-export type MenuItemObjectUnion = Article | AudioItem | Book | Category | JournalIssue | Page | PdfItem | Post | PostFormat | Tag | VideoItem;
+export type MenuItemObjectUnion = Article | AudioItem | Book | Category | JournalIssue | Page | PdfItem | Place | Post | PostFormat | Tag | Topic | VideoItem;
 
 /** Connection between the MenuItem type and the Menu type */
 export type MenuItemToMenuConnectionEdge = Edge & MenuConnectionEdge & OneToOneConnection & {
@@ -5651,6 +6407,8 @@ export type PdfItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node
    * @deprecated Deprecated in favor of the databaseId field
    */
   pdfItemId: Scalars['Int']['output'];
+  /** Connection between the PdfItem type and the place type */
+  places?: Maybe<PdfItemToPlaceConnection>;
   /** Connection between the PdfItem type and the pdfItem type */
   preview?: Maybe<PdfItemToPreviewConnectionEdge>;
   /** The database id of the preview node */
@@ -5663,8 +6421,12 @@ export type PdfItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node
   status?: Maybe<Scalars['String']['output']>;
   /** The template assigned to the node */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the PdfItem type and the TermNode type */
+  terms?: Maybe<PdfItemToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
+  /** Connection between the PdfItem type and the topic type */
+  topics?: Maybe<PdfItemToTopicConnection>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -5698,8 +6460,38 @@ export type PdfItemEnqueuedStylesheetsArgs = {
 
 
 /** The pdfItem type */
+export type PdfItemPlacesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PdfItemToPlaceConnectionWhereArgs>;
+};
+
+
+/** The pdfItem type */
+export type PdfItemTermsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PdfItemToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The pdfItem type */
 export type PdfItemTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The pdfItem type */
+export type PdfItemTopicsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PdfItemToTopicConnectionWhereArgs>;
 };
 
 /** Connection to pdfItem Nodes */
@@ -5788,6 +6580,26 @@ export type PdfItemIdType =
   /** Identify a resource by the URI. */
   | 'URI';
 
+/** Set relationships between the pdfItem to places */
+export type PdfItemPlacesInput = {
+  /** If true, this will append the place to existing related places. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<PdfItemPlacesNodeInput>>>;
+};
+
+/** List of places to connect the pdfItem to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type PdfItemPlacesNodeInput = {
+  /** The description of the place. This field is used to set a description of the place if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the place. If present, this will be used to connect to the pdfItem. If no existing place exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** The name of the place. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The slug of the place. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** Connection between the PdfItem type and the pdfItem type */
 export type PdfItemToParentConnectionEdge = Edge & OneToOneConnection & PdfItemConnectionEdge & {
   __typename?: 'PdfItemToParentConnectionEdge';
@@ -5839,6 +6651,85 @@ export type PdfItemToPdfItemConnectionPageInfo = PageInfo & PdfItemConnectionPag
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Connection between the PdfItem type and the place type */
+export type PdfItemToPlaceConnection = Connection & PlaceConnection & {
+  __typename?: 'PdfItemToPlaceConnection';
+  /** Edges for the PdfItemToPlaceConnection connection */
+  edges: Array<PdfItemToPlaceConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Place>;
+  /** Information about pagination in a connection. */
+  pageInfo: PdfItemToPlaceConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PdfItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
+  __typename?: 'PdfItemToPlaceConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Place;
+};
+
+/** Page Info on the &quot;PdfItemToPlaceConnection&quot; */
+export type PdfItemToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
+  __typename?: 'PdfItemToPlaceConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PdfItemToPlaceConnection connection */
+export type PdfItemToPlaceConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** Connection between the PdfItem type and the pdfItem type */
 export type PdfItemToPreviewConnectionEdge = Edge & OneToOneConnection & PdfItemConnectionEdge & {
   __typename?: 'PdfItemToPreviewConnectionEdge';
@@ -5846,6 +6737,873 @@ export type PdfItemToPreviewConnectionEdge = Edge & OneToOneConnection & PdfItem
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
   node: PdfItem;
+};
+
+/** Connection between the PdfItem type and the TermNode type */
+export type PdfItemToTermNodeConnection = Connection & TermNodeConnection & {
+  __typename?: 'PdfItemToTermNodeConnection';
+  /** Edges for the PdfItemToTermNodeConnection connection */
+  edges: Array<PdfItemToTermNodeConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<TermNode>;
+  /** Information about pagination in a connection. */
+  pageInfo: PdfItemToTermNodeConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PdfItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
+  __typename?: 'PdfItemToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: TermNode;
+};
+
+/** Page Info on the &quot;PdfItemToTermNodeConnection&quot; */
+export type PdfItemToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
+  __typename?: 'PdfItemToTermNodeConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PdfItemToTermNodeConnection connection */
+export type PdfItemToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Connection between the PdfItem type and the topic type */
+export type PdfItemToTopicConnection = Connection & TopicConnection & {
+  __typename?: 'PdfItemToTopicConnection';
+  /** Edges for the PdfItemToTopicConnection connection */
+  edges: Array<PdfItemToTopicConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Topic>;
+  /** Information about pagination in a connection. */
+  pageInfo: PdfItemToTopicConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PdfItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
+  __typename?: 'PdfItemToTopicConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Topic;
+};
+
+/** Page Info on the &quot;PdfItemToTopicConnection&quot; */
+export type PdfItemToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
+  __typename?: 'PdfItemToTopicConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PdfItemToTopicConnection connection */
+export type PdfItemToTopicConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Set relationships between the pdfItem to topics */
+export type PdfItemTopicsInput = {
+  /** If true, this will append the topic to existing related topics. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<PdfItemTopicsNodeInput>>>;
+};
+
+/** List of topics to connect the pdfItem to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type PdfItemTopicsNodeInput = {
+  /** The description of the topic. This field is used to set a description of the topic if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the topic. If present, this will be used to connect to the pdfItem. If no existing topic exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** The name of the topic. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The slug of the topic. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The place type */
+export type Place = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
+  __typename?: 'Place';
+  /** The ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
+  ancestors?: Maybe<PlaceToAncestorsPlaceConnection>;
+  /** Connection between the Place type and the article type */
+  articles?: Maybe<PlaceToArticleConnection>;
+  /** Connection between the Place type and the audioItem type */
+  audioItems?: Maybe<PlaceToAudioItemConnection>;
+  /** Connection between the place type and its children places. */
+  children?: Maybe<PlaceToPlaceConnection>;
+  /** Connection between the Place type and the ContentNode type */
+  contentNodes?: Maybe<PlaceToContentNodeConnection>;
+  /** The number of objects connected to the object */
+  count?: Maybe<Scalars['Int']['output']>;
+  /** The unique identifier stored in the database */
+  databaseId: Scalars['Int']['output'];
+  /** The description of the object */
+  description?: Maybe<Scalars['String']['output']>;
+  /** Connection between the TermNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
+  /** Connection between the TermNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
+  /** The globally unique ID for the object */
+  id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
+  /** Whether the object is restricted from the current viewer */
+  isRestricted?: Maybe<Scalars['Boolean']['output']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean']['output'];
+  /** The link to the term */
+  link?: Maybe<Scalars['String']['output']>;
+  /** The human friendly name of the object. */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Connection between the place type and its parent place. */
+  parent?: Maybe<PlaceToParentPlaceConnectionEdge>;
+  /** Database id of the parent node */
+  parentDatabaseId?: Maybe<Scalars['Int']['output']>;
+  /** The globally unique identifier of the parent node. */
+  parentId?: Maybe<Scalars['ID']['output']>;
+  /** Connection between the Place type and the pdfItem type */
+  pdfItems?: Maybe<PlaceToPdfItemConnection>;
+  /**
+   * The id field matches the WP_Post-&gt;ID field.
+   * @deprecated Deprecated in favor of databaseId
+   */
+  placeId?: Maybe<Scalars['Int']['output']>;
+  /** An alphanumeric identifier for the object unique to its type. */
+  slug?: Maybe<Scalars['String']['output']>;
+  /** Connection between the Place type and the Taxonomy type */
+  taxonomy?: Maybe<PlaceToTaxonomyConnectionEdge>;
+  /** The name of the taxonomy that the object is associated with */
+  taxonomyName?: Maybe<Scalars['String']['output']>;
+  /** The ID of the term group that this term object belongs to */
+  termGroupId?: Maybe<Scalars['Int']['output']>;
+  /** The taxonomy ID that the object is associated with */
+  termTaxonomyId?: Maybe<Scalars['Int']['output']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']['output']>;
+  /** Connection between the Place type and the videoItem type */
+  videoItem?: Maybe<PlaceToVideoItemConnection>;
+};
+
+
+/** The place type */
+export type PlaceAncestorsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The place type */
+export type PlaceArticlesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PlaceToArticleConnectionWhereArgs>;
+};
+
+
+/** The place type */
+export type PlaceAudioItemsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PlaceToAudioItemConnectionWhereArgs>;
+};
+
+
+/** The place type */
+export type PlaceChildrenArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PlaceToPlaceConnectionWhereArgs>;
+};
+
+
+/** The place type */
+export type PlaceContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PlaceToContentNodeConnectionWhereArgs>;
+};
+
+
+/** The place type */
+export type PlaceEnqueuedScriptsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The place type */
+export type PlaceEnqueuedStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The place type */
+export type PlacePdfItemsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PlaceToPdfItemConnectionWhereArgs>;
+};
+
+
+/** The place type */
+export type PlaceVideoItemArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PlaceToVideoItemConnectionWhereArgs>;
+};
+
+/** Connection to place Nodes */
+export type PlaceConnection = {
+  /** A list of edges (relational context) between RootQuery and connected place Nodes */
+  edges: Array<PlaceConnectionEdge>;
+  /** A list of connected place Nodes */
+  nodes: Array<Place>;
+  /** Information about pagination in a connection. */
+  pageInfo: PlaceConnectionPageInfo;
+};
+
+/** Edge between a Node and a connected place */
+export type PlaceConnectionEdge = {
+  /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The connected place Node */
+  node: Place;
+};
+
+/** Page Info on the connected PlaceConnectionEdge */
+export type PlaceConnectionPageInfo = {
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export type PlaceIdType =
+  /** The Database ID for the node */
+  | 'DATABASE_ID'
+  /** The hashed Global ID */
+  | 'ID'
+  /** The name of the node */
+  | 'NAME'
+  /** Url friendly name of the node */
+  | 'SLUG'
+  /** The URI for the node */
+  | 'URI';
+
+/** Connection between the Place type and the place type */
+export type PlaceToAncestorsPlaceConnection = Connection & PlaceConnection & {
+  __typename?: 'PlaceToAncestorsPlaceConnection';
+  /** Edges for the PlaceToAncestorsPlaceConnection connection */
+  edges: Array<PlaceToAncestorsPlaceConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Place>;
+  /** Information about pagination in a connection. */
+  pageInfo: PlaceToAncestorsPlaceConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PlaceToAncestorsPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
+  __typename?: 'PlaceToAncestorsPlaceConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Place;
+};
+
+/** Page Info on the &quot;PlaceToAncestorsPlaceConnection&quot; */
+export type PlaceToAncestorsPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
+  __typename?: 'PlaceToAncestorsPlaceConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Connection between the Place type and the article type */
+export type PlaceToArticleConnection = ArticleConnection & Connection & {
+  __typename?: 'PlaceToArticleConnection';
+  /** Edges for the PlaceToArticleConnection connection */
+  edges: Array<PlaceToArticleConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Article>;
+  /** Information about pagination in a connection. */
+  pageInfo: PlaceToArticleConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PlaceToArticleConnectionEdge = ArticleConnectionEdge & Edge & {
+  __typename?: 'PlaceToArticleConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Article;
+};
+
+/** Page Info on the &quot;PlaceToArticleConnection&quot; */
+export type PlaceToArticleConnectionPageInfo = ArticleConnectionPageInfo & PageInfo & WpPageInfo & {
+  __typename?: 'PlaceToArticleConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PlaceToArticleConnection connection */
+export type PlaceToArticleConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Place type and the audioItem type */
+export type PlaceToAudioItemConnection = AudioItemConnection & Connection & {
+  __typename?: 'PlaceToAudioItemConnection';
+  /** Edges for the PlaceToAudioItemConnection connection */
+  edges: Array<PlaceToAudioItemConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<AudioItem>;
+  /** Information about pagination in a connection. */
+  pageInfo: PlaceToAudioItemConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PlaceToAudioItemConnectionEdge = AudioItemConnectionEdge & Edge & {
+  __typename?: 'PlaceToAudioItemConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: AudioItem;
+};
+
+/** Page Info on the &quot;PlaceToAudioItemConnection&quot; */
+export type PlaceToAudioItemConnectionPageInfo = AudioItemConnectionPageInfo & PageInfo & WpPageInfo & {
+  __typename?: 'PlaceToAudioItemConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PlaceToAudioItemConnection connection */
+export type PlaceToAudioItemConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Place type and the ContentNode type */
+export type PlaceToContentNodeConnection = Connection & ContentNodeConnection & {
+  __typename?: 'PlaceToContentNodeConnection';
+  /** Edges for the PlaceToContentNodeConnection connection */
+  edges: Array<PlaceToContentNodeConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<ContentNode>;
+  /** Information about pagination in a connection. */
+  pageInfo: PlaceToContentNodeConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PlaceToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
+  __typename?: 'PlaceToContentNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: ContentNode;
+};
+
+/** Page Info on the &quot;PlaceToContentNodeConnection&quot; */
+export type PlaceToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
+  __typename?: 'PlaceToContentNodeConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PlaceToContentNodeConnection connection */
+export type PlaceToContentNodeConnectionWhereArgs = {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypesOfPlaceEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Place type and the place type */
+export type PlaceToParentPlaceConnectionEdge = Edge & OneToOneConnection & PlaceConnectionEdge & {
+  __typename?: 'PlaceToParentPlaceConnectionEdge';
+  /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The node of the connection, without the edges */
+  node: Place;
+};
+
+/** Connection between the Place type and the pdfItem type */
+export type PlaceToPdfItemConnection = Connection & PdfItemConnection & {
+  __typename?: 'PlaceToPdfItemConnection';
+  /** Edges for the PlaceToPdfItemConnection connection */
+  edges: Array<PlaceToPdfItemConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<PdfItem>;
+  /** Information about pagination in a connection. */
+  pageInfo: PlaceToPdfItemConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PlaceToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
+  __typename?: 'PlaceToPdfItemConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: PdfItem;
+};
+
+/** Page Info on the &quot;PlaceToPdfItemConnection&quot; */
+export type PlaceToPdfItemConnectionPageInfo = PageInfo & PdfItemConnectionPageInfo & WpPageInfo & {
+  __typename?: 'PlaceToPdfItemConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PlaceToPdfItemConnection connection */
+export type PlaceToPdfItemConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Place type and the place type */
+export type PlaceToPlaceConnection = Connection & PlaceConnection & {
+  __typename?: 'PlaceToPlaceConnection';
+  /** Edges for the PlaceToPlaceConnection connection */
+  edges: Array<PlaceToPlaceConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Place>;
+  /** Information about pagination in a connection. */
+  pageInfo: PlaceToPlaceConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PlaceToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
+  __typename?: 'PlaceToPlaceConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Place;
+};
+
+/** Page Info on the &quot;PlaceToPlaceConnection&quot; */
+export type PlaceToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
+  __typename?: 'PlaceToPlaceConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PlaceToPlaceConnection connection */
+export type PlaceToPlaceConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Connection between the Place type and the Taxonomy type */
+export type PlaceToTaxonomyConnectionEdge = Edge & OneToOneConnection & TaxonomyConnectionEdge & {
+  __typename?: 'PlaceToTaxonomyConnectionEdge';
+  /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The node of the connection, without the edges */
+  node: Taxonomy;
+};
+
+/** Connection between the Place type and the videoItem type */
+export type PlaceToVideoItemConnection = Connection & VideoItemConnection & {
+  __typename?: 'PlaceToVideoItemConnection';
+  /** Edges for the PlaceToVideoItemConnection connection */
+  edges: Array<PlaceToVideoItemConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<VideoItem>;
+  /** Information about pagination in a connection. */
+  pageInfo: PlaceToVideoItemConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type PlaceToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge & {
+  __typename?: 'PlaceToVideoItemConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: VideoItem;
+};
+
+/** Page Info on the &quot;PlaceToVideoItemConnection&quot; */
+export type PlaceToVideoItemConnectionPageInfo = PageInfo & VideoItemConnectionPageInfo & WpPageInfo & {
+  __typename?: 'PlaceToVideoItemConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the PlaceToVideoItemConnection connection */
+export type PlaceToVideoItemConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PlaceholderSettings = AcfOptionsPage & Node & WithAcfPlaceholderSettingsFields & {
@@ -8222,12 +9980,16 @@ export type RootMutation = {
   createPage?: Maybe<CreatePagePayload>;
   /** The createPdfItem mutation */
   createPdfItem?: Maybe<CreatePdfItemPayload>;
+  /** The createPlace mutation */
+  createPlace?: Maybe<CreatePlacePayload>;
   /** The createPost mutation */
   createPost?: Maybe<CreatePostPayload>;
   /** The createPostFormat mutation */
   createPostFormat?: Maybe<CreatePostFormatPayload>;
   /** The createTag mutation */
   createTag?: Maybe<CreateTagPayload>;
+  /** The createTopic mutation */
+  createTopic?: Maybe<CreateTopicPayload>;
   /** The createUser mutation */
   createUser?: Maybe<CreateUserPayload>;
   /** The createVideoItem mutation */
@@ -8250,12 +10012,16 @@ export type RootMutation = {
   deletePage?: Maybe<DeletePagePayload>;
   /** The deletePdfItem mutation */
   deletePdfItem?: Maybe<DeletePdfItemPayload>;
+  /** The deletePlace mutation */
+  deletePlace?: Maybe<DeletePlacePayload>;
   /** The deletePost mutation */
   deletePost?: Maybe<DeletePostPayload>;
   /** The deletePostFormat mutation */
   deletePostFormat?: Maybe<DeletePostFormatPayload>;
   /** The deleteTag mutation */
   deleteTag?: Maybe<DeleteTagPayload>;
+  /** The deleteTopic mutation */
+  deleteTopic?: Maybe<DeleteTopicPayload>;
   /** The deleteUser mutation */
   deleteUser?: Maybe<DeleteUserPayload>;
   /** The deleteVideoItem mutation */
@@ -8288,6 +10054,8 @@ export type RootMutation = {
   updatePage?: Maybe<UpdatePagePayload>;
   /** The updatePdfItem mutation */
   updatePdfItem?: Maybe<UpdatePdfItemPayload>;
+  /** The updatePlace mutation */
+  updatePlace?: Maybe<UpdatePlacePayload>;
   /** The updatePost mutation */
   updatePost?: Maybe<UpdatePostPayload>;
   /** The updatePostFormat mutation */
@@ -8296,6 +10064,8 @@ export type RootMutation = {
   updateSettings?: Maybe<UpdateSettingsPayload>;
   /** The updateTag mutation */
   updateTag?: Maybe<UpdateTagPayload>;
+  /** The updateTopic mutation */
+  updateTopic?: Maybe<UpdateTopicPayload>;
   /** The updateUser mutation */
   updateUser?: Maybe<UpdateUserPayload>;
   /** The updateVideoItem mutation */
@@ -8358,6 +10128,12 @@ export type RootMutationCreatePdfItemArgs = {
 
 
 /** The root mutation */
+export type RootMutationCreatePlaceArgs = {
+  input: CreatePlaceInput;
+};
+
+
+/** The root mutation */
 export type RootMutationCreatePostArgs = {
   input: CreatePostInput;
 };
@@ -8372,6 +10148,12 @@ export type RootMutationCreatePostFormatArgs = {
 /** The root mutation */
 export type RootMutationCreateTagArgs = {
   input: CreateTagInput;
+};
+
+
+/** The root mutation */
+export type RootMutationCreateTopicArgs = {
+  input: CreateTopicInput;
 };
 
 
@@ -8442,6 +10224,12 @@ export type RootMutationDeletePdfItemArgs = {
 
 
 /** The root mutation */
+export type RootMutationDeletePlaceArgs = {
+  input: DeletePlaceInput;
+};
+
+
+/** The root mutation */
 export type RootMutationDeletePostArgs = {
   input: DeletePostInput;
 };
@@ -8456,6 +10244,12 @@ export type RootMutationDeletePostFormatArgs = {
 /** The root mutation */
 export type RootMutationDeleteTagArgs = {
   input: DeleteTagInput;
+};
+
+
+/** The root mutation */
+export type RootMutationDeleteTopicArgs = {
+  input: DeleteTopicInput;
 };
 
 
@@ -8556,6 +10350,12 @@ export type RootMutationUpdatePdfItemArgs = {
 
 
 /** The root mutation */
+export type RootMutationUpdatePlaceArgs = {
+  input: UpdatePlaceInput;
+};
+
+
+/** The root mutation */
 export type RootMutationUpdatePostArgs = {
   input: UpdatePostInput;
 };
@@ -8576,6 +10376,12 @@ export type RootMutationUpdateSettingsArgs = {
 /** The root mutation */
 export type RootMutationUpdateTagArgs = {
   input: UpdateTagInput;
+};
+
+
+/** The root mutation */
+export type RootMutationUpdateTopicArgs = {
+  input: UpdateTopicInput;
 };
 
 
@@ -8693,7 +10499,11 @@ export type RootQuery = WithAcfOptionsPageGlobalSettings & WithAcfOptionsPagePla
   pdfItemBy?: Maybe<PdfItem>;
   /** Connection between the RootQuery type and the pdfItem type */
   pdfItems?: Maybe<RootQueryToPdfItemConnection>;
+  /** A 0bject */
+  place?: Maybe<Place>;
   placeholderSettings?: Maybe<PlaceholderSettings>;
+  /** Connection between the RootQuery type and the place type */
+  places?: Maybe<RootQueryToPlaceConnection>;
   /** A WordPress plugin */
   plugin?: Maybe<Plugin>;
   /** Connection between the RootQuery type and the Plugin type */
@@ -8735,6 +10545,10 @@ export type RootQuery = WithAcfOptionsPageGlobalSettings & WithAcfOptionsPagePla
   theme?: Maybe<Theme>;
   /** Connection between the RootQuery type and the Theme type */
   themes?: Maybe<RootQueryToThemeConnection>;
+  /** A 0bject */
+  topic?: Maybe<Topic>;
+  /** Connection between the RootQuery type and the topic type */
+  topics?: Maybe<RootQueryToTopicConnection>;
   /** Returns a user */
   user?: Maybe<User>;
   /** Returns a user role */
@@ -9067,6 +10881,23 @@ export type RootQueryPdfItemsArgs = {
 
 
 /** The root entry point into the Graph */
+export type RootQueryPlaceArgs = {
+  id: Scalars['ID']['input'];
+  idType?: InputMaybe<PlaceIdType>;
+};
+
+
+/** The root entry point into the Graph */
+export type RootQueryPlacesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<RootQueryToPlaceConnectionWhereArgs>;
+};
+
+
+/** The root entry point into the Graph */
 export type RootQueryPluginArgs = {
   id: Scalars['ID']['input'];
 };
@@ -9217,6 +11048,23 @@ export type RootQueryThemesArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The root entry point into the Graph */
+export type RootQueryTopicArgs = {
+  id: Scalars['ID']['input'];
+  idType?: InputMaybe<TopicIdType>;
+};
+
+
+/** The root entry point into the Graph */
+export type RootQueryTopicsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<RootQueryToTopicConnectionWhereArgs>;
 };
 
 
@@ -10223,6 +12071,85 @@ export type RootQueryToPdfItemConnectionWhereArgs = {
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Connection between the RootQuery type and the place type */
+export type RootQueryToPlaceConnection = Connection & PlaceConnection & {
+  __typename?: 'RootQueryToPlaceConnection';
+  /** Edges for the RootQueryToPlaceConnection connection */
+  edges: Array<RootQueryToPlaceConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Place>;
+  /** Information about pagination in a connection. */
+  pageInfo: RootQueryToPlaceConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type RootQueryToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
+  __typename?: 'RootQueryToPlaceConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Place;
+};
+
+/** Page Info on the &quot;RootQueryToPlaceConnection&quot; */
+export type RootQueryToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
+  __typename?: 'RootQueryToPlaceConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the RootQueryToPlaceConnection connection */
+export type RootQueryToPlaceConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** Connection between the RootQuery type and the Plugin type */
 export type RootQueryToPluginConnection = Connection & PluginConnection & {
   __typename?: 'RootQueryToPluginConnection';
@@ -10741,6 +12668,85 @@ export type RootQueryToThemeConnectionPageInfo = PageInfo & ThemeConnectionPageI
   hasPreviousPage: Scalars['Boolean']['output'];
   /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Connection between the RootQuery type and the topic type */
+export type RootQueryToTopicConnection = Connection & TopicConnection & {
+  __typename?: 'RootQueryToTopicConnection';
+  /** Edges for the RootQueryToTopicConnection connection */
+  edges: Array<RootQueryToTopicConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Topic>;
+  /** Information about pagination in a connection. */
+  pageInfo: RootQueryToTopicConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type RootQueryToTopicConnectionEdge = Edge & TopicConnectionEdge & {
+  __typename?: 'RootQueryToTopicConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Topic;
+};
+
+/** Page Info on the &quot;RootQueryToTopicConnection&quot; */
+export type RootQueryToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
+  __typename?: 'RootQueryToTopicConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the RootQueryToTopicConnection connection */
+export type RootQueryToTopicConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Connection between the RootQuery type and the User type */
@@ -11399,10 +13405,14 @@ export type TaxonomyConnectionPageInfo = {
 export type TaxonomyEnum =
   /** Taxonomy enum category */
   | 'CATEGORY'
+  /** Taxonomy enum place */
+  | 'PLACE'
   /** Taxonomy enum post_format */
   | 'POSTFORMAT'
   /** Taxonomy enum post_tag */
-  | 'TAG';
+  | 'TAG'
+  /** Taxonomy enum topic */
+  | 'TOPIC';
 
 /** The Type of Identifier used to fetch a single Taxonomy node. To be used along with the "id" field. Default is "ID". */
 export type TaxonomyIdTypeEnum =
@@ -11720,6 +13730,693 @@ export type ThemeConnectionPageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** The topic type */
+export type Topic = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
+  __typename?: 'Topic';
+  /** The ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
+  ancestors?: Maybe<TopicToAncestorsTopicConnection>;
+  /** Connection between the Topic type and the article type */
+  articles?: Maybe<TopicToArticleConnection>;
+  /** Connection between the Topic type and the audioItem type */
+  audioItems?: Maybe<TopicToAudioItemConnection>;
+  /** Connection between the topic type and its children topics. */
+  children?: Maybe<TopicToTopicConnection>;
+  /** Connection between the Topic type and the ContentNode type */
+  contentNodes?: Maybe<TopicToContentNodeConnection>;
+  /** The number of objects connected to the object */
+  count?: Maybe<Scalars['Int']['output']>;
+  /** The unique identifier stored in the database */
+  databaseId: Scalars['Int']['output'];
+  /** The description of the object */
+  description?: Maybe<Scalars['String']['output']>;
+  /** Connection between the TermNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
+  /** Connection between the TermNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
+  /** The globally unique ID for the object */
+  id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
+  /** Whether the object is restricted from the current viewer */
+  isRestricted?: Maybe<Scalars['Boolean']['output']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean']['output'];
+  /** The link to the term */
+  link?: Maybe<Scalars['String']['output']>;
+  /** The human friendly name of the object. */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Connection between the topic type and its parent topic. */
+  parent?: Maybe<TopicToParentTopicConnectionEdge>;
+  /** Database id of the parent node */
+  parentDatabaseId?: Maybe<Scalars['Int']['output']>;
+  /** The globally unique identifier of the parent node. */
+  parentId?: Maybe<Scalars['ID']['output']>;
+  /** Connection between the Topic type and the pdfItem type */
+  pdfItems?: Maybe<TopicToPdfItemConnection>;
+  /** An alphanumeric identifier for the object unique to its type. */
+  slug?: Maybe<Scalars['String']['output']>;
+  /** Connection between the Topic type and the Taxonomy type */
+  taxonomy?: Maybe<TopicToTaxonomyConnectionEdge>;
+  /** The name of the taxonomy that the object is associated with */
+  taxonomyName?: Maybe<Scalars['String']['output']>;
+  /** The ID of the term group that this term object belongs to */
+  termGroupId?: Maybe<Scalars['Int']['output']>;
+  /** The taxonomy ID that the object is associated with */
+  termTaxonomyId?: Maybe<Scalars['Int']['output']>;
+  /**
+   * The id field matches the WP_Post-&gt;ID field.
+   * @deprecated Deprecated in favor of databaseId
+   */
+  topicId?: Maybe<Scalars['Int']['output']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']['output']>;
+  /** Connection between the Topic type and the videoItem type */
+  videoItem?: Maybe<TopicToVideoItemConnection>;
+};
+
+
+/** The topic type */
+export type TopicAncestorsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The topic type */
+export type TopicArticlesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TopicToArticleConnectionWhereArgs>;
+};
+
+
+/** The topic type */
+export type TopicAudioItemsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TopicToAudioItemConnectionWhereArgs>;
+};
+
+
+/** The topic type */
+export type TopicChildrenArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TopicToTopicConnectionWhereArgs>;
+};
+
+
+/** The topic type */
+export type TopicContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TopicToContentNodeConnectionWhereArgs>;
+};
+
+
+/** The topic type */
+export type TopicEnqueuedScriptsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The topic type */
+export type TopicEnqueuedStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The topic type */
+export type TopicPdfItemsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TopicToPdfItemConnectionWhereArgs>;
+};
+
+
+/** The topic type */
+export type TopicVideoItemArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TopicToVideoItemConnectionWhereArgs>;
+};
+
+/** Connection to topic Nodes */
+export type TopicConnection = {
+  /** A list of edges (relational context) between RootQuery and connected topic Nodes */
+  edges: Array<TopicConnectionEdge>;
+  /** A list of connected topic Nodes */
+  nodes: Array<Topic>;
+  /** Information about pagination in a connection. */
+  pageInfo: TopicConnectionPageInfo;
+};
+
+/** Edge between a Node and a connected topic */
+export type TopicConnectionEdge = {
+  /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The connected topic Node */
+  node: Topic;
+};
+
+/** Page Info on the connected TopicConnectionEdge */
+export type TopicConnectionPageInfo = {
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export type TopicIdType =
+  /** The Database ID for the node */
+  | 'DATABASE_ID'
+  /** The hashed Global ID */
+  | 'ID'
+  /** The name of the node */
+  | 'NAME'
+  /** Url friendly name of the node */
+  | 'SLUG'
+  /** The URI for the node */
+  | 'URI';
+
+/** Connection between the Topic type and the topic type */
+export type TopicToAncestorsTopicConnection = Connection & TopicConnection & {
+  __typename?: 'TopicToAncestorsTopicConnection';
+  /** Edges for the TopicToAncestorsTopicConnection connection */
+  edges: Array<TopicToAncestorsTopicConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Topic>;
+  /** Information about pagination in a connection. */
+  pageInfo: TopicToAncestorsTopicConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type TopicToAncestorsTopicConnectionEdge = Edge & TopicConnectionEdge & {
+  __typename?: 'TopicToAncestorsTopicConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Topic;
+};
+
+/** Page Info on the &quot;TopicToAncestorsTopicConnection&quot; */
+export type TopicToAncestorsTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
+  __typename?: 'TopicToAncestorsTopicConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Connection between the Topic type and the article type */
+export type TopicToArticleConnection = ArticleConnection & Connection & {
+  __typename?: 'TopicToArticleConnection';
+  /** Edges for the TopicToArticleConnection connection */
+  edges: Array<TopicToArticleConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Article>;
+  /** Information about pagination in a connection. */
+  pageInfo: TopicToArticleConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type TopicToArticleConnectionEdge = ArticleConnectionEdge & Edge & {
+  __typename?: 'TopicToArticleConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Article;
+};
+
+/** Page Info on the &quot;TopicToArticleConnection&quot; */
+export type TopicToArticleConnectionPageInfo = ArticleConnectionPageInfo & PageInfo & WpPageInfo & {
+  __typename?: 'TopicToArticleConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the TopicToArticleConnection connection */
+export type TopicToArticleConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Topic type and the audioItem type */
+export type TopicToAudioItemConnection = AudioItemConnection & Connection & {
+  __typename?: 'TopicToAudioItemConnection';
+  /** Edges for the TopicToAudioItemConnection connection */
+  edges: Array<TopicToAudioItemConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<AudioItem>;
+  /** Information about pagination in a connection. */
+  pageInfo: TopicToAudioItemConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type TopicToAudioItemConnectionEdge = AudioItemConnectionEdge & Edge & {
+  __typename?: 'TopicToAudioItemConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: AudioItem;
+};
+
+/** Page Info on the &quot;TopicToAudioItemConnection&quot; */
+export type TopicToAudioItemConnectionPageInfo = AudioItemConnectionPageInfo & PageInfo & WpPageInfo & {
+  __typename?: 'TopicToAudioItemConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the TopicToAudioItemConnection connection */
+export type TopicToAudioItemConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Topic type and the ContentNode type */
+export type TopicToContentNodeConnection = Connection & ContentNodeConnection & {
+  __typename?: 'TopicToContentNodeConnection';
+  /** Edges for the TopicToContentNodeConnection connection */
+  edges: Array<TopicToContentNodeConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<ContentNode>;
+  /** Information about pagination in a connection. */
+  pageInfo: TopicToContentNodeConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type TopicToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
+  __typename?: 'TopicToContentNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: ContentNode;
+};
+
+/** Page Info on the &quot;TopicToContentNodeConnection&quot; */
+export type TopicToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
+  __typename?: 'TopicToContentNodeConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the TopicToContentNodeConnection connection */
+export type TopicToContentNodeConnectionWhereArgs = {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypesOfTopicEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Topic type and the topic type */
+export type TopicToParentTopicConnectionEdge = Edge & OneToOneConnection & TopicConnectionEdge & {
+  __typename?: 'TopicToParentTopicConnectionEdge';
+  /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The node of the connection, without the edges */
+  node: Topic;
+};
+
+/** Connection between the Topic type and the pdfItem type */
+export type TopicToPdfItemConnection = Connection & PdfItemConnection & {
+  __typename?: 'TopicToPdfItemConnection';
+  /** Edges for the TopicToPdfItemConnection connection */
+  edges: Array<TopicToPdfItemConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<PdfItem>;
+  /** Information about pagination in a connection. */
+  pageInfo: TopicToPdfItemConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type TopicToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
+  __typename?: 'TopicToPdfItemConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: PdfItem;
+};
+
+/** Page Info on the &quot;TopicToPdfItemConnection&quot; */
+export type TopicToPdfItemConnectionPageInfo = PageInfo & PdfItemConnectionPageInfo & WpPageInfo & {
+  __typename?: 'TopicToPdfItemConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the TopicToPdfItemConnection connection */
+export type TopicToPdfItemConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Connection between the Topic type and the Taxonomy type */
+export type TopicToTaxonomyConnectionEdge = Edge & OneToOneConnection & TaxonomyConnectionEdge & {
+  __typename?: 'TopicToTaxonomyConnectionEdge';
+  /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The node of the connection, without the edges */
+  node: Taxonomy;
+};
+
+/** Connection between the Topic type and the topic type */
+export type TopicToTopicConnection = Connection & TopicConnection & {
+  __typename?: 'TopicToTopicConnection';
+  /** Edges for the TopicToTopicConnection connection */
+  edges: Array<TopicToTopicConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Topic>;
+  /** Information about pagination in a connection. */
+  pageInfo: TopicToTopicConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type TopicToTopicConnectionEdge = Edge & TopicConnectionEdge & {
+  __typename?: 'TopicToTopicConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Topic;
+};
+
+/** Page Info on the &quot;TopicToTopicConnection&quot; */
+export type TopicToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
+  __typename?: 'TopicToTopicConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the TopicToTopicConnection connection */
+export type TopicToTopicConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Connection between the Topic type and the videoItem type */
+export type TopicToVideoItemConnection = Connection & VideoItemConnection & {
+  __typename?: 'TopicToVideoItemConnection';
+  /** Edges for the TopicToVideoItemConnection connection */
+  edges: Array<TopicToVideoItemConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<VideoItem>;
+  /** Information about pagination in a connection. */
+  pageInfo: TopicToVideoItemConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type TopicToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge & {
+  __typename?: 'TopicToVideoItemConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: VideoItem;
+};
+
+/** Page Info on the &quot;TopicToVideoItemConnection&quot; */
+export type TopicToVideoItemConnectionPageInfo = PageInfo & VideoItemConnectionPageInfo & WpPageInfo & {
+  __typename?: 'TopicToVideoItemConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the TopicToVideoItemConnection connection */
+export type TopicToVideoItemConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']['input']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** What parameter to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']['input']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** Any node that has a URI */
 export type UniformResourceIdentifiable = {
   /** The globally unique ID for the object */
@@ -11756,12 +14453,16 @@ export type UpdateArticleInput = {
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the article and places */
+  places?: InputMaybe<ArticlePlacesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']['input']>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the article and topics */
+  topics?: InputMaybe<ArticleTopicsInput>;
 };
 
 /** The payload for the updateArticle mutation. */
@@ -11789,12 +14490,16 @@ export type UpdateAudioItemInput = {
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the audioItem and places */
+  places?: InputMaybe<AudioItemPlacesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']['input']>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the audioItem and topics */
+  topics?: InputMaybe<AudioItemTopicsInput>;
 };
 
 /** The payload for the updateAudioItem mutation. */
@@ -12036,12 +14741,16 @@ export type UpdatePdfItemInput = {
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the pdfItem and places */
+  places?: InputMaybe<PdfItemPlacesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']['input']>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the pdfItem and topics */
+  topics?: InputMaybe<PdfItemTopicsInput>;
 };
 
 /** The payload for the updatePdfItem mutation. */
@@ -12051,6 +14760,33 @@ export type UpdatePdfItemPayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
   pdfItem?: Maybe<PdfItem>;
+};
+
+/** Input for the updatePlace mutation. */
+export type UpdatePlaceInput = {
+  /** The slug that the place will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']['input']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The description of the place object */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the place object to update */
+  id: Scalars['ID']['input'];
+  /** The name of the place object to mutate */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the place that should be set as the parent */
+  parentId?: InputMaybe<Scalars['ID']['input']>;
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The payload for the updatePlace mutation. */
+export type UpdatePlacePayload = {
+  __typename?: 'UpdatePlacePayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The created place */
+  place?: Maybe<Place>;
 };
 
 /** Input for the updatePostFormat mutation. */
@@ -12213,6 +14949,33 @@ export type UpdateTagPayload = {
   tag?: Maybe<Tag>;
 };
 
+/** Input for the updateTopic mutation. */
+export type UpdateTopicInput = {
+  /** The slug that the topic will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']['input']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The description of the topic object */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the topic object to update */
+  id: Scalars['ID']['input'];
+  /** The name of the topic object to mutate */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the topic that should be set as the parent */
+  parentId?: InputMaybe<Scalars['ID']['input']>;
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The payload for the updateTopic mutation. */
+export type UpdateTopicPayload = {
+  __typename?: 'UpdateTopicPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The created topic */
+  topic?: Maybe<Topic>;
+};
+
 /** Input for the updateUser mutation. */
 export type UpdateUserInput = {
   /** User's AOL IM account. */
@@ -12276,12 +15039,16 @@ export type UpdateVideoItemInput = {
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the videoItem and places */
+  places?: InputMaybe<VideoItemPlacesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']['input']>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
+  /** Set connections between the videoItem and topics */
+  topics?: InputMaybe<VideoItemTopicsInput>;
 };
 
 /** The payload for the updateVideoItem mutation. */
@@ -13186,6 +15953,8 @@ export type VideoItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & No
   parent?: Maybe<VideoItemToParentConnectionEdge>;
   /** The password for the video-item object. */
   password?: Maybe<Scalars['String']['output']>;
+  /** Connection between the VideoItem type and the place type */
+  places?: Maybe<VideoItemToPlaceConnection>;
   /** Connection between the VideoItem type and the videoItem type */
   preview?: Maybe<VideoItemToPreviewConnectionEdge>;
   /** The database id of the preview node */
@@ -13198,8 +15967,12 @@ export type VideoItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & No
   status?: Maybe<Scalars['String']['output']>;
   /** The template assigned to the node */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the VideoItem type and the TermNode type */
+  terms?: Maybe<VideoItemToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
+  /** Connection between the VideoItem type and the topic type */
+  topics?: Maybe<VideoItemToTopicConnection>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
   /**
@@ -13238,8 +16011,38 @@ export type VideoItemEnqueuedStylesheetsArgs = {
 
 
 /** The videoItem type */
+export type VideoItemPlacesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<VideoItemToPlaceConnectionWhereArgs>;
+};
+
+
+/** The videoItem type */
+export type VideoItemTermsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<VideoItemToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The videoItem type */
 export type VideoItemTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The videoItem type */
+export type VideoItemTopicsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<VideoItemToTopicConnectionWhereArgs>;
 };
 
 /** Connection to videoItem Nodes */
@@ -13283,6 +16086,26 @@ export type VideoItemIdType =
   /** Identify a resource by the URI. */
   | 'URI';
 
+/** Set relationships between the videoItem to places */
+export type VideoItemPlacesInput = {
+  /** If true, this will append the place to existing related places. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<VideoItemPlacesNodeInput>>>;
+};
+
+/** List of places to connect the videoItem to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type VideoItemPlacesNodeInput = {
+  /** The description of the place. This field is used to set a description of the place if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the place. If present, this will be used to connect to the videoItem. If no existing place exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** The name of the place. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The slug of the place. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** Connection between the VideoItem type and the videoItem type */
 export type VideoItemToParentConnectionEdge = Edge & OneToOneConnection & VideoItemConnectionEdge & {
   __typename?: 'VideoItemToParentConnectionEdge';
@@ -13295,6 +16118,85 @@ export type VideoItemToParentConnectionEdge = Edge & OneToOneConnection & VideoI
   node: VideoItem;
 };
 
+/** Connection between the VideoItem type and the place type */
+export type VideoItemToPlaceConnection = Connection & PlaceConnection & {
+  __typename?: 'VideoItemToPlaceConnection';
+  /** Edges for the VideoItemToPlaceConnection connection */
+  edges: Array<VideoItemToPlaceConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Place>;
+  /** Information about pagination in a connection. */
+  pageInfo: VideoItemToPlaceConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type VideoItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
+  __typename?: 'VideoItemToPlaceConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Place;
+};
+
+/** Page Info on the &quot;VideoItemToPlaceConnection&quot; */
+export type VideoItemToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
+  __typename?: 'VideoItemToPlaceConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the VideoItemToPlaceConnection connection */
+export type VideoItemToPlaceConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** Connection between the VideoItem type and the videoItem type */
 export type VideoItemToPreviewConnectionEdge = Edge & OneToOneConnection & VideoItemConnectionEdge & {
   __typename?: 'VideoItemToPreviewConnectionEdge';
@@ -13302,6 +16204,166 @@ export type VideoItemToPreviewConnectionEdge = Edge & OneToOneConnection & Video
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
   node: VideoItem;
+};
+
+/** Connection between the VideoItem type and the TermNode type */
+export type VideoItemToTermNodeConnection = Connection & TermNodeConnection & {
+  __typename?: 'VideoItemToTermNodeConnection';
+  /** Edges for the VideoItemToTermNodeConnection connection */
+  edges: Array<VideoItemToTermNodeConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<TermNode>;
+  /** Information about pagination in a connection. */
+  pageInfo: VideoItemToTermNodeConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type VideoItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
+  __typename?: 'VideoItemToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: TermNode;
+};
+
+/** Page Info on the &quot;VideoItemToTermNodeConnection&quot; */
+export type VideoItemToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
+  __typename?: 'VideoItemToTermNodeConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the VideoItemToTermNodeConnection connection */
+export type VideoItemToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Connection between the VideoItem type and the topic type */
+export type VideoItemToTopicConnection = Connection & TopicConnection & {
+  __typename?: 'VideoItemToTopicConnection';
+  /** Edges for the VideoItemToTopicConnection connection */
+  edges: Array<VideoItemToTopicConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<Topic>;
+  /** Information about pagination in a connection. */
+  pageInfo: VideoItemToTopicConnectionPageInfo;
+};
+
+/** An edge in a connection */
+export type VideoItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
+  __typename?: 'VideoItemToTopicConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']['output']>;
+  /** The item at the end of the edge */
+  node: Topic;
+};
+
+/** Page Info on the &quot;VideoItemToTopicConnection&quot; */
+export type VideoItemToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
+  __typename?: 'VideoItemToTopicConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Arguments for filtering the VideoItemToTopicConnection connection */
+export type VideoItemToTopicConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']['input']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']['input']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']['input']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']['input']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']['input']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Connection between the VideoItem type and the videoItem type */
@@ -13341,6 +16403,26 @@ export type VideoItemToVideoItemConnectionPageInfo = PageInfo & VideoItemConnect
   hasPreviousPage: Scalars['Boolean']['output'];
   /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Set relationships between the videoItem to topics */
+export type VideoItemTopicsInput = {
+  /** If true, this will append the topic to existing related topics. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<VideoItemTopicsNodeInput>>>;
+};
+
+/** List of topics to connect the videoItem to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type VideoItemTopicsNodeInput = {
+  /** The description of the topic. This field is used to set a description of the topic if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the topic. If present, this will be used to connect to the videoItem. If no existing topic exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']['input']>;
+  /** The name of the topic. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The slug of the topic. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Information about pagination in a connection. */
@@ -13428,7 +16510,23 @@ export type BookByUriQuery = { __typename?: 'RootQuery', bookBy?: { __typename?:
         & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
       ) } | null } | null };
 
+export type FragmentAudioItemFragment = { __typename?: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { __typename?: 'AudioItemDetails', articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null } & { ' $fragmentName'?: 'FragmentAudioItemFragment' };
+
 export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } & { ' $fragmentName'?: 'FragmentFeaturedImageFragment' };
+
+export type FragmentPdfItemFragment = { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null } & { ' $fragmentName'?: 'FragmentPdfItemFragment' };
+
+type FragmentTerms_Category_Fragment = { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } & { ' $fragmentName'?: 'FragmentTerms_Category_Fragment' };
+
+type FragmentTerms_Place_Fragment = { __typename?: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } & { ' $fragmentName'?: 'FragmentTerms_Place_Fragment' };
+
+type FragmentTerms_PostFormat_Fragment = { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } & { ' $fragmentName'?: 'FragmentTerms_PostFormat_Fragment' };
+
+type FragmentTerms_Tag_Fragment = { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } & { ' $fragmentName'?: 'FragmentTerms_Tag_Fragment' };
+
+type FragmentTerms_Topic_Fragment = { __typename?: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } & { ' $fragmentName'?: 'FragmentTerms_Topic_Fragment' };
+
+export type FragmentTermsFragment = FragmentTerms_Category_Fragment | FragmentTerms_Place_Fragment | FragmentTerms_PostFormat_Fragment | FragmentTerms_Tag_Fragment | FragmentTerms_Topic_Fragment;
 
 export type GetArticleByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -13445,10 +16543,31 @@ export type GetArticleByUriQueryVariables = Exact<{
 }>;
 
 
-export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'Book', bookId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'MediaItem', altText?: string | null, authorDatabaseId?: number | null, authorId?: string | null, caption?: string | null, commentCount?: number | null, commentStatus?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, description?: string | null, desiredSlug?: string | null, enclosure?: string | null, fileSize?: number | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'Page' } | { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, password?: string | null, pdfItemId: number, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, sizes?: string | null, uri?: string | null, title?: string | null, mediaDetails?: { __typename?: 'MediaDetails', file?: string | null, height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null, contentType?: { __typename?: 'ContentNodeToContentTypeConnectionEdge', node: { __typename?: 'ContentType', canExport?: boolean | null, deleteWithUser?: boolean | null, description?: string | null, excludeFromSearch?: boolean | null, graphqlPluralName?: string | null, graphqlSingleName?: string | null, hasArchive?: boolean | null, hierarchical?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isRestricted?: boolean | null, isTermNode: boolean, label?: string | null, menuIcon?: string | null, menuPosition?: number | null, name?: string | null, public?: boolean | null, publiclyQueryable?: boolean | null, restBase?: string | null, restControllerClass?: string | null, showInAdminBar?: boolean | null, showInGraphql?: boolean | null, showInMenu?: boolean | null, showInNavMenus?: boolean | null, showInRest?: boolean | null, showUi?: boolean | null, uri?: string | null } } | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, hasPassword?: boolean | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem', uri?: string | null, slug?: string | null } | { __typename?: 'Book', uri?: string | null, slug?: string | null } | { __typename?: 'JournalIssue', uri?: string | null, slug?: string | null } | { __typename?: 'MediaItem', uri?: string | null, slug?: string | null } | { __typename?: 'Page', uri?: string | null, slug?: string | null } | { __typename?: 'PdfItem', uri?: string | null, slug?: string | null } | { __typename?: 'Post', uri?: string | null, slug?: string | null } | { __typename?: 'VideoItem', uri?: string | null, slug?: string | null }> } | null } | null } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | (
+          { __typename?: 'PdfItem' }
+          & { ' $fragmentRefs'?: { 'FragmentPdfItemFragment': FragmentPdfItemFragment } }
+        ) | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null, relatedAudio?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article' } | (
+          { __typename?: 'AudioItem' }
+          & { ' $fragmentRefs'?: { 'FragmentAudioItemFragment': FragmentAudioItemFragment } }
+        ) | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
         { __typename?: 'MediaItem' }
         & { ' $fragmentRefs'?: { 'FragmentFeaturedImageFragment': FragmentFeaturedImageFragment } }
-      ) } | null } | null };
+      ) } | null, terms?: { __typename?: 'ArticleToTermNodeConnection', nodes: Array<(
+        { __typename?: 'Category' }
+        & { ' $fragmentRefs'?: { 'FragmentTerms_Category_Fragment': FragmentTerms_Category_Fragment } }
+      ) | (
+        { __typename?: 'Place' }
+        & { ' $fragmentRefs'?: { 'FragmentTerms_Place_Fragment': FragmentTerms_Place_Fragment } }
+      ) | (
+        { __typename?: 'PostFormat' }
+        & { ' $fragmentRefs'?: { 'FragmentTerms_PostFormat_Fragment': FragmentTerms_PostFormat_Fragment } }
+      ) | (
+        { __typename?: 'Tag' }
+        & { ' $fragmentRefs'?: { 'FragmentTerms_Tag_Fragment': FragmentTerms_Tag_Fragment } }
+      ) | (
+        { __typename?: 'Topic' }
+        & { ' $fragmentRefs'?: { 'FragmentTerms_Topic_Fragment': FragmentTerms_Topic_Fragment } }
+      )> } | null } | null };
 
 export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -13505,10 +16624,13 @@ export type GetPlaceholderSettingsQueryVariables = Exact<{ [key: string]: never;
 
 export type GetPlaceholderSettingsQuery = { __typename?: 'RootQuery', placeholderSettings?: { __typename?: 'PlaceholderSettings', placeholderSettingsFields?: { __typename?: 'PlaceholderSettingsFields', placeholderSetup: Array<{ __typename?: 'PlaceholderSettingsFieldsPlaceholderSetup', contentSelector: Array<string | null>, placeholderSelector: Array<string | null>, textContentGroup: { __typename?: 'PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup', freeTextHeading?: string | null, textContent?: string | null, freeTextImage?: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, contentTypeName: string, databaseId: number, description?: string | null, guid?: string | null, id: string, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, uri?: string | null, dateGmt?: string | null } } | null, freeTextLink?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'AudioItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Book', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'MediaItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Page', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Post', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null }> } | null } } | null> } | null } | null };
 
+export const FragmentAudioItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentAudioItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AudioItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"audioItemId"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"audioItemDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articlePageCaption"}},{"kind":"Field","name":{"kind":"Name","value":"audioEmbedCode"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"landingPageDescription"}}]}}]}}]} as unknown as DocumentNode<FragmentAudioItemFragment, unknown>;
 export const FragmentFeaturedImageFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"thumbhash"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}}]} as unknown as DocumentNode<FragmentFeaturedImageFragment, unknown>;
+export const FragmentPdfItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentPdfItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PdfItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"pdfItemId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"pdfItemDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"pdfFile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fileSize"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"size"},"value":{"kind":"NullValue"}}]},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaType"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"relatedArticle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<FragmentPdfItemFragment, unknown>;
+export const FragmentTermsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentTerms"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"TermNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"taxonomyName"}},{"kind":"Field","name":{"kind":"Name","value":"termTaxonomyId"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]} as unknown as DocumentNode<FragmentTermsFragment, unknown>;
 export const BookByUriDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"BookByUri"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uri"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookBy"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"uri"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uri"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayOnIbtBooks"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"summary"}},{"kind":"Field","name":{"kind":"Name","value":"subheading"}},{"kind":"Field","name":{"kind":"Name","value":"relatedArticles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"thumbhash"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}}]} as unknown as DocumentNode<BookByUriQuery, BookByUriQueryVariables>;
 export const GetArticleByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetArticleById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"article"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"idType"},"value":{"kind":"EnumValue","value":"DATABASE_ID"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"thumbhash"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}}]} as unknown as DocumentNode<GetArticleByIdQuery, GetArticleByIdQueryVariables>;
-export const GetArticleByUriDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetArticleByUri"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uri"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"article"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uri"}}},{"kind":"Argument","name":{"kind":"Name","value":"idType"},"value":{"kind":"EnumValue","value":"URI"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"relatedPdf"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PdfItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"pdfItemId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"pdfItemDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"pdfFile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fileSize"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"size"},"value":{"kind":"NullValue"}}]},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"canExport"}},{"kind":"Field","name":{"kind":"Name","value":"deleteWithUser"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"excludeFromSearch"}},{"kind":"Field","name":{"kind":"Name","value":"graphqlPluralName"}},{"kind":"Field","name":{"kind":"Name","value":"graphqlSingleName"}},{"kind":"Field","name":{"kind":"Name","value":"hasArchive"}},{"kind":"Field","name":{"kind":"Name","value":"hierarchical"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"menuIcon"}},{"kind":"Field","name":{"kind":"Name","value":"menuPosition"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"public"}},{"kind":"Field","name":{"kind":"Name","value":"publiclyQueryable"}},{"kind":"Field","name":{"kind":"Name","value":"restBase"}},{"kind":"Field","name":{"kind":"Name","value":"restControllerClass"}},{"kind":"Field","name":{"kind":"Name","value":"showInAdminBar"}},{"kind":"Field","name":{"kind":"Name","value":"showInGraphql"}},{"kind":"Field","name":{"kind":"Name","value":"showInMenu"}},{"kind":"Field","name":{"kind":"Name","value":"showInNavMenus"}},{"kind":"Field","name":{"kind":"Name","value":"showInRest"}},{"kind":"Field","name":{"kind":"Name","value":"showUi"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaType"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"relatedArticle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"JournalIssue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"journalIssueId"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AudioItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"audioItemId"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"authorDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"caption"}},{"kind":"Field","name":{"kind":"Name","value":"commentCount"}},{"kind":"Field","name":{"kind":"Name","value":"commentStatus"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaType"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Book"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookId"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"desiredSlug"}},{"kind":"Field","name":{"kind":"Name","value":"enclosure"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"hasPassword"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"thumbhash"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}}]} as unknown as DocumentNode<GetArticleByUriQuery, GetArticleByUriQueryVariables>;
+export const GetArticleByUriDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetArticleByUri"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uri"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"article"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uri"}}},{"kind":"Argument","name":{"kind":"Name","value":"idType"},"value":{"kind":"EnumValue","value":"URI"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"relatedPdf"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PdfItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentPdfItem"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"relatedAudio"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AudioItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentAudioItem"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"terms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentTerms"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentPdfItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PdfItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"pdfItemId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"pdfItemDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"pdfFile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fileSize"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"size"},"value":{"kind":"NullValue"}}]},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaType"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"relatedArticle"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articleId"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentAudioItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AudioItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"audioItemId"}},{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"audioItemDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articlePageCaption"}},{"kind":"Field","name":{"kind":"Name","value":"audioEmbedCode"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"landingPageDescription"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"thumbhash"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentTerms"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"TermNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"taxonomyName"}},{"kind":"Field","name":{"kind":"Name","value":"termTaxonomyId"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}}]}}]} as unknown as DocumentNode<GetArticleByUriQuery, GetArticleByUriQueryVariables>;
 export const GetBooksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isComment"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"isFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPostsPage"}},{"kind":"Field","name":{"kind":"Name","value":"isPreview"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"isTermNode"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"modified"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedGmt"}},{"kind":"Field","name":{"kind":"Name","value":"parentDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"previewRevisionId"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"bookDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayOnIbtBooks"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"subheading"}},{"kind":"Field","name":{"kind":"Name","value":"summary"}},{"kind":"Field","name":{"kind":"Name","value":"relatedArticles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Article"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"thumbhash"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}}]} as unknown as DocumentNode<GetBooksQuery, GetBooksQueryVariables>;
 export const GetArticlesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetArticles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"articles"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"50"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"orderby"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"field"},"value":{"kind":"EnumValue","value":"META_VALUE_NUM"}},{"kind":"ObjectField","name":{"kind":"Name","value":"order"},"value":{"kind":"EnumValue","value":"DESC"}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"metaKey"},"value":{"kind":"StringValue","value":"publication_date","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"metaQuery"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"StringValue","value":"display_on_front_page","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"compare"},"value":{"kind":"StringValue","value":"=","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"value"},"value":{"kind":"StringValue","value":"1","block":false}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"articleDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayDate"}},{"kind":"Field","name":{"kind":"Name","value":"displayOnFrontPage"}},{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"publicationDate"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"suppressDate"}},{"kind":"Field","name":{"kind":"Name","value":"tableOfContentsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"relatedJournal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"JournalIssue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contentTypeName"}},{"kind":"Field","name":{"kind":"Name","value":"databaseId"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"dateGmt"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageDatabaseId"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImageId"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isContentNode"}},{"kind":"Field","name":{"kind":"Name","value":"journalIssueId"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"uri"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"thumbhash"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}}]} as unknown as DocumentNode<GetArticlesQuery, GetArticlesQueryVariables>;
 export const GetGlobalSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGlobalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"globalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fGGlobalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bannerImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FragmentFeaturedImage"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"notificationBar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldGroupName"}},{"kind":"Field","name":{"kind":"Name","value":"notificationMessage"}},{"kind":"Field","name":{"kind":"Name","value":"notificationOnoff"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImageTwitter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImageTwitterSquare"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FragmentFeaturedImage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MediaItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"altText"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemId"}},{"kind":"Field","name":{"kind":"Name","value":"mediaItemUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"guid"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"srcSet"}},{"kind":"Field","name":{"kind":"Name","value":"thumbhash"}},{"kind":"Field","name":{"kind":"Name","value":"mediaDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"}},{"kind":"Field","name":{"kind":"Name","value":"fileSize"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"width"}}]}}]}}]}}]} as unknown as DocumentNode<GetGlobalSettingsQuery, GetGlobalSettingsQueryVariables>;

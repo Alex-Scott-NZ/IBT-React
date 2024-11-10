@@ -1,0 +1,12 @@
+fragment FragmentTerms on TermNode {
+    count
+    databaseId
+    description
+    id
+    isTermNode
+    name
+    slug
+    taxonomyName
+    termTaxonomyId
+    uri
+}

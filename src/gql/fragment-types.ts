@@ -87,27 +87,39 @@
       "PlaceholderSettings"
     ],
     "ArticleConnection": [
-      "RootQueryToArticleConnection"
+      "PlaceToArticleConnection",
+      "RootQueryToArticleConnection",
+      "TopicToArticleConnection"
     ],
     "ArticleConnectionEdge": [
       "ArticleToPreviewConnectionEdge",
-      "RootQueryToArticleConnectionEdge"
+      "PlaceToArticleConnectionEdge",
+      "RootQueryToArticleConnectionEdge",
+      "TopicToArticleConnectionEdge"
     ],
     "ArticleConnectionPageInfo": [
-      "RootQueryToArticleConnectionPageInfo"
+      "PlaceToArticleConnectionPageInfo",
+      "RootQueryToArticleConnectionPageInfo",
+      "TopicToArticleConnectionPageInfo"
     ],
     "ArticleDetails_Fields": [
       "ArticleDetails"
     ],
     "AudioItemConnection": [
-      "RootQueryToAudioItemConnection"
+      "PlaceToAudioItemConnection",
+      "RootQueryToAudioItemConnection",
+      "TopicToAudioItemConnection"
     ],
     "AudioItemConnectionEdge": [
       "AudioItemToPreviewConnectionEdge",
-      "RootQueryToAudioItemConnectionEdge"
+      "PlaceToAudioItemConnectionEdge",
+      "RootQueryToAudioItemConnectionEdge",
+      "TopicToAudioItemConnectionEdge"
     ],
     "AudioItemConnectionPageInfo": [
-      "RootQueryToAudioItemConnectionPageInfo"
+      "PlaceToAudioItemConnectionPageInfo",
+      "RootQueryToAudioItemConnectionPageInfo",
+      "TopicToAudioItemConnectionPageInfo"
     ],
     "AudioItemDetails_Fields": [
       "AudioItemDetails"
@@ -178,6 +190,12 @@
     ],
     "Connection": [
       "AcfContentNodeConnection",
+      "ArticleToPlaceConnection",
+      "ArticleToTermNodeConnection",
+      "ArticleToTopicConnection",
+      "AudioItemToPlaceConnection",
+      "AudioItemToTermNodeConnection",
+      "AudioItemToTopicConnection",
       "CategoryToAncestorsCategoryConnection",
       "CategoryToCategoryConnection",
       "CategoryToContentNodeConnection",
@@ -195,6 +213,16 @@
       "PageToCommentConnection",
       "PageToRevisionConnection",
       "PdfItemToPdfItemConnection",
+      "PdfItemToPlaceConnection",
+      "PdfItemToTermNodeConnection",
+      "PdfItemToTopicConnection",
+      "PlaceToAncestorsPlaceConnection",
+      "PlaceToArticleConnection",
+      "PlaceToAudioItemConnection",
+      "PlaceToContentNodeConnection",
+      "PlaceToPdfItemConnection",
+      "PlaceToPlaceConnection",
+      "PlaceToVideoItemConnection",
       "PostFormatToContentNodeConnection",
       "PostFormatToPostConnection",
       "PostToCategoryConnection",
@@ -219,6 +247,7 @@
       "RootQueryToMenuItemConnection",
       "RootQueryToPageConnection",
       "RootQueryToPdfItemConnection",
+      "RootQueryToPlaceConnection",
       "RootQueryToPluginConnection",
       "RootQueryToPostConnection",
       "RootQueryToPostFormatConnection",
@@ -227,6 +256,7 @@
       "RootQueryToTaxonomyConnection",
       "RootQueryToTermNodeConnection",
       "RootQueryToThemeConnection",
+      "RootQueryToTopicConnection",
       "RootQueryToUserConnection",
       "RootQueryToUserRoleConnection",
       "RootQueryToVideoItemConnection",
@@ -236,6 +266,13 @@
       "TaxonomyToTermNodeConnection",
       "TermNodeToEnqueuedScriptConnection",
       "TermNodeToEnqueuedStylesheetConnection",
+      "TopicToAncestorsTopicConnection",
+      "TopicToArticleConnection",
+      "TopicToAudioItemConnection",
+      "TopicToContentNodeConnection",
+      "TopicToPdfItemConnection",
+      "TopicToTopicConnection",
+      "TopicToVideoItemConnection",
       "UserToCommentConnection",
       "UserToEnqueuedScriptConnection",
       "UserToEnqueuedStylesheetConnection",
@@ -244,6 +281,9 @@
       "UserToPostConnection",
       "UserToRevisionsConnection",
       "UserToUserRoleConnection",
+      "VideoItemToPlaceConnection",
+      "VideoItemToTermNodeConnection",
+      "VideoItemToTopicConnection",
       "VideoItemToVideoItemConnection"
     ],
     "ContentNode": [
@@ -263,10 +303,12 @@
       "ContentTypeToContentNodeConnection",
       "HierarchicalContentNodeToContentNodeAncestorsConnection",
       "HierarchicalContentNodeToContentNodeChildrenConnection",
+      "PlaceToContentNodeConnection",
       "PostFormatToContentNodeConnection",
       "RootQueryToContentNodeConnection",
       "RootQueryToRevisionsConnection",
       "TagToContentNodeConnection",
+      "TopicToContentNodeConnection",
       "UserToRevisionsConnection"
     ],
     "ContentNodeConnectionEdge": [
@@ -278,10 +320,12 @@
       "HierarchicalContentNodeToContentNodeChildrenConnectionEdge",
       "HierarchicalContentNodeToParentContentNodeConnectionEdge",
       "NodeWithRevisionsToContentNodeConnectionEdge",
+      "PlaceToContentNodeConnectionEdge",
       "PostFormatToContentNodeConnectionEdge",
       "RootQueryToContentNodeConnectionEdge",
       "RootQueryToRevisionsConnectionEdge",
       "TagToContentNodeConnectionEdge",
+      "TopicToContentNodeConnectionEdge",
       "UserToRevisionsConnectionEdge"
     ],
     "ContentNodeConnectionPageInfo": [
@@ -290,10 +334,12 @@
       "ContentTypeToContentNodeConnectionPageInfo",
       "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo",
       "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo",
+      "PlaceToContentNodeConnectionPageInfo",
       "PostFormatToContentNodeConnectionPageInfo",
       "RootQueryToContentNodeConnectionPageInfo",
       "RootQueryToRevisionsConnectionPageInfo",
       "TagToContentNodeConnectionPageInfo",
+      "TopicToContentNodeConnectionPageInfo",
       "UserToRevisionsConnectionPageInfo"
     ],
     "ContentTemplate": [
@@ -325,17 +371,25 @@
       "MenuItem",
       "Page",
       "PdfItem",
+      "Place",
       "Post",
       "PostFormat",
       "Tag",
+      "Topic",
       "User",
       "VideoItem"
     ],
     "Edge": [
       "AcfContentNodeConnectionEdge",
       "AcfMediaItemConnectionEdge",
+      "ArticleToPlaceConnectionEdge",
       "ArticleToPreviewConnectionEdge",
+      "ArticleToTermNodeConnectionEdge",
+      "ArticleToTopicConnectionEdge",
+      "AudioItemToPlaceConnectionEdge",
       "AudioItemToPreviewConnectionEdge",
+      "AudioItemToTermNodeConnectionEdge",
+      "AudioItemToTopicConnectionEdge",
       "BookToPreviewConnectionEdge",
       "CategoryToAncestorsCategoryConnectionEdge",
       "CategoryToCategoryConnectionEdge",
@@ -371,7 +425,19 @@
       "PageToRevisionConnectionEdge",
       "PdfItemToParentConnectionEdge",
       "PdfItemToPdfItemConnectionEdge",
+      "PdfItemToPlaceConnectionEdge",
       "PdfItemToPreviewConnectionEdge",
+      "PdfItemToTermNodeConnectionEdge",
+      "PdfItemToTopicConnectionEdge",
+      "PlaceToAncestorsPlaceConnectionEdge",
+      "PlaceToArticleConnectionEdge",
+      "PlaceToAudioItemConnectionEdge",
+      "PlaceToContentNodeConnectionEdge",
+      "PlaceToParentPlaceConnectionEdge",
+      "PlaceToPdfItemConnectionEdge",
+      "PlaceToPlaceConnectionEdge",
+      "PlaceToTaxonomyConnectionEdge",
+      "PlaceToVideoItemConnectionEdge",
       "PostFormatToContentNodeConnectionEdge",
       "PostFormatToPostConnectionEdge",
       "PostFormatToTaxonomyConnectionEdge",
@@ -399,6 +465,7 @@
       "RootQueryToMenuItemConnectionEdge",
       "RootQueryToPageConnectionEdge",
       "RootQueryToPdfItemConnectionEdge",
+      "RootQueryToPlaceConnectionEdge",
       "RootQueryToPluginConnectionEdge",
       "RootQueryToPostConnectionEdge",
       "RootQueryToPostFormatConnectionEdge",
@@ -407,6 +474,7 @@
       "RootQueryToTaxonomyConnectionEdge",
       "RootQueryToTermNodeConnectionEdge",
       "RootQueryToThemeConnectionEdge",
+      "RootQueryToTopicConnectionEdge",
       "RootQueryToUserConnectionEdge",
       "RootQueryToUserRoleConnectionEdge",
       "RootQueryToVideoItemConnectionEdge",
@@ -417,6 +485,15 @@
       "TaxonomyToTermNodeConnectionEdge",
       "TermNodeToEnqueuedScriptConnectionEdge",
       "TermNodeToEnqueuedStylesheetConnectionEdge",
+      "TopicToAncestorsTopicConnectionEdge",
+      "TopicToArticleConnectionEdge",
+      "TopicToAudioItemConnectionEdge",
+      "TopicToContentNodeConnectionEdge",
+      "TopicToParentTopicConnectionEdge",
+      "TopicToPdfItemConnectionEdge",
+      "TopicToTaxonomyConnectionEdge",
+      "TopicToTopicConnectionEdge",
+      "TopicToVideoItemConnectionEdge",
       "UserToCommentConnectionEdge",
       "UserToEnqueuedScriptConnectionEdge",
       "UserToEnqueuedStylesheetConnectionEdge",
@@ -426,7 +503,10 @@
       "UserToRevisionsConnectionEdge",
       "UserToUserRoleConnectionEdge",
       "VideoItemToParentConnectionEdge",
+      "VideoItemToPlaceConnectionEdge",
       "VideoItemToPreviewConnectionEdge",
+      "VideoItemToTermNodeConnectionEdge",
+      "VideoItemToTopicConnectionEdge",
       "VideoItemToVideoItemConnectionEdge"
     ],
     "EnqueuedAsset": [
@@ -493,10 +573,14 @@
       "Category",
       "JournalIssue",
       "MediaItem",
-      "Page"
+      "Page",
+      "Place",
+      "Topic"
     ],
     "HierarchicalTermNode": [
-      "Category"
+      "Category",
+      "Place",
+      "Topic"
     ],
     "JournalIssueConnection": [
       "RootQueryToJournalIssueConnection"
@@ -558,9 +642,11 @@
       "JournalIssue",
       "Page",
       "PdfItem",
+      "Place",
       "Post",
       "PostFormat",
       "Tag",
+      "Topic",
       "VideoItem"
     ],
     "MenuItemLinkableConnectionEdge": [
@@ -574,9 +660,11 @@
       "JournalIssue",
       "Page",
       "PdfItem",
+      "Place",
       "Post",
       "PostFormat",
       "Tag",
+      "Topic",
       "VideoItem"
     ],
     "Node": [
@@ -596,6 +684,7 @@
       "MenuItem",
       "Page",
       "PdfItem",
+      "Place",
       "PlaceholderSettings",
       "Plugin",
       "Post",
@@ -603,6 +692,7 @@
       "Tag",
       "Taxonomy",
       "Theme",
+      "Topic",
       "User",
       "UserRole",
       "VideoItem"
@@ -687,10 +777,14 @@
       "PageToPreviewConnectionEdge",
       "PdfItemToParentConnectionEdge",
       "PdfItemToPreviewConnectionEdge",
+      "PlaceToParentPlaceConnectionEdge",
+      "PlaceToTaxonomyConnectionEdge",
       "PostFormatToTaxonomyConnectionEdge",
       "PostToParentConnectionEdge",
       "PostToPreviewConnectionEdge",
       "TagToTaxonomyConnectionEdge",
+      "TopicToParentTopicConnectionEdge",
+      "TopicToTaxonomyConnectionEdge",
       "VideoItemToParentConnectionEdge",
       "VideoItemToPreviewConnectionEdge"
     ],
@@ -712,6 +806,12 @@
     ],
     "PageInfo": [
       "AcfContentNodeConnectionPageInfo",
+      "ArticleToPlaceConnectionPageInfo",
+      "ArticleToTermNodeConnectionPageInfo",
+      "ArticleToTopicConnectionPageInfo",
+      "AudioItemToPlaceConnectionPageInfo",
+      "AudioItemToTermNodeConnectionPageInfo",
+      "AudioItemToTopicConnectionPageInfo",
       "CategoryToAncestorsCategoryConnectionPageInfo",
       "CategoryToCategoryConnectionPageInfo",
       "CategoryToContentNodeConnectionPageInfo",
@@ -729,6 +829,16 @@
       "PageToCommentConnectionPageInfo",
       "PageToRevisionConnectionPageInfo",
       "PdfItemToPdfItemConnectionPageInfo",
+      "PdfItemToPlaceConnectionPageInfo",
+      "PdfItemToTermNodeConnectionPageInfo",
+      "PdfItemToTopicConnectionPageInfo",
+      "PlaceToAncestorsPlaceConnectionPageInfo",
+      "PlaceToArticleConnectionPageInfo",
+      "PlaceToAudioItemConnectionPageInfo",
+      "PlaceToContentNodeConnectionPageInfo",
+      "PlaceToPdfItemConnectionPageInfo",
+      "PlaceToPlaceConnectionPageInfo",
+      "PlaceToVideoItemConnectionPageInfo",
       "PostFormatToContentNodeConnectionPageInfo",
       "PostFormatToPostConnectionPageInfo",
       "PostToCategoryConnectionPageInfo",
@@ -753,6 +863,7 @@
       "RootQueryToMenuItemConnectionPageInfo",
       "RootQueryToPageConnectionPageInfo",
       "RootQueryToPdfItemConnectionPageInfo",
+      "RootQueryToPlaceConnectionPageInfo",
       "RootQueryToPluginConnectionPageInfo",
       "RootQueryToPostConnectionPageInfo",
       "RootQueryToPostFormatConnectionPageInfo",
@@ -761,6 +872,7 @@
       "RootQueryToTaxonomyConnectionPageInfo",
       "RootQueryToTermNodeConnectionPageInfo",
       "RootQueryToThemeConnectionPageInfo",
+      "RootQueryToTopicConnectionPageInfo",
       "RootQueryToUserConnectionPageInfo",
       "RootQueryToUserRoleConnectionPageInfo",
       "RootQueryToVideoItemConnectionPageInfo",
@@ -770,6 +882,13 @@
       "TaxonomyToTermNodeConnectionPageInfo",
       "TermNodeToEnqueuedScriptConnectionPageInfo",
       "TermNodeToEnqueuedStylesheetConnectionPageInfo",
+      "TopicToAncestorsTopicConnectionPageInfo",
+      "TopicToArticleConnectionPageInfo",
+      "TopicToAudioItemConnectionPageInfo",
+      "TopicToContentNodeConnectionPageInfo",
+      "TopicToPdfItemConnectionPageInfo",
+      "TopicToTopicConnectionPageInfo",
+      "TopicToVideoItemConnectionPageInfo",
       "UserToCommentConnectionPageInfo",
       "UserToEnqueuedScriptConnectionPageInfo",
       "UserToEnqueuedStylesheetConnectionPageInfo",
@@ -778,24 +897,61 @@
       "UserToPostConnectionPageInfo",
       "UserToRevisionsConnectionPageInfo",
       "UserToUserRoleConnectionPageInfo",
+      "VideoItemToPlaceConnectionPageInfo",
+      "VideoItemToTermNodeConnectionPageInfo",
+      "VideoItemToTopicConnectionPageInfo",
       "VideoItemToVideoItemConnectionPageInfo"
     ],
     "PdfItemConnection": [
       "PdfItemToPdfItemConnection",
-      "RootQueryToPdfItemConnection"
+      "PlaceToPdfItemConnection",
+      "RootQueryToPdfItemConnection",
+      "TopicToPdfItemConnection"
     ],
     "PdfItemConnectionEdge": [
       "PdfItemToParentConnectionEdge",
       "PdfItemToPdfItemConnectionEdge",
       "PdfItemToPreviewConnectionEdge",
-      "RootQueryToPdfItemConnectionEdge"
+      "PlaceToPdfItemConnectionEdge",
+      "RootQueryToPdfItemConnectionEdge",
+      "TopicToPdfItemConnectionEdge"
     ],
     "PdfItemConnectionPageInfo": [
       "PdfItemToPdfItemConnectionPageInfo",
-      "RootQueryToPdfItemConnectionPageInfo"
+      "PlaceToPdfItemConnectionPageInfo",
+      "RootQueryToPdfItemConnectionPageInfo",
+      "TopicToPdfItemConnectionPageInfo"
     ],
     "PdfItemDetails_Fields": [
       "PdfItemDetails"
+    ],
+    "PlaceConnection": [
+      "ArticleToPlaceConnection",
+      "AudioItemToPlaceConnection",
+      "PdfItemToPlaceConnection",
+      "PlaceToAncestorsPlaceConnection",
+      "PlaceToPlaceConnection",
+      "RootQueryToPlaceConnection",
+      "VideoItemToPlaceConnection"
+    ],
+    "PlaceConnectionEdge": [
+      "ArticleToPlaceConnectionEdge",
+      "AudioItemToPlaceConnectionEdge",
+      "PdfItemToPlaceConnectionEdge",
+      "PlaceToAncestorsPlaceConnectionEdge",
+      "PlaceToParentPlaceConnectionEdge",
+      "PlaceToPlaceConnectionEdge",
+      "RootQueryToPlaceConnectionEdge",
+      "VideoItemToPlaceConnectionEdge"
+    ],
+    "PlaceConnectionPageInfo": [
+      "ArticleToPlaceConnectionPageInfo",
+      "AudioItemToPlaceConnectionPageInfo",
+      "PdfItemToPlaceConnectionPageInfo",
+      "PlaceToAncestorsPlaceConnectionPageInfo",
+      "PlaceToPlaceConnectionPageInfo",
+      "RootQueryToPlaceConnectionPageInfo",
+      "VideoItemToPlaceConnectionPageInfo"
     ],
     "PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup_Fields": [
       "PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup"
@@ -960,9 +1116,11 @@
     "TaxonomyConnectionEdge": [
       "CategoryToTaxonomyConnectionEdge",
       "ContentTypeToTaxonomyConnectionEdge",
+      "PlaceToTaxonomyConnectionEdge",
       "PostFormatToTaxonomyConnectionEdge",
       "RootQueryToTaxonomyConnectionEdge",
-      "TagToTaxonomyConnectionEdge"
+      "TagToTaxonomyConnectionEdge",
+      "TopicToTaxonomyConnectionEdge"
     ],
     "TaxonomyConnectionPageInfo": [
       "ContentTypeToTaxonomyConnectionPageInfo",
@@ -970,23 +1128,37 @@
     ],
     "TermNode": [
       "Category",
+      "Place",
       "PostFormat",
-      "Tag"
+      "Tag",
+      "Topic"
     ],
     "TermNodeConnection": [
+      "ArticleToTermNodeConnection",
+      "AudioItemToTermNodeConnection",
+      "PdfItemToTermNodeConnection",
       "PostToTermNodeConnection",
       "RootQueryToTermNodeConnection",
-      "TaxonomyToTermNodeConnection"
+      "TaxonomyToTermNodeConnection",
+      "VideoItemToTermNodeConnection"
     ],
     "TermNodeConnectionEdge": [
+      "ArticleToTermNodeConnectionEdge",
+      "AudioItemToTermNodeConnectionEdge",
+      "PdfItemToTermNodeConnectionEdge",
       "PostToTermNodeConnectionEdge",
       "RootQueryToTermNodeConnectionEdge",
-      "TaxonomyToTermNodeConnectionEdge"
+      "TaxonomyToTermNodeConnectionEdge",
+      "VideoItemToTermNodeConnectionEdge"
     ],
     "TermNodeConnectionPageInfo": [
+      "ArticleToTermNodeConnectionPageInfo",
+      "AudioItemToTermNodeConnectionPageInfo",
+      "PdfItemToTermNodeConnectionPageInfo",
       "PostToTermNodeConnectionPageInfo",
       "RootQueryToTermNodeConnectionPageInfo",
-      "TaxonomyToTermNodeConnectionPageInfo"
+      "TaxonomyToTermNodeConnectionPageInfo",
+      "VideoItemToTermNodeConnectionPageInfo"
     ],
     "ThemeConnection": [
       "RootQueryToThemeConnection"
@@ -996,6 +1168,34 @@
     ],
     "ThemeConnectionPageInfo": [
       "RootQueryToThemeConnectionPageInfo"
+    ],
+    "TopicConnection": [
+      "ArticleToTopicConnection",
+      "AudioItemToTopicConnection",
+      "PdfItemToTopicConnection",
+      "RootQueryToTopicConnection",
+      "TopicToAncestorsTopicConnection",
+      "TopicToTopicConnection",
+      "VideoItemToTopicConnection"
+    ],
+    "TopicConnectionEdge": [
+      "ArticleToTopicConnectionEdge",
+      "AudioItemToTopicConnectionEdge",
+      "PdfItemToTopicConnectionEdge",
+      "RootQueryToTopicConnectionEdge",
+      "TopicToAncestorsTopicConnectionEdge",
+      "TopicToParentTopicConnectionEdge",
+      "TopicToTopicConnectionEdge",
+      "VideoItemToTopicConnectionEdge"
+    ],
+    "TopicConnectionPageInfo": [
+      "ArticleToTopicConnectionPageInfo",
+      "AudioItemToTopicConnectionPageInfo",
+      "PdfItemToTopicConnectionPageInfo",
+      "RootQueryToTopicConnectionPageInfo",
+      "TopicToAncestorsTopicConnectionPageInfo",
+      "TopicToTopicConnectionPageInfo",
+      "VideoItemToTopicConnectionPageInfo"
     ],
     "UniformResourceIdentifiable": [
       "Article",
@@ -1008,9 +1208,11 @@
       "MediaItem",
       "Page",
       "PdfItem",
+      "Place",
       "Post",
       "PostFormat",
       "Tag",
+      "Topic",
       "User",
       "VideoItem"
     ],
@@ -1039,21 +1241,33 @@
       "UserToUserRoleConnectionPageInfo"
     ],
     "VideoItemConnection": [
+      "PlaceToVideoItemConnection",
       "RootQueryToVideoItemConnection",
+      "TopicToVideoItemConnection",
       "VideoItemToVideoItemConnection"
     ],
     "VideoItemConnectionEdge": [
+      "PlaceToVideoItemConnectionEdge",
       "RootQueryToVideoItemConnectionEdge",
+      "TopicToVideoItemConnectionEdge",
       "VideoItemToParentConnectionEdge",
       "VideoItemToPreviewConnectionEdge",
       "VideoItemToVideoItemConnectionEdge"
     ],
     "VideoItemConnectionPageInfo": [
+      "PlaceToVideoItemConnectionPageInfo",
       "RootQueryToVideoItemConnectionPageInfo",
+      "TopicToVideoItemConnectionPageInfo",
       "VideoItemToVideoItemConnectionPageInfo"
     ],
     "WPPageInfo": [
       "AcfContentNodeConnectionPageInfo",
+      "ArticleToPlaceConnectionPageInfo",
+      "ArticleToTermNodeConnectionPageInfo",
+      "ArticleToTopicConnectionPageInfo",
+      "AudioItemToPlaceConnectionPageInfo",
+      "AudioItemToTermNodeConnectionPageInfo",
+      "AudioItemToTopicConnectionPageInfo",
       "CategoryToAncestorsCategoryConnectionPageInfo",
       "CategoryToCategoryConnectionPageInfo",
       "CategoryToContentNodeConnectionPageInfo",
@@ -1071,6 +1285,16 @@
       "PageToCommentConnectionPageInfo",
       "PageToRevisionConnectionPageInfo",
       "PdfItemToPdfItemConnectionPageInfo",
+      "PdfItemToPlaceConnectionPageInfo",
+      "PdfItemToTermNodeConnectionPageInfo",
+      "PdfItemToTopicConnectionPageInfo",
+      "PlaceToAncestorsPlaceConnectionPageInfo",
+      "PlaceToArticleConnectionPageInfo",
+      "PlaceToAudioItemConnectionPageInfo",
+      "PlaceToContentNodeConnectionPageInfo",
+      "PlaceToPdfItemConnectionPageInfo",
+      "PlaceToPlaceConnectionPageInfo",
+      "PlaceToVideoItemConnectionPageInfo",
       "PostFormatToContentNodeConnectionPageInfo",
       "PostFormatToPostConnectionPageInfo",
       "PostToCategoryConnectionPageInfo",
@@ -1095,6 +1319,7 @@
       "RootQueryToMenuItemConnectionPageInfo",
       "RootQueryToPageConnectionPageInfo",
       "RootQueryToPdfItemConnectionPageInfo",
+      "RootQueryToPlaceConnectionPageInfo",
       "RootQueryToPluginConnectionPageInfo",
       "RootQueryToPostConnectionPageInfo",
       "RootQueryToPostFormatConnectionPageInfo",
@@ -1103,6 +1328,7 @@
       "RootQueryToTaxonomyConnectionPageInfo",
       "RootQueryToTermNodeConnectionPageInfo",
       "RootQueryToThemeConnectionPageInfo",
+      "RootQueryToTopicConnectionPageInfo",
       "RootQueryToUserConnectionPageInfo",
       "RootQueryToUserRoleConnectionPageInfo",
       "RootQueryToVideoItemConnectionPageInfo",
@@ -1112,6 +1338,13 @@
       "TaxonomyToTermNodeConnectionPageInfo",
       "TermNodeToEnqueuedScriptConnectionPageInfo",
       "TermNodeToEnqueuedStylesheetConnectionPageInfo",
+      "TopicToAncestorsTopicConnectionPageInfo",
+      "TopicToArticleConnectionPageInfo",
+      "TopicToAudioItemConnectionPageInfo",
+      "TopicToContentNodeConnectionPageInfo",
+      "TopicToPdfItemConnectionPageInfo",
+      "TopicToTopicConnectionPageInfo",
+      "TopicToVideoItemConnectionPageInfo",
       "UserToCommentConnectionPageInfo",
       "UserToEnqueuedScriptConnectionPageInfo",
       "UserToEnqueuedStylesheetConnectionPageInfo",
@@ -1120,6 +1353,9 @@
       "UserToPostConnectionPageInfo",
       "UserToRevisionsConnectionPageInfo",
       "UserToUserRoleConnectionPageInfo",
+      "VideoItemToPlaceConnectionPageInfo",
+      "VideoItemToTermNodeConnectionPageInfo",
+      "VideoItemToTopicConnectionPageInfo",
       "VideoItemToVideoItemConnectionPageInfo"
     ],
     "WithAcfArticleDetails": [
