@@ -41,7 +41,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
           </main>
 
           <aside className="hidden nav:block w-full nav:w-[20%] nav:pt-2 nav:pl-4 mb-4">
-            <div className="nav:sticky nav:top-4 bg-custom-bg">
+            <div className="nav:sticky nav:top-10 bg-custom-bg">
               {rightSidebar}
             </div>
           </aside>

@@ -1,0 +1,52 @@
+fragment FragmentPdfItem on PdfItem {
+    contentTypeName
+    databaseId
+    date
+    dateGmt
+    guid
+    id
+    modified
+    modifiedGmt
+    pdfItemId
+    slug
+    status
+    title
+    uri
+    pdfItemDetails {
+        fieldGroupName
+        pdfFile {
+            cursor
+            node {
+                fileSize(size: null)
+                link
+                slug
+                contentTypeName
+                mediaItemId
+                mediaItemUrl
+                mediaType
+                mimeType
+                uri
+                title
+            }
+        }
+        relatedArticle {
+            nodes {
+                ... on Article {
+                    articleId
+                    contentTypeName
+                    databaseId
+                    date
+                    dateGmt
+                    guid
+                    id
+                    modified
+                    modifiedGmt
+                    slug
+                    status
+                    title
+                    uri
+                }
+            }
+        }
+    }
+}

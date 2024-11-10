@@ -5,8 +5,15 @@ import {
   GetGlobalSettingsQuery,
   GetArticleByUriQuery,
   PdfItem,
+  AudioItem,
+  TermNode,
 } from '@/gql/gql-generated';
 import PdfViewerComponent from './PdfViewerComponent';
+
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import EmailIcon from '@mui/icons-material/Email';
+import PrintButton from '../components/PrintButton';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
@@ -20,6 +27,8 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
   const relatedPdf = article?.articleDetails?.relatedPdf?.nodes?.[0] as PdfItem;
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl || '';
   const featuredImage = article?.featuredImage?.node;
+  const audio = article?.articleDetails?.relatedAudio?.nodes as AudioItem[] | undefined;
+  const terms = article?.terms?.nodes as TermNode[] | undefined;
 
   const fallbackSVG = `data:image/svg+xml;base64,${Buffer.from(
     `
@@ -54,9 +63,7 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
                   quality={75}
                   className="w-full h-auto"
                   placeholder="blur"
-                  blurDataURL={
-                    featuredImage.thumbhash || fallbackSVG
-                  }
+                  blurDataURL={featuredImage.thumbhash || fallbackSVG}
                   sizes="(max-width: 1050px) 100vw, 780px"
                   style={{
                     maxWidth: '100%',
@@ -76,7 +83,56 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
           )}
         </div>
       }
-      rightSidebar={<div>Article Right Sidebar</div>}
+      rightSidebar={
+        <div>
+          {terms && terms.length > 0 && (
+            <div>
+              <h3 className="mb-0">Related Topics</h3>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {terms.map((term) => (
+                  <span
+                    key={term.id}
+                    className="bg-communist-red text-custom-bg text-sm font-normal px-2.5 py-0.5 rounded tracking-widest"
+                  >
+                    {term.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          {audio && audio.length > 0 && (
+            <div className="mt-6">
+              <h3 className="mb-0">Related Audio</h3>
+              {audio.map((item) => (
+                <div key={item.id} className="mt-2">
+                  {item.audioItemDetails?.audioEmbedCode && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.audioItemDetails.audioEmbedCode,
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="mt-6">
+            <h3 className="mb-0">Share This Article</h3>
+            <div className="flex justify-start items-center gap-x-6 mt-2">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                <FacebookIcon className="fill-communist-red" style={{ fontSize: '2rem' }} />
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                <TwitterIcon className="fill-communist-red" style={{ fontSize: '2rem' }} />
+              </a>
+              <a href="mailto:?subject=Check%20out%20this%20article">
+                <EmailIcon className="fill-communist-red" style={{ fontSize: '2rem' }} />
+              </a>
+              <PrintButton />
+            </div>
+          </div>
+        </div>
+      }
     />
   );
 };

@@ -1,0 +1,20 @@
+fragment FragmentAudioItem on AudioItem {
+    audioItemId
+    contentTypeName
+    databaseId
+    date
+    dateGmt
+    guid
+    id
+    link
+    modified
+    modifiedGmt
+    title
+    uri
+    audioItemDetails {
+        articlePageCaption
+        audioEmbedCode
+        fieldGroupName
+        landingPageDescription
+    }
+}
