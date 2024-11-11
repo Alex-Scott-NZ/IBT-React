@@ -15,8 +15,10 @@ import { serverFetch } from '../gql/query-utils';
 import { Metadata } from 'next';
 
 // Helper function to get largest image info
-const getLargestImageInfo = (srcSet: string): { url: string; width: number; height: number } => {
-  const images = srcSet.split(', ').map(img => {
+const getLargestImageInfo = (
+  srcSet: string
+): { url: string; width: number; height: number } => {
+  const images = srcSet.split(', ').map((img) => {
     const [url, size] = img.split(' ');
     const width = parseInt(size.replace('w', ''));
     const dimensions = url.match(/-(\d+)x(\d+)\.png$/);
@@ -25,22 +27,29 @@ const getLargestImageInfo = (srcSet: string): { url: string; width: number; heig
   });
 
   const largestImage = images.reduce((prev, current) =>
-    (prev.width > current.width) ? prev : current
+    prev.width > current.width ? prev : current
   );
 
   return largestImage;
 };
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
+  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
+    useGetGlobalSettingsQuery,
+    { next: { revalidate: 60 } }
+  );
 
-  const bannerImage = globalSettingsData?.globalSettings?.fGGlobalSettings?.bannerImage?.node;
-  const twitterBannerImage = globalSettingsData?.globalSettings?.fGGlobalSettings?.bannerImageTwitter?.node;
+  const bannerImage =
+    globalSettingsData?.globalSettings?.fGGlobalSettings?.bannerImage?.node;
+  const twitterBannerImage =
+    globalSettingsData?.globalSettings?.fGGlobalSettings?.bannerImageTwitter
+      ?.node;
   const mediaDetails = bannerImage?.mediaDetails;
 
   return {
     title: 'International Bolshevik Tendency',
-    description: 'We stand for a working-class revolution to overthrow capitalism on a global scale.',
+    description:
+      'We stand for a working-class revolution to overthrow capitalism on a global scale.',
     openGraph: {
       title: 'International Bolshevik Tendency',
       description: 'Main page of the International Bolshevik Tendency website',
@@ -51,7 +60,9 @@ export const generateMetadata = async (): Promise<Metadata> => {
           url: bannerImage?.sourceUrl || '',
           width: mediaDetails?.width || 1024,
           height: mediaDetails?.height || 174,
-          alt: bannerImage?.altText || 'International Bolshevik Tendency website banner',
+          alt:
+            bannerImage?.altText ||
+            'International Bolshevik Tendency website banner',
         },
       ],
       type: 'website',
@@ -60,7 +71,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
       card: 'summary_large_image',
       site: '@IBT1917',
       title: 'International Bolshevik Tendency',
-      description: 'We stand for a working-class revolution to overthrow capitalism on a global scale.',
+      description:
+        'We stand for a working-class revolution to overthrow capitalism on a global scale.',
       images: [twitterBannerImage?.sourceUrl || ''],
     },
   };
@@ -68,11 +80,25 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
 const Home = async () => {
   // Fetch the required data using your helper functions
-  const articlesData: GetArticlesQuery = await serverFetch(useGetArticlesQuery);
-  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
-  const booksData: GetBooksQuery = await serverFetch(useGetBooksQuery);
-  const latestJournalIssueData: GetJournalIssuesLatestQuery = await serverFetch(useGetJournalIssuesLatestQuery);
-  const placeholdersData: GetPlaceholderSettingsQuery = await serverFetch(useGetPlaceholderSettingsQuery);
+  const articlesData: GetArticlesQuery = await serverFetch(
+    useGetArticlesQuery,
+    { next: { revalidate: 60 } }
+  );
+  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
+    useGetGlobalSettingsQuery,
+    { next: { revalidate: 60 } }
+  );
+  const booksData: GetBooksQuery = await serverFetch(useGetBooksQuery, {
+    next: { revalidate: 60 },
+  });
+  const latestJournalIssueData: GetJournalIssuesLatestQuery = await serverFetch(
+    useGetJournalIssuesLatestQuery,
+    { next: { revalidate: 60 } }
+  );
+  const placeholdersData: GetPlaceholderSettingsQuery = await serverFetch(
+    useGetPlaceholderSettingsQuery,
+    { next: { revalidate: 60 } }
+  );
 
   // Ensure that all data is available, if not, return an error page
   if (

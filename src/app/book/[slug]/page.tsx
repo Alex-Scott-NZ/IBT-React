@@ -1,9 +1,14 @@
-import { BookByUriQuery, useBookByUriQuery, GetGlobalSettingsQuery, useGetGlobalSettingsQuery } from '../../../gql/gql-generated';
+import {
+  BookByUriQuery,
+  useBookByUriQuery,
+  GetGlobalSettingsQuery,
+  useGetGlobalSettingsQuery,
+} from '../../../gql/gql-generated';
 import { serverFetch } from '../../../gql/query-utils';
 
 import React from 'react';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
-import Image from "next/image";
+import Image from 'next/image';
 import Link from 'next/link';
 
 // Define a type for the possible node types
@@ -16,11 +21,21 @@ type ArticleNode = {
   } | null;
 };
 
-export default async function BookPage({ params }: { params: { slug: string } }) {
+export default async function BookPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const uri = `/book/${params.slug}`;
 
-  const bookData: BookByUriQuery = await serverFetch(useBookByUriQuery, { variables: { uri } });
-  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
+  const bookData: BookByUriQuery = await serverFetch(useBookByUriQuery, {
+    variables: { uri },
+    next: { revalidate: 60 },
+  });
+  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
+    useGetGlobalSettingsQuery,
+    { next: { revalidate: 60 } }
+  );
 
   const book = bookData.bookBy;
   const globalSettings = globalSettingsData.globalSettings;
@@ -33,7 +48,7 @@ export default async function BookPage({ params }: { params: { slug: string } })
   const imageUrl = featuredImage?.node?.mediaItemUrl || '';
 
   return (
-    (<BaseLayoutNoSideBars globalSettings={globalSettings}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings}>
       <div style={{ display: 'flex', alignItems: 'flex-start' }}>
         <div style={{ flex: '0 0 25%', marginRight: '20px' }}>
           <Image
@@ -45,34 +60,48 @@ export default async function BookPage({ params }: { params: { slug: string } })
               objectFit: 'cover',
               width: '100%',
               height: 'auto',
-              maxWidth: "100%"
-            }} />
+              maxWidth: '100%',
+            }}
+          />
         </div>
         <div style={{ flex: '1' }}>
-          <h1 style={{ margin: '0 0 20px', fontSize: '2rem', fontWeight: 'bold' }}>{title}</h1>
+          <h1
+            style={{ margin: '0 0 20px', fontSize: '2rem', fontWeight: 'bold' }}
+          >
+            {title}
+          </h1>
           {bookDetails?.subheading && (
-            <h2 style={{ margin: '0 0 20px', fontSize: '1.5rem' }}>{bookDetails.subheading}</h2>
+            <h2 style={{ margin: '0 0 20px', fontSize: '1.5rem' }}>
+              {bookDetails.subheading}
+            </h2>
           )}
           {bookDetails?.summary && (
             <p style={{ margin: '0 0 20px' }}>{bookDetails.summary}</p>
           )}
-          <h3 style={{ margin: '20px 0', fontSize: '1.2rem' }}>Related Articles:</h3>
-          {bookDetails?.relatedArticles?.nodes?.map((node, index) => {
-            const article = node as ArticleNode;
-            if (article) {
-              const articleTitle = article.articleDetails?.tableOfContentsTitle || article.title;
-              return (
-                <div key={index} className='mb-2'>
-                  <Link href={`/article/${article.slug}`} passHref>
-                    <span className='text-communist-red text-xl font-Helvetica'>{articleTitle}</span>
-                  </Link>
-                </div>
-              );
-            }
-            return null;
-          }).filter(Boolean) ?? <p>No related articles found.</p>}
+          <h3 style={{ margin: '20px 0', fontSize: '1.2rem' }}>
+            Related Articles:
+          </h3>
+          {bookDetails?.relatedArticles?.nodes
+            ?.map((node, index) => {
+              const article = node as ArticleNode;
+              if (article) {
+                const articleTitle =
+                  article.articleDetails?.tableOfContentsTitle || article.title;
+                return (
+                  <div key={index} className="mb-2">
+                    <Link href={`/article/${article.slug}`} passHref>
+                      <span className="text-communist-red text-xl font-Helvetica">
+                        {articleTitle}
+                      </span>
+                    </Link>
+                  </div>
+                );
+              }
+              return null;
+            })
+            .filter(Boolean) ?? <p>No related articles found.</p>}
         </div>
       </div>
-    </BaseLayoutNoSideBars>)
+    </BaseLayoutNoSideBars>
   );
 }

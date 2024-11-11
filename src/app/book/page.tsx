@@ -12,15 +12,25 @@ import {
 } from '@mui/material';
 
 import Link from 'next/link';
-import { GetBooksQuery, useGetBooksQuery, GetGlobalSettingsQuery, useGetGlobalSettingsQuery } from '@/gql/gql-generated';
+import {
+  GetBooksQuery,
+  useGetBooksQuery,
+  GetGlobalSettingsQuery,
+  useGetGlobalSettingsQuery,
+} from '@/gql/gql-generated';
 import { serverFetch } from '@/gql/query-utils';
 
 const BooksPage = async () => {
-const booksData: GetBooksQuery = await serverFetch(useGetBooksQuery);
-const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(useGetGlobalSettingsQuery);
+  const booksData: GetBooksQuery = await serverFetch(useGetBooksQuery, {
+    next: { revalidate: 60 },
+  });
+  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
+    useGetGlobalSettingsQuery,
+    { next: { revalidate: 60 } }
+  );
 
-const books = booksData.books?.nodes || [];
-const globalSettings = globalSettingsData.globalSettings;
+  const books = booksData.books?.nodes || [];
+  const globalSettings = globalSettingsData.globalSettings;
 
   return (
     <BaseLayoutNoSideBars globalSettings={globalSettings}>
@@ -33,8 +43,15 @@ const globalSettings = globalSettingsData.globalSettings;
                 <CardMedia
                   component="img"
                   height="200"
-                  image={book.featuredImage?.node.sourceUrl || '/placeholder-book-image.jpg'}
-                  alt={book.featuredImage?.node.altText || book.title || 'Book Cover'}
+                  image={
+                    book.featuredImage?.node.sourceUrl ||
+                    '/placeholder-book-image.jpg'
+                  }
+                  alt={
+                    book.featuredImage?.node.altText ||
+                    book.title ||
+                    'Book Cover'
+                  }
                 />
                 <CardContent>
                   <Typography
@@ -51,7 +68,6 @@ const globalSettings = globalSettingsData.globalSettings;
                   >
                     {book.bookDetails?.subheading}
                   </Typography>
-
                 </CardContent>
               </Card>
             </Grid>
