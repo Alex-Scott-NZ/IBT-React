@@ -26,10 +26,10 @@ type ArticleNode = {
 
 const JournalPage = async () => {
   const journalIssuesData: GetJournalIssuesQuery = await serverFetch(
-    useGetJournalIssuesQuery
+    useGetJournalIssuesQuery, {next: {revalidate:60}}
   );
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
-    useGetGlobalSettingsQuery
+    useGetGlobalSettingsQuery, {next: {revalidate:60}}
   );
 
   const journalIssues = journalIssuesData.journalIssues?.nodes || [];
