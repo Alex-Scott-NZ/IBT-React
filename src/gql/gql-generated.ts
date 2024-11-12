@@ -16567,7 +16567,13 @@ export type FragmentAudioItemFragment = { __typename?: 'AudioItem', audioItemId:
 
 export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
 
-export type FragmentPdfItemFragment = { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
+export type FragmentJournalIssueFragment = { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null };
+
+export type FragmentJournalIssueDetailsFragment = { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null };
+
+export type FragmentPdfItemFragment = { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null } | null };
+
+export type FragmentRelatedArticleFragment = { __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null };
 
 export type FragmentTerms_Category_Fragment = { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
 
@@ -16593,7 +16599,7 @@ export type GetArticleByUriQueryVariables = Exact<{
 }>;
 
 
-export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null, relatedAudio?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article' } | { __typename?: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { __typename?: 'AudioItemDetails', articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, terms?: { __typename?: 'ArticleToTermNodeConnection', nodes: Array<{ __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null }> } | null } | null };
+export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null } | null } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedAudio?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { __typename?: 'AudioItemDetails', articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null } | { __typename: 'Book' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, terms?: { __typename?: 'ArticleToTermNodeConnection', nodes: Array<{ __typename: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null }> } | null } | null };
 
 export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -16615,7 +16621,7 @@ export type GetJournalByUriQueryVariables = Exact<{
 }>;
 
 
-export type GetJournalByUriQuery = { __typename?: 'RootQuery', journalIssueBy?: { __typename?: 'JournalIssue', title?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null } | null };
+export type GetJournalByUriQuery = { __typename?: 'RootQuery', journalIssueBy?: { __typename?: 'JournalIssue', title?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null } | null };
 
 export type GetJournalIssuesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -16684,6 +16690,59 @@ export const FragmentFeaturedImageFragmentDoc = `
   }
 }
     `;
+export const FragmentJournalIssueFragmentDoc = `
+    fragment FragmentJournalIssue on JournalIssue {
+  contentTypeName
+  databaseId
+  date
+  dateGmt
+  featuredImageDatabaseId
+  featuredImageId
+  guid
+  id
+  journalIssueId
+  link
+  modified
+  modifiedGmt
+  slug
+  status
+  title
+  uri
+  featuredImage {
+    node {
+      __typename
+      ...FragmentFeaturedImage
+    }
+  }
+}
+    `;
+export const FragmentJournalIssueDetailsFragmentDoc = `
+    fragment FragmentJournalIssueDetails on JournalIssueDetails {
+  fieldGroupName
+  publicationDate
+  articlesInJournal {
+    nodes {
+      __typename
+      slug
+      ... on Article {
+        articleDetails {
+          displayDate
+          displayOnFrontPage
+          fieldGroupName
+          publicationDate
+          source
+          subtitle
+          suppressDate
+          tableOfContentsTitle
+        }
+        id
+        title
+        uri
+      }
+    }
+  }
+}
+    `;
 export const FragmentPdfItemFragmentDoc = `
     fragment FragmentPdfItem on PdfItem {
   contentTypeName
@@ -16704,6 +16763,7 @@ export const FragmentPdfItemFragmentDoc = `
     pdfFile {
       cursor
       node {
+        __typename
         fileSize(size: null)
         link
         slug
@@ -16718,6 +16778,7 @@ export const FragmentPdfItemFragmentDoc = `
     }
     relatedArticle {
       nodes {
+        __typename
         ... on Article {
           articleId
           contentTypeName
@@ -16736,6 +16797,27 @@ export const FragmentPdfItemFragmentDoc = `
       }
     }
   }
+}
+    `;
+export const FragmentRelatedArticleFragmentDoc = `
+    fragment FragmentRelatedArticle on Article {
+  __typename
+  contentTypeName
+  databaseId
+  date
+  dateGmt
+  desiredSlug
+  enclosure
+  guid
+  id
+  modified
+  modifiedGmt
+  previewRevisionDatabaseId
+  previewRevisionId
+  slug
+  status
+  title
+  uri
 }
     `;
 export const FragmentTermsFragmentDoc = `
@@ -16937,7 +17019,6 @@ export const GetArticleByUriDocument = `
     featuredImageDatabaseId
     featuredImageId
     id
-    isTermNode
     modified
     modifiedGmt
     slug
@@ -16955,6 +17036,7 @@ export const GetArticleByUriDocument = `
       tableOfContentsTitle
       relatedPdf {
         nodes {
+          __typename
           ... on PdfItem {
             ...FragmentPdfItem
           }
@@ -16962,19 +17044,38 @@ export const GetArticleByUriDocument = `
       }
       relatedAudio {
         nodes {
+          __typename
           ... on AudioItem {
             ...FragmentAudioItem
           }
         }
       }
+      relatedJournal {
+        nodes {
+          __typename
+          ... on JournalIssue {
+            ...FragmentJournalIssue
+            journalIssueDetails {
+              ...FragmentJournalIssueDetails
+            }
+          }
+        }
+      }
+      relatedArticle {
+        nodes {
+          ...FragmentRelatedArticle
+        }
+      }
     }
     featuredImage {
       node {
+        __typename
         ...FragmentFeaturedImage
       }
     }
     terms {
       nodes {
+        __typename
         ...FragmentTerms
       }
     }
@@ -16982,7 +17083,10 @@ export const GetArticleByUriDocument = `
 }
     ${FragmentPdfItemFragmentDoc}
 ${FragmentAudioItemFragmentDoc}
+${FragmentJournalIssueFragmentDoc}
 ${FragmentFeaturedImageFragmentDoc}
+${FragmentJournalIssueDetailsFragmentDoc}
+${FragmentRelatedArticleFragmentDoc}
 ${FragmentTermsFragmentDoc}`;
 
 export const useGetArticleByUriQuery = <
@@ -17315,31 +17419,12 @@ export const GetJournalByUriDocument = `
       }
     }
     journalIssueDetails {
-      fieldGroupName
-      publicationDate
-      articlesInJournal {
-        nodes {
-          slug
-          ... on Article {
-            articleDetails {
-              displayDate
-              displayOnFrontPage
-              fieldGroupName
-              publicationDate
-              source
-              subtitle
-              suppressDate
-              tableOfContentsTitle
-            }
-            title
-            uri
-          }
-        }
-      }
+      ...FragmentJournalIssueDetails
     }
   }
 }
-    ${FragmentFeaturedImageFragmentDoc}`;
+    ${FragmentFeaturedImageFragmentDoc}
+${FragmentJournalIssueDetailsFragmentDoc}`;
 
 export const useGetJournalByUriQuery = <
       TData = GetJournalByUriQuery,

@@ -9,7 +9,6 @@ query GetArticleByUri($uri: ID!) {
     featuredImageDatabaseId
     featuredImageId
     id
-    isTermNode
     modified
     modifiedGmt
     slug
@@ -27,6 +26,7 @@ query GetArticleByUri($uri: ID!) {
       tableOfContentsTitle
       relatedPdf {
         nodes {
+          __typename
           ... on PdfItem {
             ...FragmentPdfItem
           }
@@ -34,19 +34,38 @@ query GetArticleByUri($uri: ID!) {
       }
       relatedAudio {
         nodes {
+          __typename
           ... on AudioItem {
             ...FragmentAudioItem
           }
         }
       }
+      relatedJournal {
+        nodes {
+          __typename
+          ... on JournalIssue {
+            ...FragmentJournalIssue
+            journalIssueDetails {
+              ...FragmentJournalIssueDetails
+            }
+          }
+        }
+      }
+      relatedArticle {
+        nodes {
+          ...FragmentRelatedArticle
+        }
+      }
     }
     featuredImage {
       node {
+        __typename
         ...FragmentFeaturedImage
       }
     }
     terms {
       nodes {
+        __typename
         ...FragmentTerms
       }
     }

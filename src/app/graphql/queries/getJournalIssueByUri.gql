@@ -1,33 +1,13 @@
-  query GetJournalByUri($uri: String!) {
-    journalIssueBy(uri: $uri) {
-      title
-      featuredImage {
-        node {
-          ...FragmentFeaturedImage
-        }
-      }
-      journalIssueDetails {
-        fieldGroupName
-        publicationDate
-        articlesInJournal {
-          nodes {
-            slug
-            ... on Article {
-              articleDetails {
-                displayDate
-                displayOnFrontPage
-                fieldGroupName
-                publicationDate
-                source
-                subtitle
-                suppressDate
-                tableOfContentsTitle
-              }
-              title
-              uri
-            }
-          }
-        }
+query GetJournalByUri($uri: String!) {
+  journalIssueBy(uri: $uri) {
+    title
+    featuredImage {
+      node {
+        ...FragmentFeaturedImage
       }
     }
+    journalIssueDetails {
+      ...FragmentJournalIssueDetails
+    }
   }
+}

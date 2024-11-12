@@ -1,0 +1,24 @@
+fragment FragmentJournalIssue on JournalIssue {
+    contentTypeName
+    databaseId
+    date
+    dateGmt
+    featuredImageDatabaseId
+    featuredImageId
+    guid
+    id
+    journalIssueId
+    link
+    modified
+    modifiedGmt
+    slug
+    status
+    title
+    uri
+    featuredImage {
+        node {
+            __typename
+            ...FragmentFeaturedImage
+        }
+    }
+}
