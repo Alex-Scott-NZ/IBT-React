@@ -1,0 +1,25 @@
+fragment FragmentJournalIssueDetails on JournalIssueDetails {
+  fieldGroupName
+  publicationDate
+  articlesInJournal {
+    nodes {
+      __typename
+      slug
+      ... on Article {
+        articleDetails {
+          displayDate
+          displayOnFrontPage
+          fieldGroupName
+          publicationDate
+          source
+          subtitle
+          suppressDate
+          tableOfContentsTitle
+        }
+        id
+        title
+        uri
+      }
+    }
+  }
+}

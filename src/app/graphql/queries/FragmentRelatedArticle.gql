@@ -1,0 +1,19 @@
+fragment FragmentRelatedArticle on Article {
+  __typename
+  contentTypeName
+  databaseId
+  date
+  dateGmt
+  desiredSlug
+  enclosure
+  guid
+  id
+  modified
+  modifiedGmt
+  previewRevisionDatabaseId
+  previewRevisionId
+  slug
+  status
+  title
+  uri
+}

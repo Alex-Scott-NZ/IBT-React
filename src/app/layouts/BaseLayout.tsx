@@ -31,7 +31,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
 
         <div className="flex flex-col nav:flex-row nav:justify-between pt-2 nav:pt-2">
           <aside className="hidden nav:block w-full nav:w-[20%] mb-4 nav:pt-2 nav:pr-4">
-            <div className="nav:sticky nav:top-4 bg-custom-bg">
+            <div className="nav:sticky nav:bottom-4 nav:top-4 bg-custom-bg">
               {leftSidebar}
             </div>
           </aside>
@@ -40,8 +40,8 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
             {mainContent}
           </main>
 
-          <aside className="hidden nav:block w-full nav:w-[20%] nav:pt-2 nav:pl-4 mb-4">
-            <div className="nav:sticky nav:top-10 bg-custom-bg">
+          <aside className="hidden nav:block w-full nav:w-[20%] mb-4 nav:pt-2 nav:pl-4">
+            <div className="nav:sticky nav:top-4 bg-custom-bg">
               {rightSidebar}
             </div>
           </aside>
