@@ -112,7 +112,7 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
                 className="w-full h-auto mt-3"
                 placeholder="blur"
                 blurDataURL={journalCoverImage.thumbhash || fallbackSVG}
-                style={{ maxWidth: '100%' }}
+                style={{ maxWidth: '75%' }}
               />
             </Link>
           )}
