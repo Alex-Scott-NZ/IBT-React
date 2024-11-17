@@ -18,7 +18,7 @@ const BaseLayoutNoSideBars: React.FC<BaseLayoutNoSideBarsProps> = ({
   return (
     <div className="bg-custom-bg min-h-screen flex flex-col">
       <TopBar />
-      <div className="w-full max-w-[1366px] mx-auto pl-2 pr-2 flex-grow flex flex-col">
+      <div className="w-full max-w-[1108px] mx-auto pl-2 pr-2 flex-grow flex flex-col">
         <Header globalSettings={globalSettings} />
         <NavigationMenu />
         <SiteWideNotice notificationData={globalSettings?.fGGlobalSettings?.notificationBar} />
