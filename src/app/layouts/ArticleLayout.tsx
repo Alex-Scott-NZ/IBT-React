@@ -2,6 +2,7 @@ import React from 'react';
 import BaseLayout from './BaseLayout';
 import Image from 'next/image';
 import Link from 'next/link';
+import VideoPlayer from '../components/VideoPlayer';
 import {
   GetGlobalSettingsQuery,
   GetArticleByUriQuery,
@@ -10,6 +11,7 @@ import {
   TermNode,
   Article,
   JournalIssue,
+  VideoItem
 } from '@/gql/gql-generated';
 import PdfViewerComponent from './PdfViewerComponent';
 
@@ -48,6 +50,9 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
   const relatedArticles = article?.articleDetails?.relatedArticle?.nodes as
     | Article[]
     | undefined;
+  const relatedVideo = article?.articleDetails?.relatedVideo?.nodes?.[0] as VideoItem | undefined;
+  const videoUrl = relatedVideo?.videoDetails?.videoEmbedCode || '';
+  const videoCaption = relatedVideo?.videoDetails?.articlePageCaption || '';
 
   // Check if the node is of type JournalIssue and has a featuredImage
   if (relatedJournalNode?.__typename === 'JournalIssue') {
@@ -192,22 +197,29 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
               {source && (
                 <p className="mt-1 mb-1 text-gray-800">Source: {source}</p>
               )}
-              {featuredImage && (
-                <Image
-                  src={featuredImage.sourceUrl || ''}
-                  alt={featuredImage.altText || article.title || ''}
-                  width={Number(featuredImage.mediaDetails?.width || 0)}
-                  height={Number(featuredImage.mediaDetails?.height || 0)}
-                  priority={true}
-                  quality={75}
-                  className="w-full h-auto mt-2 print:hidden"
-                  placeholder="blur"
-                  blurDataURL={featuredImage.thumbhash || fallbackSVG}
-                  sizes="(max-width: 1050px) 100vw, 780px"
-                  style={{
-                    maxWidth: '100%',
-                  }}
-                />
+
+              {/* Display the video if it exists, else display the featured image */}
+              {/* Use the VideoPlayer component */}
+              {videoUrl ? (
+                <VideoPlayer url={videoUrl} caption={videoCaption} />
+              ) : (
+                featuredImage && (
+                  <Image
+                    src={featuredImage.sourceUrl || ''}
+                    alt={featuredImage.altText || article.title || ''}
+                    width={Number(featuredImage.mediaDetails?.width || 0)}
+                    height={Number(featuredImage.mediaDetails?.height || 0)}
+                    priority={true}
+                    quality={75}
+                    className="w-full h-auto mt-2 print:hidden"
+                    placeholder="blur"
+                    blurDataURL={featuredImage.thumbhash || fallbackSVG}
+                    sizes="(max-width: 1050px) 100vw, 780px"
+                    style={{
+                      maxWidth: '100%',
+                    }}
+                  />
+                )
               )}
             </>
           )}
