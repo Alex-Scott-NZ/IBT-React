@@ -32,6 +32,15 @@ const config: Config = {
       },
     },
   },
+  
+  variants: {
+    extend: {
+      display: ['print'], // Enables `print:block` and `print:hidden`
+      padding: ['print'], // Enables `print:py-4` etc.
+      margin: ['print'],  // Enables `print:mt-4` etc.
+    },
+  },
+
   plugins: [
   ],
   corePlugins: {

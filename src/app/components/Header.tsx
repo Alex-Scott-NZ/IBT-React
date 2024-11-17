@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ globalSettings }) => {
 
   return (
     <header className="w-full bg-custom-bg text-white">
-      <div className="mx-auto max-w-[1366px] pt-6">
+      <div className="mx-auto max-w-[1366px] pt-6 print:pt-0">
         <div className="w-full md:w-1/2">
           {' '}
           {/* Full width on mobile, 50% on desktop */}
