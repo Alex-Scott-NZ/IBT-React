@@ -63,7 +63,11 @@ h3 {
   size: A4; /* 'auto' is the initial value */
 
   /* Affects the margins in the printer settings */
-  margin: 25mm 25mm 25mm 25mm;
+  margin: 10%;
+
+  @top-left-corner {
+    content: "Page " counter(page);
+  }
 }
 
 @media print {

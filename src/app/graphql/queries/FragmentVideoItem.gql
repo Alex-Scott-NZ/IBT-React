@@ -1,0 +1,20 @@
+fragment FragmentVideoItem on VideoItem {
+    contentTypeName
+    databaseId
+    date
+    dateGmt
+    guid
+    id
+    link
+    modified
+    modifiedGmt
+    slug
+    status
+    uri
+    videoDetails {
+        videoEmbedCode
+        landingPageDescription
+        fieldGroupName
+        articlePageCaption
+    }
+}

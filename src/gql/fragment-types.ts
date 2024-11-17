@@ -42,7 +42,8 @@
       "PlaceholderSetupPlaceholder6",
       "PlaceholderSetupPlaceholder6BooksWidgetSettings",
       "PlaceholderSetupPlaceholder6FreeTextWidget",
-      "PlaceholderSetupPlaceholder6JournalWidgetSettings"
+      "PlaceholderSetupPlaceholder6JournalWidgetSettings",
+      "VideoDetails"
     ],
     "AcfFieldGroupFields": [
       "ArticleDetails",
@@ -80,7 +81,8 @@
       "PlaceholderSetupPlaceholder6",
       "PlaceholderSetupPlaceholder6BooksWidgetSettings",
       "PlaceholderSetupPlaceholder6FreeTextWidget",
-      "PlaceholderSetupPlaceholder6JournalWidgetSettings"
+      "PlaceholderSetupPlaceholder6JournalWidgetSettings",
+      "VideoDetails"
     ],
     "AcfOptionsPage": [
       "GlobalSettings",
@@ -1240,6 +1242,9 @@
       "RootQueryToUserRoleConnectionPageInfo",
       "UserToUserRoleConnectionPageInfo"
     ],
+    "VideoDetails_Fields": [
+      "VideoDetails"
+    ],
     "VideoItemConnection": [
       "PlaceToVideoItemConnection",
       "RootQueryToVideoItemConnection",
@@ -1384,6 +1389,9 @@
     ],
     "WithAcfPlaceholderSettingsFields": [
       "PlaceholderSettings"
+    ],
+    "WithAcfVideoDetails": [
+      "VideoItem"
     ]
   }
 };
