@@ -30,6 +30,7 @@ const ArticlePage = async ({ params }: { params: { slug: string } }) => {
     <ArticleLayout
       article={articleData.article}
       globalSettings={globalSettingsData.globalSettings}
+      slug={params.slug} // Pass the slug down
     />
   );
 };

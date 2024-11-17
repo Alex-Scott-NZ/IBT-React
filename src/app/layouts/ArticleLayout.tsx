@@ -26,9 +26,10 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 interface ArticleLayoutProps {
   article: GetArticleByUriQuery['article'];
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
+  slug: string;
 }
 
-const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
+const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) => {
   const relatedPdf = article?.articleDetails?.relatedPdf?.nodes?.[0] as PdfItem;
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl || '';
   const featuredImage = article?.featuredImage?.node;
@@ -95,6 +96,7 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
   return (
     <BaseLayout
       globalSettings={globalSettings}
+      slug={slug}
       leftSidebar={
         <div>
           {/* Link the cover image and title to the journal issue */}
@@ -139,11 +141,10 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
                       {/* Marker and Line */}
                       <div className="flex flex-col items-center">
                         <div
-                          className={`w-4 h-4 rounded-full mt-1 ${
-                            isCurrentArticle
-                              ? 'bg-communist-red'
-                              : 'bg-gray-300'
-                          }`}
+                          className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle
+                            ? 'bg-communist-red'
+                            : 'bg-gray-300'
+                            }`}
                         ></div>
                         {/* Line connecting to the next item */}
                         {index !== articlesInJournal.length - 1 && (
@@ -199,7 +200,7 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
                   height={Number(featuredImage.mediaDetails?.height || 0)}
                   priority={true}
                   quality={75}
-                  className="w-full h-auto mt-2"
+                  className="w-full h-auto mt-2 print:hidden"
                   placeholder="blur"
                   blurDataURL={featuredImage.thumbhash || fallbackSVG}
                   sizes="(max-width: 1050px) 100vw, 780px"
@@ -219,6 +220,26 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
               dangerouslySetInnerHTML={{ __html: article?.content || '' }}
             />
           )}
+          {/* Render audio player(s) if audio exists */}
+
+          {audio && audio.length > 0 && (
+            <div className="mt-4 print:hidden">
+              <h3 className="mb-2 mt-0">Related Audio</h3>
+              {audio.map((item, index) => (
+                <div key={item.id} id={`audio-track-${index + 1}`} className="mt-2 mb-4">
+                  {item.title && <h4>{item.title}</h4>}
+                  {item.audioItemDetails?.audioEmbedCode && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.audioItemDetails.audioEmbedCode,
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
         </div>
       }
       rightSidebar={
@@ -239,24 +260,26 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
             </div>
           )}
           {audio && audio.length > 0 && (
-            <div className="mt-0">
+            <div className="mt-0 mb-4">
               <h3 className="mb-0 mt-0">Related Audio</h3>
-              {audio.map((item) => (
-                <div key={item.id} className="mt-2 mb-4">
-                  {item.audioItemDetails?.audioEmbedCode && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.audioItemDetails.audioEmbedCode,
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
+              <div className="mt-1">
+                {audio.map((item, index) => (
+                  <div key={item.id} className="flex items-center mb-2">
+                    <Link
+                      href={`#audio-track-${index + 1}`}  // Ensure this matches the ID in the main content
+                      className="text-communist-red hover:underline"
+                    >
+                      Here
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
+
           <div className="mt-0">
             <h3 className="mb-0 mt-0">Share This Article</h3>
-            <div className="flex justify-start items-center gap-x-6 mt-1 mb-4">
+            <div className="flex justify-start items-center gap-x-5 mt-1 mb-4">
               <a
                 href="https://facebook.com"
                 target="_blank"
@@ -315,6 +338,7 @@ const ArticleLayout = ({ article, globalSettings }: ArticleLayoutProps) => {
           )}
         </div>
       }
+
     />
   );
 };
