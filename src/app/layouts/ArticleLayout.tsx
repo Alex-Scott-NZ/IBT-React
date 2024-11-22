@@ -201,7 +201,12 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
               {/* Display the video if it exists, else display the featured image */}
               {/* Use the VideoPlayer component */}
               {videoUrl ? (
-                <VideoPlayer url={videoUrl} caption={videoCaption} />
+                <div className='print:hidden'>
+                  <VideoPlayer
+                    url={videoUrl}
+                    caption={videoCaption}
+                  />
+                </div>
               ) : (
                 featuredImage && (
                   <Image
