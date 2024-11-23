@@ -1,5 +1,3 @@
-/* BooksWidget.module.css */
-
 .books-widget {
     position: relative;
 }
@@ -9,9 +7,6 @@
     z-index: 10;
     cursor: pointer;
     background: inherit;
-    border: inherit;
+    border: none;
     font-size: 1rem;
 }
-
-
-

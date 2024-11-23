@@ -1,55 +1,44 @@
-'use client';
+"use client";
 
-import React, { useState, useCallback } from 'react';
-import { GetBooksQuery } from '../../gql/gql-generated';
-import { getImageUrl } from '../utils/imageHelpers';
-import { Swiper as SwiperClass } from 'swiper/types';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, EffectFade } from 'swiper/modules';
-import {
-  Card,
-  CardActionArea,
-  Typography,
-  Box,
-  IconButton,
-  ButtonGroup,
-  // Divider, styled,
-} from '@mui/material';
-import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import React, { useState, useCallback } from "react";
+import { GetBooksQuery } from "../../gql/gql-generated";
+import { getImageUrl } from "../utils/imageHelpers";
+import { Swiper as SwiperClass } from "swiper/types";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, EffectFade } from "swiper/modules";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
-import 'swiper/swiper-bundle.css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
+import ArrowBackIos from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
+import "swiper/swiper-bundle.css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
 interface BooksWidgetProps {
   books: GetBooksQuery;
 }
 
-// Create a styled Divider using the Tailwind CSS color variable
-// const StyledDivider = styled(Divider)({
-//   borderColor: '#B00909',
-//   borderWidth: '1px',
-//   height: '20px', // Match the height of your buttons
-//   marginX: '20px', // Adjust spacing as needed
-// });
-
 const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null);
   const router = useRouter();
 
-  const handlePrevious = useCallback((event: React.MouseEvent) => {
-    event?.stopPropagation();
-    swiperRef?.slidePrev();
-  }, [swiperRef]);
+  const handlePrevious = useCallback(
+    (event: React.MouseEvent) => {
+      event?.stopPropagation();
+      swiperRef?.slidePrev();
+    },
+    [swiperRef]
+  );
 
-  const handleNext = useCallback((event: React.MouseEvent) => {
-    event?.stopPropagation();
-    swiperRef?.slideNext();
-  }, [swiperRef]);
+  const handleNext = useCallback(
+    (event: React.MouseEvent) => {
+      event?.stopPropagation();
+      swiperRef?.slideNext();
+    },
+    [swiperRef]
+  );
 
   const handleBookClick = (bookSlug: string) => {
     router.push(`/book/${bookSlug}`);
@@ -58,27 +47,16 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   const booksList = books?.books?.nodes || [];
 
   return (
-    (<div className="books-widget relative mb-4">
-      <Box
-        marginBottom={1}
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
+    <div className="books-widget relative mb-4">
+      <div className="mb-2 flex justify-between items-center">
         <Link href="/book" passHref>
-          <Typography
-            className="font-telegrafico text-communist-red mt-0 mb-0"
-            variant="h5"
-          >
+          <h5 className="font-telegrafico text-communist-red mt-0 mb-0 text-2xl font-normal hover:bg-gray-200/5 transition-colors">
             Books
-          </Typography>
+          </h5>
         </Link>
-
-      </Box>
+      </div>
       <Swiper
-        className='p-0'
+        className="p-0"
         onSwiper={setSwiperRef}
         spaceBetween={30}
         slidesPerView={1}
@@ -89,126 +67,57 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
         modules={[Navigation, EffectFade]}
         loop={true}
         allowTouchMove={false}
-        style={{
-          // width: 'calc(100% + 20px)',
-          // height: 'calc(200px + 20px)',
-          // marginLeft: '-10px',
-          // padding: '5px 10px 10px 10px',
-        }}
       >
         {booksList.map((book) => (
           <SwiperSlide key={book.id}>
-            <Card elevation={0} className='p-0'
-              sx={{
-                Width: '100%',
-                height: '200px',
-                display: 'flex',
-                flexDirection: 'column',
-                backgroundColor: 'transparent'
-              }}
+            <div
+              className="p-2 w-full flex flex-col bg-transparent cursor-pointer transition-colors hover:bg-gray-400/10"
+              onClick={() => book.slug && handleBookClick(book.slug)}
             >
-              <CardActionArea
-                onClick={() => book.slug && handleBookClick(book.slug)}
-                sx={{ height: '100%' }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    height: '100%',
-                  }}
-                >
-
-                  <Box
-                    sx={{
-                      width: '45%',
-                      height: '100%',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      flexShrink: 0,
-                      marginRight: '8px',
-                    }}
-                  >
-                    <Image
-                      src={getImageUrl(book.featuredImage?.node, 128)}
-                      alt={book.featuredImage?.node?.altText || book.title || ''}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 45vw"
-                      style={{
-                        objectFit: "cover"
-                      }} />
-                  </Box>
-
-                  <Box sx={{ flex: '1 1 auto' }}>
-                    <Typography variant="h6" className="font-helvetica" fontSize={16} fontWeight={'bold'}>
-                      {book.title}
-                    </Typography>
-                    <Typography
-                      variant="subtitle2"
-                      color="text.secondary"
-                      component="div"
-                      className="font-helvetica"
-                      sx={{ marginTop: '8px' }}
-                    >
-                      {book.bookDetails?.subheading}
-                    </Typography>
-                  </Box>
-                </Box>
-              </CardActionArea>
-            </Card>
+              <div className="flex items-start">
+                {/* Image Container */}
+                <div className="w-1/3 relative flex-shrink-0 mr-2">
+                  <Image
+                    src={getImageUrl(book.featuredImage?.node, 128)}
+                    alt={book.featuredImage?.node?.altText || book.title || ""}
+                    width={0}
+                    height={0}
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ width: "100%", height: "auto" }}
+                  />
+                </div>
+                {/* Text Container */}
+                <div className="flex-1">
+                  <h6 className="font-helvetica text-base font-bold m-0">
+                    {book.title}
+                  </h6>
+                  <p className="font-helvetica text-sm text-gray-600 m-0">
+                    {book.bookDetails?.subheading}
+                  </p>
+                </div>
+              </div>
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
-      <Box
-        marginTop={1}
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',  // Center the ButtonGroup within the Box
-          alignItems: 'center',       // Vertically center the ButtonGroup (optional)
-        }}
-      >
-        <ButtonGroup
-          sx={{
-            boxShadow: 0.5,
-            backgroundColor: '#EAEAE2',
-            borderRadius: '5px',
-            overflow: 'hidden',
-            width: '100%',  // Set the width for the ButtonGroup
-            justifyContent: 'center', // Center the buttons within the ButtonGroup
-          }}
-        >
-          <IconButton
+      <div className="mt-2 flex justify-center items-center">
+        <div className="flex w-full max-w-xs">
+          <button
             onClick={handlePrevious}
-            sx={{
-              flex: 1,                 // Make the button take equal space
-              justifyContent: 'center', // Center the icon within the button
-              borderRadius: '10px'
-            }}
+            className="flex-1 flex justify-center items-center p-2 rounded-l-full border-0 focus:outline-none transition-colors hover:bg-gray-400/10 bg-transparent"
           >
-            <ArrowBackIos
-              sx={{ marginLeft: '0px' }} // Remove margin if needed
-              fontSize="small"
-              className="text-communist-red"
-            />
-          </IconButton>
-          {/* <StyledDivider orientation='vertical' variant='middle' /> */}
-          <IconButton
+            <ArrowBackIos fontSize="small" className="text-communist-red" />
+          </button>
+          <button
             onClick={handleNext}
-            sx={{
-              flex: 1,                 // Make the button take equal space
-              justifyContent: 'center', // Center the icon within the button
-              borderRadius: '10px'
-            }}
+            className="flex-1 flex justify-center items-center p-2 rounded-r-full border-0 focus:outline-none transition-colors hover:bg-gray-400/10 bg-transparent"
           >
-            <ArrowForwardIos
-              sx={{ marginLeft: '0px' }} // Remove margin if needed
-              fontSize="small"
-              className="text-communist-red"
-            />
-          </IconButton>
-        </ButtonGroup>
-      </Box>
-    </div>)
+            <ArrowForwardIos fontSize="small" className="text-communist-red" />
+          </button>
+        </div>
+      </div>
+
+    </div>
   );
 };
 
