@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout';
 import Image from 'next/image';
 import Link from 'next/link';
 import VideoPlayer from '../components/VideoPlayer';
+import ScrollToTopButton from '../components/ScrollToTopButton';
 import {
   GetGlobalSettingsQuery,
   GetArticleByUriQuery,
@@ -180,7 +181,7 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
         </div>
       }
       mainContent={
-        <div>
+        <div className='relative'>
           {!pdfUrl && (
             <>
               <h1 className="mt-1 mb-0 text-gray-800">{article?.title}</h1>
@@ -256,6 +257,8 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
               ))}
             </div>
           )}
+          {/* Scroll-to-Top Button */}
+          <ScrollToTopButton />
 
         </div>
       }
