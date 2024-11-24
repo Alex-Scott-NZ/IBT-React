@@ -16,6 +16,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
+
 interface BooksWidgetProps {
   books: GetBooksQuery;
 }
@@ -121,4 +122,4 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
   );
 };
 
-export default BooksWidget;
+export default React.memo(BooksWidget);

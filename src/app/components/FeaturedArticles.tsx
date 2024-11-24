@@ -43,7 +43,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
               )}
               <div className="absolute inset-0 bg-gradient-to-b from-transparent from-15% to-black" />
               
-              <div className="absolute bottom-0 left-0 w-full p-4 text-gray-300 z-10 flex flex-col justify-end h-full">
+              <div className="absolute bottom-0 left-0 w-full p-4 text-gray-200 z-10 flex flex-col justify-end h-full">
                 <p className="text-xs mb-0">
                   {article.articleDetails?.suppressDate
                     ? article.articleDetails.displayDate

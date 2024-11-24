@@ -5,6 +5,10 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/article/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/book/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/journal/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/layouts/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   important: '#__next', // Add this line
   theme: {

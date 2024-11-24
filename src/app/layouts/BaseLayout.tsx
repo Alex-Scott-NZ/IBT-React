@@ -3,12 +3,11 @@ import { Suspense, ReactNode } from 'react';
 import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';
 import Header from '../components/Header';
-import NavigationMenu from '../components/NavigationMenu';
 import SiteWideNotice from '../components/SiteWideNotice';
-import PrintLayout from '../layouts/PrintLayout';
 import LoadingFallback from '../components/LoadingFallback';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { GetGlobalSettingsQuery } from '@/gql/gql-generated';
+import dynamic from 'next/dynamic';
 
 interface BaseLayoutProps {
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
@@ -18,6 +17,14 @@ interface BaseLayoutProps {
   slug?: string;
   isLoading?: boolean;
 }
+
+const NavigationMenu = dynamic(() => import('../components/NavigationMenu'), {
+  suspense: true,
+});
+
+const PrintLayout = dynamic(() => import('../layouts/PrintLayout'), {
+  suspense: true,
+});
 
 const BaseLayout = ({
   globalSettings,
