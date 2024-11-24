@@ -1,5 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import useSWR from 'swr';
 import {
   AppBar,
   Toolbar,
@@ -28,68 +29,86 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 
-export const revalidate = 60;
+// Constants
+const SOCIAL_LINKS = [
+  { Icon: FacebookIcon, href: 'https://www.facebook.com/Bolsheviks' },
+  { Icon: YouTubeIcon, href: 'https://www.youtube.com/user/ibt1917' },
+  { Icon: TwitterIcon, href: 'https://www.twitter.com/IBT1917' },
+  { Icon: EmailIcon, href: 'mailto:ibt@bolshevik.org' },
+] as const;
 
-const NavigationMenu: React.FC = () => {
+const COLLECTION_ITEMS = [
+  { label: 'Item 1', href: '#' },
+  { label: 'Item 2', href: '#' },
+] as const;
+
+// Fetcher for SWR
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Failed to fetch journal issues');
+  const data = await response.json();
+  return Array.isArray(data) 
+    ? data.sort((a, b) => b.slug.localeCompare(a.slug))
+    : [];
+};
+
+const NavigationMenu = () => {
+  // State management
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(null);
   const [anchorElCollection, setAnchorElCollection] = useState<null | HTMLElement>(null);
-  const [journalIssues, setJournalIssues] = useState<JournalIssueNode[]>([]);
   const [journalOpen, setJournalOpen] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchJournalIssues = async () => {
-      try {
-        const response = await fetch('/api/journal-issues');
-        if (!response.ok) throw new Error('Failed to fetch journal issues');
-        const data: JournalIssueNode[] = await response.json();
-        if (Array.isArray(data)) {
-          const sortedIssues = data.sort((a, b) =>
-            b.slug.localeCompare(a.slug)
-          );
-          setJournalIssues(sortedIssues);
-        } else {
-          console.error('Unexpected data structure:', data);
-        }
-      } catch (error) {
-        console.error('Error fetching journal issues:', error);
-      }
-    };
+  // SWR for data fetching
+  const { data: journalIssues = [], error, isLoading } = useSWR<JournalIssueNode[]>(
+    '/api/journal-issues',
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 60000,
+      dedupingInterval: 60000, // Add this to prevent duplicate requests
+    }
+  );
 
-    fetchJournalIssues();
+  // Memoized handlers
+  const handleDrawerToggle = useCallback(() => {
+    setMobileOpen(prev => !prev);
   }, []);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const handleMenuOpen =
+  const handleMenuOpen = useCallback(
     (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) =>
       (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
-      };
+      },
+    []
+  );
 
-  const handleMenuClose =
+  const handleMenuClose = useCallback(
     (setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>) =>
       () => {
         setAnchorEl(null);
-      };
+      },
+    []
+  );
 
-  const handleNestedListToggle =
+  const handleNestedListToggle = useCallback(
     (setState: React.Dispatch<React.SetStateAction<boolean>>) =>
       (event: React.MouseEvent) => {
         event.stopPropagation();
-        setState((prev) => !prev);
-      };
+        setState(prev => !prev);
+      },
+    []
+  );
 
-  const drawer = (
+  // Memoized drawer content
+  const drawer = useMemo(() => (
     <Box sx={{ textAlign: 'center' }}>
       <List>
         <ListItemButton component={Link} href="/" onClick={handleDrawerToggle}>
           <ListItemText primary="home" />
         </ListItemButton>
-
+  
         <ListItemButton onClick={handleNestedListToggle(setJournalOpen)}>
           <ListItemText primary="1917 journal" />
           {journalOpen ? <ExpandLess /> : <ExpandMore />}
@@ -104,20 +123,26 @@ const NavigationMenu: React.FC = () => {
             >
               <ListItemText primary="journal home" />
             </ListItemButton>
-            {journalIssues.map((issue) => (
-              <ListItemButton
-                key={issue.slug}
-                component={Link}
-                href={`/journal/${issue.slug}`}
-                sx={{ pl: 6 }}
-                onClick={handleDrawerToggle}
-              >
-                <ListItemText primary={issue.title} />
+            {isLoading ? (
+              <ListItemButton disabled sx={{ pl: 6 }}>
+                <ListItemText primary="Loading..." />
               </ListItemButton>
-            ))}
+            ) : (
+              journalIssues.map((issue) => (
+                <ListItemButton
+                  key={issue.slug}
+                  component={Link}
+                  href={`/journal/${issue.slug}`}
+                  sx={{ pl: 6 }}
+                  onClick={handleDrawerToggle}
+                >
+                  <ListItemText primary={issue.title} />
+                </ListItemButton>
+              ))
+            )}
           </List>
         </Collapse>
-
+  
         <ListItemButton
           component={Link}
           href="/book"
@@ -125,22 +150,27 @@ const NavigationMenu: React.FC = () => {
         >
           <ListItemText primary="books" />
         </ListItemButton>
-
+  
         <ListItemButton onClick={handleNestedListToggle(setCollectionOpen)}>
           <ListItemText primary="collection" />
           {collectionOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
         <Collapse in={collectionOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }} onClick={handleDrawerToggle}>
-              <ListItemText primary="Item 1" />
-            </ListItemButton>
-            <ListItemButton sx={{ pl: 4 }} onClick={handleDrawerToggle}>
-              <ListItemText primary="Item 2" />
-            </ListItemButton>
+            {COLLECTION_ITEMS.map(({ label, href }) => (
+              <ListItemButton
+                key={label}
+                component={Link}
+                href={href}
+                sx={{ pl: 4 }}
+                onClick={handleDrawerToggle}
+              >
+                <ListItemText primary={label} />
+              </ListItemButton>
+            ))}
           </List>
         </Collapse>
-
+  
         <ListItemButton
           component={Link}
           href="/marxist-archives"
@@ -148,7 +178,7 @@ const NavigationMenu: React.FC = () => {
         >
           <ListItemText primary="marxist archives" />
         </ListItemButton>
-
+  
         <ListItemButton
           component={Link}
           href="/about"
@@ -156,7 +186,7 @@ const NavigationMenu: React.FC = () => {
         >
           <ListItemText primary="about" />
         </ListItemButton>
-
+  
         <ListItemButton
           component={Link}
           href="/donate"
@@ -166,7 +196,37 @@ const NavigationMenu: React.FC = () => {
         </ListItemButton>
       </List>
     </Box>
-  );
+  ), [journalIssues, journalOpen, collectionOpen, isLoading, handleDrawerToggle, handleNestedListToggle]);
+  
+
+  // Memoized social icons
+  const socialIcons = useMemo(() => (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'flex-end',
+        gap: '1',
+        '& .MuiIconButton-root': { fontSize: '2rem' },
+      }}
+    >
+      {SOCIAL_LINKS.map(({ Icon, href }, index) => (
+        <IconButton
+          key={index}
+          color="inherit"
+          component={Link}
+          href={href}
+          target="_blank"
+        >
+          <Icon fontSize="inherit" />
+        </IconButton>
+      ))}
+    </Box>
+  ), []);
+
+  // Error handling
+  if (error) {
+    console.error('Failed to load journal issues:', error);
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -180,7 +240,6 @@ const NavigationMenu: React.FC = () => {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            // edge="start"
             size="large"
             className="p-1"
             onClick={handleDrawerToggle}
@@ -217,6 +276,7 @@ const NavigationMenu: React.FC = () => {
                 anchorEl={anchorElJournal}
                 open={Boolean(anchorElJournal)}
                 onClose={handleMenuClose(setAnchorElJournal)}
+                disableScrollLock={true}
               >
                 <MenuItem
                   onClick={handleMenuClose(setAnchorElJournal)}
@@ -225,19 +285,23 @@ const NavigationMenu: React.FC = () => {
                 >
                   journal home
                 </MenuItem>
-                {journalIssues.map((issue) => (
-                  <MenuItem
-                    key={issue.slug}
-                    onClick={handleMenuClose(setAnchorElJournal)}
-                    component={Link}
-                    href={`/journal/${issue.slug}`}
-                    sx={{ pl: 6 }} // Add padding here
-                  >
-                    {issue.title}
-                  </MenuItem>
-                ))}
+                {isLoading ? (
+                  <MenuItem disabled>Loading...</MenuItem>
+                ) : (
+                  journalIssues.map((issue) => (
+                    <MenuItem
+                      key={issue.slug}
+                      onClick={handleMenuClose(setAnchorElJournal)}
+                      component={Link}
+                      href={`/journal/${issue.slug}`}
+                      sx={{ pl: 6 }}
+                    >
+                      {issue.title}
+                    </MenuItem>
+                  ))
+                )}
               </Menu>
-
+  
               <Button component={Link} href="/book">
                 books
               </Button>
@@ -259,13 +323,18 @@ const NavigationMenu: React.FC = () => {
                 anchorEl={anchorElCollection}
                 open={Boolean(anchorElCollection)}
                 onClose={handleMenuClose(setAnchorElCollection)}
+                disableScrollLock={true}
               >
-                <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>
-                  Item 1
-                </MenuItem>
-                <MenuItem onClick={handleMenuClose(setAnchorElCollection)}>
-                  Item 2
-                </MenuItem>
+                {COLLECTION_ITEMS.map(({ label, href }) => (
+                  <MenuItem
+                    key={label}
+                    onClick={handleMenuClose(setAnchorElCollection)}
+                    component={Link}
+                    href={href}
+                  >
+                    {label}
+                  </MenuItem>
+                ))}
               </Menu>
               <Button component={Link} href="/about">
                 about
@@ -275,42 +344,8 @@ const NavigationMenu: React.FC = () => {
               </Button>
             </ButtonGroup>
           </Box>
-          {/* Social media icons */}
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: '1',
-              '& .MuiIconButton-root': {
-                fontSize: '2rem',
-              },
-            }}
-          >
-            {[
-              {
-                Icon: FacebookIcon,
-                href: 'https://www.facebook.com/Bolsheviks',
-              },
-              {
-                Icon: YouTubeIcon,
-                href: 'https://www.youtube.com/user/ibt1917',
-              },
-              { Icon: TwitterIcon, href: 'https://www.twitter.com/IBT1917' },
-              { Icon: EmailIcon, href: 'mailto:ibt@bolshevik.org' },
-            ].map(({ Icon, href }, index) => (
-              <IconButton
-                key={index}
-                color="inherit"
-                component={Link}
-                href={href}
-                target="_blank"
-              >
-                <Icon fontSize="inherit" />
-              </IconButton>
-            ))}
-          </Box>
+          {socialIcons}
         </Toolbar>
-        {/* Drawer */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
@@ -328,6 +363,7 @@ const NavigationMenu: React.FC = () => {
       </AppBar>
     </ThemeProvider>
   );
+  
 };
 
 export default NavigationMenu;

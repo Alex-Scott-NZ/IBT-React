@@ -30,7 +30,7 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
       >
         {textContentGroup.freeTextHeading && (
           <Typography
-            className="text-communist-red mt-0 mb-0"
+            className="text-gray-900 text-xl mt-0 mb-0"
             variant="h5"
             component="span"
           >
