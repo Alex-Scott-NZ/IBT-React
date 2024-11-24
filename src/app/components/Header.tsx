@@ -7,7 +7,7 @@ interface HeaderProps {
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
 }
 
-const Header = React.memo(({ globalSettings }: HeaderProps) => {
+const Header = ({ globalSettings }: HeaderProps) => {
   const bannerData = globalSettings?.fGGlobalSettings?.bannerImage;
 
   const fallbackSVG = `data:image/svg+xml;base64,${Buffer.from(
@@ -43,6 +43,6 @@ const Header = React.memo(({ globalSettings }: HeaderProps) => {
       </div>
     </header>
   );
-});
+};
 
-export default Header;
+export default React.memo(Header);

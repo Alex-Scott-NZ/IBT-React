@@ -75,14 +75,13 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
   articles,
   books,
   latestJournalIssue,
-  placeHolderSettings
+  placeHolderSettings,
 }) => {
-  
+
+  // 1. Call Hooks Unconditionally at the Top Level
   const validPlaceholders = useMemo(() => {
     return getValidPlaceholders(placeHolderSettings);
   }, [placeHolderSettings]);
-  
-  if (validPlaceholders.length === 0) return null;
 
   const widgetProps = useMemo(() => ({
     books,
@@ -93,26 +92,33 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
     return getSidebarContent(
       validPlaceholders,
       ['placeHolder1', 'placeHolder2', 'placeHolder3'],
-      widgetProps
+      widgetProps,
     );
   }, [validPlaceholders, widgetProps]);
-  
+
   const rightSidebarContent = useMemo(() => {
     return getSidebarContent(
       validPlaceholders,
       ['placeHolder4', 'placeHolder5', 'placeHolder6'],
-      widgetProps
+      widgetProps,
     );
   }, [validPlaceholders, widgetProps]);
-  
+
+  // 2. Early Return After Hooks Are Called
+  if (validPlaceholders.length === 0) return null;
+
+  // 3. Render Component
   return (
     <BaseLayout
       globalSettings={globalSettings.globalSettings}
       leftSidebar={<>{leftSidebarContent}</>}
-      mainContent={<MainContent articles={articles} placeholders={validPlaceholders} />}
+      mainContent={
+        <MainContent articles={articles} placeholders={validPlaceholders} />
+      }
       rightSidebar={<>{rightSidebarContent}</>}
     />
   );
 };
 
 export default HomeLayout;
+
