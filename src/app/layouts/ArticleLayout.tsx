@@ -2,7 +2,8 @@ import React from 'react';
 import BaseLayout from './BaseLayout';
 import Image from 'next/image';
 import Link from 'next/link';
-import VideoPlayer from '../components/VideoPlayer';
+import dynamic from 'next/dynamic';
+// import VideoPlayer from '../components/VideoPlayer';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import ShareButton from '../components/ShareButton';
 import {
@@ -15,7 +16,7 @@ import {
   JournalIssue,
   VideoItem
 } from '@/gql/gql-generated';
-import PdfViewerComponent from './PdfViewerComponent';
+// import PdfViewerComponent from './PdfViewerComponent';
 
 import { format } from 'date-fns';
 
@@ -26,6 +27,10 @@ import PrintButton from '../components/PrintButton';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+
+// Dynamic imports for conditional scripts
+const VideoPlayer = dynamic(() => import('../components/VideoPlayer'), {ssr:false});
+const PdfViewerComponent = dynamic(() => import('./PdfViewerComponent'), {ssr:false});
 
 interface ArticleLayoutProps {
   article: GetArticleByUriQuery['article'];

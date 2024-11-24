@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { GetGlobalSettingsQuery } from '@/gql/gql-generated';
@@ -6,7 +7,7 @@ interface HeaderProps {
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
 }
 
-const Header = ({ globalSettings }: HeaderProps) => {
+const Header = React.memo(({ globalSettings }: HeaderProps) => {
   const bannerData = globalSettings?.fGGlobalSettings?.bannerImage;
 
   const fallbackSVG = `data:image/svg+xml;base64,${Buffer.from(
@@ -42,6 +43,6 @@ const Header = ({ globalSettings }: HeaderProps) => {
       </div>
     </header>
   );
-};
+});
 
 export default Header;

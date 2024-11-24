@@ -68,4 +68,4 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
   );
 };
 
-export default LatestJournalIssueWidget;
+export default React.memo(LatestJournalIssueWidget);

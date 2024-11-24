@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import BaseLayout from './BaseLayout';
 import MainContent from '../components/MainContent';
 import BooksWidget from '../components/BooksWidget';
@@ -24,15 +24,6 @@ type HomeLayoutProps = {
 type WidgetProps = {
   books: GetBooksQuery;
   latestJournalIssue: GetJournalIssuesLatestQuery;
-};
-
-// Update the type definition
-type NullablePlaceholderSetup = {
-  placeholderSettings?: {
-    placeholderSettingsFields?: {
-      placeholderSetup?: (PlaceholderSettingsFieldsPlaceholderSetup | null)[] | null;
-    } | null;
-  } | null;
 };
 
 const getValidPlaceholders = (settings: GetPlaceholderSettingsQuery) => {
@@ -79,30 +70,41 @@ const getSidebarContent = (
     ));
 };
 
-const HomeLayout: React.FC<HomeLayoutProps> = async ({
+const HomeLayout: React.FC<HomeLayoutProps> = ({
   globalSettings,
   articles,
   books,
   latestJournalIssue,
   placeHolderSettings
 }) => {
-  const validPlaceholders = getValidPlaceholders(placeHolderSettings);
+  
+  const validPlaceholders = useMemo(() => {
+    return getValidPlaceholders(placeHolderSettings);
+  }, [placeHolderSettings]);
+  
   if (validPlaceholders.length === 0) return null;
 
-  const widgetProps = { books, latestJournalIssue };
+  const widgetProps = useMemo(() => ({
+    books,
+    latestJournalIssue,
+  }), [books, latestJournalIssue]);
 
-  const leftSidebarContent = getSidebarContent(
-    validPlaceholders,
-    ['placeHolder1', 'placeHolder2', 'placeHolder3'],
-    widgetProps
-  );
-
-  const rightSidebarContent = getSidebarContent(
-    validPlaceholders,
-    ['placeHolder4', 'placeHolder5', 'placeHolder6'],
-    widgetProps
-  );
-
+  const leftSidebarContent = useMemo(() => {
+    return getSidebarContent(
+      validPlaceholders,
+      ['placeHolder1', 'placeHolder2', 'placeHolder3'],
+      widgetProps
+    );
+  }, [validPlaceholders, widgetProps]);
+  
+  const rightSidebarContent = useMemo(() => {
+    return getSidebarContent(
+      validPlaceholders,
+      ['placeHolder4', 'placeHolder5', 'placeHolder6'],
+      widgetProps
+    );
+  }, [validPlaceholders, widgetProps]);
+  
   return (
     <BaseLayout
       globalSettings={globalSettings.globalSettings}
