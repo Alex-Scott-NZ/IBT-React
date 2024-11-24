@@ -100,7 +100,7 @@ const Home = async () => {
   const typedBooksData = booksData as GetBooksQuery;
   const typedLatestJournalIssueData = latestJournalIssueData as GetJournalIssuesLatestQuery;
   const typedPlaceholdersData = placeholdersData as GetPlaceholderSettingsQuery;
-
+  
   // Ensure that all data is available, if not, return an error page
   if (
     !typedArticlesData ||

@@ -78,6 +78,15 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
   placeHolderSettings,
 }) => {
 
+    // 
+    // console.log('Articles received in HomeLayout:', articles);
+    // console.log('Articles nodes:', articles.articles?.nodes);
+    // console.log('First article details:', articles.articles?.nodes?.[0]?.articleDetails);
+    // console.log('Related Journals:', articles.articles?.nodes?.map(article => ({
+    //   title: article.title,
+    //   relatedJournal: article.articleDetails?.relatedJournal
+    // })));
+
   // 1. Call Hooks Unconditionally at the Top Level
   const validPlaceholders = useMemo(() => {
     return getValidPlaceholders(placeHolderSettings);
