@@ -1,12 +1,8 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import React from 'react';
-// import { FrontPageArticle } from '../types/Article';
 import { GetArticlesQuery } from '@/gql/gql-generated';
-import { getImageUrl } from '../utils/imageHelpers';
-import { Card, CardActionArea, Typography, Grid, Box } from '@mui/material';
 import { FragmentFeaturedImageFragment } from '@/gql/graphql';
-
-
 
 interface FeaturedArticlesProps {
   articles: NonNullable<GetArticlesQuery['articles']>['nodes'];
@@ -15,96 +11,58 @@ interface FeaturedArticlesProps {
 
 const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
   const formatDate = (dateString?: string): string => {
-    if (!dateString) return ''; // Return an empty string if dateString is undefined or null
+    if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
-    }).replace(',', ''); // Removing commas if any
+    }).replace(',', '');
   };
 
-
   if (articles.length === 0) {
-    return <Typography>No featured articles available.</Typography>;
+    return <p>No featured articles available.</p>;
   }
 
   return (
-    <Grid container spacing={2}>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {articles.map((article) => {
         const image = article.featuredImage?.node as Partial<FragmentFeaturedImageFragment> | undefined;
         return (
-          <Grid item xs={12} md={6} key={article.id}>
-            <Link href={`/article/${article.slug}`} passHref>
-              <Card elevation={1} sx={{ position: 'relative', height: 225 }}>
-                <CardActionArea sx={{ height: '100%' }}>
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      backgroundImage: `url(${getImageUrl(image, 352)})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        background:
-                          'linear-gradient(to bottom, rgba(0,0,0,0) 15%, rgba(0,0,0,1) 100%)',
-                      },
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      width: '100%',
-                      padding: 2,
-                      color: 'white',
-                      zIndex: 1,
-                    }}
-                  >
-                    <Typography variant="body2" fontSize="0.8rem">
-                      {article.articleDetails?.suppressDate
-                        ? article.articleDetails.displayDate
-                        : formatDate(article.articleDetails?.publicationDate)}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{
-                        fontSize: '1.5rem',
-                        fontWeight: 'bold',
-                        lineHeight: 1.2,
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {article.title}
-                    </Typography>
-                    {article.articleDetails?.subtitle && (
-                      <Typography variant="body2" fontSize="0.8rem" noWrap>
-                        {article.articleDetails.subtitle}
-                      </Typography>
-                    )}
-                  </Box>
-                </CardActionArea>
-              </Card>
-            </Link>
-          </Grid>
-        )
+          <Link href={`/article/${article.slug}`} key={article.id}>
+            <div className="relative h-48 overflow-hidden transition-colors hover:bg-gray-400/5">
+              {image?.sourceUrl && (
+                <Image
+                  src={image.sourceUrl}
+                  alt={image.altText || article.title || 'Article image'}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={true}
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent from-15% to-black" />
+              
+              <div className="absolute bottom-0 left-0 w-full p-4 text-gray-300 z-10 flex flex-col justify-end h-full">
+                <p className="text-xs mb-0">
+                  {article.articleDetails?.suppressDate
+                    ? article.articleDetails.displayDate
+                    : formatDate(article.articleDetails?.publicationDate)}
+                </p>
+                <h2 className="text-xl font-bold leading-tight line-clamp-2 mb-0 mt-0">
+                  {article.title}
+                </h2>
+                {article.articleDetails?.subtitle && (
+                  <p className="text-sm truncate mb-0">
+                    {article.articleDetails.subtitle}
+                  </p>
+                )}
+              </div>
+            </div>
+          </Link>
+        );
       })}
-    </Grid>
+    </div>
   );
 };
 

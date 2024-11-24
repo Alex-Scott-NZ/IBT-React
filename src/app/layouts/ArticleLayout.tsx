@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import VideoPlayer from '../components/VideoPlayer';
 import ScrollToTopButton from '../components/ScrollToTopButton';
+import ShareButton from '../components/ShareButton';
 import {
   GetGlobalSettingsQuery,
   GetArticleByUriQuery,
@@ -181,7 +182,7 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
         </div>
       }
       mainContent={
-        <div className='relative'>
+        <div className="relative">
           {!pdfUrl && (
             <>
               <h1 className="mt-1 mb-0 text-gray-800">{article?.title}</h1>
@@ -190,23 +191,26 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
                   {article.articleDetails.subtitle}
                 </h2>
               )}
-              {/* Display the date if available */}
+              {/* Display the date and ShareButton */}
               {dateToDisplay && (
-                <p className="mt-1 mb-1 text-gray-800">{dateToDisplay}</p>
+                <div className="flex items-center mt-1 mb-1 text-gray-800">
+                  <span className="mr-2">{dateToDisplay}</span>
+                  <span className="mr-2 font-bold">Share:</span>
+
+                    <ShareButton />
+                  
+                </div>
               )}
-              {/* Display the source if available and suppressDate is false */}
+
+              {/* Display the source if available */}
               {source && (
                 <p className="mt-1 mb-1 text-gray-800">Source: {source}</p>
               )}
 
               {/* Display the video if it exists, else display the featured image */}
-              {/* Use the VideoPlayer component */}
               {videoUrl ? (
-                <div className='print:hidden'>
-                  <VideoPlayer
-                    url={videoUrl}
-                    caption={videoCaption}
-                  />
+                <div className="print:hidden mt-3">
+                  <VideoPlayer url={videoUrl} caption={videoCaption} />
                 </div>
               ) : (
                 featuredImage && (
@@ -221,9 +225,7 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
                     placeholder="blur"
                     blurDataURL={featuredImage.thumbhash || fallbackSVG}
                     sizes="(max-width: 1050px) 100vw, 780px"
-                    style={{
-                      maxWidth: '100%',
-                    }}
+                    style={{ maxWidth: '100%' }}
                   />
                 )
               )}

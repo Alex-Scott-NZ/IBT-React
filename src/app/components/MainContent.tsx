@@ -36,7 +36,7 @@ const MainContent: React.FC<MainContentProps> = ({ articles }) => {
       </div>
 
       {/* Render all articles with the same layout on mobile and non-featured articles on desktop */}
-      <div className="w-full mt-4">
+      <div className="w-full mt-0">
         {sortedArticles!.map((article, index) => (
           <ArticleSummary 
             key={article.id} 

@@ -3,12 +3,6 @@
 import React from 'react';
 import { GetJournalIssuesLatestQuery } from '../../gql/gql-generated';
 import { getImageUrl } from '../utils/imageHelpers';
-import {
-  Card,
-  CardActionArea,
-  Typography,
-  Box,
-} from '@mui/material';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from "next/image";
@@ -20,7 +14,7 @@ interface LatestJournalIssueWidgetProps {
 const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ latestJournalIssue }) => {
   const router = useRouter();
 
-  if (!latestJournalIssue ) {
+  if (!latestJournalIssue) {
     return <p>No latest journal issue available.</p>;
   }
 
@@ -33,94 +27,44 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
   };
 
   return (
-    (<div className="latest-journal-issue-widget relative mb-4">
-      <Box
-        marginBottom={1}
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
+    <div className="relative mb-4">
+      <div className="mb-2 flex justify-between items-center">
         <Link href="/journal" passHref>
-          <Typography
-            className="text-communist-red mt-0 mb-0"
-            variant="h5"
-            component="span"
-          >
-            <span className="font-telegrafico">Latest Journal</span>
-          </Typography>
+          <h5 className="font-telegrafico text-gray-900 mt-0 mb-0 text-xl font-light hover:bg-gray-400/5 transition-colors">
+            Latest Journal
+          </h5>
         </Link>
-      </Box>
-      <Card elevation={0}
-        sx={{
-          maxWidth: '100%',
-          display: 'flex',
-          flexDirection: 'column',
+      </div>
 
-          background: 'transparent',
-          border: 'none'
-
-        }}
+      <div 
+        onClick={() => handleJournalClick(latestIssue?.slug)}
+        className="w-full cursor-pointer transition-colors hover:bg-gray-400/10"
       >
-        <CardActionArea
-          onClick={() => handleJournalClick(latestIssue?.slug)}
-          sx={{ width: '100%' }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              width: '100%',
-              overflow: 'hidden',
-            }}
-          >
-
-            <Box
-              sx={{
-                width: '33%',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-            >
-              <Image
-                // 50% of the card width (328px)
-                src={getImageUrl(latestIssue?.featuredImage?.node, 164)}
-                alt={latestIssue?.featuredImage?.node?.altText || latestIssue?.title || 'Latest Journal Issue'}
-                // Set the width based on your design
-                width={328}
-                // Automatically calculate height to maintain aspect ratio
-                height={0}
-                sizes="100vw"
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  objectFit: 'cover',
-                }} />
-            </Box>
-
-            <Box
-              sx={{
-                width: '67%',
-                paddingLeft: '8px', // Ensure padding on the left side of the text
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-              }}
-            >
-              <Typography variant="body2" className="font-helvetica">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel ligula non elit bibendum tincidunt.
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={{ paddingTop: '8px', textAlign: 'center' }}>
-            <Typography variant="h6" className="font-cambay" sx={{ marginTop: '8px' }}>
+        <div className="flex items-start">
+          {/* Image Container */}
+          <div className="w-1/3 relative flex-shrink-0 mr-2">
+            <Image
+              src={getImageUrl(latestIssue?.featuredImage?.node, 164)}
+              alt={latestIssue?.featuredImage?.node?.altText || latestIssue?.title || 'Latest Journal Issue'}
+              width={0}
+              height={0}
+              sizes="(max-width: 768px) 100vw, 33vw"
+              style={{ width: "100%", height: "auto" }}
+            />
+          </div>
+          
+          {/* Text Container */}
+          <div className="flex-1">
+            <h6 className="font-helvetica text-sm text-gray-600 font-bold m-0">
               {latestIssue?.title}
-            </Typography>
-          </Box>
-        </CardActionArea>
-      </Card>
-    </div>)
+            </h6>
+            <p className="font-helvetica text-xs text-gray-600 m-0">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

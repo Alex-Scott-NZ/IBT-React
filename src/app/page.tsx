@@ -15,23 +15,23 @@ import { serverFetch } from '../gql/query-utils';
 import { Metadata } from 'next';
 
 // Helper function to get largest image info
-const getLargestImageInfo = (
-  srcSet: string
-): { url: string; width: number; height: number } => {
-  const images = srcSet.split(', ').map((img) => {
-    const [url, size] = img.split(' ');
-    const width = parseInt(size.replace('w', ''));
-    const dimensions = url.match(/-(\d+)x(\d+)\.png$/);
-    const height = dimensions ? parseInt(dimensions[2]) : 0;
-    return { url, width, height };
-  });
+// const getLargestImageInfo = (
+//   srcSet: string
+// ): { url: string; width: number; height: number } => {
+//   const images = srcSet.split(', ').map((img) => {
+//     const [url, size] = img.split(' ');
+//     const width = parseInt(size.replace('w', ''));
+//     const dimensions = url.match(/-(\d+)x(\d+)\.png$/);
+//     const height = dimensions ? parseInt(dimensions[2]) : 0;
+//     return { url, width, height };
+//   });
 
-  const largestImage = images.reduce((prev, current) =>
-    prev.width > current.width ? prev : current
-  );
+//   const largestImage = images.reduce((prev, current) =>
+//     prev.width > current.width ? prev : current
+//   );
 
-  return largestImage;
-};
+//   return largestImage;
+// };
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
@@ -79,34 +79,35 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const Home = async () => {
-  // Fetch the required data using your helper functions
-  const articlesData: GetArticlesQuery = await serverFetch(
-    useGetArticlesQuery,
-    { next: { revalidate: 60 } }
-  );
-  const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
-    useGetGlobalSettingsQuery,
-    { next: { revalidate: 60 } }
-  );
-  const booksData: GetBooksQuery = await serverFetch(useGetBooksQuery, {
-    next: { revalidate: 60 },
-  });
-  const latestJournalIssueData: GetJournalIssuesLatestQuery = await serverFetch(
-    useGetJournalIssuesLatestQuery,
-    { next: { revalidate: 60 } }
-  );
-  const placeholdersData: GetPlaceholderSettingsQuery = await serverFetch(
-    useGetPlaceholderSettingsQuery,
-    { next: { revalidate: 60 } }
-  );
+  // Fetch all data in parallel using Promise.all
+  const [
+    articlesData,
+    globalSettingsData,
+    booksData,
+    latestJournalIssueData,
+    placeholdersData,
+  ] = await Promise.all([
+    serverFetch(useGetArticlesQuery, { next: { revalidate: 60 } }),
+    serverFetch(useGetGlobalSettingsQuery, { next: { revalidate: 60 } }),
+    serverFetch(useGetBooksQuery, { next: { revalidate: 60 } }),
+    serverFetch(useGetJournalIssuesLatestQuery, { next: { revalidate: 60 } }),
+    serverFetch(useGetPlaceholderSettingsQuery, { next: { revalidate: 60 } }),
+  ]);
+
+  // Type assertions
+  const typedArticlesData = articlesData as GetArticlesQuery;
+  const typedGlobalSettingsData = globalSettingsData as GetGlobalSettingsQuery;
+  const typedBooksData = booksData as GetBooksQuery;
+  const typedLatestJournalIssueData = latestJournalIssueData as GetJournalIssuesLatestQuery;
+  const typedPlaceholdersData = placeholdersData as GetPlaceholderSettingsQuery;
 
   // Ensure that all data is available, if not, return an error page
   if (
-    !articlesData ||
-    !globalSettingsData ||
-    !booksData ||
-    !latestJournalIssueData ||
-    !placeholdersData
+    !typedArticlesData ||
+    !typedGlobalSettingsData ||
+    !typedBooksData ||
+    !typedLatestJournalIssueData ||
+    !typedPlaceholdersData
   ) {
     return {
       notFound: true,
@@ -116,11 +117,11 @@ const Home = async () => {
   // Render the HomeLayout with the data as props
   return (
     <HomeLayout
-      globalSettings={globalSettingsData}
-      articles={articlesData}
-      books={booksData}
-      latestJournalIssue={latestJournalIssueData}
-      placeHolderSettings={placeholdersData}
+      globalSettings={typedGlobalSettingsData}
+      articles={typedArticlesData}
+      books={typedBooksData}
+      latestJournalIssue={typedLatestJournalIssueData}
+      placeHolderSettings={typedPlaceholdersData}
     />
   );
 };

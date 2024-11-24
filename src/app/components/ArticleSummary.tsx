@@ -40,7 +40,7 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article, className }) =
         <div className="block mt-5 w-full cursor-pointer text-inherit hover:no-underline hover:text-inherit">
           <div className="relative h-auto w-full flex flex-col">
             <div className="relative z-10 flex flex-col flex-grow">
-              <h3 className="text-lg font-bold text-communist-red mb-1 mt-1 leading-tight">
+              <h3 className="text-lg font-bold text-communist-red mb-1 mt-1 leading-none">
                 {article.title}
               </h3>
               {article.articleDetails?.subtitle && (
