@@ -7,7 +7,15 @@ interface ArticleSummaryProps {
   className?: string;
 }
 
-const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article, className }) => {
+const ArticleSummary: React.FC<ArticleSummaryProps> = ({
+  article,
+  className,
+}) => {
+  // 
+  // console.log('Article in ArticleSummary:', article);
+  // console.log('Article Details:', article.articleDetails);
+  // console.log('Related Journal:', article.articleDetails?.relatedJournal);
+
   const formatDate = (dateString?: string | null) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -17,18 +25,35 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article, className }) =
     return `${day} ${month} ${year}`;
   };
 
-  // Type guard to check if the node is a JournalIssue
-  const isJournalIssue = (node: any): node is { 
-    __typename: 'JournalIssue';
-    slug?: string | null;
-    title?: string | null;
-  } => {
-    return node.__typename === 'JournalIssue';
+  // Updated type guard with more specific typing
+  interface JournalIssueNode {
+    contentTypeName: 'journal-issue';
+    databaseId: number;
+    slug: string;
+    title: string;
+    uri: string;
+  }
+
+  const isJournalIssue = (node: any): node is JournalIssueNode => {
+    return (
+      node &&
+      node.contentTypeName === 'journal-issue' &&
+      typeof node.slug === 'string' &&
+      typeof node.title === 'string'
+    );
   };
 
   const journalNode = article.articleDetails?.relatedJournal?.edges?.[0]?.node;
-  const journalSlug = journalNode && isJournalIssue(journalNode) ? journalNode.slug : null;
-  const journalTitle = journalNode && isJournalIssue(journalNode) ? journalNode.title : null;
+  //
+  // console.log('Journal Node:', journalNode); // Debug log
+
+  // Use the type guard before accessing properties
+  const journalData = journalNode && isJournalIssue(journalNode)
+    ? {
+        slug: journalNode.slug,
+        title: journalNode.title
+      }
+    : null;
 
   const dateToDisplay = article.articleDetails?.suppressDate
     ? article.articleDetails?.displayDate
@@ -54,11 +79,14 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({ article, className }) =
       </Link>
       <p className="text-sm mb-1 mt-1 leading-tight text-black">
         {dateToDisplay}
-        {journalSlug && (
+        {journalData && (
           <>
             {' '}
-            | <Link href={`/journal/${journalSlug}`} passHref>
-              <span className='text-communist-red text-base font-cambay'>{journalTitle}</span>
+            |{' '}
+            <Link href={`/journal/${journalData.slug}`} passHref>
+              <span className="text-communist-red text-base font-cambay">
+                {journalData.title}
+              </span>
             </Link>
           </>
         )}
