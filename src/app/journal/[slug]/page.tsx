@@ -81,11 +81,11 @@ export default async function JournalPage({
 
           {/* Right column with title and articles */}
           <div className="md:col-span-3">
-            <h2 className="font-cambay text-communist-red text-3xl mb-4 mt-2">
+            <h2 className="font-cambay text-communist-red text-3xl mb-3 mt-0">
               {title}
             </h2>
 
-            <div className="space-y-4">
+            <div>
               {journalIssueDetails?.articlesInJournal?.nodes
                 ?.map((node, index) => {
                   const article = node as ArticleNode;
@@ -94,7 +94,9 @@ export default async function JournalPage({
                       article.articleDetails.tableOfContentsTitle ||
                       article.title;
                     return (
-                      <div key={index}>
+                      <div key={index} className="mb-1.5 last:mb-0">
+                        {' '}
+                        {/* Added last:mb-0 to remove margin from last item */}
                         <Link
                           href={`/article/${article.slug}`}
                           className="font-helvetica text-xl text-gray-700 hover:text-communist-red transition-colors"

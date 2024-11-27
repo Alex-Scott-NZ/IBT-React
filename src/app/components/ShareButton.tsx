@@ -1,12 +1,11 @@
 "use client";
 import React, { useState } from 'react';
 import {
-  IconButton,
   Menu,
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Tooltip,
+  IconButton, Typography, Button
 } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
 import PrintIcon from '@mui/icons-material/Print';
@@ -26,7 +25,7 @@ const ShareButton: React.FC = () => {
   };
 
   const handlePrint = () => {
-    handleShareClose(); // Close the menu first
+    handleShareClose();
     window.print();
   };
 
@@ -34,7 +33,6 @@ const ShareButton: React.FC = () => {
     const text = encodeURIComponent(document.title);
     const url = encodeURIComponent(window.location.href);
     const twitterShareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-
     window.open(twitterShareUrl, '_blank', 'noopener,noreferrer');
     handleShareClose();
   };
@@ -42,7 +40,6 @@ const ShareButton: React.FC = () => {
   const handleShareToFacebook = () => {
     const url = encodeURIComponent(window.location.href);
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-
     window.open(facebookShareUrl, '_blank', 'noopener,noreferrer');
     handleShareClose();
   };
@@ -52,20 +49,33 @@ const ShareButton: React.FC = () => {
     const body = encodeURIComponent(
       `I thought you might find this interesting:\n\n${window.location.href}`
     );
-
     const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
-
-    window.location.href = mailtoLink; // Opens the user's email client
+    window.location.href = mailtoLink;
     handleShareClose();
   };
 
   return (
-    <>
-      <Tooltip title="Share">
-        <IconButton color="inherit" onClick={handleShareClick}>
-          <ShareIcon />
-        </IconButton>
-      </Tooltip>
+    <div className="flex justify-end">
+      <Button
+        onClick={handleShareClick}
+        startIcon={<ShareIcon />}
+        sx={{
+          border: '1px solid #B00909',
+          color: '#B00909',
+          backgroundColor: '#EAEAE2',
+          borderRadius: '9999px', // This makes it very rounded
+          '&:hover': {
+            backgroundColor: '#B00909',
+            color: '#EAEAE2',
+            border: '1px solid #B00909',
+          },
+          textTransform: 'none',
+          padding: '6px 16px',
+        }}
+      >
+        Share
+      </Button>
+      
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -99,7 +109,7 @@ const ShareButton: React.FC = () => {
           <ListItemText primary="Email" />
         </MenuItem>
       </Menu>
-    </>
+    </div>
   );
 };
 

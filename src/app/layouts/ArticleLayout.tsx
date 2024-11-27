@@ -14,7 +14,7 @@ import {
   TermNode,
   Article,
   JournalIssue,
-  VideoItem
+  VideoItem,
 } from '@/gql/gql-generated';
 // import PdfViewerComponent from './PdfViewerComponent';
 
@@ -29,8 +29,12 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 // Dynamic imports for conditional scripts
-const VideoPlayer = dynamic(() => import('../components/VideoPlayer'), {ssr:false});
-const PdfViewerComponent = dynamic(() => import('./PdfViewerComponent'), {ssr:false});
+const VideoPlayer = dynamic(() => import('../components/VideoPlayer'), {
+  ssr: false,
+});
+const PdfViewerComponent = dynamic(() => import('./PdfViewerComponent'), {
+  ssr: false,
+});
 
 interface ArticleLayoutProps {
   article: GetArticleByUriQuery['article'];
@@ -38,7 +42,11 @@ interface ArticleLayoutProps {
   slug: string;
 }
 
-const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) => {
+const ArticleLayout = ({
+  article,
+  globalSettings,
+  slug,
+}: ArticleLayoutProps) => {
   const relatedPdf = article?.articleDetails?.relatedPdf?.nodes?.[0] as PdfItem;
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl || '';
   const featuredImage = article?.featuredImage?.node;
@@ -57,7 +65,9 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
   const relatedArticles = article?.articleDetails?.relatedArticle?.nodes as
     | Article[]
     | undefined;
-  const relatedVideo = article?.articleDetails?.relatedVideo?.nodes?.[0] as VideoItem | undefined;
+  const relatedVideo = article?.articleDetails?.relatedVideo?.nodes?.[0] as
+    | VideoItem
+    | undefined;
   const videoUrl = relatedVideo?.videoDetails?.videoEmbedCode || '';
   const videoCaption = relatedVideo?.videoDetails?.articlePageCaption || '';
 
@@ -153,10 +163,11 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
                       {/* Marker and Line */}
                       <div className="flex flex-col items-center">
                         <div
-                          className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle
-                            ? 'bg-communist-red'
-                            : 'bg-gray-300'
-                            }`}
+                          className={`w-4 h-4 rounded-full mt-1 ${
+                            isCurrentArticle
+                              ? 'bg-communist-red'
+                              : 'bg-gray-300'
+                          }`}
                         ></div>
                         {/* Line connecting to the next item */}
                         {index !== articlesInJournal.length - 1 && (
@@ -198,12 +209,9 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
               )}
               {/* Display the date and ShareButton */}
               {dateToDisplay && (
-                <div className="flex items-center mt-1 mb-1 text-gray-800">
-                  <span className="mr-2">{dateToDisplay}</span>
-                  <span className="mr-2 font-bold">Share:</span>
-
-                    <ShareButton />
-                  
+                <div className="flex items-center justify-between mt-1 mb-1 text-gray-800">
+                  <span>{dateToDisplay}</span>
+                  <ShareButton />
                 </div>
               )}
 
@@ -251,7 +259,11 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
             <div className="mt-4 print:hidden">
               <h3 className="mb-2 mt-0">Related Audio</h3>
               {audio.map((item, index) => (
-                <div key={item.id} id={`audio-track-${index + 1}`} className="mt-2 mb-4">
+                <div
+                  key={item.id}
+                  id={`audio-track-${index + 1}`}
+                  className="mt-2 mb-4"
+                >
                   {item.title && <h4>{item.title}</h4>}
                   {item.audioItemDetails?.audioEmbedCode && (
                     <div
@@ -266,7 +278,6 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
           )}
           {/* Scroll-to-Top Button */}
           <ScrollToTopButton />
-
         </div>
       }
       rightSidebar={
@@ -293,7 +304,7 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
                 {audio.map((item, index) => (
                   <div key={item.id} className="flex items-center mb-2">
                     <Link
-                      href={`#audio-track-${index + 1}`}  // Ensure this matches the ID in the main content
+                      href={`#audio-track-${index + 1}`} // Ensure this matches the ID in the main content
                       className="text-communist-red hover:underline"
                     >
                       Here
@@ -365,7 +376,6 @@ const ArticleLayout = ({ article, globalSettings, slug }: ArticleLayoutProps) =>
           )}
         </div>
       }
-
     />
   );
 };
