@@ -98,7 +98,7 @@ const JournalPage = async () => {
                               <li key={article.id || article.slug || index}>
                                 <Link
                                   href={`/article/${article.slug}`}
-                                  className="font-helvetica text-gray-700 hover:text-communist-red transition-colors"
+                                  className="font-helvetica text-gray-900 hover:text-communist-red transition-colors"
                                 >
                                   {article.articleDetails
                                     ?.tableOfContentsTitle || article.title}
