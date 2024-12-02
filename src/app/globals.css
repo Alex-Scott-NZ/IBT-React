@@ -64,10 +64,7 @@ h3 {
 
   /* Affects the margins in the printer settings */
   margin: 10%;
-
-  @top-left-corner {
-    content: "Page " counter(page);
-  }
+  
 }
 
 @media print {
