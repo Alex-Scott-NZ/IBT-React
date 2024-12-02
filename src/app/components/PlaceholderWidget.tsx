@@ -11,6 +11,7 @@ import {
 import Link from 'next/link';
 import Image from "next/image";
 
+
 type PlaceholderProps = {
   textContentGroup: PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup;
 };
@@ -19,38 +20,37 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
   if (!textContentGroup) return null;
 
   return (
-    (<div className="placeholder-widget relative mb-4">
-      <Box
-        marginBottom={1}
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        {textContentGroup.freeTextHeading && (
-          <Typography
-            className="text-gray-900 text-xl mt-0 mb-0"
-            variant="h5"
-            component="span"
-          >
-            <span className="font-telegrafico">{textContentGroup.freeTextHeading}</span>
-          </Typography>
-        )}
-      </Box>
-      <Card elevation={0}
+    <div className="placeholder-widget relative mb-4">
+      {/* Heading */}
+      {textContentGroup.freeTextHeading && (
+        <Typography
+          className="text-gray-900 text-xl mt-0 mb-0"
+          variant="h5"
+          component="span"
+        >
+          <span className="font-telegrafico">
+            {textContentGroup.freeTextHeading}
+          </span>
+        </Typography>
+      )}
+
+      {/* Card */}
+      <Card
+        elevation={0}
         sx={{
           maxWidth: '100%',
           display: 'flex',
           flexDirection: 'column',
           background: 'transparent',
-          border: 'none'
+          border: 'none',
         }}
       >
         <CardActionArea
           sx={{ width: '100%' }}
-          component={textContentGroup.freeTextLink?.nodes?.[0]?.link ? Link : 'div'}
-          href={textContentGroup.freeTextLink?.nodes?.[0]?.link || '#'}
+          component={
+            textContentGroup.freeTextLink?.nodes?.[0]?.uri ? Link : 'div'
+          }
+          href={textContentGroup.freeTextLink?.nodes?.[0]?.uri || '#'}
         >
           <Box
             sx={{
@@ -60,6 +60,7 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
               overflow: 'hidden',
             }}
           >
+            {/* Image */}
             {textContentGroup.freeTextImage?.node?.srcSet && (
               <Box
                 sx={{
@@ -69,7 +70,9 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
                 }}
               >
                 <Image
-                  src={textContentGroup.freeTextImage.node.srcSet.split(' ')[0]}
+                  src={
+                    textContentGroup.freeTextImage.node.srcSet.split(' ')[0]
+                  }
                   alt={textContentGroup.freeTextImage.node.altText || ''}
                   width={328}
                   height={0}
@@ -77,34 +80,39 @@ const PlaceholderWidget: React.FC<PlaceholderProps> = ({ textContentGroup }) => 
                   style={{
                     width: '100%',
                     height: 'auto',
-                    objectFit: 'cover'
-                  }} />
+                    objectFit: 'cover',
+                  }}
+                />
               </Box>
             )}
+
+            {/* Text Content */}
             <Box
               sx={{
-                width: textContentGroup.freeTextImage?.node?.srcSet ? '67%' : '100%',
-                paddingLeft: textContentGroup.freeTextImage?.node?.srcSet ? '8px' : '0',
+                width: textContentGroup.freeTextImage?.node?.srcSet
+                  ? '67%'
+                  : '100%',
+                paddingLeft: textContentGroup.freeTextImage?.node?.srcSet
+                  ? '8px'
+                  : '0',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
               }}
             >
-              <Typography variant="body2" className="font-helvetica">
-                {textContentGroup.textContent}
-              </Typography>
+              <Typography
+                variant="body2"
+                className="font-helvetica"
+                component="div"
+                dangerouslySetInnerHTML={{
+                  __html: textContentGroup.freeTextContent || '',
+                }}
+              />
             </Box>
           </Box>
-          {textContentGroup.freeTextLink?.nodes?.[0]?.slug && (
-            <Box sx={{ paddingTop: '8px', textAlign: 'center' }}>
-              <Typography variant="h6" className="font-cambay" sx={{ marginTop: '8px' }}>
-                {textContentGroup.freeTextLink.nodes[0].slug}
-              </Typography>
-            </Box>
-          )}
         </CardActionArea>
       </Card>
-    </div>)
+    </div>
   );
 };
 
