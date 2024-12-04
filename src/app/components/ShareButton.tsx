@@ -87,7 +87,7 @@ const ShareButton: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end print:hidden">
       <Button
         onClick={handleShareClick}
         startIcon={<ShareIcon />}
