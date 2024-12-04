@@ -5,16 +5,18 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  IconButton, Typography, Button
+  IconButton, Typography, Button, Snackbar
 } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
 import PrintIcon from '@mui/icons-material/Print';
 import EmailIcon from '@mui/icons-material/Email';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const ShareButton: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
   const handleShareClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -22,6 +24,36 @@ const ShareButton: React.FC = () => {
 
   const handleShareClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
+      } else {
+        // Fallback for mobile browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = window.location.href;
+        textarea.style.position = 'fixed';  // Avoid scrolling to bottom
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+          document.execCommand('copy');
+        } catch (err) {
+          console.error('Fallback: Oops, unable to copy', err);
+        }
+        document.body.removeChild(textarea);
+      }
+      setShowCopyFeedback(true);
+      handleShareClose();
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+    }
+  };
+  
+  const handleCloseSnackbar = () => {
+    setShowCopyFeedback(false);
   };
 
   const handlePrint = () => {
@@ -75,12 +107,19 @@ const ShareButton: React.FC = () => {
       >
         Share
       </Button>
-      
+
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleShareClose}
       >
+        <MenuItem onClick={handleCopyLink}>
+          <ListItemIcon>
+            <ContentCopyIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Copy Link" />
+        </MenuItem>
+
         <MenuItem onClick={handlePrint}>
           <ListItemIcon>
             <PrintIcon fontSize="small" />
@@ -109,6 +148,20 @@ const ShareButton: React.FC = () => {
           <ListItemText primary="Email" />
         </MenuItem>
       </Menu>
+
+      <Snackbar
+        open={showCopyFeedback}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message="Link copied to clipboard!"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        sx={{
+          '& .MuiSnackbarContent-root': {  // This targets the content wrapper of the Snackbar
+            backgroundColor: '#B00909',
+            color: '#EAEAE2'  // Using your light color for contrast
+          }
+        }}
+      />
     </div>
   );
 };
