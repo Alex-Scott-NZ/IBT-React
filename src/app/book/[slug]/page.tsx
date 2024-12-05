@@ -40,6 +40,18 @@ export default async function BookPage({
   const book = bookData.bookBy;
   const globalSettings = globalSettingsData.globalSettings;
 
+  const fallbackSVG = `data:image/svg+xml;base64,${Buffer.from(
+    `
+    <svg width="768" height="131" viewBox="0 0 768 131" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="768" height="131" fill="#4B5563"/>
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9CA3AF" font-family="system-ui" font-size="16">
+        Image Not Found
+      </text>
+    </svg>
+    `
+  ).toString('base64')}`;
+  
+
   if (!book) {
     return <div>Book not found</div>;
   }
@@ -60,8 +72,10 @@ export default async function BookPage({
               objectFit: 'cover',
               width: '100%',
               height: 'auto',
-              maxWidth: '100%',
+              maxWidth: '100%'
             }}
+            placeholder='blur'
+            blurDataURL={featuredImage?.node?.thumbhash || fallbackSVG}
           />
         </div>
         <div style={{ flex: '1' }}>

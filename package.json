@@ -40,6 +40,7 @@
     "@graphql-codegen/fragment-matcher": "^5.0.2",
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@graphql-codegen/typescript-react-query": "^6.1.0",
+    "@tailwindcss/typography": "^0.5.15",
     "@types/json-schema": "^7.0.15",
     "@types/lodash": "^4.17.13",
     "@types/lodash.throttle": "^4.1.9",
