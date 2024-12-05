@@ -163,11 +163,10 @@ const ArticleLayout = ({
                       {/* Marker and Line */}
                       <div className="flex flex-col items-center">
                         <div
-                          className={`w-4 h-4 rounded-full mt-1 ${
-                            isCurrentArticle
+                          className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle
                               ? 'bg-communist-red'
                               : 'bg-gray-300'
-                          }`}
+                            }`}
                         ></div>
                         {/* Line connecting to the next item */}
                         {index !== articlesInJournal.length - 1 && (
@@ -209,7 +208,7 @@ const ArticleLayout = ({
               )}
               {/* Display the date and ShareButton */}
               {dateToDisplay && (
-                <div className="flex items-center justify-between mt-1 mb-1 text-gray-800">
+                <div className="flex items-end justify-between mt-1 mb-1 text-gray-800">
                   <span>{dateToDisplay}</span>
                   <ShareButton />
                 </div>
@@ -249,7 +248,7 @@ const ArticleLayout = ({
             <PdfViewerComponent pdfUrl={pdfUrl} />
           ) : (
             <div
-              className="font-helvetica text-lg leading-relaxed text-gray-800"
+              className="prose prose-lg font-helvetica text-lg leading-relaxed text-gray-800"
               dangerouslySetInnerHTML={{ __html: article?.content || '' }}
             />
           )}

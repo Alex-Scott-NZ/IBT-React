@@ -34,6 +34,53 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            'nav ul': {
+              listStyle: 'none',
+              margin: '0',
+              padding: '0',
+            },
+            'nav li': {
+              margin: '0',
+              padding: '0',
+            },
+            'nav > ul > li > ul': {
+              marginTop: '0 !important',
+              marginBottom: '0 !important'
+            },
+            'nav > ul > li > ul > li': {
+              marginTop: '0 !important',
+              marginBottom: '0 !important'
+            },
+            a: {
+              color: '#B00909',
+              textDecoration: 'underline',
+              textUnderlineOffset: '3px',
+              textDecorationThickness: '2.75px',
+              '&:hover': {
+                color: '#B00909',
+                opacity: 0.8,
+              },
+            },
+            // Try these variations:
+            '.source': {
+              marginTop: '0 !important',
+              marginBottom: '0 !important'
+            },
+            // or'0 !important'
+            // 'p.source, .source': {
+            //   marginTop: '0 !important',
+            // },
+            // // or
+            // '.prose p.source': {
+            //   marginTop: '0 !important',
+            // }
+          },
+        },
+      }
+      
     },
   },
   
@@ -46,6 +93,7 @@ const config: Config = {
   },
 
   plugins: [
+    require('@tailwindcss/typography')
   ],
   corePlugins: {
     preflight: false

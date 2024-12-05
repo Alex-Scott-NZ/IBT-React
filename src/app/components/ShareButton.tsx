@@ -5,7 +5,7 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  IconButton, Typography, Button, Snackbar
+  Button, Snackbar, Fade
 } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
 import PrintIcon from '@mui/icons-material/Print';
@@ -51,7 +51,7 @@ const ShareButton: React.FC = () => {
       console.error('Failed to copy link:', err);
     }
   };
-  
+
   const handleCloseSnackbar = () => {
     setShowCopyFeedback(false);
   };
@@ -92,17 +92,24 @@ const ShareButton: React.FC = () => {
         onClick={handleShareClick}
         startIcon={<ShareIcon />}
         sx={{
-          border: '1px solid #B00909',
+          display: 'flex',
+          alignitems: 'center',
+          justifyContent: 'center',
+          border: '2px solid #B00909',
           color: '#B00909',
           backgroundColor: '#EAEAE2',
           borderRadius: '9999px', // This makes it very rounded
           '&:hover': {
             backgroundColor: '#B00909',
             color: '#EAEAE2',
-            border: '1px solid #B00909',
+            border: '2px solid #B00909',
           },
           textTransform: 'none',
           padding: '6px 16px',
+          // fontSize: '1rem',
+          lineHeight:'1',
+          fontWeight: 'bold',
+          height: '40px'
         }}
       >
         Share
@@ -151,17 +158,26 @@ const ShareButton: React.FC = () => {
 
       <Snackbar
         open={showCopyFeedback}
-        autoHideDuration={3000}
+        autoHideDuration={1200}
         onClose={handleCloseSnackbar}
         message="Link copied to clipboard!"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        TransitionComponent={Fade}
+        TransitionProps={{timeout: 600}}
         sx={{
-          '& .MuiSnackbarContent-root': {  // This targets the content wrapper of the Snackbar
+          '& .MuiSnackbarContent-root': {
             backgroundColor: '#B00909',
-            color: '#EAEAE2'  // Using your light color for contrast
+            color: '#EAEAE2',
+            textAlign: 'center',
+            '& .MuiSnackbarContent-message': {
+              fontSize: '1rem',  // Makes text slightly larger
+              width: '100%',       // Ensures full width for center alignment
+              textAlign: 'center'  // Centers the text
+            }
           }
         }}
       />
+
     </div>
   );
 };
