@@ -1,37 +1,38 @@
 query GetJournalIssues {
-    journalIssues {
-        nodes {
-            journalIssueDetails {
-                articlesInJournal {
-                    nodes {
-                        ... on Article {
-                            articleDetails {
-                                displayDate
-                                displayOnFrontPage
-                                fieldGroupName
-                                publicationDate
-                                source
-                                subtitle
-                                suppressDate
-                                tableOfContentsTitle
-                            }
-                            title
-                            slug
-                            id
-                        }
-                        slug
-                    }
-                }
+  journalIssues {
+    nodes {
+      journalIssueDetails {
+        articlesInJournal {
+          nodes {
+            ... on Article {
+              articleDetails {
+                displayDate
+                displayOnFrontPage
                 fieldGroupName
                 publicationDate
+                source
+                subtitle
+                suppressDate
+                tableOfContentsTitle
+              }
+              title
+              __typename
+              slug
+              id
             }
             slug
-            title
+          }
+        }
+        fieldGroupName
+        publicationDate
+      }
+      slug
+      title
       featuredImage {
         node {
           ...FragmentFeaturedImage
         }
       }
-        }
     }
+  }
 }

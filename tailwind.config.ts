@@ -16,6 +16,10 @@ const config: Config = {
       screens: {        // Add this section
         'nav': '1075px',
       },
+      lineHeight: {
+        tight: '1.2',
+        tighter: '0.9',
+      },
       colors: {
         'custom-bg': '#EAEAE2',
         'communist-red': '#B00909',
@@ -57,8 +61,8 @@ const config: Config = {
             a: {
               color: '#B00909',
               textDecoration: 'underline',
-              textUnderlineOffset: '3px',
-              textDecorationThickness: '2.75px',
+              textUnderlineOffset: '4px',
+              textDecorationThickness: '1.75px',
               '&:hover': {
                 color: '#B00909',
                 opacity: 0.8,

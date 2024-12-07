@@ -1,5 +1,6 @@
 import React from 'react';
 import BaseLayout from './BaseLayout';
+import JournalNavigator from '../components/JournalNavigator';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -120,82 +121,15 @@ const ArticleLayout = ({
       globalSettings={globalSettings}
       slug={slug}
       leftSidebar={
-        <div>
-          {/* Link the cover image and title to the journal issue */}
-          {journalCoverImage && (
-            <Link href={`/journal/${journalSlug}`} passHref>
-              <Image
-                src={journalCoverImage.mediaItemUrl || ''}
-                alt={
-                  journalCoverImage.altText || journalTitle || 'Journal cover'
-                }
-                width={150}
-                height={225}
-                priority={true}
-                quality={75}
-                className="w-full h-auto mt-3"
-                placeholder="blur"
-                blurDataURL={journalCoverImage.thumbhash || fallbackSVG}
-                style={{ maxWidth: '75%' }}
-              />
-            </Link>
-          )}
-
-          {/* Display the journal title below the image as a link */}
-          {journalTitle && (
-            <Link href={`/journal/${journalSlug}`} passHref>
-              <span className="block mt-0 text-base font-semibold text-communist-red hover:underline">
-                {journalTitle}
-              </span>
-            </Link>
-          )}
-          {/* Vertical Stepper for Articles in the Journal Issue */}
-          {articlesInJournal && articlesInJournal.length > 0 && (
-            <div className="mt-2">
-              <h3 className="mb-2 mt-0 text-lg font-semibold">
-                Articles in this Issue
-              </h3>
-              <ul className="list-none m-0 p-0">
-                {articlesInJournal.map((issueArticle, index) => {
-                  const isCurrentArticle = issueArticle.slug === article?.slug;
-                  return (
-                    <li key={issueArticle.id} className="mb-4 flex items-start">
-                      {/* Marker and Line */}
-                      <div className="flex flex-col items-center">
-                        <div
-                          className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle
-                              ? 'bg-communist-red'
-                              : 'bg-gray-300'
-                            }`}
-                        ></div>
-                        {/* Line connecting to the next item */}
-                        {index !== articlesInJournal.length - 1 && (
-                          <div className="flex-1 w-px bg-gray-300"></div>
-                        )}
-                      </div>
-                      {/* Title */}
-                      <div className="ml-4">
-                        {isCurrentArticle ? (
-                          <span className="font-medium text-communist-red">
-                            {issueArticle.title}
-                          </span>
-                        ) : (
-                          <Link
-                            href={`/article/${issueArticle.slug}`}
-                            className="text-gray-800 hover:text-communist-red"
-                          >
-                            {issueArticle.title}
-                          </Link>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-        </div>
+        <JournalNavigator
+          journalCoverImage={journalCoverImage}
+          journalSlug={journalSlug}
+          journalTitle={journalTitle}
+          articlesInJournal={articlesInJournal}
+          currentArticleSlug={article?.slug || ''}
+        />
       }
+      
       mainContent={
         <div className="relative">
           {!pdfUrl && (
