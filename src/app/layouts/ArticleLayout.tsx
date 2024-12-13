@@ -1,6 +1,5 @@
 import React from 'react';
 import BaseLayout from './BaseLayout';
-import JournalNavigator from '../components/JournalNavigator';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -28,6 +27,7 @@ import PrintButton from '../components/PrintButton';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import JournalNavigator from '../components/JournalNavigator';
 
 // Dynamic imports for conditional scripts
 const VideoPlayer = dynamic(() => import('../components/VideoPlayer'), {
@@ -122,11 +122,6 @@ const ArticleLayout = ({
       slug={slug}
       leftSidebar={
         <JournalNavigator
-          journalCoverImage={journalCoverImage}
-          journalSlug={journalSlug}
-          journalTitle={journalTitle}
-          articlesInJournal={articlesInJournal}
-          currentArticleSlug={article?.slug || ''}
         />
       }
       
