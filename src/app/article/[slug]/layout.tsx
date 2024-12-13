@@ -13,7 +13,7 @@ import {
   VideoItem,
 } from "@/gql/gql-generated";
 import BaseLayout from "../../layouts/BaseLayout";
-import JournalNavigator from "../../components/JournalNavigator";
+import JournalNavigator from "../../components/JournalNavigator/JournalNavigatorClient";
 import dynamic from "next/dynamic";
 import { format } from "date-fns";
 import Image from "next/image";
