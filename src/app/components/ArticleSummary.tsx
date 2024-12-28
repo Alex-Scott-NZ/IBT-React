@@ -69,7 +69,7 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({
                 {article.title}
               </h3>
               {article.articleDetails?.subtitle && (
-                <p className="text-lg font-medium truncate mb-1 mt-1 leading-tight text-black">
+                <p className="text-lg font-medium truncate mb-1 mt-1 leading-tight text-gray-900">
                   {article.articleDetails.subtitle}
                 </p>
               )}

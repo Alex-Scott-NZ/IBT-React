@@ -5,6 +5,7 @@ import { ArticleProvider } from '../app/context/ArticleContext';
 import { Cambay } from 'next/font/google';
 import localFont from 'next/font/local';
 import Head from 'next/head';
+import Script from 'next/script';
 import Providers from './providers'; // Import Providers component
 
 const cambay = Cambay({
@@ -76,6 +77,22 @@ export default function RootLayout({
           </body>
         </ThemeProviderWrapper>
       </Providers>
+
+      {/* Microsoft Clarity Script */}
+      <Script
+        id="clarity-script"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "pkvgof32mr");
+          `,
+        }}
+      />
+
     </html>
   );
 }

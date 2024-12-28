@@ -51,7 +51,7 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
     <div className="books-widget relative mb-4">
       <div className="mb-2 flex justify-between items-center">
         <Link href="/book" passHref>
-          <h5 className="font-telegrafico text-gray-900 mt-0 mb-0 text-xl font-light hover:bg-gray-400/5 transition-colors">
+          <h5 className="font-telegrafico text-gray-900 mt-0 mb-0 text-xl font-light hover:bg-gray-400/10 transition-colors">
             Books
           </h5>
         </Link>
@@ -89,10 +89,10 @@ const BooksWidget: React.FC<BooksWidgetProps> = ({ books }) => {
                 </div>
                 {/* Text Container */}
                 <div className="flex-1">
-                  <h6 className="font-helvetica text-sm text-grey-600 font-bold m-0">
+                  <h6 className="font-helvetica text-sm text-grey-900 font-bold m-0">
                     {book.title}
                   </h6>
-                  <p className="font-helvetica text-xs text-gray-600 m-0">
+                  <p className="font-helvetica text-xs text-gray-900 m-0">
                     {book.bookDetails?.subheading}
                   </p>
                 </div>
