@@ -119,6 +119,7 @@ const ShareButton: React.FC = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleShareClose}
+        disableScrollLock
       >
         <MenuItem onClick={handleCopyLink}>
           <ListItemIcon>

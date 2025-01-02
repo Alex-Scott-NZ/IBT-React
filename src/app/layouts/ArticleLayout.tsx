@@ -36,6 +36,7 @@ const PdfViewerComponent = dynamic(() => import('./PdfViewerComponent'), {
   ssr: false,
 });
 
+
 interface ArticleLayoutProps {
   article: GetArticleByUriQuery['article'];
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
@@ -163,11 +164,10 @@ const ArticleLayout = ({
                       {/* Marker and Line */}
                       <div className="flex flex-col items-center">
                         <div
-                          className={`w-4 h-4 rounded-full mt-1 ${
-                            isCurrentArticle
-                              ? 'bg-communist-red'
-                              : 'bg-gray-300'
-                          }`}
+                          className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle
+                            ? 'bg-communist-red'
+                            : 'bg-gray-300'
+                            }`}
                         ></div>
                         {/* Line connecting to the next item */}
                         {index !== articlesInJournal.length - 1 && (
@@ -227,20 +227,49 @@ const ArticleLayout = ({
                 </div>
               ) : (
                 featuredImage && (
-                  <Image
-                    src={featuredImage.sourceUrl || ''}
-                    alt={featuredImage.altText || article.title || ''}
-                    width={Number(featuredImage.mediaDetails?.width || 0)}
-                    height={Number(featuredImage.mediaDetails?.height || 0)}
-                    priority={true}
-                    quality={75}
-                    className="w-full h-auto mt-2 print:hidden"
-                    placeholder="blur"
-                    blurDataURL={featuredImage.thumbhash || fallbackSVG}
-                    sizes="(max-width: 1050px) 100vw, 780px"
-                    style={{ maxWidth: '100%' }}
-                  />
+                  <div>
+                    <Image
+                      src={featuredImage.sourceUrl || ''}
+                      alt={featuredImage.altText || article.title || ''}
+                      width={Number(featuredImage.mediaDetails?.width || 0)}
+                      height={Number(featuredImage.mediaDetails?.height || 0)}
+                      priority={true}
+                      quality={75}
+                      className="w-full h-auto mt-2 print:hidden"
+                      placeholder="blur"
+                      blurDataURL={featuredImage.thumbhash || fallbackSVG}
+                      sizes="(max-width: 1050px) 100vw, 780px"
+                      style={{ maxWidth: '100%' }}
+                    />
+                    {featuredImage.caption && (
+                      <div
+                        className="text-sm text-gray-600 mt-1 italic"
+                        dangerouslySetInnerHTML={{ __html: featuredImage.caption }}
+                      />
+                    )}
+                  </div>
                 )
+              )}
+
+              {audio && audio.length > 0 && (
+                <div className="mt-4 print:hidden">
+                  {audio.map((item, index) => (
+                    <div
+                      key={item.id}
+                      id={`audio-track-${index + 1}`}
+                      className="mt-2 mb-4"
+                    >
+                      {/* {item.title && <h4>{item.title}</h4>} */}
+                      {item.audioItemDetails?.audioEmbedCode && (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: item.audioItemDetails.audioEmbedCode,
+                          }}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
               )}
             </>
           )}
@@ -248,34 +277,19 @@ const ArticleLayout = ({
           {pdfUrl ? (
             <PdfViewerComponent pdfUrl={pdfUrl} />
           ) : (
+            <>
             <div
               className="font-helvetica text-lg leading-relaxed text-gray-800"
               dangerouslySetInnerHTML={{ __html: article?.content || '' }}
             />
-          )}
-          {/* Render audio player(s) if audio exists */}
-
-          {audio && audio.length > 0 && (
-            <div className="mt-4 print:hidden">
-              <h3 className="mb-2 mt-0">Related Audio</h3>
-              {audio.map((item, index) => (
-                <div
-                  key={item.id}
-                  id={`audio-track-${index + 1}`}
-                  className="mt-2 mb-4"
-                >
-                  {item.title && <h4>{item.title}</h4>}
-                  {item.audioItemDetails?.audioEmbedCode && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.audioItemDetails.audioEmbedCode,
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
+            {/* Add Share Button at the bottom */}
+            <div className="flex justify-start mt-6 mb-6">
+              <ShareButton />
             </div>
-          )}
+          </>
+        )}
+
+
           {/* Scroll-to-Top Button */}
           <ScrollToTopButton />
         </div>
@@ -297,7 +311,7 @@ const ArticleLayout = ({
               </div>
             </div>
           )}
-          {audio && audio.length > 0 && (
+          {/* {audio && audio.length > 0 && (
             <div className="mt-0 mb-4">
               <h3 className="mb-0 mt-0">Related Audio</h3>
               <div className="mt-1">
@@ -313,9 +327,9 @@ const ArticleLayout = ({
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
-          <div className="mt-0">
+          {/* <div className="mt-0">
             <h3 className="mb-0 mt-0">Share This Article</h3>
             <div className="flex justify-start items-center gap-x-5 mt-1 mb-4">
               <a
@@ -346,7 +360,7 @@ const ArticleLayout = ({
               </a>
               <PrintButton />
             </div>
-          </div>
+          </div> */}
           {/* Display Related Articles if available */}
           {relatedArticles && relatedArticles.length > 0 && (
             <div className="mt-0">
