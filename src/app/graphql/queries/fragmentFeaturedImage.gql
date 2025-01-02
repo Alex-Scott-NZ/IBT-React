@@ -1,6 +1,7 @@
 fragment FragmentFeaturedImage on MediaItem {
   altText
   link
+  caption
   mediaItemId
   mediaItemUrl
   description
