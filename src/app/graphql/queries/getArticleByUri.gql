@@ -1,82 +1,90 @@
 query GetArticleByUri($uri: ID!) {
   article(id: $uri, idType: URI) {
-    articleId
-    content
-    contentTypeName
-    databaseId
-    date
-    dateGmt
-    featuredImageDatabaseId
-    featuredImageId
-    id
-    modified
-    modifiedGmt
-    slug
-    status
-    title
-    uri
-    articleDetails {
-      displayDate
-      displayOnFrontPage
-      fieldGroupName
-      publicationDate
-      source
-      subtitle
-      suppressDate
-      tableOfContentsTitle
-      relatedPdf {
-        nodes {
-          __typename
-          ... on PdfItem {
-            ...FragmentPdfItem
-          }
-        }
-      }
-      relatedAudio {
-        nodes {
-          __typename
-          ... on AudioItem {
-            ...FragmentAudioItem
-          }
-        }
-      }
-      relatedJournal {
-        nodes {
-          __typename
-          ... on JournalIssue {
-            ...FragmentJournalIssue
-            journalIssueDetails {
-              ...FragmentJournalIssueDetails
+        articleId
+        content
+        contentTypeName
+        databaseId
+        date
+        dateGmt
+        featuredImageDatabaseId
+        featuredImageId
+        id
+        modified
+        modifiedGmt
+        slug
+        status
+        title
+        uri
+        articleDetails {
+            displayDate
+            displayOnFrontPage
+            fieldGroupName
+            publicationDate
+            source
+            subtitle
+            suppressDate
+            tableOfContentsTitle
+            relatedPdf {
+                nodes {
+                    __typename
+                    ... on PdfItem {
+                        ...FragmentPdfItem
+                    }
+                }
             }
-          }
+            relatedAudio {
+                nodes {
+                    __typename
+                    ... on AudioItem {
+                        ...FragmentAudioItem
+                    }
+                }
+            }
+            relatedJournal {
+                nodes {
+                    __typename
+                    ... on JournalIssue {
+                        ...FragmentJournalIssue
+                        journalIssueDetails {
+                            ...FragmentJournalIssueDetails
+                        }
+                    }
+                }
+            }
+            relatedArticle {
+                nodes {
+                    ...FragmentRelatedArticle
+                }
+            }
+            relatedVideo {
+                __typename
+                nodes {
+                    contentTypeName
+                    ... on VideoItem {
+                        ...FragmentVideoItem
+                    }
+                }
+            }
+            relatedBook {
+                __typename
+                nodes {
+                    ... on Book {
+                        ...FragmentBook
+                    }
+                }
+            }
         }
-      }
-      relatedArticle {
-        nodes {
-          ...FragmentRelatedArticle
+        featuredImage {
+            node {
+                __typename
+                ...FragmentFeaturedImage
+            }
         }
-      }
-      relatedVideo {
-        __typename
-        nodes {
-          contentTypeName
-          ... on VideoItem {
-            ...FragmentVideoItem
-          }
+        terms {
+            nodes {
+                __typename
+                ...FragmentTerms
+            }
         }
-      }
     }
-    featuredImage {
-      node {
-        __typename
-        ...FragmentFeaturedImage
-      }
-    }
-    terms {
-      nodes {
-        __typename
-        ...FragmentTerms
-      }
-    }
-  }
 }
