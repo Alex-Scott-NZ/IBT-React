@@ -20,10 +20,10 @@ import {
 
 import { format } from 'date-fns';
 
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import EmailIcon from '@mui/icons-material/Email';
-import PrintButton from '../components/PrintButton';
+// import FacebookIcon from '@mui/icons-material/Facebook';
+// import TwitterIcon from '@mui/icons-material/Twitter';
+// import EmailIcon from '@mui/icons-material/Email';
+// import PrintButton from '../components/PrintButton';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
@@ -137,7 +137,7 @@ const ArticleLayout = ({
                 className="w-full h-auto mt-3"
                 placeholder="blur"
                 blurDataURL={journalCoverImage.thumbhash || fallbackSVG}
-                style={{ maxWidth: '75%' }}
+                style={{ maxWidth: '60%' }}
               />
             </Link>
           )}
@@ -159,39 +159,41 @@ const ArticleLayout = ({
               <ul className="list-none m-0 p-0">
                 {articlesInJournal.map((issueArticle, index) => {
                   const isCurrentArticle = issueArticle.slug === article?.slug;
+                  const sidebarTitle =
+                    issueArticle.articleDetails?.tableOfContentsTitle?.trim() ||
+                    issueArticle.title;
+
                   return (
                     <li key={issueArticle.id} className="mb-4 flex items-start">
                       {/* Marker and Line */}
                       <div className="flex flex-col items-center">
                         <div
-                          className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle
-                            ? 'bg-communist-red'
-                            : 'bg-gray-300'
+                          className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle ? 'bg-communist-red' : 'bg-gray-300'
                             }`}
                         ></div>
-                        {/* Line connecting to the next item */}
                         {index !== articlesInJournal.length - 1 && (
                           <div className="flex-1 w-px bg-gray-300"></div>
                         )}
                       </div>
-                      {/* Title */}
+
                       <div className="ml-4">
                         {isCurrentArticle ? (
                           <span className="font-medium text-communist-red">
-                            {issueArticle.title}
+                            {sidebarTitle}
                           </span>
                         ) : (
                           <Link
                             href={`/article/${issueArticle.slug}`}
                             className="text-gray-800 hover:text-communist-red"
                           >
-                            {issueArticle.title}
+                            {sidebarTitle}
                           </Link>
                         )}
                       </div>
                     </li>
                   );
                 })}
+
               </ul>
             </div>
           )}
@@ -278,117 +280,67 @@ const ArticleLayout = ({
             <PdfViewerComponent pdfUrl={pdfUrl} />
           ) : (
             <>
-            <div
-              className="font-helvetica text-lg leading-relaxed text-gray-800"
-              dangerouslySetInnerHTML={{ __html: article?.content || '' }}
-            />
-            {/* Add Share Button at the bottom */}
-            <div className="flex justify-start mt-6 mb-6">
-              <ShareButton />
-            </div>
-          </>
-        )}
+              <div
+                className="font-helvetica text-lg leading-relaxed text-gray-800"
+                dangerouslySetInnerHTML={{ __html: article?.content || '' }}
+              />
+              {/* Move "Related Topics" (terms) below the content */}
+              {terms && terms.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="mb-0 mt-0">Related Topics</h3>
+                  <div className="flex flex-wrap gap-2 mt-2 mb-4">
+                    {terms.map((term) => (
+                      <span
+                        key={term.id}
+                        className="bg-communist-red text-custom-bg text-sm font-normal px-2.5 py-0.5 rounded tracking-widest"
+                      >
+                        {term.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Move "Related Articles" below that */}
+              {relatedArticles && relatedArticles.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="mb-1 mt-0">Related Articles</h3>
+                  <div className="mt-0 mb-4">
+                    {relatedArticles.map((relatedArticle) => {
+                      const slug = relatedArticle.slug;
+                      return (
+                        <div key={relatedArticle.id} className="mb-1">
+                          {slug ? (
+                            <Link
+                              href={`/article/${slug}`}
+                              className="text-communist-red hover:underline"
+                            >
+                              {relatedArticle.title || slug}
+                            </Link>
+                          ) : (
+                            <span>
+                              {relatedArticle.title || 'No slug available'}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              {/* Add Share Button at the bottom */}
+              <div className="flex justify-start mt-6 mb-6">
+                <ShareButton />
+              </div>
+            </>
+          )}
 
 
           {/* Scroll-to-Top Button */}
           <ScrollToTopButton />
         </div>
       }
-      rightSidebar={
-        <div className="pt-2">
-          {terms && terms.length > 0 && (
-            <div>
-              <h3 className="mb-0 mt-0">Related Topics</h3>
-              <div className="flex flex-wrap gap-2 mt-2 mb-4">
-                {terms.map((term) => (
-                  <span
-                    key={term.id}
-                    className="bg-communist-red text-custom-bg text-sm font-normal px-2.5 py-0.5 rounded tracking-widest"
-                  >
-                    {term.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-          {/* {audio && audio.length > 0 && (
-            <div className="mt-0 mb-4">
-              <h3 className="mb-0 mt-0">Related Audio</h3>
-              <div className="mt-1">
-                {audio.map((item, index) => (
-                  <div key={item.id} className="flex items-center mb-2">
-                    <Link
-                      href={`#audio-track-${index + 1}`} // Ensure this matches the ID in the main content
-                      className="text-communist-red hover:underline"
-                    >
-                      Here
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )} */}
-
-          {/* <div className="mt-0">
-            <h3 className="mb-0 mt-0">Share This Article</h3>
-            <div className="flex justify-start items-center gap-x-5 mt-1 mb-4">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FacebookIcon
-                  className="fill-communist-red"
-                  style={{ fontSize: '2rem' }}
-                />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <TwitterIcon
-                  className="fill-communist-red"
-                  style={{ fontSize: '2rem' }}
-                />
-              </a>
-              <a href="mailto:?subject=Check%20out%20this%20article">
-                <EmailIcon
-                  className="fill-communist-red"
-                  style={{ fontSize: '2rem' }}
-                />
-              </a>
-              <PrintButton />
-            </div>
-          </div> */}
-          {/* Display Related Articles if available */}
-          {relatedArticles && relatedArticles.length > 0 && (
-            <div className="mt-0">
-              <h3 className="mb-1 mt-0">Related Articles</h3>
-              <div className="mt-0 mb-4">
-                {relatedArticles.map((relatedArticle) => {
-                  const slug = relatedArticle.slug;
-                  return (
-                    <div key={relatedArticle.id} className="mb-1">
-                      {slug ? (
-                        <Link
-                          href={`/article/${slug}`}
-                          className="text-communist-red hover:underline"
-                        >
-                          {relatedArticle.title || slug}
-                        </Link>
-                      ) : (
-                        <span>
-                          {relatedArticle.title || 'No slug available'}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
+      rightSidebar={null
       }
     />
   );

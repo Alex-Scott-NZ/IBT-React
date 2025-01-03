@@ -13,7 +13,7 @@ interface BaseLayoutProps {
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
   leftSidebar: ReactNode;
   mainContent: ReactNode;
-  rightSidebar: ReactNode;
+  rightSidebar?: ReactNode;
   slug?: string;
   isLoading?: boolean;
 }
@@ -38,6 +38,16 @@ const BaseLayout = ({
     return <LoadingFallback variant="default" />;
   }
 
+  // Check if there's a right sidebar
+  const hasRightSidebar = !!rightSidebar;
+
+  // Decide widths dynamically
+  const leftSidebarWidth = hasRightSidebar ? 'nav:w-[20%]' : 'nav:w-[30%]';
+  const mainContentWidth = hasRightSidebar ? 'nav:w-[60%]' : 'nav:w-[70%]';
+
+  // Decide the margin-right for left sidebar
+  const leftSidebarMarginRight = hasRightSidebar ? 'mr-4' : 'mr-10';
+
   return (
     <ErrorBoundary>
       <div className="bg-custom-bg min-h-screen flex flex-col print:w-full print:bg-white">
@@ -48,19 +58,20 @@ const BaseLayout = ({
         <div className="w-full max-w-[1108px] mx-auto pl-2 pr-2 flex-grow flex flex-col print:max-w-none print:px-4">
           <div className="print:hidden">
             <Header globalSettings={globalSettings} />
-            
             <Suspense fallback={<LoadingFallback variant="compact" />}>
               <NavigationMenu />
             </Suspense>
-            
-            <SiteWideNotice 
-              notificationData={globalSettings?.fGGlobalSettings?.notificationBar} 
+            <SiteWideNotice
+              notificationData={globalSettings?.fGGlobalSettings?.notificationBar}
             />
           </div>
 
           <div className="flex flex-col nav:flex-row nav:justify-between pt-2 print:w-full">
-            <aside className="hidden nav:block w-full nav:w-[20%] print:hidden">
-              <div className="sticky custom-scrollbar nav:top-4 overflow-y-auto max-h-[calc(100vh_-_var(--header-height)_-_var(--footer-height))] mr-4">
+            {/* Left Sidebar */}
+            <aside className={`hidden nav:block w-full ${leftSidebarWidth} print:hidden`}>
+              <div className="sticky custom-scrollbar nav:top-4 overflow-y-auto max-h-[calc(100vh_-_var(--header-height)_-_var(--footer-height))] mr-10"
+                style={{ paddingRight: '10px' }}
+              >
                 <Suspense fallback={<LoadingFallback variant="sidebar" />}>
                   <ErrorBoundary>
                     {leftSidebar}
@@ -69,7 +80,8 @@ const BaseLayout = ({
               </div>
             </aside>
 
-            <main className="w-full nav:w-[60%] print:mt-4 print:bg-white bg-custom-bg mb-4">
+            {/* Main Content */}
+            <main className={`w-full ${mainContentWidth} print:mt-4 print:bg-white bg-custom-bg mb-4`}>
               <Suspense fallback={<LoadingFallback variant="article" />}>
                 <ErrorBoundary>
                   {mainContent}
@@ -77,15 +89,18 @@ const BaseLayout = ({
               </Suspense>
             </main>
 
-            <aside className="hidden nav:block w-full nav:w-[20%] print:hidden">
-              <div className="sticky custom-scrollbar nav:top-4 overflow-y-auto max-h-[calc(100vh_-_var(--header-height)_-_var(--footer-height))] ml-4">
-                <Suspense fallback={<LoadingFallback variant="sidebar" />}>
-                  <ErrorBoundary>
-                    {rightSidebar}
-                  </ErrorBoundary>
-                </Suspense>
-              </div>
-            </aside>
+            {/* Conditionally render the Right Sidebar */}
+            {hasRightSidebar && (
+              <aside className="hidden nav:block w-full nav:w-[20%] print:hidden">
+                <div className="sticky custom-scrollbar nav:top-4 overflow-y-auto max-h-[calc(100vh_-_var(--header-height)_-_var(--footer-height))] ml-4">
+                  <Suspense fallback={<LoadingFallback variant="sidebar" />}>
+                    <ErrorBoundary>
+                      {rightSidebar}
+                    </ErrorBoundary>
+                  </Suspense>
+                </div>
+              </aside>
+            )}
           </div>
         </div>
 

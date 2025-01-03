@@ -91,24 +91,23 @@ const ScrollToTopButton: React.FC = () => {
 
   return (
     <div
-      className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-[1108px] px-2 transition-opacity ${
-        isVisible
-          ? 'opacity-100 duration-200'
-          : 'opacity-0 duration-500 pointer-events-none'
-      }`}
+      className={`
+    fixed
+    bottom-4
+    right-4
+    transition-opacity
+    ${isVisible ? 'opacity-100 duration-200' : 'opacity-0 duration-500 pointer-events-none'}
+  `}
     >
-      <div className="flex justify-end">
-        <div className="mr-4 nav:mr-[20%]">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-10 h-10 bg-communist-red text-white shadow-lg md:hover:bg-red-700 focus:outline-none border-none rounded-none"
-            aria-label="Scroll to top"
-          >
-            <ArrowUpwardIcon />
-          </button>
-        </div>
-      </div>
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="w-10 h-10 bg-communist-red text-white shadow-lg md:hover:bg-red-700 focus:outline-none border-none rounded-none"
+        aria-label="Scroll to top"
+      >
+        <ArrowUpwardIcon />
+      </button>
     </div>
+
   );
 };
 
