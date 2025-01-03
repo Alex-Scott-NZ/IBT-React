@@ -1,8 +1,8 @@
 import React from 'react';
 import BaseLayoutNoSideBars from '../layouts/BaseLayoutNoSideBars';
 import Link from 'next/link';
-import Image from 'next/image';
-import { getImageUrl } from '../utils/imageHelpers';
+// import Image from 'next/image';
+// import { getImageUrl } from '../utils/imageHelpers';
 import {
   GetJournalIssuesQuery,
   useGetJournalIssuesQuery,
@@ -26,10 +26,10 @@ type ArticleNode = {
 
 const JournalPage = async () => {
   const journalIssuesData: GetJournalIssuesQuery = await serverFetch(
-    useGetJournalIssuesQuery, {next: {revalidate:60}}
+    useGetJournalIssuesQuery, { next: { revalidate: 60 } }
   );
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
-    useGetGlobalSettingsQuery, {next: {revalidate:60}}
+    useGetGlobalSettingsQuery, { next: { revalidate: 60 } }
   );
 
   const journalIssues = journalIssuesData.journalIssues?.nodes || [];
@@ -57,68 +57,52 @@ const JournalPage = async () => {
           All Journal Issues
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {orderedJournalIssues.map((issue) => {
-            const featuredImage: FragmentFeaturedImageFragment | null =
-              issue.featuredImage?.node || null;
-            return (
-              <div
-                key={issue.slug}
-                className="bg-white rounded-lg shadow-md overflow-hidden"
-              >
-                <Link href={`/journal/${issue.slug}`} className="block">
-                  <div className="relative aspect-[2/3]">
-                    <Image
-                      src={featuredImage?.mediaItemUrl || fallbackSVG}
-                      alt={
-                        featuredImage?.altText || issue.title || 'Journal cover'
-                      }
-                      fill
-                      className="object-cover"
-                      placeholder="blur"
-                      blurDataURL={featuredImage?.thumbhash || fallbackSVG}
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
-                      quality={75}
-                      loading="lazy"
-                    />
-                  </div>
-                </Link>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {orderedJournalIssues.map((issue) => (
+            <div
+              key={issue.slug}
+              className="bg-white rounded-lg shadow-md overflow-hidden"
+            >
+              <div className="p-4">
+                <h2 className="font-cambay text-xl mb-4">
+                <Link
+                    href={`/journal/${issue.slug}`}
+                    className="text-communist-red hover:underline transition-colors"
+                  >
+                  {issue.title}
+                  </Link>
+                </h2>
 
-                <div className="p-4">
-                  <h2 className="font-cambay text-xl mb-4">{issue.title}</h2>
-
-                  <ul className="space-y-2">
-                    {issue.journalIssueDetails?.articlesInJournal?.nodes
-                      ?.length ? (
-                      issue.journalIssueDetails.articlesInJournal.nodes
-                        .map((node, index) => {
-                          const article = node as ArticleNode;
-                          if (article.__typename === 'Article') {
-                            return (
-                              <li key={article.id || article.slug || index}>
-                                <Link
-                                  href={`/article/${article.slug}`}
-                                  className="font-helvetica text-gray-900 hover:text-communist-red transition-colors"
-                                >
-                                  {article.articleDetails
-                                    ?.tableOfContentsTitle || article.title}
-                                </Link>
-                              </li>
-                            );
-                          }
-                          return null;
-                        })
-                        .filter(Boolean)
-                    ) : (
-                      <li className="font-helvetica text-gray-500">
-                        No articles available
-                      </li>
-                    )}
-                  </ul>
-                </div>
+                <ul className="space-y-2">
+                  {issue.journalIssueDetails?.articlesInJournal?.nodes?.length ? (
+                    issue.journalIssueDetails.articlesInJournal.nodes
+                      .map((node, index) => {
+                        const article = node as ArticleNode;
+                        if (article.__typename === 'Article') {
+                          return (
+                            <li key={article.id || article.slug || index}>
+                              <Link
+                                href={`/article/${article.slug}`}
+                                className="font-helvetica text-gray-900 hover:text-communist-red transition-colors"
+                              >
+                                {article.articleDetails?.tableOfContentsTitle ||
+                                  article.title}
+                              </Link>
+                            </li>
+                          );
+                        }
+                        return null;
+                      })
+                      .filter(Boolean)
+                  ) : (
+                    <li className="font-helvetica text-gray-500">
+                      No articles available
+                    </li>
+                  )}
+                </ul>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </BaseLayoutNoSideBars>

@@ -63,6 +63,7 @@ export default async function JournalPage({
       <div className="w-full">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Left column with image */}
+          { imageUrl && (
           <div className="md:col-span-1">
             <div className="relative aspect-[2/3] w-full">
               <Image
@@ -78,6 +79,7 @@ export default async function JournalPage({
               />
             </div>
           </div>
+          )}
 
           {/* Right column with title and articles */}
           <div className="md:col-span-3">
