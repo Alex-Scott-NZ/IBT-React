@@ -1,0 +1,33 @@
+fragment FragmentBook on Book {
+    contentTypeName
+    databaseId
+    date
+    dateGmt
+    featuredImageDatabaseId
+    featuredImageId
+    guid
+    id
+    modified
+    modifiedGmt
+    slug
+    status
+    title
+    uri
+    featuredImage {
+        node {
+            __typename
+            ...FragmentFeaturedImage
+        }
+    }
+    bookDetails {
+        displayOnIbtBooks
+        fieldGroupName
+        subheading
+        summary
+        relatedArticles {
+            nodes {
+                ...FragmentRelatedArticle
+            }
+        }
+    }
+}

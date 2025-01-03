@@ -10,6 +10,7 @@ import {
   GetArticleByUriQuery,
   PdfItem,
   AudioItem,
+  Book,
   TermNode,
   Article,
   JournalIssue,
@@ -50,6 +51,11 @@ const ArticleLayout = ({
   const { publicationDate, suppressDate, displayDate, source } =
     article?.articleDetails || {};
   const relatedJournalNode = article?.articleDetails?.relatedJournal?.nodes?.[0];
+
+  const relatedBook = article?.articleDetails?.relatedBook?.nodes?.[0] as Book;
+  const bookCoverImage = relatedBook?.featuredImage?.node;
+  const bookSlug = relatedBook?.slug || '';
+  const bookTitle = relatedBook?.title || '';
 
   let journalCoverImage = null;
   let articlesInJournal: Article[] | null = null;
@@ -103,8 +109,30 @@ const ArticleLayout = ({
   const leftSidebarContent = context === 'book'
     ? (
       <div>
-        <h3 className="mb-2 mt-0 text-lg font-semibold">Book</h3>
-        <p>This article is opened in a book context.</p>
+        <h3 className="mb-2 mt-0 text-lg font-semibold">From the Book</h3>
+        {bookCoverImage && (
+          <Link href={`/book/${bookSlug}`} passHref>
+            <Image
+              src={bookCoverImage.mediaItemUrl || ''}
+              alt={bookCoverImage.altText || bookTitle || 'Book cover'}
+              width={150}
+              height={225}
+              priority={true}
+              quality={75}
+              className="w-full h-auto mt-3"
+              placeholder="blur"
+              blurDataURL={bookCoverImage.thumbhash || fallbackSVG}
+              style={{ maxWidth: '60%' }}
+            />
+          </Link>
+        )}
+        {bookTitle && (
+          <Link href={`/book/${bookSlug}`} passHref>
+            <span className="block mt-2 text-base font-semibold text-communist-red hover:underline">
+              {bookTitle}
+            </span>
+          </Link>
+        )}
       </div>
     )
     : (
