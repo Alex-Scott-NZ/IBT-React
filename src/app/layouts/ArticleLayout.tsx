@@ -31,7 +31,7 @@ interface ArticleLayoutProps {
   article: GetArticleByUriQuery['article'];
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
   slug: string;
-  context?: string; // <--- We'll check this
+  context?: string;
 }
 
 const ArticleLayout = ({
@@ -71,8 +71,8 @@ const ArticleLayout = ({
     // <-- Force cast just like your original snippet:
     articlesInJournal =
       relatedJournalNode.journalIssueDetails?.articlesInJournal?.nodes as
-        | Article[]
-        | null;
+      | Article[]
+      | null;
     journalSlug = relatedJournalNode.slug || '';
     journalTitle = (relatedJournalNode as JournalIssue).title || '';
   }
@@ -150,9 +150,8 @@ const ArticleLayout = ({
                   <li key={issueArticle.id} className="mb-4 flex items-start">
                     <div className="flex flex-col items-center">
                       <div
-                        className={`w-4 h-4 rounded-full mt-1 ${
-                          isCurrentArticle ? 'bg-communist-red' : 'bg-gray-300'
-                        }`}
+                        className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle ? 'bg-communist-red' : 'bg-gray-300'
+                          }`}
                       ></div>
                       {index !== articlesInJournal.length - 1 && (
                         <div className="flex-1 w-px bg-gray-300"></div>
@@ -199,7 +198,20 @@ const ArticleLayout = ({
               )}
               {dateToDisplay && (
                 <div className="flex items-center justify-between mt-1 mb-1 text-gray-800">
-                  <span>{dateToDisplay}</span>
+                  <span>
+                    {dateToDisplay}
+                    {journalTitle && (
+                      <>
+                        {' '}|{' '}
+                        <Link
+                          href={`/journal/${journalSlug}`}
+                          className="text-communist-red hover:underline"
+                        >
+                          {journalTitle}
+                        </Link>
+                      </>
+                    )}
+                  </span>
                   <ShareButton />
                 </div>
               )}
