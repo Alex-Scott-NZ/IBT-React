@@ -3,7 +3,6 @@ import BaseLayout from './BaseLayout';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-// import VideoPlayer from '../components/VideoPlayer';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import ShareButton from '../components/ShareButton';
 import {
@@ -16,19 +15,8 @@ import {
   JournalIssue,
   VideoItem,
 } from '@/gql/gql-generated';
-// import PdfViewerComponent from './PdfViewerComponent';
-
 import { format } from 'date-fns';
 
-// import FacebookIcon from '@mui/icons-material/Facebook';
-// import TwitterIcon from '@mui/icons-material/Twitter';
-// import EmailIcon from '@mui/icons-material/Email';
-// import PrintButton from '../components/PrintButton';
-
-import '@react-pdf-viewer/core/lib/styles/index.css';
-import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-
-// Dynamic imports for conditional scripts
 const VideoPlayer = dynamic(() => import('../components/VideoPlayer'), {
   ssr: false,
 });
@@ -36,17 +24,21 @@ const PdfViewerComponent = dynamic(() => import('./PdfViewerComponent'), {
   ssr: false,
 });
 
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 interface ArticleLayoutProps {
   article: GetArticleByUriQuery['article'];
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
   slug: string;
+  context?: string; // <--- We'll check this
 }
 
 const ArticleLayout = ({
   article,
   globalSettings,
   slug,
+  context,
 }: ArticleLayoutProps) => {
   const relatedPdf = article?.articleDetails?.relatedPdf?.nodes?.[0] as PdfItem;
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl || '';
@@ -57,8 +49,8 @@ const ArticleLayout = ({
   const terms = article?.terms?.nodes as TermNode[] | undefined;
   const { publicationDate, suppressDate, displayDate, source } =
     article?.articleDetails || {};
-  const relatedJournalNode =
-    article?.articleDetails?.relatedJournal?.nodes?.[0];
+  const relatedJournalNode = article?.articleDetails?.relatedJournal?.nodes?.[0];
+
   let journalCoverImage = null;
   let articlesInJournal: Article[] | null = null;
   let journalSlug = '';
@@ -72,15 +64,15 @@ const ArticleLayout = ({
   const videoUrl = relatedVideo?.videoDetails?.videoEmbedCode || '';
   const videoCaption = relatedVideo?.videoDetails?.articlePageCaption || '';
 
-  // Check if the node is of type JournalIssue and has a featuredImage
   if (relatedJournalNode?.__typename === 'JournalIssue') {
     if (relatedJournalNode.featuredImage?.node) {
       journalCoverImage = relatedJournalNode.featuredImage.node;
     }
-
-    // Extract the articles in the journal issue
-    articlesInJournal = relatedJournalNode.journalIssueDetails
-      ?.articlesInJournal?.nodes as Article[] | null;
+    // <-- Force cast just like your original snippet:
+    articlesInJournal =
+      relatedJournalNode.journalIssueDetails?.articlesInJournal?.nodes as
+        | Article[]
+        | null;
     journalSlug = relatedJournalNode.slug || '';
     journalTitle = (relatedJournalNode as JournalIssue).title || '';
   }
@@ -89,7 +81,8 @@ const ArticleLayout = ({
     `
     <svg width="768" height="131" viewBox="0 0 768 131" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="768" height="131" fill="#4B5563"/>
-      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9CA3AF" font-family="system-ui" font-size="16">
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" 
+       fill="#9CA3AF" font-family="system-ui" font-size="16">
         Image Not Found
       </text>
     </svg>
@@ -97,110 +90,105 @@ const ArticleLayout = ({
   ).toString('base64')}`;
 
   let dateToDisplay: string | null = null;
-
   if (suppressDate) {
-    if (displayDate) {
-      // Use displayDate as is
-      dateToDisplay = displayDate;
-    } else {
-      // If suppressDate is true but displayDate is not provided, you can choose to display nothing or handle it accordingly.
-      dateToDisplay = null;
-    }
-  } else {
-    if (publicationDate) {
-      // Format the publicationDate
-      dateToDisplay = format(new Date(publicationDate), 'd MMMM yyyy');
-    } else {
-      // If publicationDate is not provided, you can choose to display nothing or handle it accordingly.
-      dateToDisplay = null;
-    }
+    dateToDisplay = displayDate || null;
+  } else if (publicationDate) {
+    dateToDisplay = format(new Date(publicationDate), 'd MMMM yyyy');
   }
+
+  // -------------------------------------------------------------------
+  // LEFT SIDEBAR: If 'context' === 'book', show a "Book" placeholder;
+  // otherwise, do your normal journal logic
+  // -------------------------------------------------------------------
+  const leftSidebarContent = context === 'book'
+    ? (
+      <div>
+        <h3 className="mb-2 mt-0 text-lg font-semibold">Book</h3>
+        <p>This article is opened in a book context.</p>
+      </div>
+    )
+    : (
+      <div>
+        {journalCoverImage && (
+          <Link href={`/journal/${journalSlug}`} passHref>
+            <Image
+              src={journalCoverImage.mediaItemUrl || ''}
+              alt={
+                journalCoverImage.altText || journalTitle || 'Journal cover'
+              }
+              width={150}
+              height={225}
+              priority={true}
+              quality={75}
+              className="w-full h-auto mt-3"
+              placeholder="blur"
+              blurDataURL={journalCoverImage.thumbhash || fallbackSVG}
+              style={{ maxWidth: '60%' }}
+            />
+          </Link>
+        )}
+        {journalTitle && (
+          <Link href={`/journal/${journalSlug}`} passHref>
+            <span className="block mt-0 text-base font-semibold text-communist-red hover:underline">
+              {journalTitle}
+            </span>
+          </Link>
+        )}
+        {articlesInJournal && articlesInJournal.length > 0 && (
+          <div className="mt-2">
+            <h3 className="mb-2 mt-0 text-lg font-semibold">
+              Articles in this Issue
+            </h3>
+            <ul className="list-none m-0 p-0">
+              {articlesInJournal.map((issueArticle, index) => {
+                const isCurrentArticle = issueArticle.slug === article?.slug;
+                const sidebarTitle =
+                  issueArticle.articleDetails?.tableOfContentsTitle?.trim() ||
+                  issueArticle.title;
+
+                return (
+                  <li key={issueArticle.id} className="mb-4 flex items-start">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-4 h-4 rounded-full mt-1 ${
+                          isCurrentArticle ? 'bg-communist-red' : 'bg-gray-300'
+                        }`}
+                      ></div>
+                      {index !== articlesInJournal.length - 1 && (
+                        <div className="flex-1 w-px bg-gray-300"></div>
+                      )}
+                    </div>
+                    <div className="ml-4">
+                      {isCurrentArticle ? (
+                        <span className="font-medium text-communist-red">
+                          {sidebarTitle}
+                        </span>
+                      ) : (
+                        <Link
+                          href={`/article/${issueArticle.slug}`}
+                          className="text-gray-800 hover:text-communist-red"
+                        >
+                          {sidebarTitle}
+                        </Link>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
 
   return (
     <BaseLayout
       globalSettings={globalSettings}
       slug={slug}
-      leftSidebar={
-        <div>
-          {/* Link the cover image and title to the journal issue */}
-          {journalCoverImage && (
-            <Link href={`/journal/${journalSlug}`} passHref>
-              <Image
-                src={journalCoverImage.mediaItemUrl || ''}
-                alt={
-                  journalCoverImage.altText || journalTitle || 'Journal cover'
-                }
-                width={150}
-                height={225}
-                priority={true}
-                quality={75}
-                className="w-full h-auto mt-3"
-                placeholder="blur"
-                blurDataURL={journalCoverImage.thumbhash || fallbackSVG}
-                style={{ maxWidth: '60%' }}
-              />
-            </Link>
-          )}
-
-          {/* Display the journal title below the image as a link */}
-          {journalTitle && (
-            <Link href={`/journal/${journalSlug}`} passHref>
-              <span className="block mt-0 text-base font-semibold text-communist-red hover:underline">
-                {journalTitle}
-              </span>
-            </Link>
-          )}
-          {/* Vertical Stepper for Articles in the Journal Issue */}
-          {articlesInJournal && articlesInJournal.length > 0 && (
-            <div className="mt-2">
-              <h3 className="mb-2 mt-0 text-lg font-semibold">
-                Articles in this Issue
-              </h3>
-              <ul className="list-none m-0 p-0">
-                {articlesInJournal.map((issueArticle, index) => {
-                  const isCurrentArticle = issueArticle.slug === article?.slug;
-                  const sidebarTitle =
-                    issueArticle.articleDetails?.tableOfContentsTitle?.trim() ||
-                    issueArticle.title;
-
-                  return (
-                    <li key={issueArticle.id} className="mb-4 flex items-start">
-                      {/* Marker and Line */}
-                      <div className="flex flex-col items-center">
-                        <div
-                          className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle ? 'bg-communist-red' : 'bg-gray-300'
-                            }`}
-                        ></div>
-                        {index !== articlesInJournal.length - 1 && (
-                          <div className="flex-1 w-px bg-gray-300"></div>
-                        )}
-                      </div>
-
-                      <div className="ml-4">
-                        {isCurrentArticle ? (
-                          <span className="font-medium text-communist-red">
-                            {sidebarTitle}
-                          </span>
-                        ) : (
-                          <Link
-                            href={`/article/${issueArticle.slug}`}
-                            className="text-gray-800 hover:text-communist-red"
-                          >
-                            {sidebarTitle}
-                          </Link>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-
-              </ul>
-            </div>
-          )}
-        </div>
-      }
+      leftSidebar={leftSidebarContent}
       mainContent={
         <div className="relative">
+          {/* Same mainContent code as your original snippet */}
           {!pdfUrl && (
             <>
               <h1 className="mt-1 mb-0 text-gray-800">{article?.title}</h1>
@@ -209,20 +197,16 @@ const ArticleLayout = ({
                   {article.articleDetails.subtitle}
                 </h2>
               )}
-              {/* Display the date and ShareButton */}
               {dateToDisplay && (
                 <div className="flex items-center justify-between mt-1 mb-1 text-gray-800">
                   <span>{dateToDisplay}</span>
                   <ShareButton />
                 </div>
               )}
-
-              {/* Display the source if available */}
               {source && (
                 <p className="mt-1 mb-1 text-gray-800">Source: {source}</p>
               )}
 
-              {/* Display the video if it exists, else display the featured image */}
               {videoUrl ? (
                 <div className="print:hidden mt-3">
                   <VideoPlayer url={videoUrl} caption={videoCaption} />
@@ -246,7 +230,9 @@ const ArticleLayout = ({
                     {featuredImage.caption && (
                       <div
                         className="text-sm text-gray-600 mt-1 italic"
-                        dangerouslySetInnerHTML={{ __html: featuredImage.caption }}
+                        dangerouslySetInnerHTML={{
+                          __html: featuredImage.caption,
+                        }}
                       />
                     )}
                   </div>
@@ -261,7 +247,6 @@ const ArticleLayout = ({
                       id={`audio-track-${index + 1}`}
                       className="mt-2 mb-4"
                     >
-                      {/* {item.title && <h4>{item.title}</h4>} */}
                       {item.audioItemDetails?.audioEmbedCode && (
                         <div
                           dangerouslySetInnerHTML={{
@@ -284,10 +269,8 @@ const ArticleLayout = ({
                 className="font-helvetica text-lg leading-relaxed text-gray-800"
                 dangerouslySetInnerHTML={{ __html: article?.content || '' }}
               />
-              {/* Move "Related Topics" (terms) below the content */}
               {terms && terms.length > 0 && (
                 <div className="mt-6">
-                  <h3 className="mb-0 mt-0">Related Topics</h3>
                   <div className="flex flex-wrap gap-2 mt-2 mb-4">
                     {terms.map((term) => (
                       <span
@@ -300,8 +283,6 @@ const ArticleLayout = ({
                   </div>
                 </div>
               )}
-
-              {/* Move "Related Articles" below that */}
               {relatedArticles && relatedArticles.length > 0 && (
                 <div className="mt-6">
                   <h3 className="mb-1 mt-0">Related Articles</h3>
@@ -328,20 +309,16 @@ const ArticleLayout = ({
                   </div>
                 </div>
               )}
-              {/* Add Share Button at the bottom */}
               <div className="flex justify-start mt-6 mb-6">
                 <ShareButton />
               </div>
             </>
           )}
 
-
-          {/* Scroll-to-Top Button */}
           <ScrollToTopButton />
         </div>
       }
-      rightSidebar={null
-      }
+      rightSidebar={null}
     />
   );
 };

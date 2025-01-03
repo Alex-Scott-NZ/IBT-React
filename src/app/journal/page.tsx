@@ -1,8 +1,7 @@
 import React from 'react';
 import BaseLayoutNoSideBars from '../layouts/BaseLayoutNoSideBars';
 import Link from 'next/link';
-// import Image from 'next/image';
-// import { getImageUrl } from '../utils/imageHelpers';
+import Image from 'next/image'; // Make sure this is uncommented
 import {
   GetJournalIssuesQuery,
   useGetJournalIssuesQuery,
@@ -26,15 +25,18 @@ type ArticleNode = {
 
 const JournalPage = async () => {
   const journalIssuesData: GetJournalIssuesQuery = await serverFetch(
-    useGetJournalIssuesQuery, { next: { revalidate: 60 } }
+    useGetJournalIssuesQuery,
+    { next: { revalidate: 60 } }
   );
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
-    useGetGlobalSettingsQuery, { next: { revalidate: 60 } }
+    useGetGlobalSettingsQuery,
+    { next: { revalidate: 60 } }
   );
 
   const journalIssues = journalIssuesData.journalIssues?.nodes || [];
   const globalSettings = globalSettingsData.globalSettings;
 
+  // Sort in reverse slug order (as per your existing logic):
   const orderedJournalIssues = [...journalIssues].sort((a, b) =>
     (b.slug || '').localeCompare(a.slug || '')
   );
@@ -57,52 +59,79 @@ const JournalPage = async () => {
           All Journal Issues
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {orderedJournalIssues.map((issue) => (
-            <div
-              key={issue.slug}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
-            >
-              <div className="p-4">
-                <h2 className="font-cambay text-xl mb-4">
-                <Link
-                    href={`/journal/${issue.slug}`}
-                    className="text-communist-red hover:underline transition-colors"
-                  >
-                  {issue.title}
-                  </Link>
-                </h2>
+        <div className="grid grid-cols-1 gap-6">
+          {orderedJournalIssues.map((issue) => {
+            const featuredImage = issue.featuredImage?.node as
+              | FragmentFeaturedImageFragment
+              | undefined;
 
-                <ul className="space-y-2">
-                  {issue.journalIssueDetails?.articlesInJournal?.nodes?.length ? (
-                    issue.journalIssueDetails.articlesInJournal.nodes
-                      .map((node, index) => {
-                        const article = node as ArticleNode;
-                        if (article.__typename === 'Article') {
-                          return (
-                            <li key={article.id || article.slug || index}>
-                              <Link
-                                href={`/article/${article.slug}`}
-                                className="font-helvetica text-gray-900 hover:text-communist-red transition-colors"
-                              >
-                                {article.articleDetails?.tableOfContentsTitle ||
-                                  article.title}
-                              </Link>
-                            </li>
-                          );
-                        }
-                        return null;
-                      })
-                      .filter(Boolean)
-                  ) : (
-                    <li className="font-helvetica text-gray-500">
-                      No articles available
-                    </li>
-                  )}
-                </ul>
+            return (
+              <div
+                key={issue.slug}
+                className="bg-white rounded-lg shadow-md overflow-hidden"
+              >
+                {/* 
+                  Two-column layout on desktop, stacked on mobile:
+                  - Left: Articles
+                  - Right: Featured Image (hidden on mobile)
+                */}
+<div className="p-4 flex flex-col md:flex-row">
+  {/* LEFT: Articles (3/4 width on desktop) */}
+  <div className="md:w-3/4 md:pr-4">
+    <h2 className="font-cambay text-xl mb-4">
+      <Link
+        href={`/journal/${issue.slug}`}
+        className="text-communist-red hover:underline transition-colors"
+      >
+        {issue.title}
+      </Link>
+    </h2>
+
+    <ul className="space-y-2">
+      {issue.journalIssueDetails?.articlesInJournal?.nodes?.length ? (
+        issue.journalIssueDetails.articlesInJournal.nodes.map((node, index) => {
+          const article = node as ArticleNode;
+          if (article.__typename === 'Article') {
+            return (
+              <li key={article.id || article.slug || index}>
+                <Link
+                  href={`/article/${article.slug}`}
+                  className="font-helvetica text-gray-900 hover:text-communist-red transition-colors"
+                >
+                  {article.articleDetails?.tableOfContentsTitle ||
+                    article.title}
+                </Link>
+              </li>
+            );
+          }
+          return null;
+        })
+      ) : (
+        <li className="font-helvetica text-gray-500">No articles available</li>
+      )}
+    </ul>
+  </div>
+
+  {/* RIGHT: Featured Image (1/4 width on desktop) */}
+  {featuredImage?.sourceUrl && (
+    <div className="hidden md:block md:w-1/4">
+      <Image
+        src={featuredImage.sourceUrl}
+        alt={featuredImage.altText || issue.title || ''}
+        layout="responsive"
+        width={4} // Aspect ratio width
+        height={5} // Aspect ratio height
+        className="object-cover rounded"
+        placeholder="blur"
+        blurDataURL={fallbackSVG}
+      />
+    </div>
+  )}
+</div>
+
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </BaseLayoutNoSideBars>
