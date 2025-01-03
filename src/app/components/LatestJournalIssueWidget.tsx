@@ -40,9 +40,9 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
         onClick={() => handleJournalClick(latestIssue?.slug)}
         className="w-full cursor-pointer transition-colors hover:bg-gray-400/10"
       >
-        <div className="flex items-start">
+        <div>
           {/* Image Container */}
-          <div className="w-1/3 relative flex-shrink-0 mr-2">
+          <div className="w-1/2 relative flex-shrink-0 mr-2">
             <Image
               src={getImageUrl(latestIssue?.featuredImage?.node, 164)}
               alt={latestIssue?.featuredImage?.node?.altText || latestIssue?.title || 'Latest Journal Issue'}
@@ -58,9 +58,7 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
             <h6 className="font-helvetica text-sm text-gray-600 font-bold m-0">
               {latestIssue?.title}
             </h6>
-            <p className="font-helvetica text-xs text-gray-600 m-0">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
+
           </div>
         </div>
       </div>

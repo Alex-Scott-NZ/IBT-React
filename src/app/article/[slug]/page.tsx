@@ -7,13 +7,25 @@ import {
 import ArticleLayout from '../../layouts/ArticleLayout';
 import { serverFetch } from '@/gql/query-utils';
 
-const ArticlePage = async ({ params }: { params: { slug: string } }) => {
+export default async function ArticlePage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams?: { context?: string };
+}) {
   const uri = `/article/${params.slug}/`;
+
+  // OPTIONAL: read the context (e.g. 'book') from the query string
+  const context = searchParams?.context;
 
   // Fetch the required data using serverFetch
   const articleData: GetArticleByUriQuery = await serverFetch(
     useGetArticleByUriQuery,
-    { variables: { uri }, next: { revalidate: 60 } }
+    {
+      variables: { uri },
+      next: { revalidate: 60 },
+    }
   );
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
     useGetGlobalSettingsQuery,
@@ -30,9 +42,8 @@ const ArticlePage = async ({ params }: { params: { slug: string } }) => {
     <ArticleLayout
       article={articleData.article}
       globalSettings={globalSettingsData.globalSettings}
-      slug={params.slug} // Pass the slug down
+      slug={params.slug} 
+      context={context} // Pass context down to ArticleLayout
     />
   );
-};
-
-export default ArticlePage;
+}

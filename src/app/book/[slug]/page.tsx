@@ -50,7 +50,7 @@ export default async function BookPage({
     </svg>
     `
   ).toString('base64')}`;
-  
+
 
   if (!book) {
     return <div>Book not found</div>;
@@ -103,7 +103,13 @@ export default async function BookPage({
                   article.articleDetails?.tableOfContentsTitle || article.title;
                 return (
                   <div key={index} className="mb-2">
-                    <Link href={`/article/${article.slug}`} passHref>
+                    <Link
+                      href={{
+                        pathname: `/article/${article.slug}`,
+                        query: { context: 'book' },
+                      }}
+                      passHref
+                    >
                       <span className="text-communist-red text-xl font-Helvetica">
                         {articleTitle}
                       </span>
