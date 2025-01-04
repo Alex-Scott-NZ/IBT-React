@@ -1,0 +1,16 @@
+query getPageByUri ($uri: String!) {
+    pageBy(uri: $uri) {
+        title
+        contentTypeName
+        author {
+            cursor
+        }
+        content
+        date
+        dateGmt
+        modified
+        modifiedGmt
+        pageId
+        uri
+    }
+}

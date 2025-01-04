@@ -17196,6 +17196,13 @@ export type GetJournalIssuesLatestQueryVariables = Exact<{ [key: string]: never;
 
 export type GetJournalIssuesLatestQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null }> } | null };
 
+export type GetPageByUriQueryVariables = Exact<{
+  uri: Scalars['String']['input'];
+}>;
+
+
+export type GetPageByUriQuery = { __typename?: 'RootQuery', pageBy?: { __typename?: 'Page', title?: string | null, contentTypeName: string, content?: string | null, date?: string | null, dateGmt?: string | null, modified?: string | null, modifiedGmt?: string | null, pageId: number, uri?: string | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', cursor?: string | null } | null } | null };
+
 export type GetPlaceholderSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -18246,6 +18253,64 @@ useSuspenseGetJournalIssuesLatestQuery.getKey = (variables?: GetJournalIssuesLat
 
 
 useGetJournalIssuesLatestQuery.fetcher = (variables?: GetJournalIssuesLatestQueryVariables, options?: RequestInit['headers']) => fetcher<GetJournalIssuesLatestQuery, GetJournalIssuesLatestQueryVariables>(GetJournalIssuesLatestDocument, variables, options);
+
+export const GetPageByUriDocument = `
+    query getPageByUri($uri: String!) {
+  pageBy(uri: $uri) {
+    title
+    contentTypeName
+    author {
+      cursor
+    }
+    content
+    date
+    dateGmt
+    modified
+    modifiedGmt
+    pageId
+    uri
+  }
+}
+    `;
+
+export const useGetPageByUriQuery = <
+      TData = GetPageByUriQuery,
+      TError = unknown
+    >(
+      variables: GetPageByUriQueryVariables,
+      options?: Omit<UseQueryOptions<GetPageByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetPageByUriQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetPageByUriQuery, TError, TData>(
+      {
+    queryKey: ['getPageByUri', variables],
+    queryFn: fetcher<GetPageByUriQuery, GetPageByUriQueryVariables>(GetPageByUriDocument, variables),
+    ...options
+  }
+    )};
+
+useGetPageByUriQuery.getKey = (variables: GetPageByUriQueryVariables) => ['getPageByUri', variables];
+
+export const useSuspenseGetPageByUriQuery = <
+      TData = GetPageByUriQuery,
+      TError = unknown
+    >(
+      variables: GetPageByUriQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<GetPageByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetPageByUriQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<GetPageByUriQuery, TError, TData>(
+      {
+    queryKey: ['getPageByUriSuspense', variables],
+    queryFn: fetcher<GetPageByUriQuery, GetPageByUriQueryVariables>(GetPageByUriDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseGetPageByUriQuery.getKey = (variables: GetPageByUriQueryVariables) => ['getPageByUriSuspense', variables];
+
+
+useGetPageByUriQuery.fetcher = (variables: GetPageByUriQueryVariables, options?: RequestInit['headers']) => fetcher<GetPageByUriQuery, GetPageByUriQueryVariables>(GetPageByUriDocument, variables, options);
 
 export const GetPlaceholderSettingsDocument = `
     query GetPlaceholderSettings {
