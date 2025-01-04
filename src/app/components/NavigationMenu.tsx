@@ -305,8 +305,8 @@ const NavigationMenu = () => {
               <Button component={Link} href="/book">
                 books
               </Button>
-              <Button component={Link} href="/marxist-archives">
-                marxist archives
+              <Button component={Link} href="/page/marxist-archive">
+                marxist archive
               </Button>
               <Button
                 onClick={(event) => {
