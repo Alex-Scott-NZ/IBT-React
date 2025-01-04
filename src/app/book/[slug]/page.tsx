@@ -93,7 +93,7 @@ export default async function BookPage({
             <p style={{ margin: '0 0 20px' }}>{bookDetails.summary}</p>
           )}
           <h3 style={{ margin: '20px 0', fontSize: '1.2rem' }}>
-            Related Articles:
+            Chapters in book:
           </h3>
           {bookDetails?.relatedArticles?.nodes
             ?.map((node, index) => {
