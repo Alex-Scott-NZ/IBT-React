@@ -50,12 +50,38 @@ const ArticleLayout = ({
   const terms = article?.terms?.nodes as TermNode[] | undefined;
   const { publicationDate, suppressDate, displayDate, source } =
     article?.articleDetails || {};
-  const relatedJournalNode = article?.articleDetails?.relatedJournal?.nodes?.[0];
+  const relatedJournalNode =
+    article?.articleDetails?.relatedJournal?.nodes?.[0];
 
   const relatedBook = article?.articleDetails?.relatedBook?.nodes?.[0] as Book;
   const bookCoverImage = relatedBook?.featuredImage?.node;
   const bookSlug = relatedBook?.slug || '';
   const bookTitle = relatedBook?.title || '';
+
+  // Add this block to get articles in book
+  let articlesInBook: Article[] | null = null;
+  if (relatedBook?.bookDetails?.relatedArticles?.nodes) {
+    articlesInBook = relatedBook.bookDetails.relatedArticles.nodes as Article[];
+  }
+
+  // Add this function to get next and previous articles
+  const getBookNavigation = () => {
+    if (!articlesInBook || !article?.slug) return { prev: null, next: null };
+
+    const currentIndex = articlesInBook.findIndex(
+      (bookArticle) => bookArticle.slug === article.slug
+    );
+
+    return {
+      prev: currentIndex > 0 ? articlesInBook[currentIndex - 1] : null,
+      next:
+        currentIndex < articlesInBook.length - 1
+          ? articlesInBook[currentIndex + 1]
+          : null,
+    };
+  };
+
+  const { prev, next } = getBookNavigation();
 
   let journalCoverImage = null;
   let articlesInJournal: Article[] | null = null;
@@ -75,10 +101,8 @@ const ArticleLayout = ({
       journalCoverImage = relatedJournalNode.featuredImage.node;
     }
     // <-- Force cast just like your original snippet:
-    articlesInJournal =
-      relatedJournalNode.journalIssueDetails?.articlesInJournal?.nodes as
-      | Article[]
-      | null;
+    articlesInJournal = relatedJournalNode.journalIssueDetails
+      ?.articlesInJournal?.nodes as Article[] | null;
     journalSlug = relatedJournalNode.slug || '';
     journalTitle = (relatedJournalNode as JournalIssue).title || '';
   }
@@ -106,8 +130,8 @@ const ArticleLayout = ({
   // LEFT SIDEBAR: If 'context' === 'book', show a "Book" placeholder;
   // otherwise, do your normal journal logic
   // -------------------------------------------------------------------
-  const leftSidebarContent = context === 'book'
-    ? (
+  const leftSidebarContent =
+    context === 'book' ? (
       <div>
         <h3 className="mb-2 mt-0 text-lg font-semibold">From the Book</h3>
         {bookCoverImage && (
@@ -133,17 +157,61 @@ const ArticleLayout = ({
             </span>
           </Link>
         )}
+        {articlesInBook && articlesInBook.length > 0 && (
+          <div className="mt-2">
+            <h3 className="mb-2 mt-0 text-lg font-semibold">
+              Articles in this Book
+            </h3>
+            <ul className="list-none m-0 p-0">
+              {articlesInBook.map((bookArticle, index) => {
+                const isCurrentArticle = bookArticle.slug === article?.slug;
+                const sidebarTitle =
+                  bookArticle.articleDetails?.tableOfContentsTitle?.trim() ||
+                  bookArticle.title;
+
+                return (
+                  <li key={bookArticle.id} className="mb-4 flex items-start">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-4 h-4 rounded-full mt-1 ${
+                          isCurrentArticle ? 'bg-communist-red' : 'bg-gray-300'
+                        }`}
+                      ></div>
+                      {index !== articlesInBook.length - 1 && (
+                        <div className="flex-1 w-px bg-gray-300"></div>
+                      )}
+                    </div>
+                    <div className="ml-4">
+                      {isCurrentArticle ? (
+                        <span className="font-medium text-communist-red">
+                          {sidebarTitle}
+                        </span>
+                      ) : (
+                        <Link
+                          href={{
+                            pathname: `/article/${bookArticle.slug}`,
+                            query: { context: 'book' },
+                          }}
+                          className="text-gray-800 hover:text-communist-red"
+                        >
+                          {sidebarTitle}
+                        </Link>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
-    )
-    : (
+    ) : (
       <div>
         {journalCoverImage && (
           <Link href={`/journal/${journalSlug}`} passHref>
             <Image
               src={journalCoverImage.mediaItemUrl || ''}
-              alt={
-                journalCoverImage.altText || journalTitle || 'Journal cover'
-              }
+              alt={journalCoverImage.altText || journalTitle || 'Journal cover'}
               width={150}
               height={225}
               priority={true}
@@ -178,8 +246,9 @@ const ArticleLayout = ({
                   <li key={issueArticle.id} className="mb-4 flex items-start">
                     <div className="flex flex-col items-center">
                       <div
-                        className={`w-4 h-4 rounded-full mt-1 ${isCurrentArticle ? 'bg-communist-red' : 'bg-gray-300'
-                          }`}
+                        className={`w-4 h-4 rounded-full mt-1 ${
+                          isCurrentArticle ? 'bg-communist-red' : 'bg-gray-300'
+                        }`}
                       ></div>
                       {index !== articlesInJournal.length - 1 && (
                         <div className="flex-1 w-px bg-gray-300"></div>
@@ -215,7 +284,13 @@ const ArticleLayout = ({
       leftSidebar={leftSidebarContent}
       mainContent={
         <div className="relative">
-          {/* Same mainContent code as your original snippet */}
+          {/* Share button at top for PDFs */}
+          {pdfUrl && (
+            <div className="flex justify-end mt-1 mb-4">
+              <ShareButton />
+            </div>
+          )}
+          {/* Title and metadata section - only show for non-PDF */}
           {!pdfUrl && (
             <>
               <h1 className="mt-1 mb-0 text-gray-800">{article?.title}</h1>
@@ -228,21 +303,66 @@ const ArticleLayout = ({
                 <div className="flex items-center justify-between mt-1 mb-1 text-gray-800">
                   <span>
                     {dateToDisplay}
-                    {journalTitle && (
+                    {context === 'book' ? (
                       <>
-                        {' '}|{' '}
-                        <Link
-                          href={`/journal/${journalSlug}`}
-                          className="text-communist-red hover:underline"
-                        >
-                          {journalTitle}
-                        </Link>
+                        {bookTitle && (
+                          <>
+                            {' '}
+                            |{' '}
+                            <Link
+                              href={`/book/${bookSlug}`}
+                              className="text-communist-red hover:underline"
+                            >
+                              {bookTitle}
+                            </Link>
+                          </>
+                        )}
+                        {journalTitle && (
+                          <>
+                            {' '}
+                            |{' '}
+                            <Link
+                              href={`/journal/${journalSlug}`}
+                              className="text-communist-red hover:underline"
+                            >
+                              {journalTitle}
+                            </Link>
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {journalTitle && (
+                          <>
+                            {' '}
+                            |{' '}
+                            <Link
+                              href={`/journal/${journalSlug}`}
+                              className="text-communist-red hover:underline"
+                            >
+                              {journalTitle}
+                            </Link>
+                          </>
+                        )}
+                        {bookTitle && (
+                          <>
+                            {' '}
+                            |{' '}
+                            <Link
+                              href={`/book/${bookSlug}`}
+                              className="text-communist-red hover:underline"
+                            >
+                              {bookTitle}
+                            </Link>
+                          </>
+                        )}
                       </>
                     )}
                   </span>
                   <ShareButton />
                 </div>
               )}
+
               {source && (
                 <p className="mt-1 mb-1 text-gray-800">Source: {source}</p>
               )}
@@ -301,8 +421,11 @@ const ArticleLayout = ({
             </>
           )}
 
+          {/* Main content - either PDF or article content */}
           {pdfUrl ? (
-            <PdfViewerComponent pdfUrl={pdfUrl} />
+            <>
+              <PdfViewerComponent pdfUrl={pdfUrl} />
+            </>
           ) : (
             <>
               <div
@@ -349,11 +472,81 @@ const ArticleLayout = ({
                   </div>
                 </div>
               )}
-              <div className="flex justify-start mt-6 mb-6">
-                <ShareButton />
-              </div>
             </>
           )}
+
+          {/* Book navigation - show for both PDF and regular articles */}
+          {context === 'book' && (
+            <div className="border-t border-gray-200 mt-6">
+              <div className="flex justify-between items-center text-lg">
+                {prev ? (
+                  <Link
+                    href={{
+                      pathname: `/article/${prev.slug}`,
+                      query: { context: 'book' },
+                    }}
+                    className="flex items-center text-communist-red hover:underline font-semibold text-lg"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 mr-3"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>
+                      Previous:{' '}
+                      {prev.articleDetails?.tableOfContentsTitle?.trim() ||
+                        prev.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <div />
+                )}
+
+                {next ? (
+                  <Link
+                    href={{
+                      pathname: `/article/${next.slug}`,
+                      query: { context: 'book' },
+                    }}
+                    className="flex items-center text-communist-red hover:underline font-semibold text-lg"
+                  >
+                    <span>
+                      Next:{' '}
+                      {next.articleDetails?.tableOfContentsTitle?.trim() ||
+                        next.title}
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 ml-3"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </Link>
+                ) : (
+                  <div />
+                )}
+              </div>
+            </div>
+          )}
+
+
+            <div className="flex justify-start mt-6 mb-6">
+              <ShareButton />
+            </div>
+
 
           <ScrollToTopButton />
         </div>
