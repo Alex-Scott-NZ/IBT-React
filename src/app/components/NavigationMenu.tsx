@@ -173,10 +173,10 @@ const NavigationMenu = () => {
   
         <ListItemButton
           component={Link}
-          href="/marxist-archives"
+          href="/page/marxist-archive"
           onClick={handleDrawerToggle}
         >
-          <ListItemText primary="marxist archives" />
+          <ListItemText primary="marxist archive" />
         </ListItemButton>
   
         <ListItemButton
