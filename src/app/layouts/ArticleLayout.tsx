@@ -478,14 +478,14 @@ const ArticleLayout = ({
           {/* Book navigation - show for both PDF and regular articles */}
           {context === 'book' && (
             <div className="border-t border-gray-200 mt-6">
-              <div className="flex justify-between items-center text-lg">
+              <div className="flex justify-between items-center text-lg space-x-6 sm:space-x-12">
                 {prev ? (
                   <Link
                     href={{
                       pathname: `/article/${prev.slug}`,
                       query: { context: 'book' },
                     }}
-                    className="flex items-center text-communist-red hover:underline font-semibold text-lg"
+                    className="flex items-center text-communist-red hover:underline font-semibold text-lg max-w-[calc(50%-1.5rem)] sm:max-w-[calc(50%-3rem)]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -515,7 +515,7 @@ const ArticleLayout = ({
                       pathname: `/article/${next.slug}`,
                       query: { context: 'book' },
                     }}
-                    className="flex items-center text-communist-red hover:underline font-semibold text-lg"
+                    className="flex items-center text-communist-red hover:underline font-semibold text-lg max-w-[calc(50%-1.5rem)] sm:max-w-[calc(50%-3rem)]"
                   >
                     <span>
                       Next:{' '}
@@ -542,11 +542,9 @@ const ArticleLayout = ({
             </div>
           )}
 
-
-            <div className="flex justify-start mt-6 mb-6">
-              <ShareButton />
-            </div>
-
+          <div className="flex justify-start mt-6 mb-6">
+            <ShareButton />
+          </div>
 
           <ScrollToTopButton />
         </div>
