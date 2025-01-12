@@ -58,16 +58,13 @@ const ArticleLayout = ({
   const bookSlug = relatedBook?.slug || '';
   const bookTitle = relatedBook?.title || '';
 
-  // Add this block to get articles in book
   let articlesInBook: Article[] | null = null;
   if (relatedBook?.bookDetails?.relatedArticles?.nodes) {
     articlesInBook = relatedBook.bookDetails.relatedArticles.nodes as Article[];
   }
 
-  // Add this function to get next and previous articles
   const getBookNavigation = () => {
     if (!articlesInBook || !article?.slug) return { prev: null, next: null };
-
     const currentIndex = articlesInBook.findIndex(
       (bookArticle) => bookArticle.slug === article.slug
     );
@@ -100,9 +97,9 @@ const ArticleLayout = ({
     if (relatedJournalNode.featuredImage?.node) {
       journalCoverImage = relatedJournalNode.featuredImage.node;
     }
-    // <-- Force cast just like your original snippet:
-    articlesInJournal = relatedJournalNode.journalIssueDetails
-      ?.articlesInJournal?.nodes as Article[] | null;
+    articlesInJournal =
+      relatedJournalNode.journalIssueDetails?.articlesInJournal
+        ?.nodes as Article[] | null;
     journalSlug = relatedJournalNode.slug || '';
     journalTitle = (relatedJournalNode as JournalIssue).title || '';
   }
@@ -111,7 +108,7 @@ const ArticleLayout = ({
     `
     <svg width="768" height="131" viewBox="0 0 768 131" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="768" height="131" fill="#4B5563"/>
-      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" 
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
        fill="#9CA3AF" font-family="system-ui" font-size="16">
         Image Not Found
       </text>
@@ -126,10 +123,6 @@ const ArticleLayout = ({
     dateToDisplay = format(new Date(publicationDate), 'd MMMM yyyy');
   }
 
-  // -------------------------------------------------------------------
-  // LEFT SIDEBAR: If 'context' === 'book', show a "Book" placeholder;
-  // otherwise, do your normal journal logic
-  // -------------------------------------------------------------------
   const leftSidebarContent =
     context === 'book' ? (
       <div>
@@ -432,20 +425,36 @@ const ArticleLayout = ({
                 className="font-helvetica text-lg leading-relaxed text-gray-800"
                 dangerouslySetInnerHTML={{ __html: article?.content || '' }}
               />
+
+              {/* 
+                Minimal change here: 
+                Wrap each term in a Link that navigates to either /place/[slug] or /topic/[slug] 
+                depending on the term.taxonomyName.
+              */}
               {terms && terms.length > 0 && (
                 <div className="mt-6">
                   <div className="flex flex-wrap gap-2 mt-2 mb-4">
-                    {terms.map((term) => (
-                      <span
-                        key={term.id}
-                        className="bg-communist-red text-custom-bg text-sm font-normal px-2.5 py-0.5 rounded tracking-widest"
-                      >
-                        {term.name}
-                      </span>
-                    ))}
+                    {terms.map((term) => {
+                      // Decide if it's a place or a topic:
+                      const url =
+                        term.taxonomyName === 'place'
+                          ? `/place/${term.slug}`
+                          : `/topic/${term.slug}`;
+
+                      return (
+                        <Link
+                          key={term.id}
+                          href={url}
+                          className="bg-communist-red text-custom-bg text-sm font-normal px-2.5 py-0.5 rounded tracking-widest hover:opacity-90"
+                        >
+                          {term.name}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               )}
+
               {relatedArticles && relatedArticles.length > 0 && (
                 <div className="mt-6">
                   <h3 className="mb-1 mt-0">Related Articles</h3>

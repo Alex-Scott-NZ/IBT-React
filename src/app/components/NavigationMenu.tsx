@@ -181,7 +181,7 @@ const NavigationMenu = () => {
   
         <ListItemButton
           component={Link}
-          href="/about"
+          href="/page/about"
           onClick={handleDrawerToggle}
         >
           <ListItemText primary="about" />
@@ -189,7 +189,7 @@ const NavigationMenu = () => {
   
         <ListItemButton
           component={Link}
-          href="/donate"
+          href="/page/donate"
           onClick={handleDrawerToggle}
         >
           <ListItemText primary="donate" />
@@ -336,10 +336,10 @@ const NavigationMenu = () => {
                   </MenuItem>
                 ))}
               </Menu>
-              <Button component={Link} href="/about">
+              <Button component={Link} href="/page/about">
                 about
               </Button>
-              <Button component={Link} href="/donate">
+              <Button component={Link} href="/page/donate">
                 donate
               </Button>
             </ButtonGroup>

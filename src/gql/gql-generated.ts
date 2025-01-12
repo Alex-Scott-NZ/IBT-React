@@ -17164,12 +17164,19 @@ export type GetArticleByUriQueryVariables = Exact<{
 
 export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null } | null } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedAudio?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { __typename?: 'AudioItemDetails', articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null, relatedVideo?: { __typename: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', contentTypeName: string } | { __typename?: 'AudioItem', contentTypeName: string } | { __typename?: 'Book', contentTypeName: string } | { __typename?: 'Collection', contentTypeName: string } | { __typename?: 'JournalIssue', contentTypeName: string } | { __typename?: 'MediaItem', contentTypeName: string } | { __typename?: 'Page', contentTypeName: string } | { __typename?: 'PdfItem', contentTypeName: string } | { __typename?: 'Post', contentTypeName: string } | { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { __typename?: 'VideoDetails', videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null }> } | null, relatedBook?: { __typename: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, terms?: { __typename?: 'ArticleToTermNodeConnection', nodes: Array<{ __typename: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null }> } | null } | null };
 
-export type GetArticlesByTermDatabaseIdQueryVariables = Exact<{
-  uri: Scalars['ID']['input'];
+export type GetArticlesByPlaceSlugQueryVariables = Exact<{
+  slug: Scalars['ID']['input'];
 }>;
 
 
-export type GetArticlesByTermDatabaseIdQuery = { __typename?: 'RootQuery', termNode?: { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Place', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { __typename?: 'PlaceToContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Topic', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { __typename?: 'TopicToContentNodeConnection', nodes: Array<{ __typename?: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
+export type GetArticlesByPlaceSlugQuery = { __typename?: 'RootQuery', termNode?: { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Place', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { __typename?: 'PlaceToContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | null };
+
+export type GetArticlesByTopicSlugQueryVariables = Exact<{
+  slug: Scalars['ID']['input'];
+}>;
+
+
+export type GetArticlesByTopicSlugQuery = { __typename?: 'RootQuery', termNode?: { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { __typename?: 'TopicToContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
 
 export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -17782,9 +17789,9 @@ useSuspenseGetArticleByUriQuery.getKey = (variables: GetArticleByUriQueryVariabl
 
 useGetArticleByUriQuery.fetcher = (variables: GetArticleByUriQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticleByUriQuery, GetArticleByUriQueryVariables>(GetArticleByUriDocument, variables, options);
 
-export const GetArticlesByTermDatabaseIdDocument = `
-    query GetArticlesByTermDatabaseID($uri: ID!) {
-  termNode(id: $uri, idType: DATABASE_ID) {
+export const GetArticlesByPlaceSlugDocument = `
+    query GetArticlesByPlaceSlug($slug: ID!) {
+  termNode(id: $slug, taxonomy: PLACE, idType: SLUG) {
     count
     databaseId
     description
@@ -17797,52 +17804,14 @@ export const GetArticlesByTermDatabaseIdDocument = `
     termTaxonomyId
     uri
     ... on Place {
+      __typename
       name
       slug
       uri
       contentNodes {
         nodes {
           ... on Article {
-            articleId
-            contentTypeName
-            databaseId
-            date
-            dateGmt
-            featuredImageDatabaseId
-            featuredImageId
-            id
-            isContentNode
-            modified
-            modifiedGmt
-            parentDatabaseId
-            parentId
-            password
-            previewRevisionDatabaseId
-            previewRevisionId
-            slug
-            status
-            title
-            uri
-            articleDetails {
-              displayDate
-              displayOnFrontPage
-              publicationDate
-              source
-              subtitle
-              suppressDate
-              tableOfContentsTitle
-            }
-          }
-        }
-      }
-    }
-    ... on Topic {
-      name
-      slug
-      uri
-      contentNodes {
-        nodes {
-          ... on Article {
+            __typename
             articleId
             contentTypeName
             databaseId
@@ -17880,44 +17849,143 @@ export const GetArticlesByTermDatabaseIdDocument = `
 }
     `;
 
-export const useGetArticlesByTermDatabaseIdQuery = <
-      TData = GetArticlesByTermDatabaseIdQuery,
+export const useGetArticlesByPlaceSlugQuery = <
+      TData = GetArticlesByPlaceSlugQuery,
       TError = unknown
     >(
-      variables: GetArticlesByTermDatabaseIdQueryVariables,
-      options?: Omit<UseQueryOptions<GetArticlesByTermDatabaseIdQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticlesByTermDatabaseIdQuery, TError, TData>['queryKey'] }
+      variables: GetArticlesByPlaceSlugQueryVariables,
+      options?: Omit<UseQueryOptions<GetArticlesByPlaceSlugQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticlesByPlaceSlugQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<GetArticlesByTermDatabaseIdQuery, TError, TData>(
+    return useQuery<GetArticlesByPlaceSlugQuery, TError, TData>(
       {
-    queryKey: ['GetArticlesByTermDatabaseID', variables],
-    queryFn: fetcher<GetArticlesByTermDatabaseIdQuery, GetArticlesByTermDatabaseIdQueryVariables>(GetArticlesByTermDatabaseIdDocument, variables),
+    queryKey: ['GetArticlesByPlaceSlug', variables],
+    queryFn: fetcher<GetArticlesByPlaceSlugQuery, GetArticlesByPlaceSlugQueryVariables>(GetArticlesByPlaceSlugDocument, variables),
     ...options
   }
     )};
 
-useGetArticlesByTermDatabaseIdQuery.getKey = (variables: GetArticlesByTermDatabaseIdQueryVariables) => ['GetArticlesByTermDatabaseID', variables];
+useGetArticlesByPlaceSlugQuery.getKey = (variables: GetArticlesByPlaceSlugQueryVariables) => ['GetArticlesByPlaceSlug', variables];
 
-export const useSuspenseGetArticlesByTermDatabaseIdQuery = <
-      TData = GetArticlesByTermDatabaseIdQuery,
+export const useSuspenseGetArticlesByPlaceSlugQuery = <
+      TData = GetArticlesByPlaceSlugQuery,
       TError = unknown
     >(
-      variables: GetArticlesByTermDatabaseIdQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetArticlesByTermDatabaseIdQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticlesByTermDatabaseIdQuery, TError, TData>['queryKey'] }
+      variables: GetArticlesByPlaceSlugQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<GetArticlesByPlaceSlugQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticlesByPlaceSlugQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useSuspenseQuery<GetArticlesByTermDatabaseIdQuery, TError, TData>(
+    return useSuspenseQuery<GetArticlesByPlaceSlugQuery, TError, TData>(
       {
-    queryKey: ['GetArticlesByTermDatabaseIDSuspense', variables],
-    queryFn: fetcher<GetArticlesByTermDatabaseIdQuery, GetArticlesByTermDatabaseIdQueryVariables>(GetArticlesByTermDatabaseIdDocument, variables),
+    queryKey: ['GetArticlesByPlaceSlugSuspense', variables],
+    queryFn: fetcher<GetArticlesByPlaceSlugQuery, GetArticlesByPlaceSlugQueryVariables>(GetArticlesByPlaceSlugDocument, variables),
     ...options
   }
     )};
 
-useSuspenseGetArticlesByTermDatabaseIdQuery.getKey = (variables: GetArticlesByTermDatabaseIdQueryVariables) => ['GetArticlesByTermDatabaseIDSuspense', variables];
+useSuspenseGetArticlesByPlaceSlugQuery.getKey = (variables: GetArticlesByPlaceSlugQueryVariables) => ['GetArticlesByPlaceSlugSuspense', variables];
 
 
-useGetArticlesByTermDatabaseIdQuery.fetcher = (variables: GetArticlesByTermDatabaseIdQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticlesByTermDatabaseIdQuery, GetArticlesByTermDatabaseIdQueryVariables>(GetArticlesByTermDatabaseIdDocument, variables, options);
+useGetArticlesByPlaceSlugQuery.fetcher = (variables: GetArticlesByPlaceSlugQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticlesByPlaceSlugQuery, GetArticlesByPlaceSlugQueryVariables>(GetArticlesByPlaceSlugDocument, variables, options);
+
+export const GetArticlesByTopicSlugDocument = `
+    query GetArticlesByTopicSlug($slug: ID!) {
+  termNode(id: $slug, taxonomy: TOPIC, idType: SLUG) {
+    count
+    databaseId
+    description
+    id
+    isTermNode
+    name
+    slug
+    taxonomyName
+    termGroupId
+    termTaxonomyId
+    uri
+    ... on Topic {
+      __typename
+      name
+      slug
+      uri
+      contentNodes {
+        nodes {
+          ... on Article {
+            __typename
+            articleId
+            contentTypeName
+            databaseId
+            date
+            dateGmt
+            featuredImageDatabaseId
+            featuredImageId
+            id
+            isContentNode
+            modified
+            modifiedGmt
+            parentDatabaseId
+            parentId
+            password
+            previewRevisionDatabaseId
+            previewRevisionId
+            slug
+            status
+            title
+            uri
+            articleDetails {
+              displayDate
+              displayOnFrontPage
+              publicationDate
+              source
+              subtitle
+              suppressDate
+              tableOfContentsTitle
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+export const useGetArticlesByTopicSlugQuery = <
+      TData = GetArticlesByTopicSlugQuery,
+      TError = unknown
+    >(
+      variables: GetArticlesByTopicSlugQueryVariables,
+      options?: Omit<UseQueryOptions<GetArticlesByTopicSlugQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticlesByTopicSlugQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetArticlesByTopicSlugQuery, TError, TData>(
+      {
+    queryKey: ['GetArticlesByTopicSlug', variables],
+    queryFn: fetcher<GetArticlesByTopicSlugQuery, GetArticlesByTopicSlugQueryVariables>(GetArticlesByTopicSlugDocument, variables),
+    ...options
+  }
+    )};
+
+useGetArticlesByTopicSlugQuery.getKey = (variables: GetArticlesByTopicSlugQueryVariables) => ['GetArticlesByTopicSlug', variables];
+
+export const useSuspenseGetArticlesByTopicSlugQuery = <
+      TData = GetArticlesByTopicSlugQuery,
+      TError = unknown
+    >(
+      variables: GetArticlesByTopicSlugQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<GetArticlesByTopicSlugQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticlesByTopicSlugQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<GetArticlesByTopicSlugQuery, TError, TData>(
+      {
+    queryKey: ['GetArticlesByTopicSlugSuspense', variables],
+    queryFn: fetcher<GetArticlesByTopicSlugQuery, GetArticlesByTopicSlugQueryVariables>(GetArticlesByTopicSlugDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseGetArticlesByTopicSlugQuery.getKey = (variables: GetArticlesByTopicSlugQueryVariables) => ['GetArticlesByTopicSlugSuspense', variables];
+
+
+useGetArticlesByTopicSlugQuery.fetcher = (variables: GetArticlesByTopicSlugQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticlesByTopicSlugQuery, GetArticlesByTopicSlugQueryVariables>(GetArticlesByTopicSlugDocument, variables, options);
 
 export const GetBooksDocument = `
     query GetBooks {
