@@ -1,0 +1,58 @@
+query GetArticlesByTopicSlug($slug: ID!) {
+  termNode(id: $slug, taxonomy: TOPIC, idType: SLUG) {
+    count
+    databaseId
+    description
+    id
+    isTermNode
+    name
+    slug
+    taxonomyName
+    termGroupId
+    termTaxonomyId
+    uri
+    
+    ... on Topic {
+      __typename
+      name
+      slug
+      uri
+      contentNodes {
+        nodes {
+          ... on Article {
+            __typename
+            articleId
+            contentTypeName
+            databaseId
+            date
+            dateGmt
+            featuredImageDatabaseId
+            featuredImageId
+            id
+            isContentNode
+            modified
+            modifiedGmt
+            parentDatabaseId
+            parentId
+            password
+            previewRevisionDatabaseId
+            previewRevisionId
+            slug
+            status
+            title
+            uri
+            articleDetails {
+              displayDate
+              displayOnFrontPage
+              publicationDate
+              source
+              subtitle
+              suppressDate
+              tableOfContentsTitle
+            }
+          }
+        }
+      }
+    }
+  }
+}
