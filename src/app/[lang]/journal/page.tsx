@@ -23,7 +23,11 @@ type ArticleNode = {
   } | null;
 };
 
-const JournalPage = async () => {
+export default async function Page({
+  params,
+}: {
+  params: { lang: string };
+}) {
   const journalIssuesData: GetJournalIssuesQuery = await serverFetch(
     useGetJournalIssuesQuery,
     { next: { revalidate: 60 } }
@@ -53,7 +57,7 @@ const JournalPage = async () => {
   ).toString('base64')}`;
 
   return (
-    <BaseLayoutNoSideBars globalSettings={globalSettings}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings} lang={params.lang}>
       <div className="w-full">
         <h2 className="font-cambay text-communist-red text-3xl mb-4 mt-2">
           All Journal Issues
@@ -70,65 +74,57 @@ const JournalPage = async () => {
                 key={issue.slug}
                 className="bg-white rounded-lg shadow-md overflow-hidden"
               >
-                {/* 
-                  Two-column layout on desktop, stacked on mobile:
-                  - Left: Articles
-                  - Right: Featured Image (hidden on mobile)
-                */}
-<div className="p-4 flex flex-col md:flex-row">
-  {/* LEFT: Articles (3/4 width on desktop) */}
-  <div className="md:w-3/4 md:pr-4">
-    <h2 className="font-cambay text-xl mb-4">
-      <Link
-        href={`/journal/${issue.slug}`}
-        className="text-communist-red hover:underline transition-colors"
-      >
-        {issue.title}
-      </Link>
-    </h2>
+                <div className="p-4 flex flex-col md:flex-row">
+                  <div className="md:w-3/4 md:pr-4">
+                    <h2 className="font-cambay text-xl mb-4">
+                      <Link
+                        href={`/${params.lang}/journal/${issue.slug}`}
+                        className="text-communist-red hover:underline transition-colors"
+                      >
+                        {issue.title}
+                      </Link>
+                    </h2>
 
-    <ul className="space-y-2">
-      {issue.journalIssueDetails?.articlesInJournal?.nodes?.length ? (
-        issue.journalIssueDetails.articlesInJournal.nodes.map((node, index) => {
-          const article = node as ArticleNode;
-          if (article.__typename === 'Article') {
-            return (
-              <li key={article.id || article.slug || index}>
-                <Link
-                  href={`/article/${article.slug}`}
-                  className="font-helvetica text-gray-900 hover:text-communist-red transition-colors"
-                >
-                  {article.articleDetails?.tableOfContentsTitle ||
-                    article.title}
-                </Link>
-              </li>
-            );
-          }
-          return null;
-        })
-      ) : (
-        <li className="font-helvetica text-gray-500">No articles available</li>
-      )}
-    </ul>
-  </div>
+                    <ul className="space-y-2">
+                      {issue.journalIssueDetails?.articlesInJournal?.nodes?.length ? (
+                        issue.journalIssueDetails.articlesInJournal.nodes.map((node, index) => {
+                          const article = node as ArticleNode;
+                          if (article.__typename === 'Article') {
+                            return (
+                              <li key={article.id || article.slug || index}>
+                                <Link
+                                  href={`/${params.lang}/article/${article.slug}`}
+                                  className="font-helvetica text-gray-900 hover:text-communist-red transition-colors"
+                                >
+                                  {article.articleDetails?.tableOfContentsTitle ||
+                                    article.title}
+                                </Link>
+                              </li>
+                            );
+                          }
+                          return null;
+                        })
+                      ) : (
+                        <li className="font-helvetica text-gray-500">No articles available</li>
+                      )}
+                    </ul>
+                  </div>
 
-  {/* RIGHT: Featured Image (1/4 width on desktop) */}
-  {featuredImage?.sourceUrl && (
-    <div className="hidden md:block md:w-1/4">
-      <Image
-        src={featuredImage.sourceUrl}
-        alt={featuredImage.altText || issue.title || ''}
-        layout="responsive"
-        width={4} // Aspect ratio width
-        height={5} // Aspect ratio height
-        className="object-cover rounded"
-        placeholder="blur"
-        blurDataURL={fallbackSVG}
-      />
-    </div>
-  )}
-</div>
-
+                  {featuredImage?.sourceUrl && (
+                    <div className="hidden md:block md:w-1/4">
+                      <Image
+                        src={featuredImage.sourceUrl}
+                        alt={featuredImage.altText || issue.title || ''}
+                        layout="responsive"
+                        width={4}
+                        height={5}
+                        className="object-cover rounded"
+                        placeholder="blur"
+                        blurDataURL={fallbackSVG}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -136,6 +132,4 @@ const JournalPage = async () => {
       </div>
     </BaseLayoutNoSideBars>
   );
-};
-
-export default JournalPage;
+}
