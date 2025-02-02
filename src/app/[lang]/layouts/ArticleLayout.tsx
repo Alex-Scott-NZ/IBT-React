@@ -33,6 +33,7 @@ interface ArticleLayoutProps {
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
   slug: string;
   context?: string;
+  lang: string;
 }
 
 const ArticleLayout = ({
@@ -40,6 +41,7 @@ const ArticleLayout = ({
   globalSettings,
   slug,
   context,
+  lang,
 }: ArticleLayoutProps) => {
   const relatedPdf = article?.articleDetails?.relatedPdf?.nodes?.[0] as PdfItem;
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl || '';
@@ -97,9 +99,8 @@ const ArticleLayout = ({
     if (relatedJournalNode.featuredImage?.node) {
       journalCoverImage = relatedJournalNode.featuredImage.node;
     }
-    articlesInJournal =
-      relatedJournalNode.journalIssueDetails?.articlesInJournal
-        ?.nodes as Article[] | null;
+    articlesInJournal = relatedJournalNode.journalIssueDetails
+      ?.articlesInJournal?.nodes as Article[] | null;
     journalSlug = relatedJournalNode.slug || '';
     journalTitle = (relatedJournalNode as JournalIssue).title || '';
   }
@@ -128,7 +129,7 @@ const ArticleLayout = ({
       <div>
         <h3 className="mb-2 mt-0 text-lg font-semibold">From the Book</h3>
         {bookCoverImage && (
-          <Link href={`/book/${bookSlug}`} passHref>
+          <Link href={`/${lang}/book/${bookSlug}`} passHref>
             <Image
               src={bookCoverImage.mediaItemUrl || ''}
               alt={bookCoverImage.altText || bookTitle || 'Book cover'}
@@ -144,7 +145,7 @@ const ArticleLayout = ({
           </Link>
         )}
         {bookTitle && (
-          <Link href={`/book/${bookSlug}`} passHref>
+          <Link href={`/${lang}/book/${bookSlug}`} passHref>
             <span className="block mt-2 text-base font-semibold text-communist-red hover:underline">
               {bookTitle}
             </span>
@@ -182,7 +183,7 @@ const ArticleLayout = ({
                       ) : (
                         <Link
                           href={{
-                            pathname: `/article/${bookArticle.slug}`,
+                            pathname: `/${lang}/article/${bookArticle.slug}`,
                             query: { context: 'book' },
                           }}
                           className="text-gray-800 hover:text-communist-red"
@@ -201,7 +202,7 @@ const ArticleLayout = ({
     ) : (
       <div>
         {journalCoverImage && (
-          <Link href={`/journal/${journalSlug}`} passHref>
+          <Link href={`/${lang}/journal/${journalSlug}`} passHref>
             <Image
               src={journalCoverImage.mediaItemUrl || ''}
               alt={journalCoverImage.altText || journalTitle || 'Journal cover'}
@@ -217,7 +218,7 @@ const ArticleLayout = ({
           </Link>
         )}
         {journalTitle && (
-          <Link href={`/journal/${journalSlug}`} passHref>
+          <Link href={`/${lang}/journal/${journalSlug}`} passHref>
             <span className="block mt-0 text-base font-semibold text-communist-red hover:underline">
               {journalTitle}
             </span>
@@ -254,7 +255,7 @@ const ArticleLayout = ({
                         </span>
                       ) : (
                         <Link
-                          href={`/article/${issueArticle.slug}`}
+                          href={`/${lang}/article/${issueArticle.slug}`}
                           className="text-gray-800 hover:text-communist-red"
                         >
                           {sidebarTitle}
@@ -274,6 +275,7 @@ const ArticleLayout = ({
     <BaseLayout
       globalSettings={globalSettings}
       slug={slug}
+      lang={lang}
       leftSidebar={leftSidebarContent}
       mainContent={
         <div className="relative">
@@ -303,7 +305,7 @@ const ArticleLayout = ({
                             {' '}
                             |{' '}
                             <Link
-                              href={`/book/${bookSlug}`}
+                              href={`/${lang}/book/${bookSlug}`}
                               className="text-communist-red hover:underline"
                             >
                               {bookTitle}
@@ -315,7 +317,7 @@ const ArticleLayout = ({
                             {' '}
                             |{' '}
                             <Link
-                              href={`/journal/${journalSlug}`}
+                              href={`/${lang}/journal/${journalSlug}`}
                               className="text-communist-red hover:underline"
                             >
                               {journalTitle}
@@ -330,7 +332,7 @@ const ArticleLayout = ({
                             {' '}
                             |{' '}
                             <Link
-                              href={`/journal/${journalSlug}`}
+                              href={`/${lang}/journal/${journalSlug}`}
                               className="text-communist-red hover:underline"
                             >
                               {journalTitle}
@@ -342,7 +344,7 @@ const ArticleLayout = ({
                             {' '}
                             |{' '}
                             <Link
-                              href={`/book/${bookSlug}`}
+                              href={`/${lang}/book/${bookSlug}`}
                               className="text-communist-red hover:underline"
                             >
                               {bookTitle}
@@ -438,8 +440,8 @@ const ArticleLayout = ({
                       // Decide if it's a place or a topic:
                       const url =
                         term.taxonomyName === 'place'
-                          ? `/place/${term.slug}`
-                          : `/topic/${term.slug}`;
+                          ? `/${lang}/place/${term.slug}`
+                          : `/${lang}/topic/${term.slug}`;
 
                       return (
                         <Link
@@ -465,7 +467,7 @@ const ArticleLayout = ({
                         <div key={relatedArticle.id} className="mb-1">
                           {slug ? (
                             <Link
-                              href={`/article/${slug}`}
+                              href={`/${lang}/article/${slug}`}
                               className="text-communist-red hover:underline"
                             >
                               {relatedArticle.title || slug}
@@ -491,7 +493,7 @@ const ArticleLayout = ({
                 {prev ? (
                   <Link
                     href={{
-                      pathname: `/article/${prev.slug}`,
+                      pathname: `/${lang}/article/${prev.slug}`,
                       query: { context: 'book' },
                     }}
                     className="flex items-center text-communist-red hover:underline font-semibold text-lg max-w-[calc(50%-1.5rem)] sm:max-w-[calc(50%-3rem)]"
@@ -521,7 +523,7 @@ const ArticleLayout = ({
                 {next ? (
                   <Link
                     href={{
-                      pathname: `/article/${next.slug}`,
+                      pathname: `/${lang}/article/${next.slug}`,
                       query: { context: 'book' },
                     }}
                     className="flex items-center text-communist-red hover:underline font-semibold text-lg max-w-[calc(50%-1.5rem)] sm:max-w-[calc(50%-3rem)]"
