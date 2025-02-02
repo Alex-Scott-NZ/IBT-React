@@ -10,8 +10,15 @@ import {
 import { serverFetch } from '../../../../gql/query-utils';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
 
-export default async function TopicPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function TopicPage({ 
+  params 
+}: { 
+  params: { 
+    slug: string;
+    lang: string; // Add lang parameter
+  } 
+}) {
+  const { slug, lang } = params;
 
   // 1) Fetch the topic data by slug
   const topicData: GetArticlesByTopicSlugQuery = await serverFetch(
@@ -43,12 +50,15 @@ export default async function TopicPage({ params }: { params: { slug: string } }
     return <div>Not a Topic. (Unexpected type: {termNode.__typename})</div>;
   }
 
-  // 5) Now we’re guaranteed `termNode` is a Topic
+  // 5) Now we're guaranteed `termNode` is a Topic
   const topicName = termNode.name || 'Untitled Topic';
   const articles = termNode.contentNodes?.nodes || [];
 
   return (
-    <BaseLayoutNoSideBars globalSettings={globalSettings}>
+    <BaseLayoutNoSideBars 
+      globalSettings={globalSettings}
+      lang={lang} // Pass lang to BaseLayout
+    >
       <div className="w-full">
         <h2 className="font-cambay text-communist-red text-3xl mb-3 mt-0">
           {topicName}
@@ -70,7 +80,7 @@ export default async function TopicPage({ params }: { params: { slug: string } }
             return (
               <div key={idx} className="mb-1.5 last:mb-0">
                 <Link
-                  href={`/article/${article.slug}`}
+                  href={`/${lang}/article/${article.slug}`} // Update link to include lang
                   className="font-helvetica text-xl text-gray-700 hover:text-communist-red transition-colors"
                 >
                   {displayedTitle}
