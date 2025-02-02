@@ -10,11 +10,11 @@ import {
 } from '@/gql/gql-generated';
 import { serverFetch } from '@/gql/query-utils';
 
-interface BooksPageProps {
-  lang: string;
-}
-
-const BooksPage: React.FC<BooksPageProps> = async ({ lang }) => {
+export default async function Page({
+  params,
+}: {
+  params: { lang: string };
+}) {
   const booksData: GetBooksQuery = await serverFetch(useGetBooksQuery, {
     next: { revalidate: 60 },
   });
@@ -38,7 +38,7 @@ const BooksPage: React.FC<BooksPageProps> = async ({ lang }) => {
   ).toString('base64')}`;
 
   return (
-    <BaseLayoutNoSideBars globalSettings={globalSettings} lang={lang}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings} lang={params.lang}>
       <div className="w-full">
         <h1 className="font-cambay text-communist-red text-3xl mb-4 mt-2">
           All Books
@@ -50,7 +50,7 @@ const BooksPage: React.FC<BooksPageProps> = async ({ lang }) => {
               key={book.id}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
-              <Link href={`/${lang}/book/${book.slug}`} className="block">
+              <Link href={`/${params.lang}/book/${book.slug}`} className="block">
                 <div className="relative aspect-[2/3]">
                   <Image
                     src={book.featuredImage?.node?.sourceUrl || fallbackSVG}
@@ -74,7 +74,7 @@ const BooksPage: React.FC<BooksPageProps> = async ({ lang }) => {
 
               <div className="p-4">
                 <h2 className="font-cambay text-xl mb-2 text-communist-red hover:text-communist-red-dark">
-                  <Link href={`/${lang}/book/${book.slug}`}>{book.title}</Link>
+                  <Link href={`/${params.lang}/book/${book.slug}`}>{book.title}</Link>
                 </h2>
                 {book.bookDetails?.subheading && (
                   <p className="font-helvetica text-gray-700 text-sm mb-2">
@@ -93,6 +93,4 @@ const BooksPage: React.FC<BooksPageProps> = async ({ lang }) => {
       </div>
     </BaseLayoutNoSideBars>
   );
-};
-
-export default BooksPage;
+}
