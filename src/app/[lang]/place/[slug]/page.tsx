@@ -7,9 +7,9 @@ import {
   GetArticlesByPlaceSlugQuery,
   GetGlobalSettingsQuery,
   useGetGlobalSettingsQuery,
-} from '../../../gql/gql-generated';
+} from '../../../../gql/gql-generated';
 
-import { serverFetch } from '../../../gql/query-utils';
+import { serverFetch } from '../../../../gql/query-utils';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
 
 export default async function PlacePage({ params }: { params: { slug: string } }) {
