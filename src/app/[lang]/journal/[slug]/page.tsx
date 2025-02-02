@@ -24,9 +24,9 @@ type ArticleNode = {
 export default async function JournalPage({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string; lang:string };
 }) {
-  const uri = `/journal/${params.slug}`;
+  const uri = `/${params.lang}/journal/${params.slug}`; 
 
   const journalData: GetJournalByUriQuery = await serverFetch(
     useGetJournalByUriQuery,
@@ -59,7 +59,7 @@ export default async function JournalPage({
   ).toString('base64')}`;
 
   return (
-    <BaseLayoutNoSideBars globalSettings={globalSettings}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings} lang={params.lang}>
       <div className="w-full">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Left column with image */}
@@ -100,7 +100,7 @@ export default async function JournalPage({
                         {' '}
                         {/* Added last:mb-0 to remove margin from last item */}
                         <Link
-                          href={`/article/${article.slug}`}
+                           href={`/${params.lang}/article/${article.slug}`}
                           className="font-helvetica text-xl text-gray-700 hover:text-communist-red transition-colors"
                         >
                           {articleTitle}
