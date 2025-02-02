@@ -1,4 +1,4 @@
-// article\\[slug]\page.tsx
+// [lang]/article/[slug]/page.tsx
 import {
   GetArticleByUriQuery,
   useGetArticleByUriQuery,
@@ -12,10 +12,13 @@ export default async function ArticlePage({
   params,
   searchParams,
 }: {
-  params: { slug: string };
+  params: { 
+    slug: string;
+    lang: string;
+  };
   searchParams?: { context?: string };
 }) {
-  const uri = `/article/${params.slug}/`;
+  const uri = `/${params.lang}/article/${params.slug}/`;
 
   // OPTIONAL: read the context (e.g. 'book') from the query string
   const context = searchParams?.context;
@@ -43,8 +46,9 @@ export default async function ArticlePage({
     <ArticleLayout
       article={articleData.article}
       globalSettings={globalSettingsData.globalSettings}
-      slug={params.slug} 
-      context={context} // Pass context down to ArticleLayout
+      slug={params.slug}
+      lang={params.lang}
+      context={context}
     />
   );
 }
