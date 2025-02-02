@@ -10,7 +10,11 @@ import {
 } from '@/gql/gql-generated';
 import { serverFetch } from '@/gql/query-utils';
 
-const BooksPage = async () => {
+interface BooksPageProps {
+  lang: string;
+}
+
+const BooksPage: React.FC<BooksPageProps> = async ({ lang }) => {
   const booksData: GetBooksQuery = await serverFetch(useGetBooksQuery, {
     next: { revalidate: 60 },
   });
@@ -34,7 +38,7 @@ const BooksPage = async () => {
   ).toString('base64')}`;
 
   return (
-    <BaseLayoutNoSideBars globalSettings={globalSettings}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings} lang={lang}>
       <div className="w-full">
         <h1 className="font-cambay text-communist-red text-3xl mb-4 mt-2">
           All Books
@@ -46,15 +50,21 @@ const BooksPage = async () => {
               key={book.id}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
-              <Link href={`/book/${book.slug}`} className="block">
+              <Link href={`/${lang}/book/${book.slug}`} className="block">
                 <div className="relative aspect-[2/3]">
                   <Image
                     src={book.featuredImage?.node?.sourceUrl || fallbackSVG}
-                    alt={book.featuredImage?.node?.altText || book.title || 'Book cover'}
+                    alt={
+                      book.featuredImage?.node?.altText ||
+                      book.title ||
+                      'Book cover'
+                    }
                     fill
                     className="object-cover"
                     placeholder="blur"
-                    blurDataURL={book.featuredImage?.node?.thumbhash || fallbackSVG}
+                    blurDataURL={
+                      book.featuredImage?.node?.thumbhash || fallbackSVG
+                    }
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
                     quality={75}
                     loading="lazy"
@@ -64,9 +74,7 @@ const BooksPage = async () => {
 
               <div className="p-4">
                 <h2 className="font-cambay text-xl mb-2 text-communist-red hover:text-communist-red-dark">
-                  <Link href={`/book/${book.slug}`}>
-                    {book.title}
-                  </Link>
+                  <Link href={`/${lang}/book/${book.slug}`}>{book.title}</Link>
                 </h2>
                 {book.bookDetails?.subheading && (
                   <p className="font-helvetica text-gray-700 text-sm mb-2">

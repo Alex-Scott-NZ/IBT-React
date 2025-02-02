@@ -24,9 +24,9 @@ type ArticleNode = {
 export default async function BookPage({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string; lang:string };
 }) {
-  const uri = `/book/${params.slug}`;
+  const uri = `/${params.lang}/book/${params.slug}`;
 
   const bookData: BookByUriQuery = await serverFetch(useBookByUriQuery, {
     variables: { uri },
@@ -60,7 +60,7 @@ export default async function BookPage({
   const imageUrl = featuredImage?.node?.mediaItemUrl || '';
 
   return (
-    <BaseLayoutNoSideBars globalSettings={globalSettings}>
+    <BaseLayoutNoSideBars globalSettings={globalSettings} lang={params.lang}>
       <div style={{ display: 'flex', alignItems: 'flex-start' }}>
         <div style={{ flex: '0 0 25%', marginRight: '20px' }}>
           <Image
@@ -105,7 +105,7 @@ export default async function BookPage({
                   <div key={index} className="mb-2">
                     <Link
                       href={{
-                        pathname: `/article/${article.slug}`,
+                        pathname: `/${params.lang}/article/${article.slug}`,
                         query: { context: 'book' },
                       }}
                       passHref
