@@ -136,6 +136,7 @@ const Home = async ({ params: { lang } }: PageProps) => {
       books={typedBooksData}
       latestJournalIssue={typedLatestJournalIssueData}
       placeHolderSettings={typedPlaceholdersData}
+      lang={lang}
     />
   );
 };

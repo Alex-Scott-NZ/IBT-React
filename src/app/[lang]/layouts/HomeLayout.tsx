@@ -20,11 +20,13 @@ type HomeLayoutProps = {
   books: GetBooksQuery;
   latestJournalIssue: GetJournalIssuesLatestQuery;
   placeHolderSettings: GetPlaceholderSettingsQuery;
+  lang: string;
 };
 
 type WidgetProps = {
   books: GetBooksQuery;
   latestJournalIssue: GetJournalIssuesLatestQuery;
+  lang: string;
 };
 
 const getValidPlaceholders = (settings: GetPlaceholderSettingsQuery) => {
@@ -41,7 +43,7 @@ const renderPlaceholderContent = (
   const contentType = setup.contentSelector[0];
   switch (contentType) {
     case 'booksWidget':
-      return <BooksWidget books={props.books} />;
+      return <BooksWidget books={props.books} lang={props.lang}/>;
     case 'latestJournalWidget':
       return <LatestJournalIssueWidget latestJournalIssue={props.latestJournalIssue} />;
     case 'freeText':
@@ -77,6 +79,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
   books,
   latestJournalIssue,
   placeHolderSettings,
+  lang
 }) => {
 
     // 
@@ -96,7 +99,8 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
   const widgetProps = useMemo(() => ({
     books,
     latestJournalIssue,
-  }), [books, latestJournalIssue]);
+    lang
+  }), [books, latestJournalIssue, lang]);
 
   const leftSidebarContent = useMemo(() => {
     return getSidebarContent(
