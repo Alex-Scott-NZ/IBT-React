@@ -8,8 +8,8 @@ import {
   GetGlobalSettingsQuery,
   useGetGlobalSettingsQuery,
   FragmentFeaturedImageFragment,
-} from '../../gql/gql-generated';
-import { serverFetch } from '../../gql/query-utils';
+} from '../../../gql/gql-generated';
+import { serverFetch } from '../../../gql/query-utils';
 
 export const revalidate = 60;
 
