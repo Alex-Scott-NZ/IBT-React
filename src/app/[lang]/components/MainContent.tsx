@@ -1,7 +1,8 @@
+// components/MainContent.tsx
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import FeaturedArticles from './FeaturedArticles';
 import ArticleSummary from './ArticleSummary';
 import { GetArticlesQuery, PlaceholderSettingsFieldsPlaceholderSetup } from '@/gql/gql-generated';
@@ -13,6 +14,8 @@ interface MainContentProps {
 
 const MainContent: React.FC<MainContentProps> = ({ articles }) => {
   const router = useRouter();
+  const params = useParams();
+  const lang = params?.lang || 'en'
 
   // Sort articles by publication date in descending order
   const sortedArticles = articles.articles?.nodes.sort((a, b) => {
@@ -21,8 +24,8 @@ const MainContent: React.FC<MainContentProps> = ({ articles }) => {
     return dateB.getTime() - dateA.getTime(); // Newest articles first
   });
 
-  const handleArticleClick = (slug: string) => {
-    router.push(`/article/${slug}`);
+  const handleArticleClick = (uri: string) => {
+    router.push(uri);
   };
 
   return (

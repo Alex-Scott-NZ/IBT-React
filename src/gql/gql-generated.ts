@@ -155,6 +155,8 @@ export type Article = ContentNode & DatabaseIdentifier & HierarchicalContentNode
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -191,6 +193,10 @@ export type Article = ContentNode & DatabaseIdentifier & HierarchicalContentNode
   title?: Maybe<Scalars['String']['output']>;
   /** Connection between the Article type and the topic type */
   topics?: Maybe<ArticleToTopicConnection>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Article>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<Article>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -273,6 +279,12 @@ export type ArticleTopicsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<ArticleToTopicConnectionWhereArgs>;
+};
+
+
+/** The article type */
+export type ArticleTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to article Nodes */
@@ -858,6 +870,8 @@ export type AudioItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -894,6 +908,10 @@ export type AudioItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   title?: Maybe<Scalars['String']['output']>;
   /** Connection between the AudioItem type and the topic type */
   topics?: Maybe<AudioItemToTopicConnection>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<AudioItem>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<AudioItem>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -970,6 +988,12 @@ export type AudioItemTopicsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<AudioItemToTopicConnectionWhereArgs>;
+};
+
+
+/** The audioItem type */
+export type AudioItemTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to audioItem Nodes */
@@ -1452,6 +1476,8 @@ export type Book = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -1482,6 +1508,10 @@ export type Book = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   template?: Maybe<ContentTemplate>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Book>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<Book>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -1528,6 +1558,12 @@ export type BookEnqueuedStylesheetsArgs = {
 /** The book type */
 export type BookTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The book type */
+export type BookTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to book Nodes */
@@ -1670,6 +1706,8 @@ export type Category = DatabaseIdentifier & HierarchicalNode & HierarchicalTermN
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** List available translations for this post */
+  language?: Maybe<Language>;
   /** The link to the term */
   link?: Maybe<Scalars['String']['output']>;
   /** The human friendly name of the object. */
@@ -1692,6 +1730,10 @@ export type Category = DatabaseIdentifier & HierarchicalNode & HierarchicalTermN
   termGroupId?: Maybe<Scalars['Int']['output']>;
   /** The taxonomy ID that the object is associated with */
   termTaxonomyId?: Maybe<Scalars['Int']['output']>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Category>;
+  /** List all translated versions of this term */
+  translations?: Maybe<Array<Maybe<Category>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -1751,6 +1793,12 @@ export type CategoryPostsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<CategoryToPostConnectionWhereArgs>;
+};
+
+
+/** The category type */
+export type CategoryTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to category Nodes */
@@ -2153,6 +2201,8 @@ export type Collection = ContentNode & DatabaseIdentifier & HierarchicalContentN
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -2181,6 +2231,10 @@ export type Collection = ContentNode & DatabaseIdentifier & HierarchicalContentN
   status?: Maybe<Scalars['String']['output']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Collection>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<Collection>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -2221,6 +2275,12 @@ export type CollectionEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The collection type */
+export type CollectionTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to collection Nodes */
@@ -3275,6 +3335,7 @@ export type CreateArticleInput = {
   content?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -3308,6 +3369,7 @@ export type CreateAudioItemInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -3341,6 +3403,7 @@ export type CreateBookInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -3372,6 +3435,7 @@ export type CreateCategoryInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The description of the category object */
   description?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the category object to mutate */
   name: Scalars['String']['input'];
   /** The ID of the category that should be set as the parent */
@@ -3395,6 +3459,7 @@ export type CreateCollectionInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -3459,6 +3524,7 @@ export type CreateJournalIssueInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -3537,6 +3603,7 @@ export type CreatePageInput = {
   content?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -3566,6 +3633,7 @@ export type CreatePdfItemInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -3599,6 +3667,7 @@ export type CreatePlaceInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The description of the place object */
   description?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the place object to mutate */
   name: Scalars['String']['input'];
   /** The ID of the place that should be set as the parent */
@@ -3655,6 +3724,7 @@ export type CreatePostInput = {
   date?: InputMaybe<Scalars['String']['input']>;
   /** The excerpt of the object */
   excerpt?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -3694,6 +3764,7 @@ export type CreateTagInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The description of the post_tag object */
   description?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the post_tag object to mutate */
   name: Scalars['String']['input'];
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
@@ -3717,6 +3788,7 @@ export type CreateTopicInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The description of the topic object */
   description?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the topic object to mutate */
   name: Scalars['String']['input'];
   /** The ID of the topic that should be set as the parent */
@@ -3789,6 +3861,7 @@ export type CreateVideoItemInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -4967,6 +5040,8 @@ export type JournalIssue = ContentNode & DatabaseIdentifier & HierarchicalConten
    * @deprecated Deprecated in favor of the databaseId field
    */
   journalIssueId: Scalars['Int']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -4997,6 +5072,10 @@ export type JournalIssue = ContentNode & DatabaseIdentifier & HierarchicalConten
   template?: Maybe<ContentTemplate>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<JournalIssue>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<JournalIssue>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -5043,6 +5122,12 @@ export type JournalIssueEnqueuedStylesheetsArgs = {
 /** The journalIssue type */
 export type JournalIssueTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The journalIssue type */
+export type JournalIssueTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to journalIssue Nodes */
@@ -5138,6 +5223,37 @@ export type JournalIssueToPreviewConnectionEdge = Edge & JournalIssueConnectionE
   /** The node of the connection, without the edges */
   node: JournalIssue;
 };
+
+/** Language (Polylang) */
+export type Language = {
+  __typename?: 'Language';
+  /** Language code (Polylang) */
+  code?: Maybe<LanguageCodeEnum>;
+  /** Language term front page URL */
+  homeUrl?: Maybe<Scalars['String']['output']>;
+  /** Language ID (Polylang) */
+  id: Scalars['ID']['output'];
+  /** Language locale (Polylang) */
+  locale?: Maybe<Scalars['String']['output']>;
+  /** Human readable language name (Polylang) */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Language term slug. Prefer the &quot;code&quot; field if possible (Polylang) */
+  slug?: Maybe<Scalars['String']['output']>;
+};
+
+/** Enum of all available language codes */
+export enum LanguageCodeEnum {
+  En = 'EN',
+  Fr = 'FR'
+}
+
+/** Filter item by specific language, default language or list all languages */
+export enum LanguageCodeFilterEnum {
+  All = 'ALL',
+  Default = 'DEFAULT',
+  En = 'EN',
+  Fr = 'FR'
+}
 
 /** File details for a Media Item */
 export type MediaDetails = {
@@ -5853,8 +5969,12 @@ export type MenuItemToMenuItemLinkableConnectionEdge = Edge & MenuItemLinkableCo
 export enum MenuLocationEnum {
   /** Put the menu in the footer location */
   Footer = 'FOOTER',
+  /** Put the menu in the footer___fr location */
+  FooterFr = 'FOOTER___FR',
   /** Put the menu in the primary location */
-  Primary = 'PRIMARY'
+  Primary = 'PRIMARY',
+  /** Put the menu in the primary___fr location */
+  PrimaryFr = 'PRIMARY___FR'
 }
 
 /** The Type of Identifier used to fetch a single node. Default is "ID". To be used along with the "id" field. */
@@ -6352,6 +6472,8 @@ export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   isRevision?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -6393,6 +6515,10 @@ export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & 
   template?: Maybe<ContentTemplate>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Page>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<Page>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -6465,6 +6591,12 @@ export type PageRevisionsArgs = {
 /** The page type */
 export type PageTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The page type */
+export type PageTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to page Nodes */
@@ -6750,6 +6882,8 @@ export type PdfItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -6792,6 +6926,10 @@ export type PdfItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node
   title?: Maybe<Scalars['String']['output']>;
   /** Connection between the PdfItem type and the topic type */
   topics?: Maybe<PdfItemToTopicConnection>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<PdfItem>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<PdfItem>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -6857,6 +6995,12 @@ export type PdfItemTopicsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<PdfItemToTopicConnectionWhereArgs>;
+};
+
+
+/** The pdfItem type */
+export type PdfItemTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to pdfItem Nodes */
@@ -7322,6 +7466,8 @@ export type Place = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** List available translations for this post */
+  language?: Maybe<Language>;
   /** The link to the term */
   link?: Maybe<Scalars['String']['output']>;
   /** The human friendly name of the object. */
@@ -7349,6 +7495,10 @@ export type Place = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode
   termGroupId?: Maybe<Scalars['Int']['output']>;
   /** The taxonomy ID that the object is associated with */
   termTaxonomyId?: Maybe<Scalars['Int']['output']>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Place>;
+  /** List all translated versions of this term */
+  translations?: Maybe<Array<Maybe<Place>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
   /** Connection between the Place type and the videoItem type */
@@ -7430,6 +7580,12 @@ export type PlacePdfItemsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<PlaceToPdfItemConnectionWhereArgs>;
+};
+
+
+/** The place type */
+export type PlaceTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 
@@ -8929,6 +9085,8 @@ export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & 
   isSticky: Scalars['Boolean']['output'];
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -8979,6 +9137,10 @@ export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & 
   title?: Maybe<Scalars['String']['output']>;
   /** URLs queued to be pinged. */
   toPing?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Post>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<Post>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -9086,6 +9248,12 @@ export type PostTermsArgs = {
 /** The post type */
 export type PostTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The post type */
+export type PostTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Set relationships between the post to categories */
@@ -10854,6 +11022,8 @@ export type RootQuery = WithAcfOptionsPageGlobalSettings & WithAcfOptionsPagePla
   contentType?: Maybe<ContentType>;
   /** Connection between the RootQuery type and the ContentType type */
   contentTypes?: Maybe<RootQueryToContentTypeConnection>;
+  /** Get language list */
+  defaultLanguage?: Maybe<Language>;
   /** Fields of the &#039;DiscussionSettings&#039; settings group */
   discussionSettings?: Maybe<DiscussionSettings>;
   /** Fields of the &#039;GeneralSettings&#039; settings group */
@@ -10868,6 +11038,8 @@ export type RootQuery = WithAcfOptionsPageGlobalSettings & WithAcfOptionsPagePla
   journalIssueBy?: Maybe<JournalIssue>;
   /** Connection between the RootQuery type and the journalIssue type */
   journalIssues?: Maybe<RootQueryToJournalIssueConnection>;
+  /** List available languages */
+  languages?: Maybe<Array<Maybe<Language>>>;
   /** An object of the mediaItem Type.  */
   mediaItem?: Maybe<MediaItem>;
   /**
@@ -10957,6 +11129,8 @@ export type RootQuery = WithAcfOptionsPageGlobalSettings & WithAcfOptionsPagePla
   topic?: Maybe<Topic>;
   /** Connection between the RootQuery type and the topic type */
   topics?: Maybe<RootQueryToTopicConnection>;
+  /** Translate string using pll_translate_string() (Polylang) */
+  translateString?: Maybe<Scalars['String']['output']>;
   /** Returns a user */
   user?: Maybe<User>;
   /** Returns a user role */
@@ -11503,6 +11677,13 @@ export type RootQueryTopicsArgs = {
 
 
 /** The root entry point into the Graph */
+export type RootQueryTranslateStringArgs = {
+  language: LanguageCodeEnum;
+  string: Scalars['String']['input'];
+};
+
+
+/** The root entry point into the Graph */
 export type RootQueryUserArgs = {
   id: Scalars['ID']['input'];
   idType?: InputMaybe<UserNodeIdTypeEnum>;
@@ -11593,6 +11774,10 @@ export type RootQueryToArticleConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Articles by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Articles by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Custom meta key for ordering */
   metaKey?: InputMaybe<Scalars['String']['input']>;
   /** Filter articles by custom meta queries */
@@ -11668,6 +11853,10 @@ export type RootQueryToAudioItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by AudioItems by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter AudioItems by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -11739,6 +11928,10 @@ export type RootQueryToBookConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Books by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Books by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -11820,6 +12013,10 @@ export type RootQueryToCategoryConnectionWhereArgs = {
   hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
   /** Array of term ids to include. Default empty array. */
   include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Categorys by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Categorys by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Array of names to return term(s) for. Default empty. */
   name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Retrieve terms where the name is LIKE the input value. Default empty. */
@@ -11889,6 +12086,10 @@ export type RootQueryToCollectionConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Collections by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Collections by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12057,6 +12258,10 @@ export type RootQueryToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter content nodes by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter content nodes by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12227,6 +12432,10 @@ export type RootQueryToJournalIssueConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by JournalIssues by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter JournalIssues by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Custom meta key for ordering */
   metaKey?: InputMaybe<Scalars['String']['input']>;
   /** Filter journal issues by custom meta queries */
@@ -12418,6 +12627,7 @@ export type RootQueryToMenuItemConnectionPageInfo = MenuItemConnectionPageInfo &
 export type RootQueryToMenuItemConnectionWhereArgs = {
   /** The database ID of the object */
   id?: InputMaybe<Scalars['Int']['input']>;
+  language?: InputMaybe<LanguageCodeFilterEnum>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
   /** The database ID of the parent menu object */
@@ -12477,6 +12687,10 @@ export type RootQueryToPageConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Pages by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Pages by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12548,6 +12762,10 @@ export type RootQueryToPdfItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by PdfItems by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter PdfItems by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12629,6 +12847,10 @@ export type RootQueryToPlaceConnectionWhereArgs = {
   hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
   /** Array of term ids to include. Default empty array. */
   include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Places by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Places by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Array of names to return term(s) for. Default empty. */
   name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Retrieve terms where the name is LIKE the input value. Default empty. */
@@ -12757,6 +12979,10 @@ export type RootQueryToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Posts by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Posts by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -13002,6 +13228,10 @@ export type RootQueryToTagConnectionWhereArgs = {
   hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
   /** Array of term ids to include. Default empty array. */
   include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Tags by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Tags by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Array of names to return term(s) for. Default empty. */
   name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Retrieve terms where the name is LIKE the input value. Default empty. */
@@ -13228,6 +13458,10 @@ export type RootQueryToTopicConnectionWhereArgs = {
   hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
   /** Array of term ids to include. Default empty array. */
   include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by Topics by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter Topics by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Array of names to return term(s) for. Default empty. */
   name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Retrieve terms where the name is LIKE the input value. Default empty. */
@@ -13397,6 +13631,10 @@ export type RootQueryToVideoItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by VideoItems by language code (Polylang) */
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  /** Filter VideoItems by one or more languages (Polylang) */
+  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -13525,6 +13763,8 @@ export type Tag = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & Unif
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** List available translations for this post */
+  language?: Maybe<Language>;
   /** The link to the term */
   link?: Maybe<Scalars['String']['output']>;
   /** The human friendly name of the object. */
@@ -13546,6 +13786,10 @@ export type Tag = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & Unif
   termGroupId?: Maybe<Scalars['Int']['output']>;
   /** The taxonomy ID that the object is associated with */
   termTaxonomyId?: Maybe<Scalars['Int']['output']>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Tag>;
+  /** List all translated versions of this term */
+  translations?: Maybe<Array<Maybe<Tag>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -13586,6 +13830,12 @@ export type TagPostsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<TagToPostConnectionWhereArgs>;
+};
+
+
+/** The tag type */
+export type TagTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to tag Nodes */
@@ -14278,6 +14528,8 @@ export type Topic = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** List available translations for this post */
+  language?: Maybe<Language>;
   /** The link to the term */
   link?: Maybe<Scalars['String']['output']>;
   /** The human friendly name of the object. */
@@ -14305,6 +14557,10 @@ export type Topic = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode
    * @deprecated Deprecated in favor of databaseId
    */
   topicId?: Maybe<Scalars['Int']['output']>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<Topic>;
+  /** List all translated versions of this term */
+  translations?: Maybe<Array<Maybe<Topic>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
   /** Connection between the Topic type and the videoItem type */
@@ -14386,6 +14642,12 @@ export type TopicPdfItemsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<TopicToPdfItemConnectionWhereArgs>;
+};
+
+
+/** The topic type */
+export type TopicTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 
@@ -14959,6 +15221,7 @@ export type UpdateArticleInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -14996,6 +15259,7 @@ export type UpdateAudioItemInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -15033,6 +15297,7 @@ export type UpdateBookInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -15066,6 +15331,7 @@ export type UpdateCategoryInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the category object to update */
   id: Scalars['ID']['input'];
+  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the category object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the category that should be set as the parent */
@@ -15093,6 +15359,7 @@ export type UpdateCollectionInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -15163,6 +15430,7 @@ export type UpdateJournalIssueInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -15247,6 +15515,7 @@ export type UpdatePageInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -15280,6 +15549,7 @@ export type UpdatePdfItemInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -15315,6 +15585,7 @@ export type UpdatePlaceInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the place object to update */
   id: Scalars['ID']['input'];
+  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the place object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the place that should be set as the parent */
@@ -15377,6 +15648,7 @@ export type UpdatePostInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -15477,6 +15749,7 @@ export type UpdateTagInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the tag object to update */
   id: Scalars['ID']['input'];
+  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the post_tag object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
@@ -15502,6 +15775,7 @@ export type UpdateTopicInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the topic object to update */
   id: Scalars['ID']['input'];
+  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the topic object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the topic that should be set as the parent */
@@ -15578,6 +15852,7 @@ export type UpdateVideoItemInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
+  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -16538,6 +16813,8 @@ export type VideoItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & No
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
+  /** Polylang language */
+  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -16573,6 +16850,10 @@ export type VideoItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & No
   title?: Maybe<Scalars['String']['output']>;
   /** Connection between the VideoItem type and the topic type */
   topics?: Maybe<VideoItemToTopicConnection>;
+  /** Get specific translation version of this object */
+  translation?: Maybe<VideoItem>;
+  /** List all translated versions of this post */
+  translations?: Maybe<Array<Maybe<VideoItem>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
   /** Fields of the VideoDetails ACF Field Group */
@@ -16645,6 +16926,12 @@ export type VideoItemTopicsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<VideoItemToTopicConnectionWhereArgs>;
+};
+
+
+/** The videoItem type */
+export type VideoItemTranslationArgs = {
+  language: LanguageCodeEnum;
 };
 
 /** Connection to videoItem Nodes */
@@ -17126,8 +17413,6 @@ export type FragmentAudioItemFragment = { __typename?: 'AudioItem', audioItemId:
 
 export type FragmentBookFragment = { __typename?: 'Book', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
 
-export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
-
 export type FragmentJournalIssueFragment = { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null };
 
 export type FragmentJournalIssueDetailsFragment = { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null };
@@ -17150,6 +17435,8 @@ export type FragmentTermsFragment = FragmentTerms_Category_Fragment | FragmentTe
 
 export type FragmentVideoItemFragment = { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { __typename?: 'VideoDetails', videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null };
 
+export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
+
 export type GetArticleByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -17163,6 +17450,13 @@ export type GetArticleByUriQueryVariables = Exact<{
 
 
 export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null } | null } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedAudio?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { __typename?: 'AudioItemDetails', articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null, relatedVideo?: { __typename: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', contentTypeName: string } | { __typename?: 'AudioItem', contentTypeName: string } | { __typename?: 'Book', contentTypeName: string } | { __typename?: 'Collection', contentTypeName: string } | { __typename?: 'JournalIssue', contentTypeName: string } | { __typename?: 'MediaItem', contentTypeName: string } | { __typename?: 'Page', contentTypeName: string } | { __typename?: 'PdfItem', contentTypeName: string } | { __typename?: 'Post', contentTypeName: string } | { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { __typename?: 'VideoDetails', videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null }> } | null, relatedBook?: { __typename: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, terms?: { __typename?: 'ArticleToTermNodeConnection', nodes: Array<{ __typename: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null }> } | null } | null };
+
+export type GetArticlesQueryVariables = Exact<{
+  language: LanguageCodeFilterEnum;
+}>;
+
+
+export type GetArticlesQuery = { __typename?: 'RootQuery', articles?: { __typename?: 'RootQueryToArticleConnection', nodes: Array<{ __typename?: 'Article', id: string, title?: string | null, content?: string | null, slug?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, isContentNode: boolean, journalIssueId: number, link?: string | null, slug?: string | null, status?: string | null, uri?: string | null, title?: string | null } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null, language?: { __typename?: 'Language', code?: LanguageCodeEnum | null, homeUrl?: string | null, id: string, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
 
 export type GetArticlesByPlaceSlugQueryVariables = Exact<{
   slug: Scalars['ID']['input'];
@@ -17178,15 +17472,15 @@ export type GetArticlesByTopicSlugQueryVariables = Exact<{
 
 export type GetArticlesByTopicSlugQuery = { __typename?: 'RootQuery', termNode?: { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { __typename?: 'TopicToContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
 
+export type GetAvailableLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAvailableLanguagesQuery = { __typename?: 'RootQuery', languages?: Array<{ __typename?: 'Language', code?: LanguageCodeEnum | null, homeUrl?: string | null, id: string, locale?: string | null, name?: string | null, slug?: string | null } | null> | null };
+
 export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetBooksQuery = { __typename?: 'RootQuery', books?: { __typename?: 'RootQueryToBookConnection', nodes: Array<{ __typename?: 'Book', contentTypeName: string, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article', contentTypeName: string, guid?: string | null, id: string, link?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', tableOfContentsTitle?: string | null, subtitle?: string | null, displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null }> } | null };
-
-export type GetArticlesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetArticlesQuery = { __typename?: 'RootQuery', articles?: { __typename?: 'RootQueryToArticleConnection', nodes: Array<{ __typename?: 'Article', id: string, title?: string | null, content?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, isContentNode: boolean, journalIssueId: number, link?: string | null, slug?: string | null, status?: string | null, uri?: string | null, title?: string | null } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null }> } | null };
 
 export type GetGlobalSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -17789,6 +18083,108 @@ useSuspenseGetArticleByUriQuery.getKey = (variables: GetArticleByUriQueryVariabl
 
 useGetArticleByUriQuery.fetcher = (variables: GetArticleByUriQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticleByUriQuery, GetArticleByUriQueryVariables>(GetArticleByUriDocument, variables, options);
 
+export const GetArticlesDocument = `
+    query GetArticles($language: LanguageCodeFilterEnum!) {
+  articles(
+    first: 50
+    where: {orderby: {field: META_VALUE_NUM, order: DESC}, metaKey: "publication_date", metaQuery: [{key: "display_on_front_page", compare: "=", value: "1"}], language: $language}
+  ) {
+    nodes {
+      id
+      title
+      content
+      slug
+      featuredImage {
+        node {
+          ...FragmentFeaturedImage
+        }
+      }
+      articleDetails {
+        displayDate
+        displayOnFrontPage
+        fieldGroupName
+        publicationDate
+        source
+        subtitle
+        suppressDate
+        tableOfContentsTitle
+        relatedJournal {
+          edges {
+            node {
+              ... on JournalIssue {
+                contentTypeName
+                databaseId
+                date
+                dateGmt
+                featuredImageDatabaseId
+                featuredImageId
+                guid
+                id
+                isContentNode
+                journalIssueId
+                link
+                slug
+                status
+                uri
+                title
+              }
+            }
+          }
+        }
+      }
+      uri
+      language {
+        code
+        homeUrl
+        id
+        locale
+        name
+        slug
+      }
+    }
+  }
+}
+    ${FragmentFeaturedImageFragmentDoc}`;
+
+export const useGetArticlesQuery = <
+      TData = GetArticlesQuery,
+      TError = unknown
+    >(
+      variables: GetArticlesQueryVariables,
+      options?: Omit<UseQueryOptions<GetArticlesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticlesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetArticlesQuery, TError, TData>(
+      {
+    queryKey: ['GetArticles', variables],
+    queryFn: fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables),
+    ...options
+  }
+    )};
+
+useGetArticlesQuery.getKey = (variables: GetArticlesQueryVariables) => ['GetArticles', variables];
+
+export const useSuspenseGetArticlesQuery = <
+      TData = GetArticlesQuery,
+      TError = unknown
+    >(
+      variables: GetArticlesQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<GetArticlesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticlesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<GetArticlesQuery, TError, TData>(
+      {
+    queryKey: ['GetArticlesSuspense', variables],
+    queryFn: fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseGetArticlesQuery.getKey = (variables: GetArticlesQueryVariables) => ['GetArticlesSuspense', variables];
+
+
+useGetArticlesQuery.fetcher = (variables: GetArticlesQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables, options);
+
 export const GetArticlesByPlaceSlugDocument = `
     query GetArticlesByPlaceSlug($slug: ID!) {
   termNode(id: $slug, taxonomy: PLACE, idType: SLUG) {
@@ -17987,6 +18383,58 @@ useSuspenseGetArticlesByTopicSlugQuery.getKey = (variables: GetArticlesByTopicSl
 
 useGetArticlesByTopicSlugQuery.fetcher = (variables: GetArticlesByTopicSlugQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticlesByTopicSlugQuery, GetArticlesByTopicSlugQueryVariables>(GetArticlesByTopicSlugDocument, variables, options);
 
+export const GetAvailableLanguagesDocument = `
+    query GetAvailableLanguages {
+  languages {
+    code
+    homeUrl
+    id
+    locale
+    name
+    slug
+  }
+}
+    `;
+
+export const useGetAvailableLanguagesQuery = <
+      TData = GetAvailableLanguagesQuery,
+      TError = unknown
+    >(
+      variables?: GetAvailableLanguagesQueryVariables,
+      options?: Omit<UseQueryOptions<GetAvailableLanguagesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetAvailableLanguagesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetAvailableLanguagesQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetAvailableLanguages'] : ['GetAvailableLanguages', variables],
+    queryFn: fetcher<GetAvailableLanguagesQuery, GetAvailableLanguagesQueryVariables>(GetAvailableLanguagesDocument, variables),
+    ...options
+  }
+    )};
+
+useGetAvailableLanguagesQuery.getKey = (variables?: GetAvailableLanguagesQueryVariables) => variables === undefined ? ['GetAvailableLanguages'] : ['GetAvailableLanguages', variables];
+
+export const useSuspenseGetAvailableLanguagesQuery = <
+      TData = GetAvailableLanguagesQuery,
+      TError = unknown
+    >(
+      variables?: GetAvailableLanguagesQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<GetAvailableLanguagesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetAvailableLanguagesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<GetAvailableLanguagesQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetAvailableLanguagesSuspense'] : ['GetAvailableLanguagesSuspense', variables],
+    queryFn: fetcher<GetAvailableLanguagesQuery, GetAvailableLanguagesQueryVariables>(GetAvailableLanguagesDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseGetAvailableLanguagesQuery.getKey = (variables?: GetAvailableLanguagesQueryVariables) => variables === undefined ? ['GetAvailableLanguagesSuspense'] : ['GetAvailableLanguagesSuspense', variables];
+
+
+useGetAvailableLanguagesQuery.fetcher = (variables?: GetAvailableLanguagesQueryVariables, options?: RequestInit['headers']) => fetcher<GetAvailableLanguagesQuery, GetAvailableLanguagesQueryVariables>(GetAvailableLanguagesDocument, variables, options);
+
 export const GetBooksDocument = `
     query GetBooks {
   books {
@@ -18091,99 +18539,6 @@ useSuspenseGetBooksQuery.getKey = (variables?: GetBooksQueryVariables) => variab
 
 
 useGetBooksQuery.fetcher = (variables?: GetBooksQueryVariables, options?: RequestInit['headers']) => fetcher<GetBooksQuery, GetBooksQueryVariables>(GetBooksDocument, variables, options);
-
-export const GetArticlesDocument = `
-    query GetArticles {
-  articles(
-    first: 50
-    where: {orderby: {field: META_VALUE_NUM, order: DESC}, metaKey: "publication_date", metaQuery: [{key: "display_on_front_page", compare: "=", value: "1"}]}
-  ) {
-    nodes {
-      id
-      title
-      content
-      slug
-      featuredImage {
-        node {
-          ...FragmentFeaturedImage
-        }
-      }
-      articleDetails {
-        displayDate
-        displayOnFrontPage
-        fieldGroupName
-        publicationDate
-        source
-        subtitle
-        suppressDate
-        tableOfContentsTitle
-        relatedJournal {
-          edges {
-            node {
-              ... on JournalIssue {
-                contentTypeName
-                databaseId
-                date
-                dateGmt
-                featuredImageDatabaseId
-                featuredImageId
-                guid
-                id
-                isContentNode
-                journalIssueId
-                link
-                slug
-                status
-                uri
-                title
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    ${FragmentFeaturedImageFragmentDoc}`;
-
-export const useGetArticlesQuery = <
-      TData = GetArticlesQuery,
-      TError = unknown
-    >(
-      variables?: GetArticlesQueryVariables,
-      options?: Omit<UseQueryOptions<GetArticlesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticlesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetArticlesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetArticles'] : ['GetArticles', variables],
-    queryFn: fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables),
-    ...options
-  }
-    )};
-
-useGetArticlesQuery.getKey = (variables?: GetArticlesQueryVariables) => variables === undefined ? ['GetArticles'] : ['GetArticles', variables];
-
-export const useSuspenseGetArticlesQuery = <
-      TData = GetArticlesQuery,
-      TError = unknown
-    >(
-      variables?: GetArticlesQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetArticlesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticlesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetArticlesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['GetArticlesSuspense'] : ['GetArticlesSuspense', variables],
-    queryFn: fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetArticlesQuery.getKey = (variables?: GetArticlesQueryVariables) => variables === undefined ? ['GetArticlesSuspense'] : ['GetArticlesSuspense', variables];
-
-
-useGetArticlesQuery.fetcher = (variables?: GetArticlesQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables, options);
 
 export const GetGlobalSettingsDocument = `
     query GetGlobalSettings {

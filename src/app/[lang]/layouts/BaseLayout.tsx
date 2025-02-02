@@ -22,7 +22,7 @@ const NavigationMenu = dynamic(() => import('../components/NavigationMenu'), {
   suspense: true,
 });
 
-const PrintLayout = dynamic(() => import('../layouts/PrintLayout'), {
+const PrintLayout = dynamic(() => import('./PrintLayout'), {
   suspense: true,
 });
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup
-} from '../../gql/gql-generated';
+} from '../../../gql/gql-generated';
 import {
   Card,
   CardActionArea,

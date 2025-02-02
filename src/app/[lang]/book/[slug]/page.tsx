@@ -3,8 +3,8 @@ import {
   useBookByUriQuery,
   GetGlobalSettingsQuery,
   useGetGlobalSettingsQuery,
-} from '../../../gql/gql-generated';
-import { serverFetch } from '../../../gql/query-utils';
+} from '../../../../gql/gql-generated';
+import { serverFetch } from '../../../../gql/query-utils';
 
 import React from 'react';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';

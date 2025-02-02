@@ -6,8 +6,8 @@ import {
   useGetArticlesByTopicSlugQuery,
   GetGlobalSettingsQuery,
   useGetGlobalSettingsQuery,
-} from '../../../gql/gql-generated';
-import { serverFetch } from '../../../gql/query-utils';
+} from '../../../../gql/gql-generated';
+import { serverFetch } from '../../../../gql/query-utils';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
 
 export default async function TopicPage({ params }: { params: { slug: string } }) {
