@@ -130,6 +130,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
         <MainContent articles={articles} placeholders={validPlaceholders} />
       }
       rightSidebar={<>{rightSidebarContent}</>}
+      lang={lang}
     />
   );
 };

@@ -1,3 +1,4 @@
+// components/NavigationMenu.tsx
 'use client';
 import { useState, useCallback, useMemo } from 'react';
 import useSWR from 'swr';
@@ -38,8 +39,8 @@ const SOCIAL_LINKS = [
 ] as const;
 
 const COLLECTION_ITEMS = [
-  { label: 'Item 1', href: '#' },
-  { label: 'Item 2', href: '#' },
+  { label: 'Item 1', href: (lang: string) => `/${lang}/collection/item1` },
+  { label: 'Item 2', href: (lang: string) => `/${lang}/collection/item2` },
 ] as const;
 
 // Fetcher for SWR
@@ -52,7 +53,11 @@ const fetcher = async (url: string) => {
     : [];
 };
 
-const NavigationMenu = () => {
+interface NavigationMenuProps {
+  lang: string;
+}
+
+const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
   // State management
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(null);
@@ -105,7 +110,7 @@ const NavigationMenu = () => {
   const drawer = useMemo(() => (
     <Box sx={{ textAlign: 'center' }}>
       <List>
-        <ListItemButton component={Link} href="/" onClick={handleDrawerToggle}>
+        <ListItemButton component={Link} href={`/${lang}`} onClick={handleDrawerToggle}>
           <ListItemText primary="home" />
         </ListItemButton>
   
@@ -117,7 +122,7 @@ const NavigationMenu = () => {
           <List component="div" disablePadding>
             <ListItemButton
               component={Link}
-              href="/journal"
+              href={`/${lang}/journal`}
               sx={{ pl: 4 }}
               onClick={handleDrawerToggle}
             >
@@ -132,7 +137,7 @@ const NavigationMenu = () => {
                 <ListItemButton
                   key={issue.slug}
                   component={Link}
-                  href={`/journal/${issue.slug}`}
+                  href={`/${lang}/journal/${issue.slug}`}
                   sx={{ pl: 6 }}
                   onClick={handleDrawerToggle}
                 >
@@ -145,7 +150,7 @@ const NavigationMenu = () => {
   
         <ListItemButton
           component={Link}
-          href="/book"
+          href={`/${lang}/book`}
           onClick={handleDrawerToggle}
         >
           <ListItemText primary="books" />
@@ -161,7 +166,7 @@ const NavigationMenu = () => {
               <ListItemButton
                 key={label}
                 component={Link}
-                href={href}
+                href={href(lang)}
                 sx={{ pl: 4 }}
                 onClick={handleDrawerToggle}
               >
@@ -173,7 +178,7 @@ const NavigationMenu = () => {
   
         <ListItemButton
           component={Link}
-          href="/page/marxist-archive"
+          href={`/${lang}/page/marxist-archive`}
           onClick={handleDrawerToggle}
         >
           <ListItemText primary="marxist archive" />
@@ -181,7 +186,7 @@ const NavigationMenu = () => {
   
         <ListItemButton
           component={Link}
-          href="/page/about"
+          href={`/${lang}/page/about`}
           onClick={handleDrawerToggle}
         >
           <ListItemText primary="about" />
@@ -189,14 +194,14 @@ const NavigationMenu = () => {
   
         <ListItemButton
           component={Link}
-          href="/page/donate"
+          href={`/${lang}/page/donate`}
           onClick={handleDrawerToggle}
         >
           <ListItemText primary="donate" />
         </ListItemButton>
       </List>
     </Box>
-  ), [journalIssues, journalOpen, collectionOpen, isLoading, handleDrawerToggle, handleNestedListToggle]);
+  ), [lang, journalIssues, journalOpen, collectionOpen, isLoading, handleDrawerToggle, handleNestedListToggle]);
   
 
   // Memoized social icons
@@ -258,7 +263,7 @@ const NavigationMenu = () => {
             }}
           >
             <ButtonGroup variant="text" aria-label="text button group">
-              <Button component={Link} href="/">
+            <Button component={Link} href={`/${lang}`}>
                 home
               </Button>
               <Button
@@ -281,7 +286,7 @@ const NavigationMenu = () => {
                 <MenuItem
                   onClick={handleMenuClose(setAnchorElJournal)}
                   component={Link}
-                  href="/journal"
+                  href={`/${lang}/journal`} 
                 >
                   journal home
                 </MenuItem>
@@ -293,7 +298,7 @@ const NavigationMenu = () => {
                       key={issue.slug}
                       onClick={handleMenuClose(setAnchorElJournal)}
                       component={Link}
-                      href={`/journal/${issue.slug}`}
+                      href={`/${lang}/journal/${issue.slug}`}
                       sx={{ pl: 6 }}
                     >
                       {issue.title}
@@ -302,10 +307,10 @@ const NavigationMenu = () => {
                 )}
               </Menu>
   
-              <Button component={Link} href="/book">
+              <Button component={Link} href={`/${lang}/book`}>
                 books
               </Button>
-              <Button component={Link} href="/page/marxist-archive">
+              <Button component={Link} href={`/${lang}/page/marxist-archive`}>
                 marxist archive
               </Button>
               <Button
@@ -330,16 +335,16 @@ const NavigationMenu = () => {
                     key={label}
                     onClick={handleMenuClose(setAnchorElCollection)}
                     component={Link}
-                    href={href}
+                    href={href(lang)}
                   >
                     {label}
                   </MenuItem>
                 ))}
               </Menu>
-              <Button component={Link} href="/page/about">
+              <Button component={Link} href={`/${lang}/page/about`}>
                 about
               </Button>
-              <Button component={Link} href="/page/donate">
+              <Button component={Link} href={`/${lang}/page/donate`}>
                 donate
               </Button>
             </ButtonGroup>

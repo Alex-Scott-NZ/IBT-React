@@ -16,6 +16,7 @@ interface BaseLayoutProps {
   rightSidebar?: ReactNode;
   slug?: string;
   isLoading?: boolean;
+  lang: string;
 }
 
 const NavigationMenu = dynamic(() => import('../components/NavigationMenu'), {
@@ -32,7 +33,8 @@ const BaseLayout = ({
   mainContent,
   rightSidebar,
   slug,
-  isLoading
+  isLoading,
+  lang
 }: BaseLayoutProps) => {
   if (isLoading) {
     return <LoadingFallback variant="default" />;
@@ -59,7 +61,7 @@ const BaseLayout = ({
           <div className="print:hidden">
             <Header globalSettings={globalSettings} />
             <Suspense fallback={<LoadingFallback variant="compact" />}>
-              <NavigationMenu />
+              <NavigationMenu lang={lang}/>
             </Suspense>
             <SiteWideNotice
               notificationData={globalSettings?.fGGlobalSettings?.notificationBar}
