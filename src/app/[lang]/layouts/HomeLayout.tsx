@@ -1,3 +1,4 @@
+// /layouts/HomeLayout.tsx
 import React, { useMemo } from 'react';
 import BaseLayout from './BaseLayout';
 import MainContent from '../components/MainContent';
@@ -11,7 +12,7 @@ import {
   GetJournalIssuesLatestQuery, 
   GetGlobalSettingsQuery, 
   PlaceholderSettingsFieldsPlaceholderSetup 
-} from '../../gql/gql-generated';
+} from '../../../gql/gql-generated';
 
 type HomeLayoutProps = {
   globalSettings: GetGlobalSettingsQuery;

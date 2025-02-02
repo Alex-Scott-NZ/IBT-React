@@ -6,7 +6,7 @@ import { FragmentFeaturedImageFragment } from '@/gql/graphql';
 
 interface FeaturedArticlesProps {
   articles: NonNullable<GetArticlesQuery['articles']>['nodes'];
-  onArticleClick: (slug: string) => void;
+  onArticleClick: (uri:string) => void;
 }
 
 const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
@@ -29,7 +29,7 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
       {articles.map((article) => {
         const image = article.featuredImage?.node as Partial<FragmentFeaturedImageFragment> | undefined;
         return (
-          <Link href={`/article/${article.slug}`} key={article.id}>
+          <Link href={article.uri!} key={article.id}>
             <div className="relative h-48 overflow-hidden transition-colors hover:bg-gray-400/5">
               {image?.sourceUrl && (
                 <Image

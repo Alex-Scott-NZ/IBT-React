@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import { GetJournalIssuesLatestQuery } from '../../gql/gql-generated';
-import { getImageUrl } from '../utils/imageHelpers';
+import { GetJournalIssuesLatestQuery } from '../../../gql/gql-generated';
+import { getImageUrl } from '../../utils/imageHelpers';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from "next/image";

@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';
 import Header from '../components/Header';
-import { GetGlobalSettingsQuery } from '../../gql/gql-generated';
+import { GetGlobalSettingsQuery } from '../../../gql/gql-generated';
 import NavigationMenu from '../components/NavigationMenu';
 import SiteWideNotice from '../components/SiteWideNotice';
 

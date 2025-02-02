@@ -1,11 +1,11 @@
-
-query GetArticles {
+query GetArticles($language: LanguageCodeFilterEnum!) {
     articles(
         first: 50
         where: {
             orderby: { field: META_VALUE_NUM, order: DESC }
             metaKey: "publication_date"
             metaQuery: [{ key: "display_on_front_page", compare: "=", value: "1" }]
+            language: $language
         }
     ) {
         nodes {
@@ -13,11 +13,11 @@ query GetArticles {
             title
             content
             slug
-      featuredImage {
-        node {
-          ...FragmentFeaturedImage
-        }
-      }
+            featuredImage {
+                node {
+                    ...FragmentFeaturedImage
+                }
+            }
             articleDetails {
                 displayDate
                 displayOnFrontPage
@@ -50,6 +50,15 @@ query GetArticles {
                         }
                     }
                 }
+            }
+            uri
+            language {
+                code
+                homeUrl
+                id
+                locale
+                name
+                slug
             }
         }
     }

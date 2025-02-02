@@ -27,9 +27,8 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({
 
   // Updated type guard with more specific typing
   interface JournalIssueNode {
-    contentTypeName: 'journal-issue';
+    contentTypeName: 'journal';
     databaseId: number;
-    slug: string;
     title: string;
     uri: string;
   }
@@ -37,8 +36,8 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({
   const isJournalIssue = (node: any): node is JournalIssueNode => {
     return (
       node &&
-      node.contentTypeName === 'journal-issue' &&
-      typeof node.slug === 'string' &&
+      node.contentTypeName === 'journal' &&
+      typeof node.uri === 'string' &&
       typeof node.title === 'string'
     );
   };
@@ -50,7 +49,7 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({
   // Use the type guard before accessing properties
   const journalData = journalNode && isJournalIssue(journalNode)
     ? {
-        slug: journalNode.slug,
+        uri: journalNode.uri,
         title: journalNode.title
       }
     : null;
@@ -61,7 +60,7 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({
 
   return (
     <div className={className}>
-      <Link href={`/article/${article.slug}`} passHref>
+      <Link href={article.uri!} passHref>
         <div className="block mt-5 w-full cursor-pointer text-inherit hover:no-underline hover:text-inherit">
           <div className="relative h-auto w-full flex flex-col">
             <div className="relative z-10 flex flex-col flex-grow">
@@ -83,7 +82,7 @@ const ArticleSummary: React.FC<ArticleSummaryProps> = ({
           <>
             {' '}
             |{' '}
-            <Link href={`/journal/${journalData.slug}`} passHref>
+            <Link href={`${journalData.uri}`} passHref>
               <span className="text-communist-red text-base font-cambay">
                 {journalData.title}
               </span>

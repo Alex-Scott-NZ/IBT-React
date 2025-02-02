@@ -1,9 +1,10 @@
+// article\\[slug]\page.tsx
 import {
   GetArticleByUriQuery,
   useGetArticleByUriQuery,
   GetGlobalSettingsQuery,
   useGetGlobalSettingsQuery,
-} from '../../../gql/gql-generated';
+} from '../../../../gql/gql-generated';
 import ArticleLayout from '../../layouts/ArticleLayout';
 import { serverFetch } from '@/gql/query-utils';
 

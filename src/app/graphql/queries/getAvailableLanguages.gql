@@ -1,0 +1,11 @@
+
+query GetAvailableLanguages {
+    languages {
+        code
+        homeUrl
+        id
+        locale
+        name
+        slug
+    }
+}

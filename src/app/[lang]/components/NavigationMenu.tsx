@@ -16,7 +16,7 @@ import {
   ButtonGroup,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import theme from '../theme/theme'; // Import your reusable theme
+import theme from '../../theme/theme'; // Import your reusable theme
 import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Link from 'next/link';
@@ -24,7 +24,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import EmailIcon from '@mui/icons-material/Email';
-import { JournalIssueNode } from '../types/Article';
+import { JournalIssueNode } from '../../types/Article';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
