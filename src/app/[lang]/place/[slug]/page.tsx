@@ -12,8 +12,15 @@ import {
 import { serverFetch } from '../../../../gql/query-utils';
 import BaseLayoutNoSideBars from '../../layouts/BaseLayoutNoSideBars';
 
-export default async function PlacePage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function PlacePage({ 
+  params 
+}: { 
+  params: { 
+    slug: string;
+    lang: string; // Add lang parameter
+  } 
+}) {
+  const { slug, lang } = params;
 
   // 1. Fetch place data
   const placeData: GetArticlesByPlaceSlugQuery = await serverFetch(
@@ -48,7 +55,10 @@ export default async function PlacePage({ params }: { params: { slug: string } }
   const articleNodes = termNode.contentNodes?.nodes || [];
 
   return (
-    <BaseLayoutNoSideBars globalSettings={globalSettings}>
+    <BaseLayoutNoSideBars 
+      globalSettings={globalSettings}
+      lang={lang} // Pass lang to BaseLayout
+    >
       <div className="w-full">
         <h2 className="font-cambay text-communist-red text-3xl mb-3 mt-0">
           {placeName}
@@ -65,7 +75,7 @@ export default async function PlacePage({ params }: { params: { slug: string } }
             return (
               <div key={idx} className="mb-1.5 last:mb-0">
                 <Link
-                  href={`/article/${node.slug}`}
+                  href={`/${lang}/article/${node.slug}`} // Update link to include lang
                   className="font-helvetica text-xl text-gray-700 hover:text-communist-red transition-colors"
                 >
                   {displayedTitle}
