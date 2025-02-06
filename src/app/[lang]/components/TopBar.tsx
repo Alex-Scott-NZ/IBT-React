@@ -1,4 +1,4 @@
-// src/components/TopBar.tsx
+// src/app/[lang]/components/TopBar.tsx
 
 import React from 'react';
 

@@ -1,14 +1,16 @@
-// /components/Header.tsx
+// /app/[lang]/components/Header.tsx
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { GetGlobalSettingsQuery } from '@/gql/gql-generated';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface HeaderProps {
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
+  lang: string;
 }
 
-const Header = ({ globalSettings }: HeaderProps) => {
+const Header = ({ globalSettings, lang }: HeaderProps) => {
   const bannerData = globalSettings?.fGGlobalSettings?.bannerImage;
 
   const fallbackSVG = `data:image/svg+xml;base64,${Buffer.from(
@@ -23,23 +25,27 @@ const Header = ({ globalSettings }: HeaderProps) => {
   return (
     <header className="w-full bg-custom-bg text-white">
       <div className="mx-auto max-w-[1366px] pt-6 print:pt-0">
-        <div className="w-full md:w-1/2">
-          <Link href="/" className="block">
-            {bannerData?.node?.mediaDetails ? (
-              <div className="relative aspect-[768/131] max-h-[122px]">
-                <Image
-                  src={bannerData.node.sourceUrl || fallbackSVG}
-                  alt={bannerData.node.altText || 'Banner Image'}
-                  fill
-                  priority
-                  className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-            ) : (
-              <div className="aspect-[768/131] max-h-[122px] animate-pulse bg-gray-300" />
-            )}
-          </Link>
+        <div className="flex justify-between items-start">
+          <div className="w-full md:w-1/2">
+            <Link href={`/${lang}`} className="block">
+              {bannerData?.node?.mediaDetails ? (
+                <div className="relative aspect-[768/131] max-h-[122px]">
+                  <Image
+                    src={bannerData.node.sourceUrl || fallbackSVG}
+                    alt={bannerData.node.altText || 'Banner Image'}
+                    fill
+                    priority
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+              ) : (
+                <div className="aspect-[768/131] max-h-[122px] animate-pulse bg-gray-300" />
+              )}
+            </Link>
+          </div>
+          
+          <LanguageSwitcher currentLang={lang} />
         </div>
       </div>
     </header>

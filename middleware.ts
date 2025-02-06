@@ -2,13 +2,13 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const locales = ['en', 'fr'] // add your supported locales
-const defaultLocale = 'en'
+const LOCALES = ['en', 'fr'] as const
+const DEFAULT_LOCALE = 'en'
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname, search } = request.nextUrl
 
-  // Skip middleware for assets, api routes, etc.
+  // Early return for static assets, API routes, etc.
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -18,24 +18,35 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Check if pathname starts with a locale
-  const pathnameHasLocale = locales.some(
+  // Check if pathname already has a locale
+  const hasLocale = LOCALES.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   )
 
-  if (pathnameHasLocale) {
+  if (hasLocale) {
     return NextResponse.next()
   }
 
-  // If pathname doesn't have locale, redirect to default locale
-  // Special handling for the root path
-  const newPathname = pathname === '/' ? `/${defaultLocale}` : `/${defaultLocale}${pathname}`
-  return NextResponse.redirect(new URL(newPathname, request.url))
+  // Immediate redirect with optimized headers
+  const newPathname = pathname === '/' ? `/${DEFAULT_LOCALE}` : `/${DEFAULT_LOCALE}${pathname}`
+  const response = NextResponse.redirect(new URL(newPathname + search, request.url), {
+    // Use 308 for permanent redirect to improve caching
+    status: 308
+  })
+
+  // Add headers to optimize the redirect
+  response.headers.set('Cache-Control', 'public, max-age=3600')
+  response.headers.set('Vary', 'Accept-Language')
+  
+  // Add header to trigger immediate client-side navigation
+  response.headers.set('X-Middleware-Prefetch', '1')
+
+  return response
 }
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next)
-    '/((?!api|_next/static|_next/image|favicon.ico|graphql).*)',
+    // Match all paths except those starting with excluded prefixes
+    "/((?!api|_next/static|_next/image|favicon.ico|graphql).*)"
   ],
 }

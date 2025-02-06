@@ -2633,6 +2633,8 @@ export type CommentToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -2730,6 +2732,8 @@ export type CommentToParentCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -3160,7 +3164,7 @@ export enum ContentTypeEnum {
   /** The Type of Content object */
   Collection = 'COLLECTION',
   /** The Type of Content object */
-  JournalIssue = 'JOURNAL_ISSUE',
+  Journal = 'JOURNAL',
   /** The Type of Content object */
   Page = 'PAGE',
   /** The Type of Content object */
@@ -4342,6 +4346,8 @@ export type EnqueuedAsset = {
    * @deprecated Use `EnqueuedScript.extraData` instead.
    */
   extra?: Maybe<Scalars['String']['output']>;
+  /** The loading group to which this asset belongs. */
+  group?: Maybe<Scalars['Int']['output']>;
   /** The handle of the enqueued asset */
   handle?: Maybe<Scalars['String']['output']>;
   /** The ID of the enqueued asset */
@@ -4375,6 +4381,10 @@ export type EnqueuedScript = EnqueuedAsset & Node & {
   extra?: Maybe<Scalars['String']['output']>;
   /** Extra data supplied to the enqueued script */
   extraData?: Maybe<Scalars['String']['output']>;
+  /** The loading group to which this asset belongs. */
+  group?: Maybe<Scalars['Int']['output']>;
+  /** The location where this script should be loaded */
+  groupLocation?: Maybe<ScriptLoadingGroupLocationEnum>;
   /** The handle of the enqueued asset */
   handle?: Maybe<Scalars['String']['output']>;
   /** The global ID of the enqueued script */
@@ -4438,6 +4448,8 @@ export type EnqueuedStylesheet = EnqueuedAsset & Node & {
    * @deprecated Use `EnqueuedScript.extraData` instead.
    */
   extra?: Maybe<Scalars['String']['output']>;
+  /** The loading group to which this asset belongs. */
+  group?: Maybe<Scalars['Int']['output']>;
   /** The handle of the enqueued asset */
   handle?: Maybe<Scalars['String']['output']>;
   /** The global ID of the enqueued stylesheet */
@@ -5015,9 +5027,9 @@ export type JournalIssue = ContentNode & DatabaseIdentifier & HierarchicalConten
   featuredImageId?: Maybe<Scalars['ID']['output']>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
-  /** Whether the journal-issue object is password protected. */
+  /** Whether the journal object is password protected. */
   hasPassword?: Maybe<Scalars['Boolean']['output']>;
-  /** The globally unique identifier of the journal-issue object. */
+  /** The globally unique identifier of the journal object. */
   id: Scalars['ID']['output'];
   /** Whether the node is a Comment */
   isComment: Scalars['Boolean']['output'];
@@ -5056,7 +5068,7 @@ export type JournalIssue = ContentNode & DatabaseIdentifier & HierarchicalConten
   parentDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']['output']>;
-  /** The password for the journal-issue object. */
+  /** The password for the journal object. */
   password?: Maybe<Scalars['String']['output']>;
   /** Connection between the JournalIssue type and the journalIssue type */
   preview?: Maybe<JournalIssueToPreviewConnectionEdge>;
@@ -5681,6 +5693,8 @@ export type MediaItemToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -6742,6 +6756,8 @@ export type PageToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -9927,6 +9943,8 @@ export type PostToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -12209,6 +12227,8 @@ export type RootQueryToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -13662,6 +13682,14 @@ export type RootQueryToVideoItemConnectionWhereArgs = {
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
+
+/** Location in the document where the script to be loaded */
+export enum ScriptLoadingGroupLocationEnum {
+  /** A script to be loaded in document at right before the closing `<body>` tag */
+  Footer = 'FOOTER',
+  /** A script to be loaded in document `<head>` tag */
+  Header = 'HEADER'
+}
 
 /** The strategy to use when loading the script */
 export enum ScriptLoadingStrategyEnum {
@@ -16237,6 +16265,8 @@ export type UserToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -17413,6 +17443,8 @@ export type FragmentAudioItemFragment = { __typename?: 'AudioItem', audioItemId:
 
 export type FragmentBookFragment = { __typename?: 'Book', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
 
+export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
+
 export type FragmentJournalIssueFragment = { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null };
 
 export type FragmentJournalIssueDetailsFragment = { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null };
@@ -17434,8 +17466,6 @@ export type FragmentTerms_Topic_Fragment = { __typename?: 'Topic', count?: numbe
 export type FragmentTermsFragment = FragmentTerms_Category_Fragment | FragmentTerms_Place_Fragment | FragmentTerms_PostFormat_Fragment | FragmentTerms_Tag_Fragment | FragmentTerms_Topic_Fragment;
 
 export type FragmentVideoItemFragment = { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { __typename?: 'VideoDetails', videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null };
-
-export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
 
 export type GetArticleByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -17497,7 +17527,7 @@ export type GetJournalByUriQuery = { __typename?: 'RootQuery', journalIssueBy?: 
 export type GetJournalIssuesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetJournalIssuesQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', title?: string | null, slug?: string | null, id: string, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'Collection', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null }> } | null };
+export type GetJournalIssuesQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', title?: string | null, slug?: string | null, id: string, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'Collection', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, language?: { __typename?: 'Language', code?: LanguageCodeEnum | null, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
 
 export type GetJournalIssuesLatestQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -18714,6 +18744,12 @@ export const GetJournalIssuesDocument = `
         node {
           ...FragmentFeaturedImage
         }
+      }
+      language {
+        code
+        locale
+        name
+        slug
       }
     }
   }
