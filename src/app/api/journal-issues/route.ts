@@ -1,3 +1,4 @@
+// /src/app/api/journal-issues/route.ts
 import { NextResponse } from 'next/server';
 import {
   useGetJournalIssuesQuery,

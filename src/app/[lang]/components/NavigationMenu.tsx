@@ -38,18 +38,37 @@ const SOCIAL_LINKS = [
   { Icon: EmailIcon, href: 'mailto:ibt@bolshevik.org' },
 ] as const;
 
-const COLLECTION_ITEMS = [
-  { label: 'Item 1', href: (lang: string) => `/${lang}/collection/item1` },
-  { label: 'Item 2', href: (lang: string) => `/${lang}/collection/item2` },
-] as const;
+// const COLLECTION_ITEMS = [
+//   { label: 'Item 1', href: (lang: string) => `/${lang}/collection/item1` },
+//   { label: 'Item 2', href: (lang: string) => `/${lang}/collection/item2` },
+// ] as const;
+
+const MENU_TRANSLATIONS = {
+  JOURNAL: {
+    EN: '1917 Journal',
+    FR: '1917 édition française'
+  },
+  JOURNAL_HOME: {
+    EN: 'journal home',
+    FR: 'accueil du journal'
+  }
+} as const;
 
 // Fetcher for SWR
-const fetcher = async (url: string) => {
+const fetcher = async ([url, lang]: [string, string]) => {
   const response = await fetch(url);
   if (!response.ok) throw new Error('Failed to fetch journal issues');
   const data = await response.json();
-  return Array.isArray(data) 
-    ? data.sort((a, b) => b.slug.localeCompare(a.slug))
+
+  return Array.isArray(data)
+    ? data
+      .filter(issue => {
+        // Ensure we're comparing in the same case and handle potential undefined
+        const issueCode = issue.language?.code || '';
+        const currentLang = lang || '';
+        return issueCode.toUpperCase() === currentLang.toUpperCase();
+      })
+      .sort((a, b) => b.slug.localeCompare(a.slug))
     : [];
 };
 
@@ -65,14 +84,19 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
   const [journalOpen, setJournalOpen] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
 
+  // Helper function to get translation
+  const getTranslation = useCallback((key: keyof typeof MENU_TRANSLATIONS) => {
+    return MENU_TRANSLATIONS[key][lang.toUpperCase() as 'EN' | 'FR'] || MENU_TRANSLATIONS[key]['EN'];
+  }, [lang]);
+
   // SWR for data fetching
   const { data: journalIssues = [], error, isLoading } = useSWR<JournalIssueNode[]>(
-    '/api/journal-issues',
+    ['/api/journal-issues', lang],
     fetcher,
     {
       revalidateOnFocus: false,
       refreshInterval: 60000,
-      dedupingInterval: 60000, // Add this to prevent duplicate requests
+      dedupingInterval: 60000,
     }
   );
 
@@ -113,9 +137,9 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
         <ListItemButton component={Link} href={`/${lang}`} onClick={handleDrawerToggle}>
           <ListItemText primary="home" />
         </ListItemButton>
-  
+
         <ListItemButton onClick={handleNestedListToggle(setJournalOpen)}>
-          <ListItemText primary="1917 journal" />
+          <ListItemText primary={getTranslation('JOURNAL')} />
           {journalOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
         <Collapse in={journalOpen} timeout="auto" unmountOnExit>
@@ -126,7 +150,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
               sx={{ pl: 4 }}
               onClick={handleDrawerToggle}
             >
-              <ListItemText primary="journal home" />
+              <ListItemText primary={getTranslation('JOURNAL_HOME')} />
             </ListItemButton>
             {isLoading ? (
               <ListItemButton disabled sx={{ pl: 6 }}>
@@ -147,7 +171,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
             )}
           </List>
         </Collapse>
-  
+
         <ListItemButton
           component={Link}
           href={`/${lang}/book`}
@@ -155,8 +179,8 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
         >
           <ListItemText primary="books" />
         </ListItemButton>
-  
-        <ListItemButton onClick={handleNestedListToggle(setCollectionOpen)}>
+
+        {/* <ListItemButton onClick={handleNestedListToggle(setCollectionOpen)}>
           <ListItemText primary="collection" />
           {collectionOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
@@ -174,8 +198,8 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
               </ListItemButton>
             ))}
           </List>
-        </Collapse>
-  
+        </Collapse> */}
+
         <ListItemButton
           component={Link}
           href={`/${lang}/page/marxist-archive`}
@@ -183,7 +207,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
         >
           <ListItemText primary="marxist archive" />
         </ListItemButton>
-  
+
         <ListItemButton
           component={Link}
           href={`/${lang}/page/about`}
@@ -191,7 +215,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
         >
           <ListItemText primary="about" />
         </ListItemButton>
-  
+
         <ListItemButton
           component={Link}
           href={`/${lang}/page/donate`}
@@ -202,7 +226,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
       </List>
     </Box>
   ), [lang, journalIssues, journalOpen, collectionOpen, isLoading, handleDrawerToggle, handleNestedListToggle]);
-  
+
 
   // Memoized social icons
   const socialIcons = useMemo(() => (
@@ -263,7 +287,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
             }}
           >
             <ButtonGroup variant="text" aria-label="text button group">
-            <Button component={Link} href={`/${lang}`}>
+              <Button component={Link} href={`/${lang}`}>
                 home
               </Button>
               <Button
@@ -275,7 +299,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
                 }}
                 endIcon={<KeyboardArrowDownIcon />}
               >
-                1917 journal
+                {getTranslation('JOURNAL')}
               </Button>
               <Menu
                 anchorEl={anchorElJournal}
@@ -286,9 +310,9 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
                 <MenuItem
                   onClick={handleMenuClose(setAnchorElJournal)}
                   component={Link}
-                  href={`/${lang}/journal`} 
+                  href={`/${lang}/journal`}
                 >
-                  journal home
+                  {getTranslation('JOURNAL_HOME')}
                 </MenuItem>
                 {isLoading ? (
                   <MenuItem disabled>Loading...</MenuItem>
@@ -306,14 +330,14 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
                   ))
                 )}
               </Menu>
-  
+
               <Button component={Link} href={`/${lang}/book`}>
                 books
               </Button>
               <Button component={Link} href={`/${lang}/page/marxist-archive`}>
                 marxist archive
               </Button>
-              <Button
+              {/* <Button
                 onClick={(event) => {
                   event.preventDefault();
                   handleMenuOpen(setAnchorElCollection)(
@@ -340,7 +364,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
                     {label}
                   </MenuItem>
                 ))}
-              </Menu>
+              </Menu> */}
               <Button component={Link} href={`/${lang}/page/about`}>
                 about
               </Button>
@@ -368,7 +392,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
       </AppBar>
     </ThemeProvider>
   );
-  
+
 };
 
 export default NavigationMenu;

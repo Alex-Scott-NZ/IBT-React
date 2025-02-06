@@ -1,3 +1,4 @@
+// /app/[lang]/components/ArticleSummary.tsx
 import React from 'react';
 import { GetArticlesQuery } from '@/gql/gql-generated';
 import Link from 'next/link';

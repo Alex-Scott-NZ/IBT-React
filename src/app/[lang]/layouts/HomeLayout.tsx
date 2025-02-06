@@ -1,6 +1,7 @@
-// /layouts/HomeLayout.tsx
+// /app/[lang]/layouts/HomeLayout.tsx
 import React, { useMemo } from 'react';
 import BaseLayout from './BaseLayout';
+import BaseLayoutNoSideBars from './BaseLayoutNoSideBars';
 import MainContent from '../components/MainContent';
 import BooksWidget from '../components/BooksWidget';
 import LatestJournalIssueWidget from '../components/LatestJournalIssueWidget';
@@ -121,17 +122,30 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
   // 2. Early Return After Hooks Are Called
   if (validPlaceholders.length === 0) return null;
 
-  // 3. Render Component
+
+  // 3. Conditional Rendering Based on Language
+  if (lang === 'en') {
+    return (
+      <BaseLayout
+        globalSettings={globalSettings.globalSettings}
+        leftSidebar={<>{leftSidebarContent}</>}
+        mainContent={
+          <MainContent articles={articles} placeholders={validPlaceholders} />
+        }
+        rightSidebar={<>{rightSidebarContent}</>}
+        lang={lang}
+      />
+    );
+  }
+
+  // For all other languages, use BaseLayoutNoSidebars
   return (
-    <BaseLayout
+    <BaseLayoutNoSideBars
       globalSettings={globalSettings.globalSettings}
-      leftSidebar={<>{leftSidebarContent}</>}
-      mainContent={
-        <MainContent articles={articles} placeholders={validPlaceholders} />
-      }
-      rightSidebar={<>{rightSidebarContent}</>}
       lang={lang}
-    />
+    >
+      <MainContent articles={articles} placeholders={validPlaceholders} />
+    </BaseLayoutNoSideBars>
   );
 };
 

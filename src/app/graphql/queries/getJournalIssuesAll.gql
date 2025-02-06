@@ -33,6 +33,12 @@ query GetJournalIssues {
           ...FragmentFeaturedImage
         }
       }
+      language {
+        code
+        locale
+        name
+        slug
+      }
     }
   }
 }
