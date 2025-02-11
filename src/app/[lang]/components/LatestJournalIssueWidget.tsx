@@ -9,9 +9,10 @@ import Image from "next/image";
 
 interface LatestJournalIssueWidgetProps {
   latestJournalIssue: GetJournalIssuesLatestQuery
+  lang: string;
 }
 
-const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ latestJournalIssue }) => {
+const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ latestJournalIssue, lang }) => {
   const router = useRouter();
 
   if (!latestJournalIssue) {
@@ -22,14 +23,14 @@ const LatestJournalIssueWidget: React.FC<LatestJournalIssueWidgetProps> = ({ lat
 
   const handleJournalClick = (slug: string | null | undefined) => {
     if (slug) {
-      router.push(`/journal/${slug}`);
+      router.push(`/${lang}/journal/${slug}`);
     }
   };
 
   return (
     <div className="relative mb-4">
       <div className="mb-2 flex justify-between items-center">
-        <Link href="/journal" passHref>
+      <Link href={`/${lang}/journal`} passHref>
           <h5 className="font-telegrafico text-gray-900 mt-0 mb-0 text-xl font-light hover:bg-gray-400/5 transition-colors">
             Latest Journal
           </h5>
