@@ -46,7 +46,7 @@ const renderPlaceholderContent = (
     case 'booksWidget':
       return <BooksWidget books={props.books} lang={props.lang}/>;
     case 'latestJournalWidget':
-      return <LatestJournalIssueWidget latestJournalIssue={props.latestJournalIssue} />;
+      return <LatestJournalIssueWidget latestJournalIssue={props.latestJournalIssue} lang={props.lang} />;
     case 'freeText':
       return (
         <PlaceholderWidget

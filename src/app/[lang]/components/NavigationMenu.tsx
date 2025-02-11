@@ -29,6 +29,7 @@ import { JournalIssueNode } from '../../types/Article';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
+import LanguageSwitcher from './LanguageSwitcher';
 
 // Constants
 const SOCIAL_LINKS = [
@@ -134,6 +135,27 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
   const drawer = useMemo(() => (
     <Box sx={{ textAlign: 'center' }}>
       <List>
+        <ListItemButton
+          sx={{
+            p: 0,
+            '& .MuiSelect-select': {
+              width: '100%',
+              py: 2, // Add vertical padding to match other items
+              pl: 2, // Left padding to align with other items
+            }
+          }}
+        >
+          <LanguageSwitcher
+            currentLang={lang}
+            isMobile={true}
+            sx={{
+              width: '100%',
+              '& .MuiOutlinedInput-root': {
+                width: '100%',
+              },
+            }}
+          />
+        </ListItemButton>
         <ListItemButton component={Link} href={`/${lang}`} onClick={handleDrawerToggle}>
           <ListItemText primary="home" />
         </ListItemButton>
