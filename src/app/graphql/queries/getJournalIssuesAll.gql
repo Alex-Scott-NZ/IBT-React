@@ -1,5 +1,5 @@
-query GetJournalIssues {
-  journalIssues {
+query GetJournalIssues($language: LanguageCodeFilterEnum!) {
+  journalIssues(where: { language: $language }) {
     nodes {
       journalIssueDetails {
         articlesInJournal {

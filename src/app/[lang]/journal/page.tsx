@@ -1,3 +1,4 @@
+// app/[lang]/journal/page.tsx
 import React from 'react';
 import BaseLayoutNoSideBars from '../layouts/BaseLayoutNoSideBars';
 import Link from 'next/link';
@@ -8,6 +9,7 @@ import {
   GetGlobalSettingsQuery,
   useGetGlobalSettingsQuery,
   FragmentFeaturedImageFragment,
+  LanguageCodeFilterEnum,
 } from '../../../gql/gql-generated';
 import { serverFetch } from '../../../gql/query-utils';
 
@@ -28,9 +30,13 @@ export default async function Page({
 }: {
   params: { lang: string };
 }) {
+  const languageCode = params.lang.toUpperCase() as LanguageCodeFilterEnum;
   const journalIssuesData: GetJournalIssuesQuery = await serverFetch(
     useGetJournalIssuesQuery,
-    { next: { revalidate: 60 } }
+    { 
+      variables: { language: languageCode},
+      next: { revalidate: 60 } 
+    }
   );
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
     useGetGlobalSettingsQuery,

@@ -17443,8 +17443,6 @@ export type FragmentAudioItemFragment = { __typename?: 'AudioItem', audioItemId:
 
 export type FragmentBookFragment = { __typename?: 'Book', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
 
-export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
-
 export type FragmentJournalIssueFragment = { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null };
 
 export type FragmentJournalIssueDetailsFragment = { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null };
@@ -17466,6 +17464,8 @@ export type FragmentTerms_Topic_Fragment = { __typename?: 'Topic', count?: numbe
 export type FragmentTermsFragment = FragmentTerms_Category_Fragment | FragmentTerms_Place_Fragment | FragmentTerms_PostFormat_Fragment | FragmentTerms_Tag_Fragment | FragmentTerms_Topic_Fragment;
 
 export type FragmentVideoItemFragment = { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { __typename?: 'VideoDetails', videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null };
+
+export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
 
 export type GetArticleByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -17524,7 +17524,9 @@ export type GetJournalByUriQueryVariables = Exact<{
 
 export type GetJournalByUriQuery = { __typename?: 'RootQuery', journalIssueBy?: { __typename?: 'JournalIssue', title?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null } | null };
 
-export type GetJournalIssuesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetJournalIssuesQueryVariables = Exact<{
+  language: LanguageCodeFilterEnum;
+}>;
 
 
 export type GetJournalIssuesQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', title?: string | null, slug?: string | null, id: string, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'Collection', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, language?: { __typename?: 'Language', code?: LanguageCodeEnum | null, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
@@ -18710,8 +18712,8 @@ useSuspenseGetJournalByUriQuery.getKey = (variables: GetJournalByUriQueryVariabl
 useGetJournalByUriQuery.fetcher = (variables: GetJournalByUriQueryVariables, options?: RequestInit['headers']) => fetcher<GetJournalByUriQuery, GetJournalByUriQueryVariables>(GetJournalByUriDocument, variables, options);
 
 export const GetJournalIssuesDocument = `
-    query GetJournalIssues {
-  journalIssues {
+    query GetJournalIssues($language: LanguageCodeFilterEnum!) {
+  journalIssues(where: {language: $language}) {
     nodes {
       journalIssueDetails {
         articlesInJournal {
@@ -18760,40 +18762,40 @@ export const useGetJournalIssuesQuery = <
       TData = GetJournalIssuesQuery,
       TError = unknown
     >(
-      variables?: GetJournalIssuesQueryVariables,
+      variables: GetJournalIssuesQueryVariables,
       options?: Omit<UseQueryOptions<GetJournalIssuesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetJournalIssuesQuery, TError, TData>['queryKey'] }
     ) => {
     
     return useQuery<GetJournalIssuesQuery, TError, TData>(
       {
-    queryKey: variables === undefined ? ['GetJournalIssues'] : ['GetJournalIssues', variables],
+    queryKey: ['GetJournalIssues', variables],
     queryFn: fetcher<GetJournalIssuesQuery, GetJournalIssuesQueryVariables>(GetJournalIssuesDocument, variables),
     ...options
   }
     )};
 
-useGetJournalIssuesQuery.getKey = (variables?: GetJournalIssuesQueryVariables) => variables === undefined ? ['GetJournalIssues'] : ['GetJournalIssues', variables];
+useGetJournalIssuesQuery.getKey = (variables: GetJournalIssuesQueryVariables) => ['GetJournalIssues', variables];
 
 export const useSuspenseGetJournalIssuesQuery = <
       TData = GetJournalIssuesQuery,
       TError = unknown
     >(
-      variables?: GetJournalIssuesQueryVariables,
+      variables: GetJournalIssuesQueryVariables,
       options?: Omit<UseSuspenseQueryOptions<GetJournalIssuesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetJournalIssuesQuery, TError, TData>['queryKey'] }
     ) => {
     
     return useSuspenseQuery<GetJournalIssuesQuery, TError, TData>(
       {
-    queryKey: variables === undefined ? ['GetJournalIssuesSuspense'] : ['GetJournalIssuesSuspense', variables],
+    queryKey: ['GetJournalIssuesSuspense', variables],
     queryFn: fetcher<GetJournalIssuesQuery, GetJournalIssuesQueryVariables>(GetJournalIssuesDocument, variables),
     ...options
   }
     )};
 
-useSuspenseGetJournalIssuesQuery.getKey = (variables?: GetJournalIssuesQueryVariables) => variables === undefined ? ['GetJournalIssuesSuspense'] : ['GetJournalIssuesSuspense', variables];
+useSuspenseGetJournalIssuesQuery.getKey = (variables: GetJournalIssuesQueryVariables) => ['GetJournalIssuesSuspense', variables];
 
 
-useGetJournalIssuesQuery.fetcher = (variables?: GetJournalIssuesQueryVariables, options?: RequestInit['headers']) => fetcher<GetJournalIssuesQuery, GetJournalIssuesQueryVariables>(GetJournalIssuesDocument, variables, options);
+useGetJournalIssuesQuery.fetcher = (variables: GetJournalIssuesQueryVariables, options?: RequestInit['headers']) => fetcher<GetJournalIssuesQuery, GetJournalIssuesQueryVariables>(GetJournalIssuesDocument, variables, options);
 
 export const GetJournalIssuesLatestDocument = `
     query GetJournalIssuesLatest {

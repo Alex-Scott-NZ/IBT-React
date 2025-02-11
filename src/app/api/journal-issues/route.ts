@@ -3,17 +3,24 @@ import { NextResponse } from 'next/server';
 import {
   useGetJournalIssuesQuery,
   GetJournalIssuesQuery,
+  LanguageCodeFilterEnum, // Update this import
 } from '@/gql/gql-generated';
 import { serverFetch } from '@/gql/query-utils';
 
-export const revalidate = 60; // Set revalidation time
+export const revalidate = 60;
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // Fetch data using serverFetch
+    // Get language from URL parameters
+    const { searchParams } = new URL(request.url);
+    const lang = (searchParams.get('lang')?.toUpperCase() || 'EN') as LanguageCodeFilterEnum;
+
+    // Fetch data using serverFetch with language parameter
     const data: GetJournalIssuesQuery = await serverFetch(
       useGetJournalIssuesQuery,
-      {} // Remove next config here since we're using export const revalidate
+      {
+        variables: { language: lang }
+      }
     );
 
     // Null check and sorting
@@ -22,7 +29,7 @@ export async function GET() {
     }
 
     const sortedIssues = data.journalIssues.nodes
-      .filter(Boolean) // Remove any null values
+      .filter(Boolean)
       .sort((a, b) => 
         (b?.slug ?? '').localeCompare(a?.slug ?? '')
       );
