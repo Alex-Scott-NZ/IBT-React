@@ -57,20 +57,15 @@ const MENU_TRANSLATIONS = {
 
 // Fetcher for SWR
 const fetcher = async ([url, lang]: [string, string]) => {
-  const response = await fetch(url);
+  // Convert lang to uppercase and append as query parameter
+  const apiUrl = `${url}?lang=${lang.toUpperCase()}`;
+  const response = await fetch(apiUrl);
+  
   if (!response.ok) throw new Error('Failed to fetch journal issues');
   const data = await response.json();
 
-  return Array.isArray(data)
-    ? data
-      .filter(issue => {
-        // Ensure we're comparing in the same case and handle potential undefined
-        const issueCode = issue.language?.code || '';
-        const currentLang = lang || '';
-        return issueCode.toUpperCase() === currentLang.toUpperCase();
-      })
-      .sort((a, b) => b.slug.localeCompare(a.slug))
-    : [];
+  // No need to filter by language anymore since the API handles it
+  return Array.isArray(data) ? data.sort((a, b) => b.slug.localeCompare(a.slug)) : [];
 };
 
 interface NavigationMenuProps {
