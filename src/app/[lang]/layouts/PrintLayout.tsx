@@ -58,13 +58,13 @@ const PrintLayout = ({ slug }: PrintLayoutProps) => {
       <div className="grid print:grid-cols-[20%_40%_40%] items-center">
         {/* Banner */}
         <div className="flex justify-start">
-        <img
-  src="https://backend.saggitari.us/wp-content/uploads/2024/10/file.png"
-  alt="Banner for Print"
-  width="127"
-  height="127"
-  className="rounded-full"
-/>
+        <Image
+            src="https://backend.saggitari.us/wp-content/uploads/2024/10/file.png"
+            alt="Banner for Print"
+            width={127} // Use numbers for width and height
+            height={127}
+            className="rounded-full"
+          />
         </div>
 
         {/* First Social Media Column */}

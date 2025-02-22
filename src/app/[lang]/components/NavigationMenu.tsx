@@ -242,7 +242,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
         </ListItemButton>
       </List>
     </Box>
-  ), [lang, journalIssues, journalOpen, collectionOpen, isLoading, handleDrawerToggle, handleNestedListToggle, getTranslation]);
+  ), [lang, journalIssues, journalOpen, isLoading, handleDrawerToggle, handleNestedListToggle, getTranslation]);
 
 
   // Memoized social icons
