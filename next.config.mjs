@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     domains: ['backend.saggitari.us'],
   },
+  productionBrowserSourceMaps: true,
   webpack: (config, options) => {
     config.module.rules.push({
       test: /\.node$/,
