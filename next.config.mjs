@@ -3,6 +3,8 @@
 const nextConfig = {
   images: {
     domains: ['backend.saggitari.us'],
+    formats: ['image/avif', 'image/webp'], // Modern formats
+    minimumCacheTTL: 60, // Cache optimization
   },
   productionBrowserSourceMaps: true,
   webpack: (config, options) => {
