@@ -1,4 +1,4 @@
-// app/[lang]/journal/page.tsx
+
 import React from 'react';
 import BaseLayoutNoSideBars from '../layouts/BaseLayoutNoSideBars';
 import Link from 'next/link';
@@ -126,7 +126,7 @@ export default async function Page({
                         height={5}
                         className="object-cover rounded"
                         placeholder="blur"
-                        blurDataURL={fallbackSVG}
+                        blurDataURL={featuredImage.thumbhash || fallbackSVG} 
                       />
                     </div>
                   )}

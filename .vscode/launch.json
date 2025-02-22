@@ -46,7 +46,7 @@
         "${workspaceFolder}/.next/**/*.js"
       ],
       "serverReadyAction": {
-        "pattern": "started server on .+, url: (https?://\\S+)",
+       "pattern": "- Local:\\s+(https?://\\S+)",
         "uriFormat": "%s",
         "action": "debugWithChrome"
       }
