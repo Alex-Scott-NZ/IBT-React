@@ -15,17 +15,17 @@ export const fetcher = <TData, TVariables>(
   return async (): Promise<TData> => {
     const { next, cache, ...restOptions } = options || {};
     const endpoint = 'https://backend.saggitari.us/graphql';
-    
-    // Enhanced request logging
+
+    // Log the full query and variables
     console.log('Making GraphQL request:', {
       endpoint,
       variables,
-      query: query.slice(0, 100) + '...', // Truncate long queries
+      query, // Log the full query
       options: {
         cache,
         next,
-        headers: restOptions
-      }
+        headers: restOptions,
+      },
     });
 
     try {
@@ -52,15 +52,33 @@ export const fetcher = <TData, TVariables>(
       }
 
       const json = await res.json();
-      
-      // Enhanced response logging
+
+      // Log the full response
       console.log('GraphQL Response:', {
         status: res.status,
         hasData: !!json.data,
         hasErrors: !!json.errors,
         data: json.data ? 'Present' : 'None',
-        errors: json.errors || 'None'
+        errors: json.errors || 'None',
+        fullResponse: json, // Log the full response
       });
+
+      // Log the articlesInJournal field specifically
+      if (json.data?.journalIssues?.nodes) {
+        json.data.journalIssues.nodes.forEach((issue: any, index: number) => {
+          console.log(`Journal Issue ${index + 1}:`, {
+            title: issue.title,
+            slug: issue.slug,
+            articleCount: issue.journalIssueDetails?.articlesInJournal?.nodes?.length || 0,
+            articles: issue.journalIssueDetails?.articlesInJournal?.nodes?.map(
+              (article: any) => ({
+                title: article.title,
+                slug: article.slug,
+              })
+            ),
+          });
+        });
+      }
 
       if (json.errors) {
         console.error('GraphQL Errors:', json.errors);
@@ -68,17 +86,12 @@ export const fetcher = <TData, TVariables>(
           `GraphQL Error: ${json.errors.map((e: any) => e.message).join(', ')}`
         );
       }
-// Right before returning the data:
-console.log('Raw GraphQL Response:', {
-  fullData: json.data,
-  article: json.data?.article,
-  typename: json.data?.article?.__typename
-});
+
       return json.data;
     } catch (error) {
       console.error('Fetcher Error:', {
         message: error instanceof Error ? error.message : 'Unknown error',
-        error
+        error,
       });
       throw error;
     }
