@@ -17561,7 +17561,7 @@ export type GetJournalIssuesQueryVariables = Exact<{
 }>;
 
 
-export type GetJournalIssuesQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', title?: string | null, slug?: string | null, id: string, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem', slug?: string | null } | { __typename?: 'Book', slug?: string | null } | { __typename?: 'Collection', slug?: string | null } | { __typename?: 'JournalIssue', slug?: string | null } | { __typename?: 'MediaItem', slug?: string | null } | { __typename?: 'Page', slug?: string | null } | { __typename?: 'PdfItem', slug?: string | null } | { __typename?: 'Post', slug?: string | null } | { __typename?: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, language?: { __typename?: 'Language', code?: LanguageCodeEnum | null, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
+export type GetJournalIssuesQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, language?: { __typename?: 'Language', code?: LanguageCodeEnum | null, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
 
 export type GetJournalIssuesLatestQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -17719,7 +17719,7 @@ export const FragmentJournalIssueDetailsFragmentDoc = `
     fragment FragmentJournalIssueDetails on JournalIssueDetails {
   fieldGroupName
   publicationDate
-  articlesInJournal {
+  articlesInJournal(first: 20) {
     nodes {
       __typename
       slug
@@ -18748,29 +18748,7 @@ export const GetJournalIssuesDocument = `
   journalIssues(where: {language: $language}) {
     nodes {
       journalIssueDetails {
-        articlesInJournal(first: 20) {
-          nodes {
-            ... on Article {
-              articleDetails {
-                displayDate
-                displayOnFrontPage
-                fieldGroupName
-                publicationDate
-                source
-                subtitle
-                suppressDate
-                tableOfContentsTitle
-              }
-              title
-              __typename
-              slug
-              id
-            }
-            slug
-          }
-        }
-        fieldGroupName
-        publicationDate
+        ...FragmentJournalIssueDetails
       }
       slug
       title
@@ -18788,7 +18766,8 @@ export const GetJournalIssuesDocument = `
     }
   }
 }
-    ${FragmentFeaturedImageFragmentDoc}`;
+    ${FragmentJournalIssueDetailsFragmentDoc}
+${FragmentFeaturedImageFragmentDoc}`;
 
 export const useGetJournalIssuesQuery = <
       TData = GetJournalIssuesQuery,
