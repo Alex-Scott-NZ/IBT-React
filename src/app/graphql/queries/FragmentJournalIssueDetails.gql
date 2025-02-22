@@ -1,7 +1,7 @@
 fragment FragmentJournalIssueDetails on JournalIssueDetails {
   fieldGroupName
   publicationDate
-  articlesInJournal {
+  articlesInJournal(first: 20) {
     nodes {
       __typename
       slug

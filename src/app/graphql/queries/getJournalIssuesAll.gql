@@ -2,29 +2,7 @@ query GetJournalIssues($language: LanguageCodeFilterEnum!) {
   journalIssues(where: { language: $language }) {
     nodes {
       journalIssueDetails {
-        articlesInJournal(first: 20) {
-          nodes {
-            ... on Article {
-              articleDetails {
-                displayDate
-                displayOnFrontPage
-                fieldGroupName
-                publicationDate
-                source
-                subtitle
-                suppressDate
-                tableOfContentsTitle
-              }
-              title
-              __typename
-              slug
-              id
-            }
-            slug
-          }
-        }
-        fieldGroupName
-        publicationDate
+        ...FragmentJournalIssueDetails
       }
       slug
       title
