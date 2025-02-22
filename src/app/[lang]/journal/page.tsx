@@ -33,9 +33,9 @@ export default async function Page({
   const languageCode = params.lang.toUpperCase() as LanguageCodeFilterEnum;
   const journalIssuesData: GetJournalIssuesQuery = await serverFetch(
     useGetJournalIssuesQuery,
-    { 
-      variables: { language: languageCode},
-      next: { revalidate: 60 } 
+    {
+      variables: { language: languageCode },
+      next: { revalidate: 60 }
     }
   );
   const globalSettingsData: GetGlobalSettingsQuery = await serverFetch(
@@ -117,16 +117,17 @@ export default async function Page({
                   </div>
 
                   {featuredImage?.sourceUrl && (
-                    <div className="hidden md:block md:w-1/4">
+                    <div className="hidden md:block md:w-1/4 relative aspect-[2/3]">
                       <Image
                         src={featuredImage.sourceUrl}
                         alt={featuredImage.altText || issue.title || ''}
-                        layout="responsive"
-                        width={4}
-                        height={5}
+                        fill
                         className="object-cover rounded"
                         placeholder="blur"
-                        blurDataURL={featuredImage.thumbhash || fallbackSVG} 
+                        blurDataURL={featuredImage.thumbhash || fallbackSVG}
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
+                        quality={75} // Add quality for consistency
+                        priority // Add priority for above-the-fold images
                       />
                     </div>
                   )}
