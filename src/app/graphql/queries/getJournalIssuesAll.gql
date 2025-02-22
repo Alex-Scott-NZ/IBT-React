@@ -2,7 +2,7 @@ query GetJournalIssues($language: LanguageCodeFilterEnum!) {
   journalIssues(where: { language: $language }) {
     nodes {
       journalIssueDetails {
-        articlesInJournal {
+        articlesInJournal(first: 20) {
           nodes {
             ... on Article {
               articleDetails {

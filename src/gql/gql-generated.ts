@@ -3442,7 +3442,9 @@ export type CreateCategoryInput = {
   language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the category object to mutate */
   name: Scalars['String']['input'];
-  /** The ID of the category that should be set as the parent */
+  /** The database ID of the category that should be set as the parent. This field cannot be used in conjunction with parentId */
+  parentDatabaseId?: InputMaybe<Scalars['Int']['input']>;
+  /** The ID of the category that should be set as the parent. This field cannot be used in conjunction with parentDatabaseId */
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -3674,7 +3676,9 @@ export type CreatePlaceInput = {
   language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the place object to mutate */
   name: Scalars['String']['input'];
-  /** The ID of the place that should be set as the parent */
+  /** The database ID of the place that should be set as the parent. This field cannot be used in conjunction with parentId */
+  parentDatabaseId?: InputMaybe<Scalars['Int']['input']>;
+  /** The ID of the place that should be set as the parent. This field cannot be used in conjunction with parentDatabaseId */
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -3795,7 +3799,9 @@ export type CreateTopicInput = {
   language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the topic object to mutate */
   name: Scalars['String']['input'];
-  /** The ID of the topic that should be set as the parent */
+  /** The database ID of the topic that should be set as the parent. This field cannot be used in conjunction with parentId */
+  parentDatabaseId?: InputMaybe<Scalars['Int']['input']>;
+  /** The ID of the topic that should be set as the parent. This field cannot be used in conjunction with parentDatabaseId */
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -5272,6 +5278,8 @@ export type MediaDetails = {
   __typename?: 'MediaDetails';
   /** The filename of the mediaItem */
   file?: Maybe<Scalars['String']['output']>;
+  /** The path to the mediaItem relative to the uploads directory */
+  filePath?: Maybe<Scalars['String']['output']>;
   /** The height of the mediaItem */
   height?: Maybe<Scalars['Int']['output']>;
   /** Meta information associated with the mediaItem */
@@ -5334,6 +5342,10 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   enqueuedScripts?: Maybe<ContentNodeToEnqueuedScriptConnection>;
   /** Connection between the ContentNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
+  /** The filename of the mediaItem for the specified size (default size is full) */
+  file?: Maybe<Scalars['String']['output']>;
+  /** The path to the original file relative to the uploads directory */
+  filePath?: Maybe<Scalars['String']['output']>;
   /** The filesize in bytes of the resource */
   fileSize?: Maybe<Scalars['Int']['output']>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
@@ -5467,6 +5479,18 @@ export type MediaItemEnqueuedStylesheetsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** The mediaItem type */
+export type MediaItemFileArgs = {
+  size?: InputMaybe<MediaItemSizeEnum>;
+};
+
+
+/** The mediaItem type */
+export type MediaItemFilePathArgs = {
+  size?: InputMaybe<MediaItemSizeEnum>;
 };
 
 
@@ -5704,6 +5728,8 @@ export type MediaSize = {
   __typename?: 'MediaSize';
   /** The filename of the referenced size */
   file?: Maybe<Scalars['String']['output']>;
+  /** The path of the file for the referenced size (default size is full) */
+  filePath?: Maybe<Scalars['String']['output']>;
   /** The filesize of the resource */
   fileSize?: Maybe<Scalars['Int']['output']>;
   /** The height of the referenced size */
@@ -15362,7 +15388,9 @@ export type UpdateCategoryInput = {
   language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the category object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
-  /** The ID of the category that should be set as the parent */
+  /** The database ID of the category that should be set as the parent. This field cannot be used in conjunction with parentId */
+  parentDatabaseId?: InputMaybe<Scalars['Int']['input']>;
+  /** The ID of the category that should be set as the parent. This field cannot be used in conjunction with parentDatabaseId */
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -15616,7 +15644,9 @@ export type UpdatePlaceInput = {
   language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the place object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
-  /** The ID of the place that should be set as the parent */
+  /** The database ID of the place that should be set as the parent. This field cannot be used in conjunction with parentId */
+  parentDatabaseId?: InputMaybe<Scalars['Int']['input']>;
+  /** The ID of the place that should be set as the parent. This field cannot be used in conjunction with parentDatabaseId */
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -15806,7 +15836,9 @@ export type UpdateTopicInput = {
   language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the topic object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
-  /** The ID of the topic that should be set as the parent */
+  /** The database ID of the topic that should be set as the parent. This field cannot be used in conjunction with parentId */
+  parentDatabaseId?: InputMaybe<Scalars['Int']['input']>;
+  /** The ID of the topic that should be set as the parent. This field cannot be used in conjunction with parentDatabaseId */
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -17443,6 +17475,8 @@ export type FragmentAudioItemFragment = { __typename?: 'AudioItem', audioItemId:
 
 export type FragmentBookFragment = { __typename?: 'Book', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
 
+export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
+
 export type FragmentJournalIssueFragment = { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null };
 
 export type FragmentJournalIssueDetailsFragment = { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null };
@@ -17464,8 +17498,6 @@ export type FragmentTerms_Topic_Fragment = { __typename?: 'Topic', count?: numbe
 export type FragmentTermsFragment = FragmentTerms_Category_Fragment | FragmentTerms_Place_Fragment | FragmentTerms_PostFormat_Fragment | FragmentTerms_Tag_Fragment | FragmentTerms_Topic_Fragment;
 
 export type FragmentVideoItemFragment = { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { __typename?: 'VideoDetails', videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null };
-
-export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
 
 export type GetArticleByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -18716,7 +18748,7 @@ export const GetJournalIssuesDocument = `
   journalIssues(where: {language: $language}) {
     nodes {
       journalIssueDetails {
-        articlesInJournal {
+        articlesInJournal(first: 20) {
           nodes {
             ... on Article {
               articleDetails {
