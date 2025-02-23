@@ -25,7 +25,7 @@ const Header = ({ globalSettings, lang }: HeaderProps) => {
   return (
     <div className="w-full bg-custom-bg text-white">
       <div className="mx-auto max-w-[1108px] relative">
-        <header className="pt-2 print:pt-0">
+        <header className="pt-3 pb-3 print:pt-0">
           <div className="flex justify-between items-start">
             <div className="w-full md:w-1/2">
               <Link href={`/${lang}`} className="block">
