@@ -16,7 +16,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        port: ${{ secrets.PORT }}
+        port: 22
         script: |
           cd /home/saggitari/web/headless.saggitari.us/app/source
           ./deploy.sh
