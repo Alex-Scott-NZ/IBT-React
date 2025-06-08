@@ -12,6 +12,20 @@ const nextConfig = {
       test: /\.node$/,
       use: 'raw-loader',
     });
+    
+    // Fix for PDF.js canvas issue on server
+    if (!options.isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    } else {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        canvas: false,
+      };
+    }
+    
     return config;
   },
 };
