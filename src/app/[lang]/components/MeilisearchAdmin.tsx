@@ -2,8 +2,8 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Search, ChevronLeft, ChevronRight, Eye, Filter, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Search, ChevronLeft, ChevronRight, Eye, Filter, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import Image from 'next/image';
 
 interface RelatedItem {
@@ -67,6 +67,12 @@ interface SearchResponse {
   query: string;
 }
 
+interface RelatedContentFilter {
+  type: string;
+  items: Array<{ slug: string; title: string; count: number }>;
+  selectedItems: string[];
+}
+
 const MeilisearchAdmin: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
@@ -80,18 +86,236 @@ const MeilisearchAdmin: React.FC = () => {
   const [showSnippets, setShowSnippets] = useState(true);
   const [isReindexing, setIsReindexing] = useState(false);
   const [reindexStatus, setReindexStatus] = useState<string | null>(null);
+  const [searchTime, setSearchTime] = useState<number | null>(null);
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState({
     language: 'all',
-    hasRelatedPdf: 'all',
-    hasRelatedAudio: 'all',
-    hasRelatedVideo: 'all',
-    displayOnFrontPage: 'all'
+    displayOnFrontPage: 'all',
+    dateRange: 'all',
+    customDateFrom: '',
+    customDateTo: ''
   });
+  const [relatedContentFilters, setRelatedContentFilters] = useState<Record<string, string[]>>({});
+  const [categoryFilters, setCategoryFilters] = useState<Set<string>>(new Set());
 
   const limit = 10;
   const searchHost = process.env.NEXT_PUBLIC_MEILISEARCH_HOST || 'https://headless.saggitari.us/search-api';
   const searchKey = process.env.NEXT_PUBLIC_MEILISEARCH_SEARCH_KEY || 'd7d3be8f7e614fff7cdadb3041791b86a7c8f64e928531a2157ea943d7382442';
   const baseUrl = process.env.NEXT_PUBLIC_ROOT_URL || 'http://localhost:3000';
+
+  // Calculate available related content from current search results
+  const availableRelatedContent = useMemo(() => {
+    const contentMap: Record<string, Map<string, { title: string; count: number }>> = {
+      books: new Map(),
+      journals: new Map(),
+      collections: new Map(),
+      pdfs: new Map(),
+      audio: new Map(),
+      videos: new Map()
+    };
+
+    documents.forEach(doc => {
+      if (doc.relatedContent) {
+        // Books
+        doc.relatedContent.books?.forEach(book => {
+          const existing = contentMap.books.get(book.slug);
+          contentMap.books.set(book.slug, {
+            title: book.title || book.slug,
+            count: (existing?.count || 0) + 1
+          });
+        });
+
+        // Journals
+        doc.relatedContent.journals?.forEach(journal => {
+          const existing = contentMap.journals.get(journal.slug);
+          contentMap.journals.set(journal.slug, {
+            title: journal.title || journal.slug,
+            count: (existing?.count || 0) + 1
+          });
+        });
+
+        // Collections
+        doc.relatedContent.collections?.forEach(collection => {
+          const existing = contentMap.collections.get(collection.slug);
+          contentMap.collections.set(collection.slug, {
+            title: collection.title || collection.slug,
+            count: (existing?.count || 0) + 1
+          });
+        });
+
+        // PDFs
+        if (doc.hasRelatedPdf && doc.relatedContent.pdfs?.length > 0) {
+          doc.relatedContent.pdfs.forEach(pdf => {
+            const existing = contentMap.pdfs.get(pdf.slug);
+            contentMap.pdfs.set(pdf.slug, {
+              title: pdf.title || 'PDF',
+              count: (existing?.count || 0) + 1
+            });
+          });
+        }
+
+        // Audio
+        if (doc.hasRelatedAudio && doc.relatedContent.audio?.length > 0) {
+          doc.relatedContent.audio.forEach(audio => {
+            const existing = contentMap.audio.get(audio.slug);
+            contentMap.audio.set(audio.slug, {
+              title: audio.title || 'Audio',
+              count: (existing?.count || 0) + 1
+            });
+          });
+        }
+
+        // Videos
+        if (doc.hasRelatedVideo && doc.relatedContent.videos?.length > 0) {
+          doc.relatedContent.videos.forEach(video => {
+            const existing = contentMap.videos.get(video.slug);
+            contentMap.videos.set(video.slug, {
+              title: video.title || 'Video',
+              count: (existing?.count || 0) + 1
+            });
+          });
+        }
+      }
+    });
+
+    // Convert maps to arrays and filter out empty ones
+    const result: RelatedContentFilter[] = [];
+    
+    Object.entries(contentMap).forEach(([type, map]) => {
+      if (map.size > 0) {
+        const items = Array.from(map.entries())
+          .map(([slug, data]) => ({ slug, ...data }))
+          .sort((a, b) => b.count - a.count);
+        
+        result.push({
+          type,
+          items,
+          selectedItems: relatedContentFilters[type] || []
+        });
+      }
+    });
+
+    return result;
+  }, [documents, relatedContentFilters]);
+
+  // Calculate category counts
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    
+    documents.forEach(doc => {
+      if (doc.relatedContent) {
+        if (doc.relatedContent.books?.length > 0) counts.books = (counts.books || 0) + 1;
+        if (doc.relatedContent.journals?.length > 0) counts.journals = (counts.journals || 0) + 1;
+        if (doc.relatedContent.collections?.length > 0) counts.collections = (counts.collections || 0) + 1;
+        if (doc.hasRelatedPdf) counts.pdfs = (counts.pdfs || 0) + 1;
+        if (doc.hasRelatedAudio) counts.audio = (counts.audio || 0) + 1;
+        if (doc.hasRelatedVideo) counts.videos = (counts.videos || 0) + 1;
+      }
+    });
+    
+    return counts;
+  }, [documents]);
+
+  // Filter documents based on selected categories and specific items
+  const filteredDocuments = useMemo(() => {
+    let filtered = documents;
+
+// Filter by categories first
+if (categoryFilters.size > 0) {
+  filtered = filtered.filter(doc => {
+    // Convert Set to Array for iteration
+    for (const category of Array.from(categoryFilters)) {
+      if (category === 'books' && (!doc.relatedContent?.books || doc.relatedContent.books.length === 0)) return false;
+      if (category === 'journals' && (!doc.relatedContent?.journals || doc.relatedContent.journals.length === 0)) return false;
+      if (category === 'collections' && (!doc.relatedContent?.collections || doc.relatedContent.collections.length === 0)) return false;
+      if (category === 'pdfs' && !doc.hasRelatedPdf) return false;
+      if (category === 'audio' && !doc.hasRelatedAudio) return false;
+      if (category === 'videos' && !doc.hasRelatedVideo) return false;
+    }
+    return true;
+  });
+}
+
+    // Then filter by specific items if any
+    if (Object.keys(relatedContentFilters).length > 0) {
+      filtered = filtered.filter(doc => {
+        for (const [type, selectedSlugs] of Object.entries(relatedContentFilters)) {
+          if (selectedSlugs.length > 0 && doc.relatedContent) {
+            const relatedItems = doc.relatedContent[type as keyof RelatedContent] || [];
+            const hasSelectedItem = relatedItems.some(item => selectedSlugs.includes(item.slug));
+            if (!hasSelectedItem) return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    return filtered;
+  }, [documents, categoryFilters, relatedContentFilters]);
+
+  // Toggle category expansion
+  const toggleCategoryExpansion = (category: string) => {
+    setExpandedCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(category)) {
+        newSet.delete(category);
+      } else {
+        newSet.add(category);
+      }
+      return newSet;
+    });
+  };
+
+  // Toggle category filter
+  const toggleCategoryFilter = (category: string) => {
+    setCategoryFilters(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(category)) {
+        newSet.delete(category);
+        // Also clear specific item filters for this category
+        setRelatedContentFilters(prev => {
+          const { [category]: _, ...rest } = prev;
+          return rest;
+        });
+      } else {
+        newSet.add(category);
+      }
+      return newSet;
+    });
+  };
+
+  // Calculate date filter
+  const getDateFilter = () => {
+    const now = new Date();
+    let dateFilter = '';
+    
+    switch (filters.dateRange) {
+      case 'week':
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        dateFilter = `publicationDate >= ${weekAgo.getTime()}`;
+        break;
+      case 'month':
+        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        dateFilter = `publicationDate >= ${monthAgo.getTime()}`;
+        break;
+      case 'year':
+        const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+        dateFilter = `publicationDate >= ${yearAgo.getTime()}`;
+        break;
+      case 'custom':
+        if (filters.customDateFrom) {
+          const fromDate = new Date(filters.customDateFrom).getTime();
+          dateFilter = `publicationDate >= ${fromDate}`;
+        }
+        if (filters.customDateTo) {
+          const toDate = new Date(filters.customDateTo).getTime();
+          dateFilter += dateFilter ? ` AND publicationDate <= ${toDate}` : `publicationDate <= ${toDate}`;
+        }
+        break;
+    }
+    
+    return dateFilter;
+  };
 
   // Fetch documents
   const fetchDocuments = async () => {
@@ -99,15 +323,16 @@ const MeilisearchAdmin: React.FC = () => {
     try {
       const filterArray: string[] = [];
       if (filters.language !== 'all') filterArray.push(`language = '${filters.language}'`);
-      if (filters.hasRelatedPdf !== 'all') filterArray.push(`hasRelatedPdf = ${filters.hasRelatedPdf}`);
-      if (filters.hasRelatedAudio !== 'all') filterArray.push(`hasRelatedAudio = ${filters.hasRelatedAudio}`);
-      if (filters.hasRelatedVideo !== 'all') filterArray.push(`hasRelatedVideo = ${filters.hasRelatedVideo}`);
       if (filters.displayOnFrontPage !== 'all') filterArray.push(`displayOnFrontPage = ${filters.displayOnFrontPage}`);
+      
+      // Add date filter
+      const dateFilter = getDateFilter();
+      if (dateFilter) filterArray.push(dateFilter);
       
       const body: any = {
         q: searchQuery,
-        limit: limit,
-        offset: currentOffset,
+        limit: 1000, // Get more results to filter client-side
+        offset: 0,
         filter: filterArray.length > 0 ? filterArray.join(' AND ') : undefined,
         sort: ['publicationDate:desc']
       };
@@ -116,7 +341,7 @@ const MeilisearchAdmin: React.FC = () => {
       if (searchQuery) {
         body.attributesToHighlight = ['title', 'subtitle', 'content'];
         body.attributesToCrop = ['content'];
-        body.cropLength = 200; // Show 200 characters around the match
+        body.cropLength = 200;
         body.highlightPreTag = '<mark class="bg-yellow-200">';
         body.highlightPostTag = '</mark>';
       }
@@ -133,6 +358,12 @@ const MeilisearchAdmin: React.FC = () => {
       const data: SearchResponse = await response.json();
       setDocuments(data.hits || []);
       setTotalHits(data.estimatedTotalHits || 0);
+      setSearchTime(data.processingTimeMs || null);
+      
+      // Reset filters when new search is performed
+      setRelatedContentFilters({});
+      setCategoryFilters(new Set());
+      setExpandedCategories(new Set());
     } catch (error) {
       console.error('Error fetching documents:', error);
     }
@@ -177,7 +408,6 @@ const MeilisearchAdmin: React.FC = () => {
       if (data.success) {
         setReindexStatus(`✅ Reindexing completed! Total: ${data.total}, Indexed: ${data.indexed}`);
         
-        // Refresh the stats after a delay
         setTimeout(() => {
           fetchIndexStats();
           fetchDocuments();
@@ -191,16 +421,48 @@ const MeilisearchAdmin: React.FC = () => {
     } finally {
       setIsReindexing(false);
       
-      // Clear status message after 10 seconds
       setTimeout(() => {
         setReindexStatus(null);
       }, 10000);
     }
   };
 
+  // Handle related content filter toggle
+  const toggleRelatedContentFilter = (type: string, slug: string) => {
+    setRelatedContentFilters(prev => {
+      const currentFilters = prev[type] || [];
+      const newFilters = currentFilters.includes(slug)
+        ? currentFilters.filter(s => s !== slug)
+        : [...currentFilters, slug];
+      
+      if (newFilters.length === 0) {
+        const { [type]: _, ...rest } = prev;
+        return rest;
+      }
+      
+      return { ...prev, [type]: newFilters };
+    });
+  };
+
+  // Toggle all items in a category
+  const toggleAllInCategory = (type: string, items: Array<{ slug: string }>) => {
+    setRelatedContentFilters(prev => {
+      const currentFilters = prev[type] || [];
+      const allSlugs = items.map(item => item.slug);
+      const allSelected = allSlugs.every(slug => currentFilters.includes(slug));
+      
+      if (allSelected) {
+        const { [type]: _, ...rest } = prev;
+        return rest;
+      } else {
+        return { ...prev, [type]: allSlugs };
+      }
+    });
+  };
+
   useEffect(() => {
     fetchDocuments();
-  }, [currentOffset, filters]);
+  }, [filters]);
 
   useEffect(() => {
     fetchIndexStats();
@@ -217,15 +479,20 @@ const MeilisearchAdmin: React.FC = () => {
     setCurrentOffset(0);
   };
 
-  const totalPages = Math.ceil(totalHits / limit);
+  // Pagination for filtered documents
+  const paginatedDocuments = filteredDocuments.slice(currentOffset, currentOffset + limit);
+  const totalFilteredHits = filteredDocuments.length;
+  const totalPages = Math.ceil(totalFilteredHits / limit);
   const currentPage = Math.floor(currentOffset / limit) + 1;
 
-  // Helper to build article URL
+  // Count documents with related content
+  const docsWithRelatedContent = documents.filter(d => d.relatedItemsCount > 0).length;
+
+  // Helper functions
   const getArticleUrl = (uri: string) => {
     return `${baseUrl}${uri}`;
   };
 
-  // Helper to build related content URLs
   const getRelatedUrl = (type: string, slug: string, lang: string) => {
     const typeMap: Record<string, string> = {
       'books': 'book',
@@ -239,45 +506,36 @@ const MeilisearchAdmin: React.FC = () => {
     return `${baseUrl}/${lang}/${typeMap[type] || type}/${slug}`;
   };
 
-  // Helper to render highlighted text
   const renderHighlightedText = (text: string | undefined) => {
     if (!text) return null;
     return <span dangerouslySetInnerHTML={{ __html: text }} />;
   };
 
+  const getIcon = (type: string) => {
+    switch (type) {
+      case 'books': return <Book size={16} />;
+      case 'journals': return <FileArchive size={16} />;
+      case 'collections': return <Folder size={16} />;
+      case 'pdfs': return <FileText size={16} />;
+      case 'audio': return <Volume2 size={16} />;
+      case 'videos': return <Video size={16} />;
+      default: return null;
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <h1 className="text-3xl font-bold mb-6">Meilisearch Admin Browser</h1>
-        
-        {/* Stats */}
-        {indexStats && (
-          <div className="grid grid-cols-4 gap-4 mb-6">
-            <div className="bg-blue-50 p-4 rounded">
-              <div className="text-2xl font-bold">{indexStats.numberOfDocuments}</div>
-              <div className="text-gray-600">Total Documents</div>
-            </div>
-            <div className="bg-green-50 p-4 rounded">
-              <div className="text-2xl font-bold">{Object.keys(indexStats.fieldDistribution || {}).length}</div>
-              <div className="text-gray-600">Total Fields</div>
-            </div>
-            <div className="bg-purple-50 p-4 rounded">
-              <div className="text-2xl font-bold">{totalHits}</div>
-              <div className="text-gray-600">Search Results</div>
-            </div>
-            <div className="bg-yellow-50 p-4 rounded">
-              <div className="text-2xl font-bold">{documents.filter(d => d.relatedItemsCount > 0).length}</div>
-              <div className="text-gray-600">With Related Content</div>
-            </div>
-          </div>
-        )}
+        <h1 className="text-3xl font-bold mb-6">
+          IBT Admin Search {indexStats && `- ${indexStats.numberOfDocuments} Articles indexed`}
+        </h1>
 
         {/* Reindex Section */}
         <div className="mb-6 p-4 bg-gray-50 rounded-lg">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold">Index Management</h2>
-              <p className="text-sm text-gray-600">Last indexed: {indexStats?.numberOfDocuments || 0} documents</p>
+              <p className="text-sm text-gray-600">Reindex all articles from GraphQL source</p>
             </div>
             <button
               onClick={handleReindex}
@@ -305,7 +563,7 @@ const MeilisearchAdmin: React.FC = () => {
         </div>
 
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="mb-6">
+        <form onSubmit={handleSearch} className="mb-2">
           <div className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 text-gray-400" size={20} />
@@ -350,7 +608,109 @@ const MeilisearchAdmin: React.FC = () => {
           </div>
         </form>
 
-        {/* Filters */}
+        {/* Results Summary Box */}
+        {!loading && (
+          <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+            <div className="text-lg font-semibold text-blue-900">
+              Found {totalHits} results
+              {searchQuery && <span> for "{searchQuery}"</span>}
+              {searchTime !== null && <span className="text-sm font-normal"> in {searchTime}ms</span>}
+            </div>
+            {docsWithRelatedContent > 0 && (
+              <div className="text-sm text-blue-700 mt-1">
+                {docsWithRelatedContent} with related content
+              </div>
+            )}
+            {(categoryFilters.size > 0 || Object.keys(relatedContentFilters).length > 0) && (
+              <div className="text-sm text-blue-700 mt-1">
+                Showing {totalFilteredHits} filtered results
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Related Content Filters - Simplified with Accordions */}
+        {Object.keys(categoryCounts).length > 0 && (
+          <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+            <h3 className="font-semibold mb-3">Filter by Related Content</h3>
+            
+            {/* Category Level Filters */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {Object.entries(categoryCounts).map(([type, count]) => (
+                <button
+                  key={type}
+                  onClick={() => toggleCategoryFilter(type)}
+                  className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm transition-colors ${
+                    categoryFilters.has(type)
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  {getIcon(type)}
+                  <span className="capitalize">{type}</span>
+                  <span className="font-semibold">({count})</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Detailed Filters - Only show for selected categories */}
+            {availableRelatedContent
+              .filter(({ type }) => categoryFilters.has(type))
+              .map(({ type, items, selectedItems }) => {
+                const isExpanded = expandedCategories.has(type);
+                const allSelected = items.every(item => selectedItems.includes(item.slug));
+                
+                return (
+                  <div key={type} className="border rounded-lg mb-2 bg-white">
+                    <div className="p-3 flex items-center justify-between">
+                      <button
+                        onClick={() => toggleCategoryExpansion(type)}
+                        className="flex items-center gap-2 flex-1 text-left"
+                      >
+                        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        <span className="flex items-center gap-1 font-medium capitalize">
+                          {getIcon(type)} {type} Details
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          ({items.length} unique items)
+                        </span>
+                      </button>
+                      {isExpanded && (
+                        <button
+                          onClick={() => toggleAllInCategory(type, items)}
+                          className="text-sm text-blue-600 hover:underline"
+                        >
+                          {allSelected ? 'Deselect All' : 'Select All'}
+                        </button>
+                      )}
+                    </div>
+                    
+                    {isExpanded && (
+                      <div className="border-t p-3 max-h-60 overflow-y-auto">
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          {items.map(item => (
+                            <label key={item.slug} className="flex items-start gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                              <input
+                                type="checkbox"
+                                checked={selectedItems.includes(item.slug)}
+                                onChange={() => toggleRelatedContentFilter(type, item.slug)}
+                                className="mt-0.5"
+                              />
+                              <span className="flex-1">
+                                {item.title} <span className="text-gray-500">({item.count})</span>
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+          </div>
+        )}
+
+        {/* Standard Filters */}
         {showFilters && (
           <div className="mb-6 p-4 bg-gray-50 rounded-lg">
             <div className="grid grid-cols-2 gap-6">
@@ -374,36 +734,50 @@ const MeilisearchAdmin: React.FC = () => {
                 </div>
               </div>
 
-              {/* Media Filters */}
+              {/* Date Range Filter */}
               <div>
-                <label className="block text-sm font-medium mb-2">Media Types</label>
+                <label className="flex text-sm font-medium mb-2 items-center gap-1">
+                  <Calendar size={16} /> Date Range
+                </label>
                 <div className="space-y-2">
                   {[
-                    { key: 'hasRelatedPdf', label: 'Has PDF', icon: <FileText size={16} /> },
-                    { key: 'hasRelatedAudio', label: 'Has Audio', icon: <Volume2 size={16} /> },
-                    { key: 'hasRelatedVideo', label: 'Has Video', icon: <Video size={16} /> }
-                  ].map(({ key, label, icon }) => (
-                    <div key={key}>
-                      <span className="flex items-center gap-1 text-sm font-medium mb-1">
-                        {icon} {label}
-                      </span>
-                      <div className="flex gap-4 ml-5">
-                        {['all', 'true', 'false'].map(value => (
-                          <label key={value} className="flex items-center">
-                            <input
-                              type="radio"
-                              name={key}
-                              value={value}
-                              checked={filters[key as keyof typeof filters] === value}
-                              onChange={(e) => handleFilterChange(key, e.target.value)}
-                              className="mr-1"
-                            />
-                            <span className="text-sm">{value === 'all' ? 'All' : value === 'true' ? 'Yes' : 'No'}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
+                    { value: 'all', label: 'All Time' },
+                    { value: 'week', label: 'Last Week' },
+                    { value: 'month', label: 'Last Month' },
+                    { value: 'year', label: 'Last Year' },
+                    { value: 'custom', label: 'Custom Range' }
+                  ].map(option => (
+                    <label key={option.value} className="flex items-center">
+                      <input
+                        type="radio"
+                        name="dateRange"
+                        value={option.value}
+                        checked={filters.dateRange === option.value}
+                        onChange={(e) => handleFilterChange('dateRange', e.target.value)}
+                        className="mr-2"
+                      />
+                      <span>{option.label}</span>
+                    </label>
                   ))}
+                  
+                  {filters.dateRange === 'custom' && (
+                    <div className="ml-6 space-y-2 mt-2">
+                      <input
+                        type="date"
+                        value={filters.customDateFrom}
+                        onChange={(e) => handleFilterChange('customDateFrom', e.target.value)}
+                        className="px-3 py-1 border rounded"
+                        placeholder="From"
+                      />
+                      <input
+                        type="date"
+                        value={filters.customDateTo}
+                        onChange={(e) => handleFilterChange('customDateTo', e.target.value)}
+                        className="px-3 py-1 border rounded ml-2"
+                        placeholder="To"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -436,7 +810,7 @@ const MeilisearchAdmin: React.FC = () => {
         ) : (
           <>
             <div className="space-y-4">
-              {documents.map((doc) => (
+              {paginatedDocuments.map((doc) => (
                 <div key={doc.id} className="border rounded-lg p-4 hover:bg-gray-50">
                   <div className="flex gap-4">
                     {/* Featured Image */}
@@ -522,7 +896,7 @@ const MeilisearchAdmin: React.FC = () => {
                                         href={getRelatedUrl('books', book.slug, doc.language)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="block ml-5 text-blue-600 hover:underline"
+                                        className="ml-5 text-blue-600 hover:underline"
                                       >
                                         {book.title || book.slug}
                                       </a>
@@ -538,7 +912,7 @@ const MeilisearchAdmin: React.FC = () => {
                                         href={getRelatedUrl('collections', collection.slug, doc.language)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="block ml-5 text-blue-600 hover:underline"
+                                        className="ml-5 text-blue-600 hover:underline"
                                       >
                                         {collection.slug}
                                       </a>
@@ -554,7 +928,7 @@ const MeilisearchAdmin: React.FC = () => {
                                         href={getRelatedUrl('journals', journal.slug, doc.language)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="block ml-5 text-blue-600 hover:underline"
+                                        className="ml-5 text-blue-600 hover:underline"
                                       >
                                         {journal.title || journal.slug}
                                       </a>
@@ -570,7 +944,7 @@ const MeilisearchAdmin: React.FC = () => {
                                         href={getRelatedUrl('articles', article.slug, doc.language)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="block ml-5 text-blue-600 hover:underline"
+                                        className="ml-5 text-blue-600 hover:underline"
                                       >
                                         {article.title || article.slug}
                                       </a>
@@ -616,12 +990,12 @@ const MeilisearchAdmin: React.FC = () => {
               </button>
               
               <span className="text-gray-600">
-                Page {currentPage} of {totalPages} ({totalHits} total)
+                Page {currentPage} of {totalPages} ({totalFilteredHits} results)
               </span>
               
               <button
                 onClick={() => setCurrentOffset(currentOffset + limit)}
-                disabled={currentOffset + limit >= totalHits}
+                disabled={currentOffset + limit >= totalFilteredHits}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
               >
                 Next
