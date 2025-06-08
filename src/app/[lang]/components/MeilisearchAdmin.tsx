@@ -5,6 +5,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Search, ChevronLeft, ChevronRight, Eye, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp, Globe, Home, Filter, X } from 'lucide-react';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 interface RelatedItem {
   id: string;
@@ -100,6 +101,9 @@ const JsonModal: React.FC<{ doc: Document | null; onClose: () => void }> = ({ do
 };
 
 const MeilisearchAdmin: React.FC = () => {
+  const params = useParams();
+  const currentLang = params?.lang as string || 'en';
+  
   const [documents, setDocuments] = useState<Document[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -116,8 +120,8 @@ const MeilisearchAdmin: React.FC = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
-    language: 'all',
-    displayOnFrontPage: 'all',
+    language: currentLang, // Default to current language
+    displayOnFrontPage: 'true', // Default to showing front page articles
     dateRange: 'all',
     customDateFrom: '',
     customDateTo: ''
@@ -566,19 +570,39 @@ const MeilisearchAdmin: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <h1 className="text-3xl font-bold mb-6">
-          IBT Admin Search {indexStats && `- ${indexStats.numberOfDocuments} Articles indexed`}
-        </h1>
-
-        {/* Reindex Section - Light Yellow */}
-        <div className="mb-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold">Index Management</h2>
-              <p className="text-sm text-gray-600">Reindex all articles from GraphQL source</p>
+    <div className="max-w-7xl mx-auto p-4">
+      {/* Header Container - All search controls */}
+      <div className="bg-white rounded-lg shadow-lg p-5 mb-6">
+        {/* Title and Controls on same line */}
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-bold">
+            IBT Admin Search {indexStats && `- ${indexStats.numberOfDocuments} Articles indexed`}
+          </h1>
+          
+          <div className="flex items-center gap-3">
+            {/* Show Options */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowImages(!showImages)}
+                className={`px-3 py-1 rounded-full text-sm flex items-center gap-1 transition-colors ${
+                  showImages ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                <ImageIcon size={16} />
+                Images
+              </button>
+              <button
+                onClick={() => setShowSnippets(!showSnippets)}
+                className={`px-3 py-1 rounded-full text-sm flex items-center gap-1 transition-colors ${
+                  showSnippets ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                <FileText size={16} />
+                Snippets
+              </button>
             </div>
+            
+            {/* Reindex Button */}
             <button
               onClick={handleReindex}
               disabled={isReindexing}
@@ -592,20 +616,21 @@ const MeilisearchAdmin: React.FC = () => {
               {isReindexing ? 'Reindexing...' : 'Reindex Articles'}
             </button>
           </div>
-          
-          {reindexStatus && (
-            <div className={`mt-3 p-3 rounded text-sm ${
-              reindexStatus.includes('✅') ? 'bg-green-100 text-green-800' : 
-              reindexStatus.includes('❌') ? 'bg-red-100 text-red-800' : 
-              'bg-blue-100 text-blue-800'
-            }`}>
-              {reindexStatus}
-            </div>
-          )}
         </div>
 
+        {/* Reindex Status Message */}
+        {reindexStatus && (
+          <div className={`mb-3 p-2 rounded text-sm ${
+            reindexStatus.includes('✅') ? 'bg-green-100 text-green-800' : 
+            reindexStatus.includes('❌') ? 'bg-red-100 text-red-800' : 
+            'bg-blue-100 text-blue-800'
+          }`}>
+            {reindexStatus}
+          </div>
+        )}
+
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="mb-4">
+        <form onSubmit={handleSearch} className="mb-3">
           <div className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 text-gray-400" size={20} />
@@ -626,20 +651,20 @@ const MeilisearchAdmin: React.FC = () => {
           </div>
         </form>
 
-        {/* Results Summary Box - Fixed height with all info on one line */}
-        <div className="mb-4 p-4 bg-blue-100 rounded-lg h-[80px] flex items-center">
+        {/* Results Summary Box - Reduced height */}
+        <div className="mb-3 p-3 bg-blue-100 rounded-lg">
           {loading ? (
-            <div className="text-lg font-semibold text-blue-900">Searching...</div>
+            <div className="text-base font-semibold text-blue-900">Searching...</div>
           ) : (
-            <div className="w-full">
-              <div className="text-lg font-semibold text-blue-900">
+            <div>
+              <div className="text-base font-semibold text-blue-900">
                 Found {totalHits} results
                 {searchQuery && <span> for &quot;{searchQuery}&quot;</span>}
                 {docsWithRelatedContent > 0 && <span> ({docsWithRelatedContent} with related content)</span>}
                 {searchTime !== null && <span className="text-sm font-normal"> in {searchTime}ms</span>}
               </div>
               {(categoryFilters.size > 0 || Object.keys(relatedContentFilters).length > 0) && (
-                <div className="text-sm text-blue-700 mt-1">
+                <div className="text-sm text-blue-700">
                   Showing {totalFilteredHits} filtered results
                 </div>
               )}
@@ -648,7 +673,7 @@ const MeilisearchAdmin: React.FC = () => {
         </div>
 
         {/* Filters Dropdown */}
-        <div className="mb-4">
+        <div>
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 font-medium"
@@ -856,30 +881,10 @@ const MeilisearchAdmin: React.FC = () => {
             </div>
           )}
         </div>
+      </div>
 
-        {/* Show Options - Always visible above results */}
-        <div className="mb-4 flex gap-2">
-          <span className="text-sm font-medium text-gray-700 flex items-center">Show:</span>
-          <button
-            onClick={() => setShowImages(!showImages)}
-            className={`px-3 py-1 rounded-full text-sm flex items-center gap-1 transition-colors ${
-              showImages ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            <ImageIcon size={16} />
-            Images
-          </button>
-          <button
-            onClick={() => setShowSnippets(!showSnippets)}
-            className={`px-3 py-1 rounded-full text-sm flex items-center gap-1 transition-colors ${
-              showSnippets ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            <FileText size={16} />
-            Snippets
-          </button>
-        </div>
-
+      {/* Results Container - Separate from header */}
+      <div className="bg-gray-50 rounded-lg shadow-lg p-6">
         {/* Results */}
         {loading ? (
           <div className="text-center py-8">Loading...</div>
@@ -887,7 +892,7 @@ const MeilisearchAdmin: React.FC = () => {
           <>
             <div className="space-y-4">
               {paginatedDocuments.map((doc) => (
-                <div key={doc.id} className="bg-gray-200 border-2 border-gray-300 rounded-lg p-6 hover:border-gray-400 transition-colors">
+                <div key={doc.id} className="bg-white border border-gray-300 rounded-lg p-6 hover:border-gray-400 transition-colors shadow-sm">
                   <div className="flex gap-6">
                     {/* Main Content */}
                     <div className="flex-1">
@@ -913,7 +918,7 @@ const MeilisearchAdmin: React.FC = () => {
                       
                       {/* Search Snippet */}
                       {showSnippets && searchQuery && doc._formatted?.content && (
-                        <div className="mb-3 p-3 bg-white rounded border border-gray-200 text-sm">
+                        <div className="mb-3 p-3 bg-gray-50 rounded border border-gray-200 text-sm">
                           <div className="text-gray-700 italic">
                             ...{renderHighlightedText(doc._formatted.content)}...
                           </div>
@@ -950,7 +955,7 @@ const MeilisearchAdmin: React.FC = () => {
 
                       {/* Related Content - Clearly part of this result */}
                       {doc.relatedContent && doc.relatedItemsCount > 0 && (
-                        <div className="p-4 bg-white rounded-lg border border-gray-300">
+                        <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                           <div className="font-medium mb-2 text-gray-700">Related Content:</div>
                           <div className="grid grid-cols-2 gap-3 text-sm">
                             {doc.relatedContent.books?.length > 0 && (
