@@ -110,6 +110,7 @@ const MeilisearchAdmin: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [currentOffset, setCurrentOffset] = useState(0);
   const [totalHits, setTotalHits] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -142,6 +143,16 @@ const MeilisearchAdmin: React.FC = () => {
   
   // All possible content types (always show these)
   const allContentTypes = ['books', 'journals', 'collections', 'pdfs', 'audio', 'videos'];
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setCurrentOffset(0); // Reset to first page when searching
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Scroll to top of results function
   const scrollToResults = () => {
@@ -386,7 +397,7 @@ const MeilisearchAdmin: React.FC = () => {
       if (dateFilter) filterArray.push(dateFilter);
       
       const body: any = {
-        q: searchQuery,
+        q: debouncedSearchQuery, // Use debounced search query
         limit: 1000, // Get more results to filter client-side
         offset: 0,
         filter: filterArray.length > 0 ? filterArray.join(' AND ') : undefined,
@@ -394,7 +405,7 @@ const MeilisearchAdmin: React.FC = () => {
       };
 
       // Add highlighting and cropping when there's a search query
-      if (searchQuery) {
+      if (debouncedSearchQuery) {
         body.attributesToHighlight = ['title', 'subtitle', 'content'];
         body.attributesToCrop = ['content'];
         body.cropLength = 200;
@@ -424,7 +435,7 @@ const MeilisearchAdmin: React.FC = () => {
       console.error('Error fetching documents:', error);
     }
     setLoading(false);
-  }, [searchQuery, filters.language, filters.displayOnFrontPage, getDateFilter, searchHost, searchKey]);
+  }, [debouncedSearchQuery, filters.language, filters.displayOnFrontPage, getDateFilter, searchHost, searchKey]);
 
   // Fetch index stats - wrapped in useCallback
   const fetchIndexStats = useCallback(async () => {
@@ -527,7 +538,7 @@ const MeilisearchAdmin: React.FC = () => {
 
   useEffect(() => {
     fetchDocuments();
-  }, [filters, fetchDocuments]);
+  }, [filters, debouncedSearchQuery, fetchDocuments]);
 
   useEffect(() => {
     fetchIndexStats();
@@ -535,8 +546,8 @@ const MeilisearchAdmin: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setDebouncedSearchQuery(searchQuery); // Immediately search without waiting
     setCurrentOffset(0);
-    fetchDocuments();
   };
 
   const handleFilterChange = (filterName: string, value: string) => {
@@ -665,10 +676,17 @@ const MeilisearchAdmin: React.FC = () => {
               type="submit"
               className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
             >
-              Search
+              Search Now
             </button>
           </div>
         </form>
+
+        {/* Search pending indicator */}
+        {searchQuery !== debouncedSearchQuery && searchQuery !== '' && (
+          <div className="text-sm text-blue-600 mb-2">
+            Will search for &quot;{searchQuery}&quot; when you stop typing...
+          </div>
+        )}
 
         {/* Results Summary Box - Reduced height */}
         <div className="mb-3 p-3 bg-blue-100 rounded-lg">
@@ -678,7 +696,7 @@ const MeilisearchAdmin: React.FC = () => {
             <div>
               <div className="text-base font-semibold text-blue-900">
                 Found {totalHits} results
-                {searchQuery && <span> for &quot;{searchQuery}&quot;</span>}
+                {debouncedSearchQuery && <span> for &quot;{debouncedSearchQuery}&quot;</span>}
                 {docsWithRelatedContent > 0 && <span> ({docsWithRelatedContent} with related content)</span>}
                 {searchTime !== null && <span className="text-sm font-normal"> in {searchTime}ms</span>}
               </div>
@@ -903,7 +921,7 @@ const MeilisearchAdmin: React.FC = () => {
       </div>
 
       {/* Results Container - Separate from header */}
-      <div ref={resultsContainerRef} className="bg-gray-50 rounded-lg shadow-lg p-6">
+      <div ref={resultsContainerRef} className="bg-gray-100 rounded-lg shadow-lg p-6">
         {/* Results */}
         {loading ? (
           <div className="text-center py-8">Loading...</div>
@@ -936,8 +954,8 @@ const MeilisearchAdmin: React.FC = () => {
                       </div>
                       
                       {/* Search Snippet */}
-                      {showSnippets && searchQuery && doc._formatted?.content && (
-                        <div className="mb-3 p-3 bg-gray-50 rounded border border-gray-200 text-sm">
+                      {showSnippets && debouncedSearchQuery && doc._formatted?.content && (
+                        <div className="mb-3 p-3 bg-gray-100 rounded border border-gray-200 text-sm">
                           <div className="text-gray-700 italic">
                             ...{renderHighlightedText(doc._formatted.content)}...
                           </div>
@@ -974,7 +992,7 @@ const MeilisearchAdmin: React.FC = () => {
 
                       {/* Related Content - Clearly part of this result */}
                       {doc.relatedContent && doc.relatedItemsCount > 0 && (
-                        <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div className="p-4 bg-gray-100 rounded-lg border border-gray-200">
                           <div className="font-medium mb-2 text-gray-700">Related Content:</div>
                           <div className="grid grid-cols-2 gap-3 text-sm">
                             {doc.relatedContent.books?.length > 0 && (
