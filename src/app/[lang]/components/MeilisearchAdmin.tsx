@@ -2,8 +2,8 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Search, ChevronLeft, ChevronRight, Eye, Filter, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Search, ChevronLeft, ChevronRight, Eye, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp, Globe, Home, Filter, X } from 'lucide-react';
 import Image from 'next/image';
 
 interface RelatedItem {
@@ -73,6 +73,32 @@ interface RelatedContentFilter {
   selectedItems: string[];
 }
 
+// JSON Modal Component with proper text wrapping
+const JsonModal: React.FC<{ doc: Document | null; onClose: () => void }> = ({ doc, onClose }) => {
+  if (!doc) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col">
+        <div className="flex justify-between items-center p-4 border-b">
+          <h3 className="text-lg font-semibold">JSON Data - {doc.title}</h3>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <div className="flex-1 overflow-auto p-4">
+          <pre className="text-xs whitespace-pre-wrap break-words">
+            {JSON.stringify(doc, null, 2)}
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MeilisearchAdmin: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
@@ -81,13 +107,14 @@ const MeilisearchAdmin: React.FC = () => {
   const [totalHits, setTotalHits] = useState(0);
   const [loading, setLoading] = useState(false);
   const [indexStats, setIndexStats] = useState<IndexStats | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
   const [showImages, setShowImages] = useState(true);
   const [showSnippets, setShowSnippets] = useState(true);
   const [isReindexing, setIsReindexing] = useState(false);
   const [reindexStatus, setReindexStatus] = useState<string | null>(null);
   const [searchTime, setSearchTime] = useState<number | null>(null);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     language: 'all',
     displayOnFrontPage: 'all',
@@ -102,6 +129,12 @@ const MeilisearchAdmin: React.FC = () => {
   const searchHost = process.env.NEXT_PUBLIC_MEILISEARCH_HOST || 'https://headless.saggitari.us/search-api';
   const searchKey = process.env.NEXT_PUBLIC_MEILISEARCH_SEARCH_KEY || 'd7d3be8f7e614fff7cdadb3041791b86a7c8f64e928531a2157ea943d7382442';
   const baseUrl = process.env.NEXT_PUBLIC_ROOT_URL || 'http://localhost:3000';
+
+  // Available languages (always show these)
+  const availableLanguages = ['en', 'fr', 'es', 'de']; // Add more as needed
+  
+  // All possible content types (always show these)
+  const allContentTypes = ['books', 'journals', 'collections', 'pdfs', 'audio', 'videos'];
 
   // Calculate available related content from current search results
   const availableRelatedContent = useMemo(() => {
@@ -216,25 +249,34 @@ const MeilisearchAdmin: React.FC = () => {
     return counts;
   }, [documents]);
 
+  // Calculate language counts
+  const languageCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    documents.forEach(doc => {
+      counts[doc.language] = (counts[doc.language] || 0) + 1;
+    });
+    return counts;
+  }, [documents]);
+
   // Filter documents based on selected categories and specific items
   const filteredDocuments = useMemo(() => {
     let filtered = documents;
 
-// Filter by categories first
-if (categoryFilters.size > 0) {
-  filtered = filtered.filter(doc => {
-    // Convert Set to Array for iteration
-    for (const category of Array.from(categoryFilters)) {
-      if (category === 'books' && (!doc.relatedContent?.books || doc.relatedContent.books.length === 0)) return false;
-      if (category === 'journals' && (!doc.relatedContent?.journals || doc.relatedContent.journals.length === 0)) return false;
-      if (category === 'collections' && (!doc.relatedContent?.collections || doc.relatedContent.collections.length === 0)) return false;
-      if (category === 'pdfs' && !doc.hasRelatedPdf) return false;
-      if (category === 'audio' && !doc.hasRelatedAudio) return false;
-      if (category === 'videos' && !doc.hasRelatedVideo) return false;
+    // Filter by categories first
+    if (categoryFilters.size > 0) {
+      filtered = filtered.filter(doc => {
+        // Convert Set to Array for iteration
+        for (const category of Array.from(categoryFilters)) {
+          if (category === 'books' && (!doc.relatedContent?.books || doc.relatedContent.books.length === 0)) return false;
+          if (category === 'journals' && (!doc.relatedContent?.journals || doc.relatedContent.journals.length === 0)) return false;
+          if (category === 'collections' && (!doc.relatedContent?.collections || doc.relatedContent.collections.length === 0)) return false;
+          if (category === 'pdfs' && !doc.hasRelatedPdf) return false;
+          if (category === 'audio' && !doc.hasRelatedAudio) return false;
+          if (category === 'videos' && !doc.hasRelatedVideo) return false;
+        }
+        return true;
+      });
     }
-    return true;
-  });
-}
 
     // Then filter by specific items if any
     if (Object.keys(relatedContentFilters).length > 0) {
@@ -285,7 +327,7 @@ if (categoryFilters.size > 0) {
   };
 
   // Calculate date filter
-  const getDateFilter = () => {
+  const getDateFilter = useCallback(() => {
     const now = new Date();
     let dateFilter = '';
     
@@ -315,10 +357,10 @@ if (categoryFilters.size > 0) {
     }
     
     return dateFilter;
-  };
+  }, [filters.dateRange, filters.customDateFrom, filters.customDateTo]);
 
-  // Fetch documents
-  const fetchDocuments = async () => {
+  // Fetch documents - wrapped in useCallback
+  const fetchDocuments = useCallback(async () => {
     setLoading(true);
     try {
       const filterArray: string[] = [];
@@ -368,10 +410,10 @@ if (categoryFilters.size > 0) {
       console.error('Error fetching documents:', error);
     }
     setLoading(false);
-  };
+  }, [searchQuery, filters.language, filters.displayOnFrontPage, getDateFilter, searchHost, searchKey]);
 
-  // Fetch index stats
-  const fetchIndexStats = async () => {
+  // Fetch index stats - wrapped in useCallback
+  const fetchIndexStats = useCallback(async () => {
     try {
       const response = await fetch(`${searchHost}/indexes/articles/stats`, {
         headers: {
@@ -383,7 +425,7 @@ if (categoryFilters.size > 0) {
     } catch (error) {
       console.error('Error fetching stats:', error);
     }
-  };
+  }, [searchHost, searchKey]);
 
   // Handle reindexing
   const handleReindex = async () => {
@@ -462,11 +504,11 @@ if (categoryFilters.size > 0) {
 
   useEffect(() => {
     fetchDocuments();
-  }, [filters]);
+  }, [filters, fetchDocuments]);
 
   useEffect(() => {
     fetchIndexStats();
-  }, []);
+  }, [fetchIndexStats]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -530,8 +572,8 @@ if (categoryFilters.size > 0) {
           IBT Admin Search {indexStats && `- ${indexStats.numberOfDocuments} Articles indexed`}
         </h1>
 
-        {/* Reindex Section */}
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+        {/* Reindex Section - Light Yellow */}
+        <div className="mb-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold">Index Management</h2>
@@ -563,7 +605,7 @@ if (categoryFilters.size > 0) {
         </div>
 
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="mb-2">
+        <form onSubmit={handleSearch} className="mb-4">
           <div className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 text-gray-400" size={20} />
@@ -576,30 +618,6 @@ if (categoryFilters.size > 0) {
               />
             </div>
             <button
-              type="button"
-              onClick={() => setShowFilters(!showFilters)}
-              className="px-4 py-3 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-2"
-            >
-              <Filter size={20} />
-              Filters
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowImages(!showImages)}
-              className={`px-4 py-3 rounded-lg flex items-center gap-2 ${showImages ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'}`}
-            >
-              <ImageIcon size={20} />
-              Images
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowSnippets(!showSnippets)}
-              className={`px-4 py-3 rounded-lg flex items-center gap-2 ${showSnippets ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'}`}
-            >
-              <FileText size={20} />
-              Snippets
-            </button>
-            <button
               type="submit"
               className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
             >
@@ -608,201 +626,259 @@ if (categoryFilters.size > 0) {
           </div>
         </form>
 
-        {/* Results Summary Box */}
-        {!loading && (
-          <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-            <div className="text-lg font-semibold text-blue-900">
-              Found {totalHits} results
-              {searchQuery && <span> for "{searchQuery}"</span>}
-              {searchTime !== null && <span className="text-sm font-normal"> in {searchTime}ms</span>}
-            </div>
-            {docsWithRelatedContent > 0 && (
-              <div className="text-sm text-blue-700 mt-1">
-                {docsWithRelatedContent} with related content
+        {/* Results Summary Box - Fixed height with all info on one line */}
+        <div className="mb-4 p-4 bg-blue-100 rounded-lg h-[80px] flex items-center">
+          {loading ? (
+            <div className="text-lg font-semibold text-blue-900">Searching...</div>
+          ) : (
+            <div className="w-full">
+              <div className="text-lg font-semibold text-blue-900">
+                Found {totalHits} results
+                {searchQuery && <span> for &quot;{searchQuery}&quot;</span>}
+                {docsWithRelatedContent > 0 && <span> ({docsWithRelatedContent} with related content)</span>}
+                {searchTime !== null && <span className="text-sm font-normal"> in {searchTime}ms</span>}
               </div>
-            )}
-            {(categoryFilters.size > 0 || Object.keys(relatedContentFilters).length > 0) && (
-              <div className="text-sm text-blue-700 mt-1">
-                Showing {totalFilteredHits} filtered results
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Related Content Filters - Simplified with Accordions */}
-        {Object.keys(categoryCounts).length > 0 && (
-          <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-            <h3 className="font-semibold mb-3">Filter by Related Content</h3>
-            
-            {/* Category Level Filters */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {Object.entries(categoryCounts).map(([type, count]) => (
-                <button
-                  key={type}
-                  onClick={() => toggleCategoryFilter(type)}
-                  className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm transition-colors ${
-                    categoryFilters.has(type)
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {getIcon(type)}
-                  <span className="capitalize">{type}</span>
-                  <span className="font-semibold">({count})</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Detailed Filters - Only show for selected categories */}
-            {availableRelatedContent
-              .filter(({ type }) => categoryFilters.has(type))
-              .map(({ type, items, selectedItems }) => {
-                const isExpanded = expandedCategories.has(type);
-                const allSelected = items.every(item => selectedItems.includes(item.slug));
-                
-                return (
-                  <div key={type} className="border rounded-lg mb-2 bg-white">
-                    <div className="p-3 flex items-center justify-between">
-                      <button
-                        onClick={() => toggleCategoryExpansion(type)}
-                        className="flex items-center gap-2 flex-1 text-left"
-                      >
-                        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                        <span className="flex items-center gap-1 font-medium capitalize">
-                          {getIcon(type)} {type} Details
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          ({items.length} unique items)
-                        </span>
-                      </button>
-                      {isExpanded && (
-                        <button
-                          onClick={() => toggleAllInCategory(type, items)}
-                          className="text-sm text-blue-600 hover:underline"
-                        >
-                          {allSelected ? 'Deselect All' : 'Select All'}
-                        </button>
-                      )}
-                    </div>
-                    
-                    {isExpanded && (
-                      <div className="border-t p-3 max-h-60 overflow-y-auto">
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                          {items.map(item => (
-                            <label key={item.slug} className="flex items-start gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded">
-                              <input
-                                type="checkbox"
-                                checked={selectedItems.includes(item.slug)}
-                                onChange={() => toggleRelatedContentFilter(type, item.slug)}
-                                className="mt-0.5"
-                              />
-                              <span className="flex-1">
-                                {item.title} <span className="text-gray-500">({item.count})</span>
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-          </div>
-        )}
-
-        {/* Standard Filters */}
-        {showFilters && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <div className="grid grid-cols-2 gap-6">
-              {/* Language Filter */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Language</label>
-                <div className="space-y-2">
-                  {['all', 'en', 'fr'].map(value => (
-                    <label key={value} className="flex items-center">
-                      <input
-                        type="radio"
-                        name="language"
-                        value={value}
-                        checked={filters.language === value}
-                        onChange={(e) => handleFilterChange('language', e.target.value)}
-                        className="mr-2"
-                      />
-                      <span className="capitalize">{value === 'all' ? 'All Languages' : value.toUpperCase()}</span>
-                    </label>
-                  ))}
+              {(categoryFilters.size > 0 || Object.keys(relatedContentFilters).length > 0) && (
+                <div className="text-sm text-blue-700 mt-1">
+                  Showing {totalFilteredHits} filtered results
                 </div>
-              </div>
+              )}
+            </div>
+          )}
+        </div>
 
-              {/* Date Range Filter */}
-              <div>
-                <label className="flex text-sm font-medium mb-2 items-center gap-1">
-                  <Calendar size={16} /> Date Range
-                </label>
-                <div className="space-y-2">
-                  {[
-                    { value: 'all', label: 'All Time' },
-                    { value: 'week', label: 'Last Week' },
-                    { value: 'month', label: 'Last Month' },
-                    { value: 'year', label: 'Last Year' },
-                    { value: 'custom', label: 'Custom Range' }
-                  ].map(option => (
-                    <label key={option.value} className="flex items-center">
-                      <input
-                        type="radio"
-                        name="dateRange"
-                        value={option.value}
-                        checked={filters.dateRange === option.value}
-                        onChange={(e) => handleFilterChange('dateRange', e.target.value)}
-                        className="mr-2"
-                      />
-                      <span>{option.label}</span>
-                    </label>
-                  ))}
-                  
-                  {filters.dateRange === 'custom' && (
-                    <div className="ml-6 space-y-2 mt-2">
+        {/* Filters Dropdown */}
+        <div className="mb-4">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 font-medium"
+          >
+            <Filter size={20} />
+            Filters
+            {showFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          
+          {showFilters && (
+            <div className="mt-4 space-y-4">
+              {/* Standard Filters - Three columns */}
+              <div className="grid grid-cols-3 gap-4">
+                {/* Language Filter */}
+                <div className="p-4 bg-blue-100 rounded-lg">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
+                    <Globe size={16} /> Language
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => handleFilterChange('language', 'all')}
+                      className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                        filters.language === 'all' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      All
+                    </button>
+                    {availableLanguages.map(lang => {
+                      const count = languageCounts[lang] || 0;
+                      return (
+                        <button
+                          key={lang}
+                          onClick={() => handleFilterChange('language', lang)}
+                          className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                            filters.language === lang ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+                          }`}
+                        >
+                          {lang.toUpperCase()} {count > 0 && `(${count})`}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Date Range Filter */}
+                <div className="p-4 bg-blue-100 rounded-lg">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
+                    <Calendar size={16} /> Date Range
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['all', 'week', 'month', 'year'].map(range => (
+                      <button
+                        key={range}
+                        onClick={() => handleFilterChange('dateRange', range)}
+                        className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                          filters.dateRange === range ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        {range === 'all' ? 'All Time' : 
+                         range === 'week' ? 'Last Week' :
+                         range === 'month' ? 'Last Month' : 'Last Year'}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => {
+                        handleFilterChange('dateRange', 'custom');
+                        setShowDatePicker(!showDatePicker);
+                      }}
+                      className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                        filters.dateRange === 'custom' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      Custom
+                    </button>
+                  </div>
+                  {/* Custom Date Range Picker */}
+                  {showDatePicker && filters.dateRange === 'custom' && (
+                    <div className="mt-3 flex items-center gap-2">
                       <input
                         type="date"
                         value={filters.customDateFrom}
                         onChange={(e) => handleFilterChange('customDateFrom', e.target.value)}
-                        className="px-3 py-1 border rounded"
-                        placeholder="From"
+                        className="px-2 py-1 border rounded text-sm"
                       />
+                      <span className="text-sm">to</span>
                       <input
                         type="date"
                         value={filters.customDateTo}
                         onChange={(e) => handleFilterChange('customDateTo', e.target.value)}
-                        className="px-3 py-1 border rounded ml-2"
-                        placeholder="To"
+                        className="px-2 py-1 border rounded text-sm"
                       />
                     </div>
                   )}
                 </div>
-              </div>
 
-              {/* Front Page Filter */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Display on Front Page</label>
-                <div className="flex gap-4">
-                  {['all', 'true', 'false'].map(value => (
-                    <label key={value} className="flex items-center">
-                      <input
-                        type="radio"
-                        name="displayOnFrontPage"
-                        value={value}
-                        checked={filters.displayOnFrontPage === value}
-                        onChange={(e) => handleFilterChange('displayOnFrontPage', e.target.value)}
-                        className="mr-1"
-                      />
-                      <span>{value === 'all' ? 'All' : value === 'true' ? 'Yes' : 'No'}</span>
-                    </label>
-                  ))}
+                {/* Front Page Filter */}
+                <div className="p-4 bg-blue-100 rounded-lg">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
+                    <Home size={16} /> Front Page Display
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['all', 'true', 'false'].map(value => (
+                      <button
+                        key={value}
+                        onClick={() => handleFilterChange('displayOnFrontPage', value)}
+                        className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                          filters.displayOnFrontPage === value ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        {value === 'all' ? 'All' : value === 'true' ? 'Yes' : 'No'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
+
+              {/* Related Content Filters - Dynamic height based on content */}
+              <div className="p-4 bg-blue-100 rounded-lg">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Related Content Filters</h3>
+                
+                {/* Category Level Filters - Always show all types */}
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {allContentTypes.map(type => {
+                    const count = categoryCounts[type] || 0;
+                    return (
+                      <button
+                        key={type}
+                        onClick={() => toggleCategoryFilter(type)}
+                        disabled={count === 0}
+                        className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm transition-colors ${
+                          categoryFilters.has(type)
+                            ? 'bg-blue-500 text-white'
+                            : count === 0 
+                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                              : 'bg-white text-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        {getIcon(type)}
+                        <span className="capitalize">{type}</span>
+                        <span className="font-semibold">({count})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Detailed Filters - Only show for selected categories */}
+                {availableRelatedContent.filter(({ type }) => categoryFilters.has(type)).length > 0 && (
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                    {availableRelatedContent
+                      .filter(({ type }) => categoryFilters.has(type))
+                      .map(({ type, items, selectedItems }) => {
+                        const isExpanded = expandedCategories.has(type);
+                        const allSelected = items.every(item => selectedItems.includes(item.slug));
+                        
+                        return (
+                          <div key={type} className="border border-blue-200 rounded-lg bg-white">
+                            <div className="p-3 flex items-center justify-between">
+                              <button
+                                onClick={() => toggleCategoryExpansion(type)}
+                                className="flex items-center gap-2 flex-1 text-left"
+                              >
+                                {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                <span className="flex items-center gap-1 font-medium capitalize">
+                                  {getIcon(type)} {type} Details
+                                </span>
+                                <span className="text-sm text-gray-500">
+                                  ({items.length} unique items)
+                                </span>
+                              </button>
+                              {isExpanded && (
+                                <button
+                                  onClick={() => toggleAllInCategory(type, items)}
+                                  className="text-sm text-blue-600 hover:underline"
+                                >
+                                  {allSelected ? 'Deselect All' : 'Select All'}
+                                </button>
+                              )}
+                            </div>
+                            
+                            {isExpanded && (
+                              <div className="border-t p-3 max-h-60 overflow-y-auto">
+                                <div className="grid grid-cols-2 gap-2 text-sm">
+                                  {items.map(item => (
+                                    <label key={item.slug} className="flex items-start gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedItems.includes(item.slug)}
+                                        onChange={() => toggleRelatedContentFilter(type, item.slug)}
+                                        className="mt-0.5"
+                                      />
+                                      <span className="flex-1">
+                                        {item.title} <span className="text-gray-500">({item.count})</span>
+                                      </span>
+                                    </label>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Show Options - Always visible above results */}
+        <div className="mb-4 flex gap-2">
+          <span className="text-sm font-medium text-gray-700 flex items-center">Show:</span>
+          <button
+            onClick={() => setShowImages(!showImages)}
+            className={`px-3 py-1 rounded-full text-sm flex items-center gap-1 transition-colors ${
+              showImages ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            <ImageIcon size={16} />
+            Images
+          </button>
+          <button
+            onClick={() => setShowSnippets(!showSnippets)}
+            className={`px-3 py-1 rounded-full text-sm flex items-center gap-1 transition-colors ${
+              showSnippets ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            <FileText size={16} />
+            Snippets
+          </button>
+        </div>
 
         {/* Results */}
         {loading ? (
@@ -811,167 +887,172 @@ if (categoryFilters.size > 0) {
           <>
             <div className="space-y-4">
               {paginatedDocuments.map((doc) => (
-                <div key={doc.id} className="border rounded-lg p-4 hover:bg-gray-50">
-                  <div className="flex gap-4">
-                    {/* Featured Image */}
-                    {showImages && doc.featuredImage && (
-                      <div className="flex-shrink-0">
-                        <img
-                          src={doc.featuredImage}
-                          alt={doc.featuredImageAlt || doc.title}
-                          className="w-32 h-24 object-cover rounded"
-                        />
-                      </div>
-                    )}
-                    
-                    {/* Content */}
+                <div key={doc.id} className="bg-gray-200 border-2 border-gray-300 rounded-lg p-6 hover:border-gray-400 transition-colors">
+                  <div className="flex gap-6">
+                    {/* Main Content */}
                     <div className="flex-1">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold">
-                            <a 
-                              href={getArticleUrl(doc.uri)} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="hover:text-blue-600 flex items-center gap-1"
-                            >
-                              {doc._formatted?.title ? renderHighlightedText(doc._formatted.title) : doc.title}
-                              <ExternalLink size={16} />
-                            </a>
-                          </h3>
-                          {doc.subtitle && (
-                            <p className="text-gray-600">
-                              {doc._formatted?.subtitle ? renderHighlightedText(doc._formatted.subtitle) : doc.subtitle}
-                            </p>
-                          )}
-                          
-                          {/* Search Snippet */}
-                          {showSnippets && searchQuery && doc._formatted?.content && (
-                            <div className="mt-2 p-3 bg-gray-50 rounded text-sm">
-                              <div className="text-gray-700 italic">
-                                ...{renderHighlightedText(doc._formatted.content)}...
-                              </div>
-                            </div>
-                          )}
-                          
-                          {/* Metadata */}
-                          <div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-500">
-                            <span>ID: {doc.databaseId}</span>
-                            <span>Lang: {doc.language}</span>
-                            <span>Date: {new Date(doc.publicationDate).toLocaleDateString()}</span>
-                            {doc.source && <span>Source: {doc.source}</span>}
-                            {doc.displayOnFrontPage && <span className="text-green-600">✓ Front Page</span>}
-                          </div>
-
-                          {/* Media Indicators */}
-                          <div className="flex gap-3 mt-2">
-                            {doc.hasRelatedPdf && <span className="text-blue-600 flex items-center gap-1"><FileText size={16} /> PDF</span>}
-                            {doc.hasRelatedAudio && <span className="text-green-600 flex items-center gap-1"><Volume2 size={16} /> Audio</span>}
-                            {doc.hasRelatedVideo && <span className="text-purple-600 flex items-center gap-1"><Video size={16} /> Video</span>}
-                          </div>
-
-                          {/* Places & Topics */}
-                          {(doc.places.length > 0 || doc.topics.length > 0) && (
-                            <div className="mt-2 text-sm">
-                              {doc.places.length > 0 && (
-                                <div>Places: {doc.places.join(', ')}</div>
-                              )}
-                              {doc.topics.length > 0 && (
-                                <div>Topics: {doc.topics.join(', ')}</div>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Related Content */}
-                          {doc.relatedContent && doc.relatedItemsCount > 0 && (
-                            <div className="mt-3 p-3 bg-gray-100 rounded text-sm">
-                              <div className="font-medium mb-2">Related Content:</div>
-                              <div className="grid grid-cols-2 gap-2">
-                                {doc.relatedContent.books?.length > 0 && (
-                                  <div>
-                                    <span className="flex items-center gap-1 font-medium"><Book size={14} /> Books:</span>
-                                    {doc.relatedContent.books.map((book, idx) => (
-                                      <a
-                                        key={idx}
-                                        href={getRelatedUrl('books', book.slug, doc.language)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="ml-5 text-blue-600 hover:underline"
-                                      >
-                                        {book.title || book.slug}
-                                      </a>
-                                    ))}
-                                  </div>
-                                )}
-                                {doc.relatedContent.collections?.length > 0 && (
-                                  <div>
-                                    <span className="flex items-center gap-1 font-medium"><Folder size={14} /> Collections:</span>
-                                    {doc.relatedContent.collections.map((collection, idx) => (
-                                      <a
-                                        key={idx}
-                                        href={getRelatedUrl('collections', collection.slug, doc.language)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="ml-5 text-blue-600 hover:underline"
-                                      >
-                                        {collection.slug}
-                                      </a>
-                                    ))}
-                                  </div>
-                                )}
-                                {doc.relatedContent.journals?.length > 0 && (
-                                  <div>
-                                    <span className="flex items-center gap-1 font-medium"><FileArchive size={14} /> Journals:</span>
-                                    {doc.relatedContent.journals.map((journal, idx) => (
-                                      <a
-                                        key={idx}
-                                        href={getRelatedUrl('journals', journal.slug, doc.language)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="ml-5 text-blue-600 hover:underline"
-                                      >
-                                        {journal.title || journal.slug}
-                                      </a>
-                                    ))}
-                                  </div>
-                                )}
-                                {doc.relatedContent.articles?.length > 0 && (
-                                  <div>
-                                    <span className="flex items-center gap-1 font-medium"><FileText size={14} /> Related Articles:</span>
-                                    {doc.relatedContent.articles.map((article, idx) => (
-                                      <a
-                                        key={idx}
-                                        href={getRelatedUrl('articles', article.slug, doc.language)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="ml-5 text-blue-600 hover:underline"
-                                      >
-                                        {article.title || article.slug}
-                                      </a>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        
-                        <button
-                          onClick={() => setSelectedDoc(selectedDoc?.id === doc.id ? null : doc)}
-                          className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 ml-2"
-                        >
-                          <Eye size={16} />
-                        </button>
+                      {/* Title and Subtitle */}
+                      <div className="mb-3">
+                        <h3 className="text-xl font-semibold mb-1">
+                          <a 
+                            href={getArticleUrl(doc.uri)} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="hover:text-blue-600 inline-flex items-center gap-1"
+                          >
+                            {doc._formatted?.title ? renderHighlightedText(doc._formatted.title) : doc.title}
+                            <ExternalLink size={16} />
+                          </a>
+                        </h3>
+                        {doc.subtitle && (
+                          <p className="text-gray-600 text-lg">
+                            {doc._formatted?.subtitle ? renderHighlightedText(doc._formatted.subtitle) : doc.subtitle}
+                          </p>
+                        )}
                       </div>
                       
-                      {/* JSON View */}
-                      {selectedDoc?.id === doc.id && (
-                        <div className="mt-4 p-4 bg-gray-100 rounded">
-                          <pre className="text-xs overflow-auto max-h-96">
-                            {JSON.stringify(doc, null, 2)}
-                          </pre>
+                      {/* Search Snippet */}
+                      {showSnippets && searchQuery && doc._formatted?.content && (
+                        <div className="mb-3 p-3 bg-white rounded border border-gray-200 text-sm">
+                          <div className="text-gray-700 italic">
+                            ...{renderHighlightedText(doc._formatted.content)}...
+                          </div>
                         </div>
                       )}
+                      
+                      {/* Metadata */}
+                      <div className="flex flex-wrap gap-4 mb-3 text-sm text-gray-600">
+                        <span>ID: {doc.databaseId}</span>
+                        <span>Lang: <span className="font-medium">{doc.language.toUpperCase()}</span></span>
+                        <span>Date: {new Date(doc.publicationDate).toLocaleDateString()}</span>
+                        {doc.source && <span>Source: {doc.source}</span>}
+                        {doc.displayOnFrontPage && <span className="text-green-600 font-medium">✓ Front Page</span>}
+                      </div>
+
+                      {/* Media Indicators */}
+                      <div className="flex gap-3 mb-3">
+                        {doc.hasRelatedPdf && <span className="text-blue-600 flex items-center gap-1 font-medium"><FileText size={16} /> PDF</span>}
+                        {doc.hasRelatedAudio && <span className="text-green-600 flex items-center gap-1 font-medium"><Volume2 size={16} /> Audio</span>}
+                        {doc.hasRelatedVideo && <span className="text-purple-600 flex items-center gap-1 font-medium"><Video size={16} /> Video</span>}
+                      </div>
+
+                      {/* Places & Topics */}
+                      {(doc.places.length > 0 || doc.topics.length > 0) && (
+                        <div className="mb-3 text-sm">
+                          {doc.places.length > 0 && (
+                            <div><span className="font-medium">Places:</span> {doc.places.join(', ')}</div>
+                          )}
+                          {doc.topics.length > 0 && (
+                            <div><span className="font-medium">Topics:</span> {doc.topics.join(', ')}</div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Related Content - Clearly part of this result */}
+                      {doc.relatedContent && doc.relatedItemsCount > 0 && (
+                        <div className="p-4 bg-white rounded-lg border border-gray-300">
+                          <div className="font-medium mb-2 text-gray-700">Related Content:</div>
+                          <div className="grid grid-cols-2 gap-3 text-sm">
+                            {doc.relatedContent.books?.length > 0 && (
+                              <div>
+                                <span className="flex items-center gap-1 font-medium text-gray-700"><Book size={14} /> Books:</span>
+                                <div className="ml-5 space-y-1">
+                                  {doc.relatedContent.books.map((book, idx) => (
+                                    <a
+                                      key={idx}
+                                      href={getRelatedUrl('books', book.slug, doc.language)}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="block text-blue-600 hover:underline"
+                                    >
+                                      {book.title || book.slug}
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {doc.relatedContent.collections?.length > 0 && (
+                              <div>
+                                <span className="flex items-center gap-1 font-medium text-gray-700"><Folder size={14} /> Collections:</span>
+                                <div className="ml-5 space-y-1">
+                                  {doc.relatedContent.collections.map((collection, idx) => (
+                                    <a
+                                      key={idx}
+                                      href={getRelatedUrl('collections', collection.slug, doc.language)}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="block text-blue-600 hover:underline"
+                                    >
+                                      {collection.slug}
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {doc.relatedContent.journals?.length > 0 && (
+                              <div>
+                                <span className="flex items-center gap-1 font-medium text-gray-700"><FileArchive size={14} /> Journals:</span>
+                                <div className="ml-5 space-y-1">
+                                  {doc.relatedContent.journals.map((journal, idx) => (
+                                    <a
+                                      key={idx}
+                                      href={getRelatedUrl('journals', journal.slug, doc.language)}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="block text-blue-600 hover:underline"
+                                    >
+                                      {journal.title || journal.slug}
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {doc.relatedContent.articles?.length > 0 && (
+                              <div>
+                                <span className="flex items-center gap-1 font-medium text-gray-700"><FileText size={14} /> Related Articles:</span>
+                                <div className="ml-5 space-y-1">
+                                  {doc.relatedContent.articles.map((article, idx) => (
+                                    <a
+                                      key={idx}
+                                      href={getRelatedUrl('articles', article.slug, doc.language)}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="block text-blue-600 hover:underline"
+                                    >
+                                      {article.title || article.slug}
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Right Side - Image and JSON button */}
+                    <div className="flex flex-col items-end gap-3">
+                      {/* Featured Image - Only show if exists and showImages is true */}
+                      {showImages && doc.featuredImage && (
+                        <div className="w-48 h-36 relative">
+                          <Image
+                            src={doc.featuredImage}
+                            alt={doc.featuredImageAlt || doc.title}
+                            width={192}
+                            height={144}
+                            className="object-cover rounded-lg"
+                          />
+                        </div>
+                      )}
+                      
+                      {/* JSON View Button */}
+                      <button
+                        onClick={() => setSelectedDoc(doc)}
+                        className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 flex items-center gap-2 font-medium"
+                      >
+                        <Eye size={18} />
+                        View JSON
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -1005,6 +1086,9 @@ if (categoryFilters.size > 0) {
           </>
         )}
       </div>
+
+      {/* JSON Modal */}
+      <JsonModal doc={selectedDoc} onClose={() => setSelectedDoc(null)} />
 
       {/* Add custom styles for highlighting */}
       <style jsx global>{`
