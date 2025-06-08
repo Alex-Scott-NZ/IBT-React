@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Search, ChevronLeft, ChevronRight, Eye, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp, Globe, Home, Filter, X } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
@@ -104,6 +104,9 @@ const MeilisearchAdmin: React.FC = () => {
   const params = useParams();
   const currentLang = params?.lang as string || 'en';
   
+  // Add ref for results container
+  const resultsContainerRef = useRef<HTMLDivElement>(null);
+  
   const [documents, setDocuments] = useState<Document[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -139,6 +142,13 @@ const MeilisearchAdmin: React.FC = () => {
   
   // All possible content types (always show these)
   const allContentTypes = ['books', 'journals', 'collections', 'pdfs', 'audio', 'videos'];
+
+  // Scroll to top of results function
+  const scrollToResults = () => {
+    if (resultsContainerRef.current) {
+      resultsContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   // Calculate available related content from current search results
   const availableRelatedContent = useMemo(() => {
@@ -504,6 +514,15 @@ const MeilisearchAdmin: React.FC = () => {
         return { ...prev, [type]: allSlugs };
       }
     });
+  };
+
+  // Handle pagination with scroll
+  const handlePagination = (newOffset: number) => {
+    setCurrentOffset(newOffset);
+    // Small delay to ensure the new content is rendered before scrolling
+    setTimeout(() => {
+      scrollToResults();
+    }, 100);
   };
 
   useEffect(() => {
@@ -884,7 +903,7 @@ const MeilisearchAdmin: React.FC = () => {
       </div>
 
       {/* Results Container - Separate from header */}
-      <div className="bg-gray-50 rounded-lg shadow-lg p-6">
+      <div ref={resultsContainerRef} className="bg-gray-50 rounded-lg shadow-lg p-6">
         {/* Results */}
         {loading ? (
           <div className="text-center py-8">Loading...</div>
@@ -1067,7 +1086,7 @@ const MeilisearchAdmin: React.FC = () => {
             {/* Pagination */}
             <div className="flex justify-between items-center mt-6">
               <button
-                onClick={() => setCurrentOffset(Math.max(0, currentOffset - limit))}
+                onClick={() => handlePagination(Math.max(0, currentOffset - limit))}
                 disabled={currentOffset === 0}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
               >
@@ -1080,7 +1099,7 @@ const MeilisearchAdmin: React.FC = () => {
               </span>
               
               <button
-                onClick={() => setCurrentOffset(currentOffset + limit)}
+                onClick={() => handlePagination(currentOffset + limit)}
                 disabled={currentOffset + limit >= totalFilteredHits}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
               >
