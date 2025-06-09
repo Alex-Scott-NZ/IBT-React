@@ -1,9 +1,9 @@
-// src/app/[lang]/components/MeilisearchAdmin.tsx
+// src\app\[lang]\components\MeilisearchAdmin.tsx
 
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { Search, ChevronLeft, ChevronRight, Eye, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp, Globe, Home, Filter, X } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Eye, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp, Globe, Home, Filter, X, RotateCcw } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
@@ -32,6 +32,7 @@ interface Document {
   uri: string;
   link: string;
   publicationDate: string;
+  publicationTimestamp?: number; // Add this field
   displayDate: string;
   language: string;
   source?: string;
@@ -123,13 +124,17 @@ const MeilisearchAdmin: React.FC = () => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({
-    language: currentLang, // Default to current language
-    displayOnFrontPage: 'true', // Default to showing front page articles
+  
+  // Initial filter state
+  const initialFilters = {
+    language: currentLang,
+    displayOnFrontPage: 'true',
     dateRange: 'all',
     customDateFrom: '',
     customDateTo: ''
-  });
+  };
+  
+  const [filters, setFilters] = useState(initialFilters);
   const [relatedContentFilters, setRelatedContentFilters] = useState<Record<string, string[]>>({});
   const [categoryFilters, setCategoryFilters] = useState<Set<string>>(new Set());
 
@@ -143,6 +148,29 @@ const MeilisearchAdmin: React.FC = () => {
   
   // All possible content types (always show these)
   const allContentTypes = ['books', 'journals', 'collections', 'pdfs', 'audio', 'videos'];
+
+  // Date formatting function - Fixed to show proper format
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                   'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    
+    return `${day} ${month} ${year}`;
+  };
+
+  // Reset all filters function
+  const resetAllFilters = () => {
+    setFilters(initialFilters);
+    setRelatedContentFilters({});
+    setCategoryFilters(new Set());
+    setExpandedCategories(new Set());
+    setShowDatePicker(false);
+    setCurrentOffset(0);
+  };
 
   // Debounce search query
   useEffect(() => {
@@ -351,32 +379,34 @@ const MeilisearchAdmin: React.FC = () => {
     });
   };
 
-  // Calculate date filter
+  // Calculate date filter - Now using numeric timestamps
   const getDateFilter = useCallback(() => {
     const now = new Date();
     let dateFilter = '';
     
     switch (filters.dateRange) {
       case 'week':
-        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        dateFilter = `publicationDate >= ${weekAgo.getTime()}`;
+        const weekAgo = now.getTime() - (7 * 24 * 60 * 60 * 1000);
+        dateFilter = `publicationTimestamp > ${weekAgo}`;
         break;
       case 'month':
-        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        dateFilter = `publicationDate >= ${monthAgo.getTime()}`;
+        const monthAgo = now.getTime() - (30 * 24 * 60 * 60 * 1000);
+        dateFilter = `publicationTimestamp > ${monthAgo}`;
         break;
       case 'year':
-        const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-        dateFilter = `publicationDate >= ${yearAgo.getTime()}`;
+        const yearAgo = now.getTime() - (365 * 24 * 60 * 60 * 1000);
+        dateFilter = `publicationTimestamp > ${yearAgo}`;
         break;
       case 'custom':
         if (filters.customDateFrom) {
-          const fromDate = new Date(filters.customDateFrom).getTime();
-          dateFilter = `publicationDate >= ${fromDate}`;
+          const fromDate = new Date(filters.customDateFrom);
+          fromDate.setHours(0, 0, 0, 0);
+          dateFilter = `publicationTimestamp > ${fromDate.getTime()}`;
         }
         if (filters.customDateTo) {
-          const toDate = new Date(filters.customDateTo).getTime();
-          dateFilter += dateFilter ? ` AND publicationDate <= ${toDate}` : `publicationDate <= ${toDate}`;
+          const toDate = new Date(filters.customDateTo);
+          toDate.setHours(23, 59, 59, 999);
+          dateFilter += dateFilter ? ` AND publicationTimestamp < ${toDate.getTime()}` : `publicationTimestamp < ${toDate.getTime()}`;
         }
         break;
     }
@@ -389,17 +419,17 @@ const MeilisearchAdmin: React.FC = () => {
     setLoading(true);
     try {
       const filterArray: string[] = [];
-      if (filters.language !== 'all') filterArray.push(`language = '${filters.language}'`);
+      if (filters.language !== 'all') filterArray.push(`language = "${filters.language}"`);
       if (filters.displayOnFrontPage !== 'all') filterArray.push(`displayOnFrontPage = ${filters.displayOnFrontPage}`);
       
-      // Add date filter
+      // Add date filter (now it will work with numeric timestamps)
       const dateFilter = getDateFilter();
-      if (dateFilter) filterArray.push(dateFilter);
+      if (dateFilter) filterArray.push(`(${dateFilter})`);
       
       const body: any = {
-        q: debouncedSearchQuery, // Use debounced search query
-        limit: 1000, // Get more results to filter client-side
-        offset: 0,
+        q: debouncedSearchQuery,
+        limit,
+        offset: currentOffset,
         filter: filterArray.length > 0 ? filterArray.join(' AND ') : undefined,
         sort: ['publicationDate:desc']
       };
@@ -413,6 +443,15 @@ const MeilisearchAdmin: React.FC = () => {
         body.highlightPostTag = '</mark>';
       }
 
+      // Debug logging
+      console.log('Meilisearch query:', {
+        query: debouncedSearchQuery,
+        filters: filterArray,
+        dateFilter: dateFilter,
+        offset: currentOffset,
+        limit: limit
+      });
+
       const response = await fetch(`${searchHost}/indexes/articles/search`, {
         method: 'POST',
         headers: {
@@ -423,19 +462,27 @@ const MeilisearchAdmin: React.FC = () => {
       });
 
       const data: SearchResponse = await response.json();
+      
+      // Debug logging
+      if (data.hits && data.hits.length > 0) {
+        console.log('First result has publicationTimestamp:', data.hits[0].publicationTimestamp);
+      }
+
       setDocuments(data.hits || []);
       setTotalHits(data.estimatedTotalHits || 0);
       setSearchTime(data.processingTimeMs || null);
       
       // Reset filters when new search is performed
-      setRelatedContentFilters({});
-      setCategoryFilters(new Set());
-      setExpandedCategories(new Set());
+      if (debouncedSearchQuery !== searchQuery) {
+        setRelatedContentFilters({});
+        setCategoryFilters(new Set());
+        setExpandedCategories(new Set());
+      }
     } catch (error) {
       console.error('Error fetching documents:', error);
     }
     setLoading(false);
-  }, [debouncedSearchQuery, filters.language, filters.displayOnFrontPage, getDateFilter, searchHost, searchKey]);
+  }, [debouncedSearchQuery, filters, currentOffset, getDateFilter, searchHost, searchKey, limit, searchQuery]);
 
   // Fetch index stats - wrapped in useCallback
   const fetchIndexStats = useCallback(async () => {
@@ -538,7 +585,7 @@ const MeilisearchAdmin: React.FC = () => {
 
   useEffect(() => {
     fetchDocuments();
-  }, [filters, debouncedSearchQuery, fetchDocuments]);
+  }, [filters, debouncedSearchQuery, currentOffset, fetchDocuments]);
 
   useEffect(() => {
     fetchIndexStats();
@@ -598,6 +645,13 @@ const MeilisearchAdmin: React.FC = () => {
       default: return null;
     }
   };
+
+  // Check if any filters are active
+  const hasActiveFilters = filters.language !== currentLang || 
+                          filters.displayOnFrontPage !== 'true' || 
+                          filters.dateRange !== 'all' ||
+                          categoryFilters.size > 0 ||
+                          Object.keys(relatedContentFilters).length > 0;
 
   return (
     <div className="max-w-7xl mx-auto p-4">
@@ -718,6 +772,11 @@ const MeilisearchAdmin: React.FC = () => {
             <Filter size={20} />
             Filters
             {showFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            {hasActiveFilters && (
+              <span className="ml-2 px-2 py-0.5 bg-blue-500 text-white text-xs rounded-full">
+                Active
+              </span>
+            )}
           </button>
           
           {showFilters && (
@@ -915,6 +974,19 @@ const MeilisearchAdmin: React.FC = () => {
                   </div>
                 )}
               </div>
+
+              {/* Reset Filters Button */}
+              {hasActiveFilters && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={resetAllFilters}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition-colors"
+                  >
+                    <RotateCcw size={18} />
+                    Reset All Filters
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -962,11 +1034,11 @@ const MeilisearchAdmin: React.FC = () => {
                         </div>
                       )}
                       
-                      {/* Metadata */}
+                      {/* Metadata - Updated with formatted date */}
                       <div className="flex flex-wrap gap-4 mb-3 text-sm text-gray-600">
                         <span>ID: {doc.databaseId}</span>
                         <span>Lang: <span className="font-medium">{doc.language.toUpperCase()}</span></span>
-                        <span>Date: {new Date(doc.publicationDate).toLocaleDateString()}</span>
+                        <span>Date: <span className="font-medium">{formatDate(doc.publicationDate)}</span></span>
                         {doc.source && <span>Source: {doc.source}</span>}
                         {doc.displayOnFrontPage && <span className="text-green-600 font-medium">✓ Front Page</span>}
                       </div>

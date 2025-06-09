@@ -1,4 +1,4 @@
-// src/app/utils/meilisearch-client.ts
+// src\app\utils\meilisearch-client.ts
 
 import { MeiliSearch } from 'meilisearch';
 

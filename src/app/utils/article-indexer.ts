@@ -1,4 +1,4 @@
-// src/app/utils/article-indexer.ts
+// src\app\utils\article-indexer.ts
 
 import { GraphQLClient } from './graphql-client';
 import { getMeilisearchClient } from './meilisearch-client';
@@ -260,6 +260,9 @@ export class ArticleIndexer {
       ? article.articleDetails.displayDate
       : article.articleDetails.publicationDate;
     
+    // Calculate numeric timestamp from publicationDate
+    const publicationTimestamp = new Date(article.articleDetails.publicationDate).getTime();
+    
     // Collect related content
     const relatedContent = {
       pdfs: article.articleDetails.relatedPdf?.nodes || [],
@@ -297,6 +300,7 @@ export class ArticleIndexer {
       date: article.date,
       modified: article.modified,
       publicationDate: article.articleDetails.publicationDate,
+      publicationTimestamp, // Add numeric timestamp for filtering
       displayDate,
       suppressDate: article.articleDetails.suppressDate,
       
@@ -362,6 +366,87 @@ export class ArticleIndexer {
     return allArticles;
   }
 
+  // Configure index settings separately
+  async configureIndexSettings() {
+    const client = getMeilisearchClient();
+    const index = client.index('articles');
+    
+    console.log('Configuring index settings...');
+    const settingsTask = await index.updateSettings({
+      searchableAttributes: [
+        'fullTitle',
+        'title',
+        'subtitle',
+        'content',
+        'places',
+        'topics',
+        'source',
+        '_searchableText',
+      ],
+      displayedAttributes: [
+        'id',
+        'databaseId',
+        'title',
+        'subtitle',
+        'fullTitle',
+        'slug',
+        'uri',
+        'link',
+        'displayDate',
+        'publicationDate',
+        'publicationTimestamp', // Add to displayed attributes
+        'language',
+        'source',
+        'places',
+        'topics',
+        'featuredImage',
+        'featuredImageAlt',
+        'hasRelatedPdf',
+        'hasRelatedAudio',
+        'hasRelatedVideo',
+        'relatedItemsCount',
+        'displayOnFrontPage',
+        'relatedContent',
+        'content', 
+      ],
+      filterableAttributes: [
+        'language',
+        'places',
+        'topics',
+        'displayOnFrontPage',
+        'hasRelatedPdf',
+        'hasRelatedAudio',
+        'hasRelatedVideo',
+        'publicationDate',
+        'publicationTimestamp', // Add numeric timestamp for filtering
+      ],
+      sortableAttributes: [
+        'publicationDate',
+        'publicationTimestamp', // Add for sorting by date
+        'date',
+        'modified',
+        'title',
+        '_rankingScore',
+      ],
+      rankingRules: [
+        'words',
+        'typo',
+        'proximity',
+        'attribute',
+        'sort',
+        'exactness',
+        'publicationDate:desc',
+        '_rankingScore:desc',
+      ],
+    });
+    
+    console.log(`Settings update task: ${settingsTask.taskUid}`);
+    
+    // Wait for settings to be applied
+    console.log('Waiting for settings to be applied...');
+    await new Promise(resolve => setTimeout(resolve, 3000));
+  }
+
   // Index all articles
   async indexArticles() {
     console.log('Starting article indexing...');
@@ -390,73 +475,8 @@ export class ArticleIndexer {
     // Now get the index reference
     const index = client.index('articles');
     
-    // Configure index settings
-    console.log('Configuring index settings...');
-    const settingsTask = await index.updateSettings({
-      searchableAttributes: [
-        'fullTitle',
-        'title',
-        'subtitle',
-        'content',
-        'places',
-        'topics',
-        'source',
-        '_searchableText',
-      ],
-      displayedAttributes: [
-        'id',
-        'databaseId',
-        'title',
-        'subtitle',
-        'fullTitle',
-        'slug',
-        'uri',
-        'link',
-        'displayDate',
-        'publicationDate',
-        'language',
-        'source',
-        'places',
-        'topics',
-        'featuredImage',
-        'featuredImageAlt',
-        'hasRelatedPdf',
-        'hasRelatedAudio',
-        'hasRelatedVideo',
-        'relatedItemsCount',
-        'displayOnFrontPage',
-        'relatedContent',
-        'content', 
-      ],
-      filterableAttributes: [
-        'language',
-        'places',
-        'topics',
-        'displayOnFrontPage',
-        'hasRelatedPdf',
-        'hasRelatedAudio',
-        'hasRelatedVideo',
-        'publicationDate',
-      ],
-      sortableAttributes: [
-        'publicationDate',
-        'date',
-        'modified',
-        'title',
-        '_rankingScore',
-      ],
-      rankingRules: [
-        'words',
-        'typo',
-        'proximity',
-        'attribute',
-        'sort',
-        'exactness',
-        'publicationDate:desc',
-        '_rankingScore:desc',
-      ],
-    });
-    console.log(`Settings update task: ${settingsTask.taskUid}`);
+    // Configure index settings (now includes publicationTimestamp)
+    await this.configureIndexSettings();
     
     // Fetch all articles
     const articles = await this.fetchAllArticles();
@@ -468,6 +488,16 @@ export class ArticleIndexer {
     // Filter out articles without titles
     const validDocuments = documents.filter(doc => doc.title);
     console.log(`Valid articles to index: ${validDocuments.length}`);
+    
+    // Log a sample document to verify timestamp field
+    if (validDocuments.length > 0) {
+      console.log('Sample document with timestamp:', {
+        id: validDocuments[0].id,
+        publicationDate: validDocuments[0].publicationDate,
+        publicationTimestamp: validDocuments[0].publicationTimestamp,
+        timestampAsDate: new Date(validDocuments[0].publicationTimestamp).toISOString()
+      });
+    }
     
     // Add to Meilisearch with explicit primary key
     if (validDocuments.length > 0) {

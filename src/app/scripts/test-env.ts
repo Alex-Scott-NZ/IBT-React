@@ -1,4 +1,4 @@
-// src/app/scripts/test-env.ts
+// src\app\scripts\test-env.ts
 
 import dotenv from 'dotenv';
 

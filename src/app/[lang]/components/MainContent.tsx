@@ -1,4 +1,4 @@
-// components/MainContent.tsx
+// src\app\[lang]\components\MainContent.tsx
 'use client';
 
 import React from 'react';
