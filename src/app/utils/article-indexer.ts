@@ -372,7 +372,11 @@ export class ArticleIndexer {
     const index = client.index('articles');
     
     console.log('Configuring index settings...');
-    const settingsTask = await index.updateSettings({
+    
+    // Check if we have OpenAI API key for embeddings
+    const hasOpenAIKey = !!process.env.OPENAI_API_KEY;
+    
+    const settings: any = {
       searchableAttributes: [
         'fullTitle',
         'title',
@@ -394,7 +398,7 @@ export class ArticleIndexer {
         'link',
         'displayDate',
         'publicationDate',
-        'publicationTimestamp', // Add to displayed attributes
+        'publicationTimestamp',
         'language',
         'source',
         'places',
@@ -418,11 +422,11 @@ export class ArticleIndexer {
         'hasRelatedAudio',
         'hasRelatedVideo',
         'publicationDate',
-        'publicationTimestamp', // Add numeric timestamp for filtering
+        'publicationTimestamp',
       ],
       sortableAttributes: [
         'publicationDate',
-        'publicationTimestamp', // Add for sorting by date
+        'publicationTimestamp',
         'date',
         'modified',
         'title',
@@ -438,13 +442,35 @@ export class ArticleIndexer {
         'publicationDate:desc',
         '_rankingScore:desc',
       ],
-    });
+    };
+    
+    // Add embedder configuration if OpenAI key is available
+    if (hasOpenAIKey) {
+      console.log('OpenAI API key found - configuring semantic search...');
+      settings.embedders = {
+        default: {
+          source: 'openAi',
+          apiKey: process.env.OPENAI_API_KEY,
+          model: 'text-embedding-3-small',
+          documentTemplate: '{{doc.title}} {{doc.subtitle}} {{doc.content}}',
+          dimensions: 1536,
+        }
+      };
+    } else {
+      console.log('No OpenAI API key found - semantic search will not be available');
+    }
+    
+    const settingsTask = await index.updateSettings(settings);
     
     console.log(`Settings update task: ${settingsTask.taskUid}`);
     
     // Wait for settings to be applied
     console.log('Waiting for settings to be applied...');
     await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    if (hasOpenAIKey) {
+      console.log('Semantic search configuration complete!');
+    }
   }
 
   // Index all articles
@@ -475,7 +501,7 @@ export class ArticleIndexer {
     // Now get the index reference
     const index = client.index('articles');
     
-    // Configure index settings (now includes publicationTimestamp)
+    // Configure index settings (now includes embeddings if API key available)
     await this.configureIndexSettings();
     
     // Fetch all articles
@@ -513,6 +539,11 @@ export class ArticleIndexer {
       try {
         const stats = await index.getStats();
         console.log(`Index now contains ${stats.numberOfDocuments} documents`);
+        
+        // If embeddings are configured, they'll be generated automatically
+        if (process.env.OPENAI_API_KEY) {
+          console.log('Note: Embeddings will be generated in the background for semantic search');
+        }
       } catch (e) {
         console.log('Could not get stats yet, check dashboard for status');
       }

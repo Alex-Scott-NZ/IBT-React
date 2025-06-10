@@ -3,7 +3,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { Search, ChevronLeft, ChevronRight, Eye, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp, Globe, Home, Filter, X, RotateCcw } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Eye, ExternalLink, Image as ImageIcon, FileText, Volume2, Video, Book, Folder, FileArchive, RefreshCw, Calendar, ChevronDown, ChevronUp, Globe, Home, Filter, X, RotateCcw, Brain, Zap } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
@@ -32,7 +32,7 @@ interface Document {
   uri: string;
   link: string;
   publicationDate: string;
-  publicationTimestamp?: number; // Add this field
+  publicationTimestamp?: number;
   displayDate: string;
   language: string;
   source?: string;
@@ -124,6 +124,7 @@ const MeilisearchAdmin: React.FC = () => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [semanticRatio, setSemanticRatio] = useState(0.5); // Add semantic ratio state
   
   // Initial filter state
   const initialFilters = {
@@ -144,12 +145,12 @@ const MeilisearchAdmin: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_ROOT_URL || 'http://localhost:3000';
 
   // Available languages (always show these)
-  const availableLanguages = ['en', 'fr', 'es', 'de']; // Add more as needed
+  const availableLanguages = ['en', 'fr', 'es', 'de'];
   
   // All possible content types (always show these)
   const allContentTypes = ['books', 'journals', 'collections', 'pdfs', 'audio', 'videos'];
 
-  // Date formatting function - Fixed to show proper format
+  // Date formatting function
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 
@@ -170,14 +171,15 @@ const MeilisearchAdmin: React.FC = () => {
     setExpandedCategories(new Set());
     setShowDatePicker(false);
     setCurrentOffset(0);
+    setSemanticRatio(0.5); // Reset semantic ratio
   };
 
   // Debounce search query
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
-      setCurrentOffset(0); // Reset to first page when searching
-    }, 500); // Wait 500ms after user stops typing
+      setCurrentOffset(0);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -318,7 +320,6 @@ const MeilisearchAdmin: React.FC = () => {
     // Filter by categories first
     if (categoryFilters.size > 0) {
       filtered = filtered.filter(doc => {
-        // Convert Set to Array for iteration
         for (const category of Array.from(categoryFilters)) {
           if (category === 'books' && (!doc.relatedContent?.books || doc.relatedContent.books.length === 0)) return false;
           if (category === 'journals' && (!doc.relatedContent?.journals || doc.relatedContent.journals.length === 0)) return false;
@@ -379,7 +380,7 @@ const MeilisearchAdmin: React.FC = () => {
     });
   };
 
-  // Calculate date filter - Now using numeric timestamps
+  // Calculate date filter
   const getDateFilter = useCallback(() => {
     const now = new Date();
     let dateFilter = '';
@@ -414,7 +415,7 @@ const MeilisearchAdmin: React.FC = () => {
     return dateFilter;
   }, [filters.dateRange, filters.customDateFrom, filters.customDateTo]);
 
-  // Fetch documents - wrapped in useCallback
+  // Fetch documents with semantic search support
   const fetchDocuments = useCallback(async () => {
     setLoading(true);
     try {
@@ -422,7 +423,6 @@ const MeilisearchAdmin: React.FC = () => {
       if (filters.language !== 'all') filterArray.push(`language = "${filters.language}"`);
       if (filters.displayOnFrontPage !== 'all') filterArray.push(`displayOnFrontPage = ${filters.displayOnFrontPage}`);
       
-      // Add date filter (now it will work with numeric timestamps)
       const dateFilter = getDateFilter();
       if (dateFilter) filterArray.push(`(${dateFilter})`);
       
@@ -434,6 +434,14 @@ const MeilisearchAdmin: React.FC = () => {
         sort: ['publicationDate:desc']
       };
 
+      // Add hybrid search configuration if there's a search query
+      if (debouncedSearchQuery && semanticRatio > 0) {
+        body.hybrid = {
+          semanticRatio: semanticRatio,
+          embedder: 'default' // Use 'default' as per the documentation
+        };
+      }
+
       // Add highlighting and cropping when there's a search query
       if (debouncedSearchQuery) {
         body.attributesToHighlight = ['title', 'subtitle', 'content'];
@@ -443,11 +451,10 @@ const MeilisearchAdmin: React.FC = () => {
         body.highlightPostTag = '</mark>';
       }
 
-      // Debug logging
       console.log('Meilisearch query:', {
         query: debouncedSearchQuery,
         filters: filterArray,
-        dateFilter: dateFilter,
+        semanticRatio: semanticRatio,
         offset: currentOffset,
         limit: limit
       });
@@ -463,16 +470,10 @@ const MeilisearchAdmin: React.FC = () => {
 
       const data: SearchResponse = await response.json();
       
-      // Debug logging
-      if (data.hits && data.hits.length > 0) {
-        console.log('First result has publicationTimestamp:', data.hits[0].publicationTimestamp);
-      }
-
       setDocuments(data.hits || []);
       setTotalHits(data.estimatedTotalHits || 0);
       setSearchTime(data.processingTimeMs || null);
       
-      // Reset filters when new search is performed
       if (debouncedSearchQuery !== searchQuery) {
         setRelatedContentFilters({});
         setCategoryFilters(new Set());
@@ -482,9 +483,9 @@ const MeilisearchAdmin: React.FC = () => {
       console.error('Error fetching documents:', error);
     }
     setLoading(false);
-  }, [debouncedSearchQuery, filters, currentOffset, getDateFilter, searchHost, searchKey, limit, searchQuery]);
+  }, [debouncedSearchQuery, filters, currentOffset, getDateFilter, searchHost, searchKey, limit, searchQuery, semanticRatio]);
 
-  // Fetch index stats - wrapped in useCallback
+  // Fetch index stats
   const fetchIndexStats = useCallback(async () => {
     try {
       const response = await fetch(`${searchHost}/indexes/articles/stats`, {
@@ -577,7 +578,6 @@ const MeilisearchAdmin: React.FC = () => {
   // Handle pagination with scroll
   const handlePagination = (newOffset: number) => {
     setCurrentOffset(newOffset);
-    // Small delay to ensure the new content is rendered before scrolling
     setTimeout(() => {
       scrollToResults();
     }, 100);
@@ -593,7 +593,7 @@ const MeilisearchAdmin: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setDebouncedSearchQuery(searchQuery); // Immediately search without waiting
+    setDebouncedSearchQuery(searchQuery);
     setCurrentOffset(0);
   };
 
@@ -735,6 +735,63 @@ const MeilisearchAdmin: React.FC = () => {
           </div>
         </form>
 
+        {/* Semantic Search Slider - Only show when there's a search query */}
+        {searchQuery && (
+          <div className="mb-3 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <Brain size={18} className="text-purple-600" />
+                Search Type
+              </label>
+              <span className="text-sm font-medium text-gray-600">
+                {Math.round(semanticRatio * 100)}% Semantic / {Math.round((1 - semanticRatio) * 100)}% Keyword
+              </span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-1 text-xs text-gray-600">
+                <Zap size={14} />
+                <span>Keyword</span>
+              </div>
+              <div className="relative flex-1">
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={semanticRatio}
+                  onChange={(e) => {
+                    setSemanticRatio(parseFloat(e.target.value));
+                    setCurrentOffset(0); // Reset to first page when changing search type
+                  }}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${semanticRatio * 100}%, #E5E7EB ${semanticRatio * 100}%, #E5E7EB 100%)`
+                  }}
+                />
+                {/* Tick marks */}
+                <div className="absolute w-full flex justify-between text-xs text-gray-400 mt-1">
+                  <span>0</span>
+                  <span>25</span>
+                  <span>50</span>
+                  <span>75</span>
+                  <span>100</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-xs text-gray-600">
+                <Brain size={14} />
+                <span>Semantic</span>
+              </div>
+            </div>
+            <div className="mt-3 text-xs text-gray-600 italic text-center">
+              {semanticRatio === 0 && "Pure keyword matching - exact word matches only"}
+              {semanticRatio > 0 && semanticRatio < 0.5 && "Keyword-focused with some understanding of meaning"}
+              {semanticRatio === 0.5 && "Balanced search - equal weight to keywords and meaning"}
+              {semanticRatio > 0.5 && semanticRatio < 1 && "Meaning-focused with some keyword matching"}
+              {semanticRatio === 1 && "Pure semantic search - finds conceptually similar content"}
+            </div>
+          </div>
+        )}
+
         {/* Search pending indicator */}
         {searchQuery !== debouncedSearchQuery && searchQuery !== '' && (
           <div className="text-sm text-blue-600 mb-2">
@@ -742,7 +799,7 @@ const MeilisearchAdmin: React.FC = () => {
           </div>
         )}
 
-        {/* Results Summary Box - Reduced height */}
+        {/* Results Summary Box */}
         <div className="mb-3 p-3 bg-blue-100 rounded-lg">
           {loading ? (
             <div className="text-base font-semibold text-blue-900">Searching...</div>
@@ -886,11 +943,11 @@ const MeilisearchAdmin: React.FC = () => {
                 </div>
               </div>
 
-              {/* Related Content Filters - Dynamic height based on content */}
+              {/* Related Content Filters */}
               <div className="p-4 bg-blue-100 rounded-lg">
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Related Content Filters</h3>
                 
-                {/* Category Level Filters - Always show all types */}
+                {/* Category Level Filters */}
                 <div className="flex flex-wrap gap-2 mb-3">
                   {allContentTypes.map(type => {
                     const count = categoryCounts[type] || 0;
@@ -915,7 +972,7 @@ const MeilisearchAdmin: React.FC = () => {
                   })}
                 </div>
 
-                {/* Detailed Filters - Only show for selected categories */}
+                {/* Detailed Filters */}
                 {availableRelatedContent.filter(({ type }) => categoryFilters.has(type)).length > 0 && (
                   <div className="space-y-2 max-h-[300px] overflow-y-auto">
                     {availableRelatedContent
@@ -992,7 +1049,7 @@ const MeilisearchAdmin: React.FC = () => {
         </div>
       </div>
 
-      {/* Results Container - Separate from header */}
+      {/* Results Container */}
       <div ref={resultsContainerRef} className="bg-gray-100 rounded-lg shadow-lg p-6">
         {/* Results */}
         {loading ? (
@@ -1034,7 +1091,7 @@ const MeilisearchAdmin: React.FC = () => {
                         </div>
                       )}
                       
-                      {/* Metadata - Updated with formatted date */}
+                      {/* Metadata */}
                       <div className="flex flex-wrap gap-4 mb-3 text-sm text-gray-600">
                         <span>ID: {doc.databaseId}</span>
                         <span>Lang: <span className="font-medium">{doc.language.toUpperCase()}</span></span>
@@ -1062,7 +1119,7 @@ const MeilisearchAdmin: React.FC = () => {
                         </div>
                       )}
 
-                      {/* Related Content - Clearly part of this result */}
+                      {/* Related Content */}
                       {doc.relatedContent && doc.relatedItemsCount > 0 && (
                         <div className="p-4 bg-gray-100 rounded-lg border border-gray-200">
                           <div className="font-medium mb-2 text-gray-700">Related Content:</div>
@@ -1146,7 +1203,7 @@ const MeilisearchAdmin: React.FC = () => {
                     
                     {/* Right Side - Image and JSON button */}
                     <div className="flex flex-col items-end gap-3">
-                      {/* Featured Image - Only show if exists and showImages is true */}
+                      {/* Featured Image */}
                       {showImages && doc.featuredImage && (
                         <div className="w-48 h-36 relative">
                           <Image
