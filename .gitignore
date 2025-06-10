@@ -38,3 +38,8 @@ next-env.d.ts
 .env.production
 .env.development
 .env.production
+# Generated GraphQL files
+src/gql/gql-generated.ts
+src/gql/gql.ts
+src/gql/graphql.ts
+src/gql/fragment-types.ts
