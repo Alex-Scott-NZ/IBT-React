@@ -1,4 +1,4 @@
-// src/app/[lang]/components/BannerSearch.tsx
+// src\app\[lang]\components\BannerSearch.tsx
 
 'use client';
 
@@ -166,7 +166,7 @@ const BannerSearch: React.FC = () => {
 
             {!loading && searchQuery && results.length === 0 && (
               <div className="text-center py-8 text-gray-500 px-4">
-                No results found for "{searchQuery}"
+                No results found for &quot;{searchQuery}&quot;
               </div>
             )}
 
