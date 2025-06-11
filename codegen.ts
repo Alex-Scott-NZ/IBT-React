@@ -7,6 +7,11 @@ const config: CodegenConfig = {
   generates: {
     'src/gql/gql-generated.ts': {
       plugins: [
+        {
+          add: {
+            content: '/* eslint-disable */'
+          }
+        },
         'typescript',
         'typescript-operations',
         'typescript-react-query',

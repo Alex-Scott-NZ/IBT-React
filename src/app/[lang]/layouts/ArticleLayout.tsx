@@ -1,3 +1,4 @@
+// src\app\[lang]\layouts\ArticleLayout.tsx
 import React from 'react';
 import BaseLayout from './BaseLayout';
 import Image from 'next/image';
@@ -43,12 +44,13 @@ const ArticleLayout = ({
   context,
   lang,
 }: ArticleLayoutProps) => {
-  const relatedPdf = article?.articleDetails?.relatedPdf?.nodes?.[0] as PdfItem;
+  const relatedPdfNode = article?.articleDetails?.relatedPdf?.nodes?.[0];
+  const relatedPdf =
+    relatedPdfNode?.__typename === 'PdfItem' ? relatedPdfNode : undefined;
   const pdfUrl = relatedPdf?.pdfItemDetails?.pdfFile?.node?.mediaItemUrl || '';
   const featuredImage = article?.featuredImage?.node;
-  const audio = article?.articleDetails?.relatedAudio?.nodes as
-    | AudioItem[]
-    | undefined;
+  const audioNodes = article?.articleDetails?.relatedAudio?.nodes;
+  const audio = audioNodes?.filter((node) => node.__typename === 'AudioItem');
   const terms = article?.terms?.nodes as TermNode[] | undefined;
   const { publicationDate, suppressDate, displayDate, source } =
     article?.articleDetails || {};
@@ -83,7 +85,7 @@ const ArticleLayout = ({
   const { prev, next } = getBookNavigation();
 
   let journalCoverImage = null;
-  let articlesInJournal: Article[] | null = null;
+  let articlesInJournal = null;
   let journalSlug = '';
   let journalTitle = '';
   const relatedArticles = article?.articleDetails?.relatedArticle?.nodes as
@@ -99,10 +101,13 @@ const ArticleLayout = ({
     if (relatedJournalNode.featuredImage?.node) {
       journalCoverImage = relatedJournalNode.featuredImage.node;
     }
-    articlesInJournal = relatedJournalNode.journalIssueDetails
-      ?.articlesInJournal?.nodes as Article[] | null;
+
+    // Don't cast - just use the data as-is
+    articlesInJournal =
+      relatedJournalNode.journalIssueDetails?.articlesInJournal?.nodes || null;
+
     journalSlug = relatedJournalNode.slug || '';
-    journalTitle = (relatedJournalNode as JournalIssue).title || '';
+    journalTitle = relatedJournalNode.title || '';
   }
 
   const fallbackSVG = `data:image/svg+xml;base64,${Buffer.from(
@@ -231,6 +236,9 @@ const ArticleLayout = ({
             </h3>
             <ul className="list-none m-0 p-0">
               {articlesInJournal.map((issueArticle, index) => {
+                // Check if it's actually an Article
+                if (issueArticle.__typename !== 'Article') return null;
+
                 const isCurrentArticle = issueArticle.slug === article?.slug;
                 const sidebarTitle =
                   issueArticle.articleDetails?.tableOfContentsTitle?.trim() ||

@@ -1,3 +1,4 @@
+// src\app\[lang]\components\PlaceholderWidget.tsx
 import React from 'react';
 import { 
   PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup

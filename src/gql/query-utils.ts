@@ -1,3 +1,4 @@
+// src\gql\query-utils.ts
 import { QueryClient, QueryKey, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { cache } from 'react';
 

@@ -1,3 +1,4 @@
+// src\app\[lang]\journal\page.tsx
 
 import React from 'react';
 import BaseLayoutNoSideBars from '../layouts/BaseLayoutNoSideBars';

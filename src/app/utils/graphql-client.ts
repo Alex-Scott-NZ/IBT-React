@@ -1,4 +1,4 @@
-// src/app/utils/graphql-client.ts
+// src\app\utils\graphql-client.ts
 
 export class GraphQLClient {
   private endpoint: string;

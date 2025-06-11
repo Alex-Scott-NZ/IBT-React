@@ -1,4 +1,4 @@
-// /app/[lang]/layouts/BaseLayoutNoSideBars.tsx
+// src\app\[lang]\layouts\BaseLayoutNoSideBars.tsx
 import React, { ReactNode } from 'react';
 import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';

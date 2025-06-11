@@ -1,4 +1,4 @@
-// /app/[lang]/layouts/BaseLayout.tsx
+// src\app\[lang]\layouts\BaseLayout.tsx
 import { Suspense, ReactNode } from 'react';
 import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';

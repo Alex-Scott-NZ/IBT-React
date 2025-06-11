@@ -1,4 +1,4 @@
-// src/app/[lang]/components/NavigationMenu.tsx
+// src\app\[lang]\components\NavigationMenu.tsx
 'use client';
 import { useState, useCallback, useMemo } from 'react';
 import useSWR from 'swr';

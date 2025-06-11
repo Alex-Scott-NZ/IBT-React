@@ -1,4 +1,4 @@
-// src/app/[lang]/admin/meilisearch/page.tsx
+// src\app\[lang]\admin\meilisearch\page.tsx
 
 import MeilisearchAdmin from '@/app/[lang]/components/MeilisearchAdmin';
 

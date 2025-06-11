@@ -1,3 +1,4 @@
+// src\app\[lang]\layouts\PdfViewerComponent.tsx
 'use client';
 
 import { Worker, Viewer, ViewMode, ScrollMode } from '@react-pdf-viewer/core';

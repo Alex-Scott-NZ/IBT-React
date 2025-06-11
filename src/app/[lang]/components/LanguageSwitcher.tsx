@@ -1,4 +1,4 @@
-// /app/[lang]/components/LanguageSwitcher.tsx
+// src\app\[lang]\components\LanguageSwitcher.tsx
 'use client';
 import { useState, useCallback } from 'react';
 import Link from 'next/link';

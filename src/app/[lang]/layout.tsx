@@ -1,3 +1,4 @@
+// src\app\[lang]\layout.tsx
 import { Metadata } from 'next';
 import '../globals.css';
 import ThemeProviderWrapper from '../ThemeProviderWrapper';
