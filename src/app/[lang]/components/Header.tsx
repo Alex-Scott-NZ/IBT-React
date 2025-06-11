@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { GetGlobalSettingsQuery } from '@/gql/gql-generated';
 import LanguageSwitcher from './LanguageSwitcher';
-import BannerSearch from './BannerSearch';
+import ModalSearch from './ModalSearch';  // Changed import
 
 interface HeaderProps {
   globalSettings: GetGlobalSettingsQuery['globalSettings'];
@@ -47,17 +47,17 @@ const Header = ({ globalSettings, lang }: HeaderProps) => {
               </Link>
             </div>
             
-            {/* Right side with language switcher and search */}
-            <div className="hidden md:flex flex-col items-end gap-3 mt-2">
+            {/* Right side controls - now in a row */}
+            <div className="hidden md:flex items-center gap-3">
+              <ModalSearch />
               <LanguageSwitcher currentLang={lang} />
-              <BannerSearch />
             </div>
           </div>
           
-          {/* Mobile: Stack language switcher and search */}
-          <div className="md:hidden mt-3 flex flex-col items-end gap-2">
+          {/* Mobile controls - also in a row */}
+          <div className="md:hidden mt-3 flex justify-end items-center gap-3">
+            <ModalSearch />
             <LanguageSwitcher currentLang={lang} />
-            <BannerSearch />
           </div>
         </header>
       </div>
