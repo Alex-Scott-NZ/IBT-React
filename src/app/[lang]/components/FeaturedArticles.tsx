@@ -1,8 +1,8 @@
+// src\app\[lang]\components\FeaturedArticles.tsx
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import { GetArticlesQuery } from '@/gql/gql-generated';
-import { FragmentFeaturedImageFragment } from '@/gql/graphql';
 
 interface FeaturedArticlesProps {
   articles: NonNullable<GetArticlesQuery['articles']>['nodes'];
@@ -27,7 +27,8 @@ const FeaturedArticles: React.FC<FeaturedArticlesProps> = ({ articles }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {articles.map((article) => {
-        const image = article.featuredImage?.node as Partial<FragmentFeaturedImageFragment> | undefined;
+        // Simply use the featuredImage.node directly without the fragment type
+        const image = article.featuredImage?.node;
         return (
           <Link href={article.uri!} key={article.id}>
             <div className="relative h-48 overflow-hidden transition-colors hover:bg-gray-400/5">
