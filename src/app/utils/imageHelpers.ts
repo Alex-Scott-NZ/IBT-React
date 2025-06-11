@@ -1,7 +1,14 @@
-import { FragmentFeaturedImageFragment } from "@/gql/graphql";
+// src\app\utils\imageHelpers.ts
+
+// Define the interface based on what the function actually uses
+interface ImageNode {
+  sourceUrl?: string | null;
+  mediaItemUrl?: string | null;
+  srcSet?: string | null;
+}
 
 export function getImageUrl(
-  imageNode: Partial<FragmentFeaturedImageFragment> | undefined,
+  imageNode: ImageNode | undefined,
   targetWidth: number = 768
 ): string {
   if (!imageNode) {
