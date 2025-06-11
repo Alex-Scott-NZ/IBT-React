@@ -46,12 +46,16 @@ interface Document {
   relatedItemsCount: number;
   displayOnFrontPage: boolean;
   content?: string;
+  pdfContent?: string;
+  contentForSearch?: string;
   fullTitle: string;
   relatedContent?: RelatedContent;
   _formatted?: {
     title?: string;
     subtitle?: string;
     content?: string;
+    pdfContent?: string;
+    contentForSearch?: string;
     fullTitle?: string;
   };
 }
@@ -124,22 +128,28 @@ const MeilisearchAdmin: React.FC = () => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [semanticRatio, setSemanticRatio] = useState(0.5); // Add semantic ratio state
+  const [semanticRatio, setSemanticRatio] = useState(0.5);
   
   // Initial filter state
   const initialFilters = {
     language: currentLang,
-    displayOnFrontPage: 'true',
+    displayOnFrontPage: 'all',
     dateRange: 'all',
     customDateFrom: '',
     customDateTo: ''
   };
   
+  // Server-side filters (trigger new search)
   const [filters, setFilters] = useState(initialFilters);
+  
+  // Client-side filters (filter existing results)
   const [relatedContentFilters, setRelatedContentFilters] = useState<Record<string, string[]>>({});
   const [categoryFilters, setCategoryFilters] = useState<Set<string>>(new Set());
 
-  const limit = 10;
+  // Fetch all results for client-side filtering
+  const fetchLimit = 1000; // Adjust based on your total articles
+  const displayLimit = 10; // How many to show per page
+  
   const searchHost = process.env.NEXT_PUBLIC_MEILISEARCH_HOST || 'https://headless.saggitari.us/search-api';
   const searchKey = process.env.NEXT_PUBLIC_MEILISEARCH_SEARCH_KEY || 'd7d3be8f7e614fff7cdadb3041791b86a7c8f64e928531a2157ea943d7382442';
   const baseUrl = process.env.NEXT_PUBLIC_ROOT_URL || 'http://localhost:3000';
@@ -171,7 +181,7 @@ const MeilisearchAdmin: React.FC = () => {
     setExpandedCategories(new Set());
     setShowDatePicker(false);
     setCurrentOffset(0);
-    setSemanticRatio(0.5); // Reset semantic ratio
+    setSemanticRatio(0.5);
   };
 
   // Debounce search query
@@ -313,7 +323,7 @@ const MeilisearchAdmin: React.FC = () => {
     return counts;
   }, [documents]);
 
-  // Filter documents based on selected categories and specific items
+  // Filter documents based on selected categories and specific items (CLIENT-SIDE)
   const filteredDocuments = useMemo(() => {
     let filtered = documents;
 
@@ -419,6 +429,7 @@ const MeilisearchAdmin: React.FC = () => {
   const fetchDocuments = useCallback(async () => {
     setLoading(true);
     try {
+      // Build server-side filters
       const filterArray: string[] = [];
       if (filters.language !== 'all') filterArray.push(`language = "${filters.language}"`);
       if (filters.displayOnFrontPage !== 'all') filterArray.push(`displayOnFrontPage = ${filters.displayOnFrontPage}`);
@@ -428,8 +439,8 @@ const MeilisearchAdmin: React.FC = () => {
       
       const body: any = {
         q: debouncedSearchQuery,
-        limit,
-        offset: currentOffset,
+        limit: fetchLimit, // Fetch all results (up to 1000)
+        offset: 0, // Always start from 0 to get all results
         filter: filterArray.length > 0 ? filterArray.join(' AND ') : undefined,
         sort: ['publicationDate:desc']
       };
@@ -438,14 +449,14 @@ const MeilisearchAdmin: React.FC = () => {
       if (debouncedSearchQuery && semanticRatio > 0) {
         body.hybrid = {
           semanticRatio: semanticRatio,
-          embedder: 'default' // Use 'default' as per the documentation
+          embedder: 'default'
         };
       }
 
       // Add highlighting and cropping when there's a search query
       if (debouncedSearchQuery) {
-        body.attributesToHighlight = ['title', 'subtitle', 'content'];
-        body.attributesToCrop = ['content'];
+        body.attributesToHighlight = ['title', 'subtitle', 'content', 'pdfContent', 'contentForSearch'];
+        body.attributesToCrop = ['content', 'pdfContent', 'contentForSearch'];
         body.cropLength = 200;
         body.highlightPreTag = '<mark class="bg-yellow-200">';
         body.highlightPostTag = '</mark>';
@@ -455,8 +466,7 @@ const MeilisearchAdmin: React.FC = () => {
         query: debouncedSearchQuery,
         filters: filterArray,
         semanticRatio: semanticRatio,
-        offset: currentOffset,
-        limit: limit
+        limit: fetchLimit
       });
 
       const response = await fetch(`${searchHost}/indexes/articles/search`, {
@@ -474,7 +484,9 @@ const MeilisearchAdmin: React.FC = () => {
       setTotalHits(data.estimatedTotalHits || 0);
       setSearchTime(data.processingTimeMs || null);
       
+      // Reset client-side filters and pagination when search changes
       if (debouncedSearchQuery !== searchQuery) {
+        setCurrentOffset(0);
         setRelatedContentFilters({});
         setCategoryFilters(new Set());
         setExpandedCategories(new Set());
@@ -483,7 +495,7 @@ const MeilisearchAdmin: React.FC = () => {
       console.error('Error fetching documents:', error);
     }
     setLoading(false);
-  }, [debouncedSearchQuery, filters, currentOffset, getDateFilter, searchHost, searchKey, limit, searchQuery, semanticRatio]);
+  }, [debouncedSearchQuery, filters, getDateFilter, searchHost, searchKey, fetchLimit, searchQuery, semanticRatio]);
 
   // Fetch index stats
   const fetchIndexStats = useCallback(async () => {
@@ -521,7 +533,7 @@ const MeilisearchAdmin: React.FC = () => {
       const data = await response.json();
 
       if (data.success) {
-        setReindexStatus(`✅ Reindexing completed! Total: ${data.total}, Indexed: ${data.indexed}`);
+        setReindexStatus(`✅ Reindexing completed! Total: ${data.total}, Indexed: ${data.indexed}, With PDF content: ${data.withPdfContent || 0}`);
         
         setTimeout(() => {
           fetchIndexStats();
@@ -583,9 +595,10 @@ const MeilisearchAdmin: React.FC = () => {
     }, 100);
   };
 
+  // Fetch documents when server-side filters or search changes
   useEffect(() => {
     fetchDocuments();
-  }, [filters, debouncedSearchQuery, currentOffset, fetchDocuments]);
+  }, [filters, debouncedSearchQuery, fetchDocuments]);
 
   useEffect(() => {
     fetchIndexStats();
@@ -603,10 +616,10 @@ const MeilisearchAdmin: React.FC = () => {
   };
 
   // Pagination for filtered documents
-  const paginatedDocuments = filteredDocuments.slice(currentOffset, currentOffset + limit);
+  const paginatedDocuments = filteredDocuments.slice(currentOffset, currentOffset + displayLimit);
   const totalFilteredHits = filteredDocuments.length;
-  const totalPages = Math.ceil(totalFilteredHits / limit);
-  const currentPage = Math.floor(currentOffset / limit) + 1;
+  const totalPages = Math.ceil(totalFilteredHits / displayLimit);
+  const currentPage = Math.floor(currentOffset / displayLimit) + 1;
 
   // Count documents with related content
   const docsWithRelatedContent = documents.filter(d => d.relatedItemsCount > 0).length;
@@ -806,14 +819,19 @@ const MeilisearchAdmin: React.FC = () => {
           ) : (
             <div>
               <div className="text-base font-semibold text-blue-900">
-                Found {totalHits} results
+                Fetched {documents.length} results from index
                 {debouncedSearchQuery && <span> for &quot;{debouncedSearchQuery}&quot;</span>}
                 {docsWithRelatedContent > 0 && <span> ({docsWithRelatedContent} with related content)</span>}
                 {searchTime !== null && <span className="text-sm font-normal"> in {searchTime}ms</span>}
               </div>
               {(categoryFilters.size > 0 || Object.keys(relatedContentFilters).length > 0) && (
                 <div className="text-sm text-blue-700">
-                  Showing {totalFilteredHits} filtered results
+                  Filtered to {totalFilteredHits} results (showing {Math.min(displayLimit, totalFilteredHits - currentOffset)} per page)
+                </div>
+              )}
+              {documents.length >= fetchLimit && (
+                <div className="text-sm text-orange-700 mt-1">
+                  Note: Showing first {fetchLimit} results. Use search to narrow down.
                 </div>
               )}
             </div>
@@ -838,12 +856,16 @@ const MeilisearchAdmin: React.FC = () => {
           
           {showFilters && (
             <div className="mt-4 space-y-4">
+              <div className="text-xs text-gray-600 italic p-2 bg-gray-50 rounded">
+                Note: Language, Date, and Front Page filters trigger new searches. Related Content filters work on already-fetched results.
+              </div>
+              
               {/* Standard Filters - Three columns */}
               <div className="grid grid-cols-3 gap-4">
                 {/* Language Filter */}
                 <div className="p-4 bg-blue-100 rounded-lg">
                   <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
-                    <Globe size={16} /> Language
+                    <Globe size={16} /> Language (Server Filter)
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     <button
@@ -874,7 +896,7 @@ const MeilisearchAdmin: React.FC = () => {
                 {/* Date Range Filter */}
                 <div className="p-4 bg-blue-100 rounded-lg">
                   <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
-                    <Calendar size={16} /> Date Range
+                    <Calendar size={16} /> Date Range (Server Filter)
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {['all', 'week', 'month', 'year'].map(range => (
@@ -925,7 +947,7 @@ const MeilisearchAdmin: React.FC = () => {
                 {/* Front Page Filter */}
                 <div className="p-4 bg-blue-100 rounded-lg">
                   <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
-                    <Home size={16} /> Front Page Display
+                    <Home size={16} /> Front Page Display (Server Filter)
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {['all', 'true', 'false'].map(value => (
@@ -945,7 +967,7 @@ const MeilisearchAdmin: React.FC = () => {
 
               {/* Related Content Filters */}
               <div className="p-4 bg-blue-100 rounded-lg">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">Related Content Filters</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Related Content Filters (Client-side)</h3>
                 
                 {/* Category Level Filters */}
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -1082,12 +1104,31 @@ const MeilisearchAdmin: React.FC = () => {
                         )}
                       </div>
                       
-                      {/* Search Snippet */}
-                      {showSnippets && debouncedSearchQuery && doc._formatted?.content && (
+                      {/* Search Snippet - Enhanced to show PDF content */}
+                      {showSnippets && debouncedSearchQuery && (
                         <div className="mb-3 p-3 bg-gray-100 rounded border border-gray-200 text-sm">
-                          <div className="text-gray-700 italic">
-                            ...{renderHighlightedText(doc._formatted.content)}...
-                          </div>
+                          {doc._formatted?.content ? (
+                            <div className="text-gray-700 italic">
+                              ...{renderHighlightedText(doc._formatted.content)}...
+                            </div>
+                          ) : doc._formatted?.contentForSearch ? (
+                            <div className="text-gray-700 italic">
+                              ...{renderHighlightedText(doc._formatted.contentForSearch)}...
+                            </div>
+                          ) : doc._formatted?.pdfContent ? (
+                            <div className="text-gray-700 italic">
+                              <span className="text-xs text-gray-500 font-normal">[From PDF] </span>
+                              ...{renderHighlightedText(doc._formatted.pdfContent)}...
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                      
+                      {/* PDF Content Indicator */}
+                      {!doc.content && doc.pdfContent && (
+                        <div className="mb-3 text-sm text-blue-600 italic">
+                          <FileText size={14} className="inline mr-1" />
+                          Content extracted from PDF
                         </div>
                       )}
                       
@@ -1233,7 +1274,7 @@ const MeilisearchAdmin: React.FC = () => {
             {/* Pagination */}
             <div className="flex justify-between items-center mt-6">
               <button
-                onClick={() => handlePagination(Math.max(0, currentOffset - limit))}
+                onClick={() => handlePagination(Math.max(0, currentOffset - displayLimit))}
                 disabled={currentOffset === 0}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
               >
@@ -1246,8 +1287,8 @@ const MeilisearchAdmin: React.FC = () => {
               </span>
               
               <button
-                onClick={() => handlePagination(currentOffset + limit)}
-                disabled={currentOffset + limit >= totalFilteredHits}
+                onClick={() => handlePagination(currentOffset + displayLimit)}
+                disabled={currentOffset + displayLimit >= totalFilteredHits}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
               >
                 Next

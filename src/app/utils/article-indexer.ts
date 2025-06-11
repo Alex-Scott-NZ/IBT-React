@@ -54,6 +54,9 @@ const ARTICLES_QUERY = `
                 id
                 title
                 slug
+                pdfItemDetails {
+                  pdfTextContent
+                }
               }
             }
           }
@@ -116,6 +119,15 @@ const ARTICLES_QUERY = `
   }
 `;
 
+interface PdfItem {
+  id: string;
+  title: string;
+  slug: string;
+  pdfItemDetails?: {
+    pdfTextContent?: string | null;
+  };
+}
+
 interface Article {
   id: string;
   databaseId: number;
@@ -155,11 +167,7 @@ interface Article {
     suppressDate: boolean;
     displayDate: string | null;
     relatedPdf: {
-      nodes: Array<{
-        id: string;
-        title: string;
-        slug: string;
-      }>;
+      nodes: PdfItem[];
     } | null;
     relatedAudio: {
       nodes: Array<{
@@ -217,7 +225,7 @@ interface ArticlesQueryResponse {
 
 export class ArticleIndexer {
   private graphqlClient: GraphQLClient;
-  
+
   constructor() {
     const endpoint = `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/graphql`;
     this.graphqlClient = new GraphQLClient(endpoint);
@@ -245,27 +253,48 @@ export class ArticleIndexer {
   }
 
   // Transform article for Meilisearch
+
   private transformArticle(article: Article) {
     const language = this.extractLanguage(article.uri);
-    const places = article.places.nodes.map(p => p.name);
-    const topics = article.topics.nodes.map(t => t.name);
-    
+    const places = article.places.nodes.map((p) => p.name);
+    const topics = article.topics.nodes.map((t) => t.name);
+
     // Build full title with subtitle
-    const fullTitle = article.articleDetails.subtitle 
+    const fullTitle = article.articleDetails.subtitle
       ? `${article.title}: ${article.articleDetails.subtitle}`
       : article.title;
-    
+
     // Get display date
-    const displayDate = article.articleDetails.suppressDate && article.articleDetails.displayDate
-      ? article.articleDetails.displayDate
-      : article.articleDetails.publicationDate;
-    
+    const displayDate =
+      article.articleDetails.suppressDate && article.articleDetails.displayDate
+        ? article.articleDetails.displayDate
+        : article.articleDetails.publicationDate;
+
     // Calculate numeric timestamp from publicationDate
-    const publicationTimestamp = new Date(article.articleDetails.publicationDate).getTime();
-    
-    // Collect related content
+    const publicationTimestamp = new Date(
+      article.articleDetails.publicationDate
+    ).getTime();
+
+    // Extract PDF text content if available
+    const pdfTextContent =
+      article.articleDetails.relatedPdf?.nodes
+        ?.map((pdf) => pdf.pdfItemDetails?.pdfTextContent || '')
+        .filter((content) => content.length > 0)
+        .join('\n\n') || '';
+
+    // Get main content - use PDF content if article content is empty
+    const mainContent = this.stripHtml(article.content);
+    const contentForIndexing = mainContent || pdfTextContent;
+
+    // Collect related content - IMPORTANT: Don't include pdfItemDetails
     const relatedContent = {
-      pdfs: article.articleDetails.relatedPdf?.nodes || [],
+      pdfs:
+        article.articleDetails.relatedPdf?.nodes?.map((pdf) => ({
+          id: pdf.id,
+          title: pdf.title,
+          slug: pdf.slug,
+          // Explicitly NOT including pdfItemDetails here
+        })) || [],
       audio: article.articleDetails.relatedAudio?.nodes || [],
       videos: article.articleDetails.relatedVideo?.nodes || [],
       articles: article.articleDetails.relatedArticle?.nodes || [],
@@ -273,67 +302,72 @@ export class ArticleIndexer {
       collections: article.articleDetails.relatedCollection?.nodes || [],
       journals: article.articleDetails.relatedJournal?.nodes || [],
     };
-    
+
     // Count related items
     const relatedItemsCount = Object.values(relatedContent).reduce(
-      (sum, items) => sum + items.length, 
+      (sum, items) => sum + items.length,
       0
     );
-    
+
     return {
       // Use only 'id' as the primary key
       id: `article_${article.databaseId}`,
-      
+
       // Core fields
       databaseId: article.databaseId,
       title: article.title,
       subtitle: article.articleDetails.subtitle,
       fullTitle,
       slug: article.slug,
-      content: this.stripHtml(article.content),
-      
+      content: mainContent, // Original article content
+      pdfContent: pdfTextContent, // PDF text content as a flat field
+      contentForSearch: contentForIndexing, // Content to use for search/highlighting
+
       // URLs
       uri: article.uri,
       link: article.link,
-      
+
       // Dates
       date: article.date,
       modified: article.modified,
       publicationDate: article.articleDetails.publicationDate,
-      publicationTimestamp, // Add numeric timestamp for filtering
+      publicationTimestamp,
       displayDate,
       suppressDate: article.articleDetails.suppressDate,
-      
+
       // Metadata
       language,
       source: article.articleDetails.source,
       displayOnFrontPage: article.articleDetails.displayOnFrontPage,
-      
+
       // Taxonomies
       places,
       topics,
-      
+
       // Featured image
       featuredImage: article.featuredImage?.node?.sourceUrl || null,
       featuredImageAlt: article.featuredImage?.node?.altText || null,
-      
-      // Related content
+
+      // Related content (without PDF text content)
       relatedContent,
       hasRelatedPdf: relatedContent.pdfs.length > 0,
       hasRelatedAudio: relatedContent.audio.length > 0,
       hasRelatedVideo: relatedContent.videos.length > 0,
       relatedItemsCount,
-      
-      // Search optimization - combined text field
+
+      // Search optimization - combined text field including PDF content
       _searchableText: [
         article.title,
         article.articleDetails.subtitle || '',
-        this.stripHtml(article.content),
+        mainContent,
+        pdfTextContent, // Include PDF content in searchable text
         article.articleDetails.source || '',
         places.join(' '),
         topics.join(' '),
-      ].join(' ').toLowerCase(),
-      
+      ]
+        .join(' ')
+        .toLowerCase(),
+
       // Sorting fields
       _rankingScore: article.articleDetails.displayOnFrontPage ? 1 : 0,
     };
@@ -344,25 +378,27 @@ export class ArticleIndexer {
     const allArticles: Article[] = [];
     let hasNextPage = true;
     let after: string | null = null;
-    
+
     while (hasNextPage) {
-      console.log(`Fetching articles... ${after ? `after cursor: ${after}` : 'first page'}`);
-      
-      const queryResponse: ArticlesQueryResponse = await this.graphqlClient.query<ArticlesQueryResponse>(
-        ARTICLES_QUERY, 
-        {
+      console.log(
+        `Fetching articles... ${after ? `after cursor: ${after}` : 'first page'}`
+      );
+
+      const queryResponse: ArticlesQueryResponse =
+        await this.graphqlClient.query<ArticlesQueryResponse>(ARTICLES_QUERY, {
           first: 50,
           after,
-        }
-      );
-      
+        });
+
       allArticles.push(...queryResponse.articles.nodes);
       hasNextPage = queryResponse.articles.pageInfo.hasNextPage;
       after = queryResponse.articles.pageInfo.endCursor;
-      
-      console.log(`  Fetched ${queryResponse.articles.nodes.length} articles. Total: ${allArticles.length}`);
+
+      console.log(
+        `  Fetched ${queryResponse.articles.nodes.length} articles. Total: ${allArticles.length}`
+      );
     }
-    
+
     return allArticles;
   }
 
@@ -370,18 +406,20 @@ export class ArticleIndexer {
   async configureIndexSettings() {
     const client = getMeilisearchClient();
     const index = client.index('articles');
-    
+
     console.log('Configuring index settings...');
-    
+
     // Check if we have OpenAI API key for embeddings
     const hasOpenAIKey = !!process.env.OPENAI_API_KEY;
-    
+
     const settings: any = {
       searchableAttributes: [
         'fullTitle',
         'title',
         'subtitle',
         'content',
+        'pdfContent', // Add PDF content as searchable
+        'contentForSearch', // Combined content field
         'places',
         'topics',
         'source',
@@ -411,7 +449,9 @@ export class ArticleIndexer {
         'relatedItemsCount',
         'displayOnFrontPage',
         'relatedContent',
-        'content', 
+        'content',
+        'pdfContent', // Include PDF content in displayed attributes
+        'contentForSearch', // Include combined content for highlighting
       ],
       filterableAttributes: [
         'language',
@@ -443,7 +483,7 @@ export class ArticleIndexer {
         '_rankingScore:desc',
       ],
     };
-    
+
     // Add embedder configuration if OpenAI key is available
     if (hasOpenAIKey) {
       console.log('OpenAI API key found - configuring semantic search...');
@@ -451,23 +491,27 @@ export class ArticleIndexer {
         default: {
           source: 'openAi',
           apiKey: process.env.OPENAI_API_KEY,
-          model: 'text-embedding-3-small',
-          documentTemplate: '{{doc.title}} {{doc.subtitle}} {{doc.content}}',
-          dimensions: 1536,
-        }
+          model: 'text-embedding-3-large',
+          // Include PDF content in embeddings
+          documentTemplate:
+            '{{doc.title}} {{doc.subtitle}} {{doc.content}} {{doc.pdfContent}}',
+          dimensions: 3072,
+        },
       };
     } else {
-      console.log('No OpenAI API key found - semantic search will not be available');
+      console.log(
+        'No OpenAI API key found - semantic search will not be available'
+      );
     }
-    
+
     const settingsTask = await index.updateSettings(settings);
-    
+
     console.log(`Settings update task: ${settingsTask.taskUid}`);
-    
+
     // Wait for settings to be applied
     console.log('Waiting for settings to be applied...');
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     if (hasOpenAIKey) {
       console.log('Semantic search configuration complete!');
     }
@@ -476,82 +520,101 @@ export class ArticleIndexer {
   // Index all articles
   async indexArticles() {
     console.log('Starting article indexing...');
-    
+
     // Get the Meilisearch client
     const client = getMeilisearchClient();
-    
+
     // Check if index exists by listing all indexes
     console.log('Checking for existing indexes...');
     const { results: indexes } = await client.getIndexes();
-    const indexExists = indexes.some(idx => idx.uid === 'articles');
-    
+    const indexExists = indexes.some((idx) => idx.uid === 'articles');
+
     if (!indexExists) {
       // Create the index with explicit primary key
       console.log('Creating index "articles" with primary key "id"...');
-      const createTask = await client.createIndex('articles', { primaryKey: 'id' });
+      const createTask = await client.createIndex('articles', {
+        primaryKey: 'id',
+      });
       console.log(`Index creation task: ${createTask.taskUid}`);
-      
+
       // Wait for index creation to complete
       console.log('Waiting for index creation...');
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
     } else {
       console.log('Index "articles" already exists');
     }
-    
+
     // Now get the index reference
     const index = client.index('articles');
-    
+
     // Configure index settings (now includes embeddings if API key available)
     await this.configureIndexSettings();
-    
+
     // Fetch all articles
     const articles = await this.fetchAllArticles();
     console.log(`Total articles fetched: ${articles.length}`);
-    
+
     // Transform articles
-    const documents = articles.map(article => this.transformArticle(article));
-    
+    const documents = articles.map((article) => this.transformArticle(article));
+
     // Filter out articles without titles
-    const validDocuments = documents.filter(doc => doc.title);
+    const validDocuments = documents.filter((doc) => doc.title);
     console.log(`Valid articles to index: ${validDocuments.length}`);
-    
+
+    // Log articles that have PDF content
+    const articlesWithPdfContent = validDocuments.filter(
+      (doc) => doc.pdfContent
+    );
+    console.log(`Articles with PDF content: ${articlesWithPdfContent.length}`);
+
     // Log a sample document to verify timestamp field
     if (validDocuments.length > 0) {
       console.log('Sample document with timestamp:', {
         id: validDocuments[0].id,
         publicationDate: validDocuments[0].publicationDate,
         publicationTimestamp: validDocuments[0].publicationTimestamp,
-        timestampAsDate: new Date(validDocuments[0].publicationTimestamp).toISOString()
+        timestampAsDate: new Date(
+          validDocuments[0].publicationTimestamp
+        ).toISOString(),
+        hasPdfContent: !!validDocuments[0].pdfContent,
+        pdfContentLength: validDocuments[0].pdfContent?.length || 0,
       });
     }
-    
+
     // Add to Meilisearch with explicit primary key
     if (validDocuments.length > 0) {
-      const task = await index.addDocuments(validDocuments, { primaryKey: 'id' });
+      const task = await index.addDocuments(validDocuments, {
+        primaryKey: 'id',
+      });
       console.log('Indexing task enqueued:', task.taskUid);
-      console.log('Indexing task submitted. Check Meilisearch dashboard for status.');
-      
+      console.log(
+        'Indexing task submitted. Check Meilisearch dashboard for status.'
+      );
+
       // Wait a bit to let the task process
       console.log('Waiting for indexing to process...');
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
       // Check final status
       try {
         const stats = await index.getStats();
         console.log(`Index now contains ${stats.numberOfDocuments} documents`);
-        
+
         // If embeddings are configured, they'll be generated automatically
         if (process.env.OPENAI_API_KEY) {
-          console.log('Note: Embeddings will be generated in the background for semantic search');
+          console.log(
+            'Note: Embeddings will be generated in the background for semantic search'
+          );
         }
       } catch (e) {
         console.log('Could not get stats yet, check dashboard for status');
       }
     }
-    
+
     return {
       total: articles.length,
       indexed: validDocuments.length,
+      withPdfContent: articlesWithPdfContent.length,
     };
   }
 }

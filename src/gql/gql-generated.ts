@@ -1,5 +1,5 @@
 // src\gql\gql-generated.ts
-import { useQuery, useSuspenseQuery, type UseQueryOptions, type UseSuspenseQueryOptions } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery, UseQueryOptions, UseSuspenseQueryOptions } from '@tanstack/react-query';
 import { fetcher } from './fetcher';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -8,14 +8,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-
-            type FetchOptions = {
-              cache?: RequestCache;
-              next?: NextFetchRequestConfig;
-            };
-            type RequestInit = {
-              headers: (HeadersInit & FetchOptions) | FetchOptions;
-            };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -27,7 +19,6 @@ export type Scalars = {
 
 /** Connection between the ArticleDetails_Fields type and the ContentNode type */
 export type AcfContentNodeConnection = Connection & ContentNodeConnection & {
-  __typename?: 'AcfContentNodeConnection';
   /** Edges for the AcfContentNodeConnection connection */
   edges: Array<AcfContentNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -38,7 +29,6 @@ export type AcfContentNodeConnection = Connection & ContentNodeConnection & {
 
 /** An edge in a connection */
 export type AcfContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'AcfContentNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -47,7 +37,6 @@ export type AcfContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
 
 /** Page Info on the &quot;AcfContentNodeConnection&quot; */
 export type AcfContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'AcfContentNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -78,7 +67,6 @@ export type AcfFieldGroupFields = {
 
 /** Connection between the FGGlobalSettings_Fields type and the MediaItem type */
 export type AcfMediaItemConnectionEdge = Edge & MediaItemConnectionEdge & OneToOneConnection & {
-  __typename?: 'AcfMediaItemConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -96,7 +84,6 @@ export type AcfOptionsPage = {
 
 /** The article type */
 export type Article = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithContentEditor & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & WithAcfArticleDetails & {
-  __typename?: 'Article';
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /** Fields of the ArticleDetails ACF Field Group */
@@ -320,7 +307,6 @@ export type ArticleConnectionPageInfo = {
 
 /** The &quot;ArticleDetails&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type ArticleDetails = AcfFieldGroup & AcfFieldGroupFields & ArticleDetails_Fields & {
-  __typename?: 'ArticleDetails';
   /** This field allows for text input and is not limited to exact dates. It is intended for use when the exact publication date is unknown or has been chosen to be suppressed. In such cases, the information entered in this field will be displayed in place of the exact publication date. Note that the original publication date, even if suppressed from public view, will still be used for organizing articles in search result queries. */
   displayDate?: Maybe<Scalars['String']['output']>;
   /** By default, new articles are featured on the front page according to their publication date, with the most recent articles appearing first. If you prefer an article to be available on the website but not highlighted on the front page, you can opt to suppress it from appearing there. This allows the article to exist publicly on the site without being prominently displayed on the front page. */
@@ -520,14 +506,13 @@ export type ArticleDetails_FieldsRelatedVideoArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum ArticleIdType {
+export type ArticleIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Set relationships between the article to places */
 export type ArticlePlacesInput = {
@@ -551,7 +536,6 @@ export type ArticlePlacesNodeInput = {
 
 /** Connection between the Article type and the place type */
 export type ArticleToPlaceConnection = Connection & PlaceConnection & {
-  __typename?: 'ArticleToPlaceConnection';
   /** Edges for the ArticleToPlaceConnection connection */
   edges: Array<ArticleToPlaceConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -562,7 +546,6 @@ export type ArticleToPlaceConnection = Connection & PlaceConnection & {
 
 /** An edge in a connection */
 export type ArticleToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
-  __typename?: 'ArticleToPlaceConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -571,7 +554,6 @@ export type ArticleToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
 
 /** Page Info on the &quot;ArticleToPlaceConnection&quot; */
 export type ArticleToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
-  __typename?: 'ArticleToPlaceConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -630,7 +612,6 @@ export type ArticleToPlaceConnectionWhereArgs = {
 
 /** Connection between the Article type and the article type */
 export type ArticleToPreviewConnectionEdge = ArticleConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'ArticleToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -639,7 +620,6 @@ export type ArticleToPreviewConnectionEdge = ArticleConnectionEdge & Edge & OneT
 
 /** Connection between the Article type and the TermNode type */
 export type ArticleToTermNodeConnection = Connection & TermNodeConnection & {
-  __typename?: 'ArticleToTermNodeConnection';
   /** Edges for the ArticleToTermNodeConnection connection */
   edges: Array<ArticleToTermNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -650,7 +630,6 @@ export type ArticleToTermNodeConnection = Connection & TermNodeConnection & {
 
 /** An edge in a connection */
 export type ArticleToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
-  __typename?: 'ArticleToTermNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -659,7 +638,6 @@ export type ArticleToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
 
 /** Page Info on the &quot;ArticleToTermNodeConnection&quot; */
 export type ArticleToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
-  __typename?: 'ArticleToTermNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -720,7 +698,6 @@ export type ArticleToTermNodeConnectionWhereArgs = {
 
 /** Connection between the Article type and the topic type */
 export type ArticleToTopicConnection = Connection & TopicConnection & {
-  __typename?: 'ArticleToTopicConnection';
   /** Edges for the ArticleToTopicConnection connection */
   edges: Array<ArticleToTopicConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -731,7 +708,6 @@ export type ArticleToTopicConnection = Connection & TopicConnection & {
 
 /** An edge in a connection */
 export type ArticleToTopicConnectionEdge = Edge & TopicConnectionEdge & {
-  __typename?: 'ArticleToTopicConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -740,7 +716,6 @@ export type ArticleToTopicConnectionEdge = Edge & TopicConnectionEdge & {
 
 /** Page Info on the &quot;ArticleToTopicConnection&quot; */
 export type ArticleToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
-  __typename?: 'ArticleToTopicConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -819,7 +794,6 @@ export type ArticleTopicsNodeInput = {
 
 /** The audioItem type */
 export type AudioItem = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & WithAcfAudioItemDetails & {
-  __typename?: 'AudioItem';
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /** Fields of the AudioItemDetails ACF Field Group */
@@ -1029,7 +1003,6 @@ export type AudioItemConnectionPageInfo = {
 
 /** The &quot;AudioItemDetails&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type AudioItemDetails = AcfFieldGroup & AcfFieldGroupFields & AudioItemDetails_Fields & {
-  __typename?: 'AudioItemDetails';
   /** Text to appear on article page under audio file. */
   articlePageCaption?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;AudioItemDetails&quot; Field Group */
@@ -1081,14 +1054,13 @@ export type AudioItemDetails_FieldsRelatedArticleArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum AudioItemIdType {
+export type AudioItemIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Set relationships between the audioItem to places */
 export type AudioItemPlacesInput = {
@@ -1112,7 +1084,6 @@ export type AudioItemPlacesNodeInput = {
 
 /** Connection between the AudioItem type and the place type */
 export type AudioItemToPlaceConnection = Connection & PlaceConnection & {
-  __typename?: 'AudioItemToPlaceConnection';
   /** Edges for the AudioItemToPlaceConnection connection */
   edges: Array<AudioItemToPlaceConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -1123,7 +1094,6 @@ export type AudioItemToPlaceConnection = Connection & PlaceConnection & {
 
 /** An edge in a connection */
 export type AudioItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
-  __typename?: 'AudioItemToPlaceConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -1132,7 +1102,6 @@ export type AudioItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
 
 /** Page Info on the &quot;AudioItemToPlaceConnection&quot; */
 export type AudioItemToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
-  __typename?: 'AudioItemToPlaceConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -1191,7 +1160,6 @@ export type AudioItemToPlaceConnectionWhereArgs = {
 
 /** Connection between the AudioItem type and the audioItem type */
 export type AudioItemToPreviewConnectionEdge = AudioItemConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'AudioItemToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -1200,7 +1168,6 @@ export type AudioItemToPreviewConnectionEdge = AudioItemConnectionEdge & Edge & 
 
 /** Connection between the AudioItem type and the TermNode type */
 export type AudioItemToTermNodeConnection = Connection & TermNodeConnection & {
-  __typename?: 'AudioItemToTermNodeConnection';
   /** Edges for the AudioItemToTermNodeConnection connection */
   edges: Array<AudioItemToTermNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -1211,7 +1178,6 @@ export type AudioItemToTermNodeConnection = Connection & TermNodeConnection & {
 
 /** An edge in a connection */
 export type AudioItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
-  __typename?: 'AudioItemToTermNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -1220,7 +1186,6 @@ export type AudioItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & 
 
 /** Page Info on the &quot;AudioItemToTermNodeConnection&quot; */
 export type AudioItemToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
-  __typename?: 'AudioItemToTermNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -1281,7 +1246,6 @@ export type AudioItemToTermNodeConnectionWhereArgs = {
 
 /** Connection between the AudioItem type and the topic type */
 export type AudioItemToTopicConnection = Connection & TopicConnection & {
-  __typename?: 'AudioItemToTopicConnection';
   /** Edges for the AudioItemToTopicConnection connection */
   edges: Array<AudioItemToTopicConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -1292,7 +1256,6 @@ export type AudioItemToTopicConnection = Connection & TopicConnection & {
 
 /** An edge in a connection */
 export type AudioItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
-  __typename?: 'AudioItemToTopicConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -1301,7 +1264,6 @@ export type AudioItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
 
 /** Page Info on the &quot;AudioItemToTopicConnection&quot; */
 export type AudioItemToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
-  __typename?: 'AudioItemToTopicConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -1380,7 +1342,6 @@ export type AudioItemTopicsNodeInput = {
 
 /** Avatars are profile images for users. WordPress by default uses the Gravatar service to host and fetch avatars from. */
 export type Avatar = {
-  __typename?: 'Avatar';
   /** URL for the default image or a default type. Accepts &#039;404&#039; (return a 404 instead of a default image), &#039;retro&#039; (8bit), &#039;monsterid&#039; (monster), &#039;wavatar&#039; (cartoon face), &#039;indenticon&#039; (the &#039;quilt&#039;), &#039;mystery&#039;, &#039;mm&#039;, or &#039;mysteryman&#039; (The Oyster Man), &#039;blank&#039; (transparent GIF), or &#039;gravatar_default&#039; (the Gravatar logo). */
   default?: Maybe<Scalars['String']['output']>;
   /** HTML attributes to insert in the IMG element. Is not sanitized. */
@@ -1406,20 +1367,18 @@ export type Avatar = {
 };
 
 /** What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are judged in that order. Default is the value of the 'avatar_rating' option */
-export enum AvatarRatingEnum {
+export type AvatarRatingEnum =
   /** Indicates a G level avatar rating level. */
-  G = 'G',
+  | 'G'
   /** Indicates a PG level avatar rating level. */
-  Pg = 'PG',
+  | 'PG'
   /** Indicates an R level avatar rating level. */
-  R = 'R',
+  | 'R'
   /** Indicates an X level avatar rating level. */
-  X = 'X'
-}
+  | 'X';
 
 /** The book type */
 export type Book = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & WithAcfBookDetails & {
-  __typename?: 'Book';
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /** Fields of the BookDetails ACF Field Group */
@@ -1599,7 +1558,6 @@ export type BookConnectionPageInfo = {
 
 /** The &quot;BookDetails&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type BookDetails = AcfFieldGroup & AcfFieldGroupFields & BookDetails_Fields & {
-  __typename?: 'BookDetails';
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;BookDetails&quot; Field Group */
   displayOnIbtBooks?: Maybe<Scalars['Boolean']['output']>;
   /**
@@ -1651,18 +1609,16 @@ export type BookDetails_FieldsRelatedArticlesArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum BookIdType {
+export type BookIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Book type and the book type */
 export type BookToPreviewConnectionEdge = BookConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'BookToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -1671,7 +1627,6 @@ export type BookToPreviewConnectionEdge = BookConnectionEdge & Edge & OneToOneCo
 
 /** The category type */
 export type Category = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
-  __typename?: 'Category';
   /** The ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<CategoryToAncestorsCategoryConnection>;
   /**
@@ -1833,22 +1788,20 @@ export type CategoryConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum CategoryIdType {
+export type CategoryIdType =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Category type and the category type */
 export type CategoryToAncestorsCategoryConnection = CategoryConnection & Connection & {
-  __typename?: 'CategoryToAncestorsCategoryConnection';
   /** Edges for the CategoryToAncestorsCategoryConnection connection */
   edges: Array<CategoryToAncestorsCategoryConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -1859,7 +1812,6 @@ export type CategoryToAncestorsCategoryConnection = CategoryConnection & Connect
 
 /** An edge in a connection */
 export type CategoryToAncestorsCategoryConnectionEdge = CategoryConnectionEdge & Edge & {
-  __typename?: 'CategoryToAncestorsCategoryConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -1868,7 +1820,6 @@ export type CategoryToAncestorsCategoryConnectionEdge = CategoryConnectionEdge &
 
 /** Page Info on the &quot;CategoryToAncestorsCategoryConnection&quot; */
 export type CategoryToAncestorsCategoryConnectionPageInfo = CategoryConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'CategoryToAncestorsCategoryConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -1881,7 +1832,6 @@ export type CategoryToAncestorsCategoryConnectionPageInfo = CategoryConnectionPa
 
 /** Connection between the Category type and the category type */
 export type CategoryToCategoryConnection = CategoryConnection & Connection & {
-  __typename?: 'CategoryToCategoryConnection';
   /** Edges for the CategoryToCategoryConnection connection */
   edges: Array<CategoryToCategoryConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -1892,7 +1842,6 @@ export type CategoryToCategoryConnection = CategoryConnection & Connection & {
 
 /** An edge in a connection */
 export type CategoryToCategoryConnectionEdge = CategoryConnectionEdge & Edge & {
-  __typename?: 'CategoryToCategoryConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -1901,7 +1850,6 @@ export type CategoryToCategoryConnectionEdge = CategoryConnectionEdge & Edge & {
 
 /** Page Info on the &quot;CategoryToCategoryConnection&quot; */
 export type CategoryToCategoryConnectionPageInfo = CategoryConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'CategoryToCategoryConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -1960,7 +1908,6 @@ export type CategoryToCategoryConnectionWhereArgs = {
 
 /** Connection between the Category type and the ContentNode type */
 export type CategoryToContentNodeConnection = Connection & ContentNodeConnection & {
-  __typename?: 'CategoryToContentNodeConnection';
   /** Edges for the CategoryToContentNodeConnection connection */
   edges: Array<CategoryToContentNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -1971,7 +1918,6 @@ export type CategoryToContentNodeConnection = Connection & ContentNodeConnection
 
 /** An edge in a connection */
 export type CategoryToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'CategoryToContentNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -1980,7 +1926,6 @@ export type CategoryToContentNodeConnectionEdge = ContentNodeConnectionEdge & Ed
 
 /** Page Info on the &quot;CategoryToContentNodeConnection&quot; */
 export type CategoryToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'CategoryToContentNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -2033,7 +1978,6 @@ export type CategoryToContentNodeConnectionWhereArgs = {
 
 /** Connection between the Category type and the category type */
 export type CategoryToParentCategoryConnectionEdge = CategoryConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'CategoryToParentCategoryConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -2042,7 +1986,6 @@ export type CategoryToParentCategoryConnectionEdge = CategoryConnectionEdge & Ed
 
 /** Connection between the Category type and the post type */
 export type CategoryToPostConnection = Connection & PostConnection & {
-  __typename?: 'CategoryToPostConnection';
   /** Edges for the CategoryToPostConnection connection */
   edges: Array<CategoryToPostConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -2053,7 +1996,6 @@ export type CategoryToPostConnection = Connection & PostConnection & {
 
 /** An edge in a connection */
 export type CategoryToPostConnectionEdge = Edge & PostConnectionEdge & {
-  __typename?: 'CategoryToPostConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -2062,7 +2004,6 @@ export type CategoryToPostConnectionEdge = Edge & PostConnectionEdge & {
 
 /** Page Info on the &quot;CategoryToPostConnection&quot; */
 export type CategoryToPostConnectionPageInfo = PageInfo & PostConnectionPageInfo & WpPageInfo & {
-  __typename?: 'CategoryToPostConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -2141,7 +2082,6 @@ export type CategoryToPostConnectionWhereArgs = {
 
 /** Connection between the Category type and the Taxonomy type */
 export type CategoryToTaxonomyConnectionEdge = Edge & OneToOneConnection & TaxonomyConnectionEdge & {
-  __typename?: 'CategoryToTaxonomyConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -2150,7 +2090,6 @@ export type CategoryToTaxonomyConnectionEdge = Edge & OneToOneConnection & Taxon
 
 /** The collection type */
 export type Collection = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithTemplate & Previewable & UniformResourceIdentifiable & WithAcfCollectionDetails & {
-  __typename?: 'Collection';
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /** Connection between the HierarchicalContentNode type and the ContentNode type */
@@ -2316,7 +2255,6 @@ export type CollectionConnectionPageInfo = {
 
 /** The &quot;CollectionDetails&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type CollectionDetails = AcfFieldGroup & AcfFieldGroupFields & CollectionDetails_Fields & {
-  __typename?: 'CollectionDetails';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -2360,18 +2298,16 @@ export type CollectionDetails_FieldsRelatedArticlesArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum CollectionIdType {
+export type CollectionIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Collection type and the collection type */
 export type CollectionToPreviewConnectionEdge = CollectionConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'CollectionToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -2380,7 +2316,6 @@ export type CollectionToPreviewConnectionEdge = CollectionConnectionEdge & Edge 
 
 /** A Comment object */
 export type Comment = DatabaseIdentifier & Node & UniformResourceIdentifiable & {
-  __typename?: 'Comment';
   /** User agent used to post the comment. This field is equivalent to WP_Comment-&gt;comment_agent and the value matching the &quot;comment_agent&quot; column in SQL. */
   agent?: Maybe<Scalars['String']['output']>;
   /**
@@ -2468,7 +2403,6 @@ export type CommentRepliesArgs = {
 
 /** A Comment Author object */
 export type CommentAuthor = Commenter & DatabaseIdentifier & Node & {
-  __typename?: 'CommentAuthor';
   /** Avatar object for user. The avatar object can be retrieved in different sizes by specifying the size argument. */
   avatar?: Maybe<Avatar>;
   /** The unique identifier stored in the database */
@@ -2524,28 +2458,25 @@ export type CommentConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single comment node. Default is "ID". To be used along with the "id" field. */
-export enum CommentNodeIdTypeEnum {
+export type CommentNodeIdTypeEnum =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID'
-}
+  | 'ID';
 
 /** The status of the comment object. */
-export enum CommentStatusEnum {
+export type CommentStatusEnum =
   /** Comments with the Approved status */
-  Approve = 'APPROVE',
+  | 'APPROVE'
   /** Comments with the Unapproved status */
-  Hold = 'HOLD',
+  | 'HOLD'
   /** Comments with the Spam status */
-  Spam = 'SPAM',
+  | 'SPAM'
   /** Comments with the Bin status */
-  Trash = 'TRASH'
-}
+  | 'TRASH';
 
 /** Connection between the Comment type and the Comment type */
 export type CommentToCommentConnection = CommentConnection & Connection & {
-  __typename?: 'CommentToCommentConnection';
   /** Edges for the CommentToCommentConnection connection */
   edges: Array<CommentToCommentConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -2556,7 +2487,6 @@ export type CommentToCommentConnection = CommentConnection & Connection & {
 
 /** An edge in a connection */
 export type CommentToCommentConnectionEdge = CommentConnectionEdge & Edge & {
-  __typename?: 'CommentToCommentConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -2565,7 +2495,6 @@ export type CommentToCommentConnectionEdge = CommentConnectionEdge & Edge & {
 
 /** Page Info on the &quot;CommentToCommentConnection&quot; */
 export type CommentToCommentConnectionPageInfo = CommentConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'CommentToCommentConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -2642,7 +2571,6 @@ export type CommentToCommentConnectionWhereArgs = {
 
 /** Connection between the Comment type and the Commenter type */
 export type CommentToCommenterConnectionEdge = CommenterConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'CommentToCommenterConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The email address representing the author for this particular comment */
@@ -2659,7 +2587,6 @@ export type CommentToCommenterConnectionEdge = CommenterConnectionEdge & Edge & 
 
 /** Connection between the Comment type and the ContentNode type */
 export type CommentToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'CommentToContentNodeConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -2668,7 +2595,6 @@ export type CommentToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edg
 
 /** Connection between the Comment type and the Comment type */
 export type CommentToParentCommentConnectionEdge = CommentConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'CommentToParentCommentConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -2766,40 +2692,39 @@ export type CommenterConnectionEdge = {
 };
 
 /** Options for ordering the connection */
-export enum CommentsConnectionOrderbyEnum {
+export type CommentsConnectionOrderbyEnum =
   /** Order by browser user agent of the commenter. */
-  CommentAgent = 'COMMENT_AGENT',
+  | 'COMMENT_AGENT'
   /** Order by approval status of the comment. */
-  CommentApproved = 'COMMENT_APPROVED',
+  | 'COMMENT_APPROVED'
   /** Order by name of the comment author. */
-  CommentAuthor = 'COMMENT_AUTHOR',
+  | 'COMMENT_AUTHOR'
   /** Order by e-mail of the comment author. */
-  CommentAuthorEmail = 'COMMENT_AUTHOR_EMAIL',
+  | 'COMMENT_AUTHOR_EMAIL'
   /** Order by IP address of the comment author. */
-  CommentAuthorIp = 'COMMENT_AUTHOR_IP',
+  | 'COMMENT_AUTHOR_IP'
   /** Order by URL address of the comment author. */
-  CommentAuthorUrl = 'COMMENT_AUTHOR_URL',
+  | 'COMMENT_AUTHOR_URL'
   /** Order by the comment contents. */
-  CommentContent = 'COMMENT_CONTENT',
+  | 'COMMENT_CONTENT'
   /** Order by date/time timestamp of the comment. */
-  CommentDate = 'COMMENT_DATE',
+  | 'COMMENT_DATE'
   /** Order by GMT timezone date/time timestamp of the comment. */
-  CommentDateGmt = 'COMMENT_DATE_GMT',
+  | 'COMMENT_DATE_GMT'
   /** Order by the globally unique identifier for the comment object */
-  CommentId = 'COMMENT_ID',
+  | 'COMMENT_ID'
   /** Order by the array list of comment IDs listed in the where clause. */
-  CommentIn = 'COMMENT_IN',
+  | 'COMMENT_IN'
   /** Order by the comment karma score. */
-  CommentKarma = 'COMMENT_KARMA',
+  | 'COMMENT_KARMA'
   /** Order by the comment parent ID. */
-  CommentParent = 'COMMENT_PARENT',
+  | 'COMMENT_PARENT'
   /** Order by the post object ID. */
-  CommentPostId = 'COMMENT_POST_ID',
+  | 'COMMENT_POST_ID'
   /** Order by the the type of comment, such as 'comment', 'pingback', or 'trackback'. */
-  CommentType = 'COMMENT_TYPE',
+  | 'COMMENT_TYPE'
   /** Order by the user ID. */
-  UserId = 'USER_ID'
-}
+  | 'USER_ID';
 
 /** A plural connection from one Node Type in the Graph to another Node Type, with support for relational data via &quot;edges&quot;. */
 export type Connection = {
@@ -2922,18 +2847,16 @@ export type ContentNodeConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum ContentNodeIdTypeEnum {
+export type ContentNodeIdTypeEnum =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the ContentNode type and the ContentType type */
 export type ContentNodeToContentTypeConnectionEdge = ContentTypeConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'ContentNodeToContentTypeConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -2942,7 +2865,6 @@ export type ContentNodeToContentTypeConnectionEdge = ContentTypeConnectionEdge &
 
 /** Connection between the ContentNode type and the User type */
 export type ContentNodeToEditLastConnectionEdge = Edge & OneToOneConnection & UserConnectionEdge & {
-  __typename?: 'ContentNodeToEditLastConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -2951,7 +2873,6 @@ export type ContentNodeToEditLastConnectionEdge = Edge & OneToOneConnection & Us
 
 /** Connection between the ContentNode type and the User type */
 export type ContentNodeToEditLockConnectionEdge = Edge & OneToOneConnection & UserConnectionEdge & {
-  __typename?: 'ContentNodeToEditLockConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The timestamp for when the node was last edited */
@@ -2962,7 +2883,6 @@ export type ContentNodeToEditLockConnectionEdge = Edge & OneToOneConnection & Us
 
 /** Connection between the ContentNode type and the EnqueuedScript type */
 export type ContentNodeToEnqueuedScriptConnection = Connection & EnqueuedScriptConnection & {
-  __typename?: 'ContentNodeToEnqueuedScriptConnection';
   /** Edges for the ContentNodeToEnqueuedScriptConnection connection */
   edges: Array<ContentNodeToEnqueuedScriptConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -2973,7 +2893,6 @@ export type ContentNodeToEnqueuedScriptConnection = Connection & EnqueuedScriptC
 
 /** An edge in a connection */
 export type ContentNodeToEnqueuedScriptConnectionEdge = Edge & EnqueuedScriptConnectionEdge & {
-  __typename?: 'ContentNodeToEnqueuedScriptConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -2982,7 +2901,6 @@ export type ContentNodeToEnqueuedScriptConnectionEdge = Edge & EnqueuedScriptCon
 
 /** Page Info on the &quot;ContentNodeToEnqueuedScriptConnection&quot; */
 export type ContentNodeToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'ContentNodeToEnqueuedScriptConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -2995,7 +2913,6 @@ export type ContentNodeToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnec
 
 /** Connection between the ContentNode type and the EnqueuedStylesheet type */
 export type ContentNodeToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheetConnection & {
-  __typename?: 'ContentNodeToEnqueuedStylesheetConnection';
   /** Edges for the ContentNodeToEnqueuedStylesheetConnection connection */
   edges: Array<ContentNodeToEnqueuedStylesheetConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -3006,7 +2923,6 @@ export type ContentNodeToEnqueuedStylesheetConnection = Connection & EnqueuedSty
 
 /** An edge in a connection */
 export type ContentNodeToEnqueuedStylesheetConnectionEdge = Edge & EnqueuedStylesheetConnectionEdge & {
-  __typename?: 'ContentNodeToEnqueuedStylesheetConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -3015,7 +2931,6 @@ export type ContentNodeToEnqueuedStylesheetConnectionEdge = Edge & EnqueuedStyle
 
 /** Page Info on the &quot;ContentNodeToEnqueuedStylesheetConnection&quot; */
 export type ContentNodeToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'ContentNodeToEnqueuedStylesheetConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -3034,7 +2949,6 @@ export type ContentTemplate = {
 
 /** An Post Type object */
 export type ContentType = Node & UniformResourceIdentifiable & {
-  __typename?: 'ContentType';
   /** Whether this content type should can be exported. */
   canExport?: Maybe<Scalars['Boolean']['output']>;
   /** Connection between the ContentType type and the Taxonomy type */
@@ -3153,40 +3067,37 @@ export type ContentTypeConnectionPageInfo = {
 };
 
 /** Allowed Content Types */
-export enum ContentTypeEnum {
+export type ContentTypeEnum =
   /** The Type of Content object */
-  Article = 'ARTICLE',
+  | 'ARTICLE'
   /** The Type of Content object */
-  Attachment = 'ATTACHMENT',
+  | 'ATTACHMENT'
   /** The Type of Content object */
-  AudioItem = 'AUDIO_ITEM',
+  | 'AUDIO_ITEM'
   /** The Type of Content object */
-  Book = 'BOOK',
+  | 'BOOK'
   /** The Type of Content object */
-  Collection = 'COLLECTION',
+  | 'COLLECTION'
   /** The Type of Content object */
-  Journal = 'JOURNAL',
+  | 'JOURNAL'
   /** The Type of Content object */
-  Page = 'PAGE',
+  | 'PAGE'
   /** The Type of Content object */
-  PdfItem = 'PDF_ITEM',
+  | 'PDF_ITEM'
   /** The Type of Content object */
-  Post = 'POST',
+  | 'POST'
   /** The Type of Content object */
-  VideoItem = 'VIDEO_ITEM'
-}
+  | 'VIDEO_ITEM';
 
 /** The Type of Identifier used to fetch a single Content Type node. To be used along with the "id" field. Default is "ID". */
-export enum ContentTypeIdTypeEnum {
+export type ContentTypeIdTypeEnum =
   /** The globally unique ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the content type. */
-  Name = 'NAME'
-}
+  | 'NAME';
 
 /** Connection between the ContentType type and the ContentNode type */
 export type ContentTypeToContentNodeConnection = Connection & ContentNodeConnection & {
-  __typename?: 'ContentTypeToContentNodeConnection';
   /** Edges for the ContentTypeToContentNodeConnection connection */
   edges: Array<ContentTypeToContentNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -3197,7 +3108,6 @@ export type ContentTypeToContentNodeConnection = Connection & ContentNodeConnect
 
 /** An edge in a connection */
 export type ContentTypeToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'ContentTypeToContentNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -3206,7 +3116,6 @@ export type ContentTypeToContentNodeConnectionEdge = ContentNodeConnectionEdge &
 
 /** Page Info on the &quot;ContentTypeToContentNodeConnection&quot; */
 export type ContentTypeToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'ContentTypeToContentNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -3259,7 +3168,6 @@ export type ContentTypeToContentNodeConnectionWhereArgs = {
 
 /** Connection between the ContentType type and the Taxonomy type */
 export type ContentTypeToTaxonomyConnection = Connection & TaxonomyConnection & {
-  __typename?: 'ContentTypeToTaxonomyConnection';
   /** Edges for the ContentTypeToTaxonomyConnection connection */
   edges: Array<ContentTypeToTaxonomyConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -3270,7 +3178,6 @@ export type ContentTypeToTaxonomyConnection = Connection & TaxonomyConnection & 
 
 /** An edge in a connection */
 export type ContentTypeToTaxonomyConnectionEdge = Edge & TaxonomyConnectionEdge & {
-  __typename?: 'ContentTypeToTaxonomyConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -3279,7 +3186,6 @@ export type ContentTypeToTaxonomyConnectionEdge = Edge & TaxonomyConnectionEdge 
 
 /** Page Info on the &quot;ContentTypeToTaxonomyConnection&quot; */
 export type ContentTypeToTaxonomyConnectionPageInfo = PageInfo & TaxonomyConnectionPageInfo & WpPageInfo & {
-  __typename?: 'ContentTypeToTaxonomyConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -3291,46 +3197,41 @@ export type ContentTypeToTaxonomyConnectionPageInfo = PageInfo & TaxonomyConnect
 };
 
 /** Allowed Content Types of the Category taxonomy. */
-export enum ContentTypesOfCategoryEnum {
+export type ContentTypesOfCategoryEnum =
   /** The Type of Content object */
-  Post = 'POST'
-}
+  | 'POST';
 
 /** Allowed Content Types of the Place taxonomy. */
-export enum ContentTypesOfPlaceEnum {
+export type ContentTypesOfPlaceEnum =
   /** The Type of Content object */
-  Article = 'ARTICLE',
+  | 'ARTICLE'
   /** The Type of Content object */
-  AudioItem = 'AUDIO_ITEM',
+  | 'AUDIO_ITEM'
   /** The Type of Content object */
-  PdfItem = 'PDF_ITEM',
+  | 'PDF_ITEM'
   /** The Type of Content object */
-  VideoItem = 'VIDEO_ITEM'
-}
+  | 'VIDEO_ITEM';
 
 /** Allowed Content Types of the PostFormat taxonomy. */
-export enum ContentTypesOfPostFormatEnum {
+export type ContentTypesOfPostFormatEnum =
   /** The Type of Content object */
-  Post = 'POST'
-}
+  | 'POST';
 
 /** Allowed Content Types of the Tag taxonomy. */
-export enum ContentTypesOfTagEnum {
+export type ContentTypesOfTagEnum =
   /** The Type of Content object */
-  Post = 'POST'
-}
+  | 'POST';
 
 /** Allowed Content Types of the Topic taxonomy. */
-export enum ContentTypesOfTopicEnum {
+export type ContentTypesOfTopicEnum =
   /** The Type of Content object */
-  Article = 'ARTICLE',
+  | 'ARTICLE'
   /** The Type of Content object */
-  AudioItem = 'AUDIO_ITEM',
+  | 'AUDIO_ITEM'
   /** The Type of Content object */
-  PdfItem = 'PDF_ITEM',
+  | 'PDF_ITEM'
   /** The Type of Content object */
-  VideoItem = 'VIDEO_ITEM'
-}
+  | 'VIDEO_ITEM';
 
 /** Input for the createArticle mutation. */
 export type CreateArticleInput = {
@@ -3361,7 +3262,6 @@ export type CreateArticleInput = {
 
 /** The payload for the createArticle mutation. */
 export type CreateArticlePayload = {
-  __typename?: 'CreateArticlePayload';
   /** The Post object mutation type. */
   article?: Maybe<Article>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -3395,7 +3295,6 @@ export type CreateAudioItemInput = {
 
 /** The payload for the createAudioItem mutation. */
 export type CreateAudioItemPayload = {
-  __typename?: 'CreateAudioItemPayload';
   /** The Post object mutation type. */
   audioItem?: Maybe<AudioItem>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -3425,7 +3324,6 @@ export type CreateBookInput = {
 
 /** The payload for the createBook mutation. */
 export type CreateBookPayload = {
-  __typename?: 'CreateBookPayload';
   /** The Post object mutation type. */
   book?: Maybe<Book>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -3453,7 +3351,6 @@ export type CreateCategoryInput = {
 
 /** The payload for the createCategory mutation. */
 export type CreateCategoryPayload = {
-  __typename?: 'CreateCategoryPayload';
   /** The created category */
   category?: Maybe<Category>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -3481,7 +3378,6 @@ export type CreateCollectionInput = {
 
 /** The payload for the createCollection mutation. */
 export type CreateCollectionPayload = {
-  __typename?: 'CreateCollectionPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -3516,7 +3412,6 @@ export type CreateCommentInput = {
 
 /** The payload for the createComment mutation. */
 export type CreateCommentPayload = {
-  __typename?: 'CreateCommentPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The comment that was created */
@@ -3548,7 +3443,6 @@ export type CreateJournalIssueInput = {
 
 /** The payload for the createJournalIssue mutation. */
 export type CreateJournalIssuePayload = {
-  __typename?: 'CreateJournalIssuePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -3591,7 +3485,6 @@ export type CreateMediaItemInput = {
 
 /** The payload for the createMediaItem mutation. */
 export type CreateMediaItemPayload = {
-  __typename?: 'CreateMediaItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The MediaItem object mutation type. */
@@ -3627,7 +3520,6 @@ export type CreatePageInput = {
 
 /** The payload for the createPage mutation. */
 export type CreatePagePayload = {
-  __typename?: 'CreatePagePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -3659,7 +3551,6 @@ export type CreatePdfItemInput = {
 
 /** The payload for the createPdfItem mutation. */
 export type CreatePdfItemPayload = {
-  __typename?: 'CreatePdfItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -3687,7 +3578,6 @@ export type CreatePlaceInput = {
 
 /** The payload for the createPlace mutation. */
 export type CreatePlacePayload = {
-  __typename?: 'CreatePlacePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The created place */
@@ -3710,7 +3600,6 @@ export type CreatePostFormatInput = {
 
 /** The payload for the createPostFormat mutation. */
 export type CreatePostFormatPayload = {
-  __typename?: 'CreatePostFormatPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The created post_format */
@@ -3758,7 +3647,6 @@ export type CreatePostInput = {
 
 /** The payload for the createPost mutation. */
 export type CreatePostPayload = {
-  __typename?: 'CreatePostPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -3782,7 +3670,6 @@ export type CreateTagInput = {
 
 /** The payload for the createTag mutation. */
 export type CreateTagPayload = {
-  __typename?: 'CreateTagPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The created post_tag */
@@ -3810,7 +3697,6 @@ export type CreateTopicInput = {
 
 /** The payload for the createTopic mutation. */
 export type CreateTopicPayload = {
-  __typename?: 'CreateTopicPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The created topic */
@@ -3859,7 +3745,6 @@ export type CreateUserInput = {
 
 /** The payload for the createUser mutation. */
 export type CreateUserPayload = {
-  __typename?: 'CreateUserPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The User object mutation type. */
@@ -3891,7 +3776,6 @@ export type CreateVideoItemInput = {
 
 /** The payload for the createVideoItem mutation. */
 export type CreateVideoItemPayload = {
-  __typename?: 'CreateVideoItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -3946,7 +3830,6 @@ export type DateQueryInput = {
 
 /** The template assigned to the node */
 export type DefaultTemplate = ContentTemplate & {
-  __typename?: 'DefaultTemplate';
   /** The name of the template */
   templateName?: Maybe<Scalars['String']['output']>;
 };
@@ -3965,7 +3848,6 @@ export type DeleteArticleInput = {
 
 /** The payload for the deleteArticle mutation. */
 export type DeleteArticlePayload = {
-  __typename?: 'DeleteArticlePayload';
   /** The object before it was deleted */
   article?: Maybe<Article>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -3988,7 +3870,6 @@ export type DeleteAudioItemInput = {
 
 /** The payload for the deleteAudioItem mutation. */
 export type DeleteAudioItemPayload = {
-  __typename?: 'DeleteAudioItemPayload';
   /** The object before it was deleted */
   audioItem?: Maybe<AudioItem>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -4011,7 +3892,6 @@ export type DeleteBookInput = {
 
 /** The payload for the deleteBook mutation. */
 export type DeleteBookPayload = {
-  __typename?: 'DeleteBookPayload';
   /** The object before it was deleted */
   book?: Maybe<Book>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -4030,7 +3910,6 @@ export type DeleteCategoryInput = {
 
 /** The payload for the deleteCategory mutation. */
 export type DeleteCategoryPayload = {
-  __typename?: 'DeleteCategoryPayload';
   /** The deleted term object */
   category?: Maybe<Category>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -4053,7 +3932,6 @@ export type DeleteCollectionInput = {
 
 /** The payload for the deleteCollection mutation. */
 export type DeleteCollectionPayload = {
-  __typename?: 'DeleteCollectionPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The object before it was deleted */
@@ -4074,7 +3952,6 @@ export type DeleteCommentInput = {
 
 /** The payload for the deleteComment mutation. */
 export type DeleteCommentPayload = {
-  __typename?: 'DeleteCommentPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The deleted comment object */
@@ -4097,7 +3974,6 @@ export type DeleteJournalIssueInput = {
 
 /** The payload for the deleteJournalIssue mutation. */
 export type DeleteJournalIssuePayload = {
-  __typename?: 'DeleteJournalIssuePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4118,7 +3994,6 @@ export type DeleteMediaItemInput = {
 
 /** The payload for the deleteMediaItem mutation. */
 export type DeleteMediaItemPayload = {
-  __typename?: 'DeleteMediaItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted mediaItem */
@@ -4141,7 +4016,6 @@ export type DeletePageInput = {
 
 /** The payload for the deletePage mutation. */
 export type DeletePagePayload = {
-  __typename?: 'DeletePagePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4164,7 +4038,6 @@ export type DeletePdfItemInput = {
 
 /** The payload for the deletePdfItem mutation. */
 export type DeletePdfItemPayload = {
-  __typename?: 'DeletePdfItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4183,7 +4056,6 @@ export type DeletePlaceInput = {
 
 /** The payload for the deletePlace mutation. */
 export type DeletePlacePayload = {
-  __typename?: 'DeletePlacePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4202,7 +4074,6 @@ export type DeletePostFormatInput = {
 
 /** The payload for the deletePostFormat mutation. */
 export type DeletePostFormatPayload = {
-  __typename?: 'DeletePostFormatPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4225,7 +4096,6 @@ export type DeletePostInput = {
 
 /** The payload for the deletePost mutation. */
 export type DeletePostPayload = {
-  __typename?: 'DeletePostPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4244,7 +4114,6 @@ export type DeleteTagInput = {
 
 /** The payload for the deleteTag mutation. */
 export type DeleteTagPayload = {
-  __typename?: 'DeleteTagPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4263,7 +4132,6 @@ export type DeleteTopicInput = {
 
 /** The payload for the deleteTopic mutation. */
 export type DeleteTopicPayload = {
-  __typename?: 'DeleteTopicPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4284,7 +4152,6 @@ export type DeleteUserInput = {
 
 /** The payload for the deleteUser mutation. */
 export type DeleteUserPayload = {
-  __typename?: 'DeleteUserPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the user that you just deleted */
@@ -4307,7 +4174,6 @@ export type DeleteVideoItemInput = {
 
 /** The payload for the deleteVideoItem mutation. */
 export type DeleteVideoItemPayload = {
-  __typename?: 'DeleteVideoItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The ID of the deleted object */
@@ -4318,7 +4184,6 @@ export type DeleteVideoItemPayload = {
 
 /** The discussion setting type */
 export type DiscussionSettings = {
-  __typename?: 'DiscussionSettings';
   /** Allow people to submit comments on new posts. */
   defaultCommentStatus?: Maybe<Scalars['String']['output']>;
   /** Allow link notifications from other blogs (pingbacks and trackbacks) on new articles. */
@@ -4367,7 +4232,6 @@ export type EnqueuedAsset = {
 
 /** Script enqueued by the CMS */
 export type EnqueuedScript = EnqueuedAsset & Node & {
-  __typename?: 'EnqueuedScript';
   /** The inline code to be run after the asset is loaded. */
   after?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   /**
@@ -4436,7 +4300,6 @@ export type EnqueuedScriptConnectionPageInfo = {
 
 /** Stylesheet enqueued by the CMS */
 export type EnqueuedStylesheet = EnqueuedAsset & Node & {
-  __typename?: 'EnqueuedStylesheet';
   /** The inline code to be run after the asset is loaded. */
   after?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   /**
@@ -4511,7 +4374,6 @@ export type EnqueuedStylesheetConnectionPageInfo = {
 
 /** The &quot;FGGlobalSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type FgGlobalSettings = AcfFieldGroup & AcfFieldGroupFields & FgGlobalSettings_Fields & {
-  __typename?: 'FGGlobalSettings';
   /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;FGGlobalSettings&quot; Field Group */
   bannerImage?: Maybe<AcfMediaItemConnectionEdge>;
   /**
@@ -4535,7 +4397,6 @@ export type FgGlobalSettings = AcfFieldGroup & AcfFieldGroupFields & FgGlobalSet
 
 /** The &quot;FGGlobalSettingsBooksWidget&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type FgGlobalSettingsBooksWidget = AcfFieldGroup & AcfFieldGroupFields & FgGlobalSettingsBooksWidget_Fields & {
-  __typename?: 'FGGlobalSettingsBooksWidget';
   /** Field of the &quot;relationship&quot; Field Type added to the schema as part of the &quot;FGGlobalSettingsBooksWidget&quot; Field Group */
   books?: Maybe<AcfContentNodeConnection>;
   /**
@@ -4576,7 +4437,6 @@ export type FgGlobalSettingsBooksWidget_FieldsBooksArgs = {
 
 /** The &quot;FGGlobalSettingsNotificationBar&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type FgGlobalSettingsNotificationBar = AcfFieldGroup & AcfFieldGroupFields & FgGlobalSettingsNotificationBar_Fields & {
-  __typename?: 'FGGlobalSettingsNotificationBar';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -4626,7 +4486,6 @@ export type FgGlobalSettings_Fields = {
 
 /** The general setting type */
 export type GeneralSettings = {
-  __typename?: 'GeneralSettings';
   /** A date format for all date strings. */
   dateFormat?: Maybe<Scalars['String']['output']>;
   /** Site tagline. */
@@ -4648,7 +4507,6 @@ export type GeneralSettings = {
 };
 
 export type GlobalSettings = AcfOptionsPage & Node & WithAcfFgGlobalSettings & {
-  __typename?: 'GlobalSettings';
   /** Fields of the FGGlobalSettings ACF Field Group */
   fGGlobalSettings?: Maybe<FgGlobalSettings>;
   /** The globally unique ID for the object */
@@ -4770,7 +4628,6 @@ export type HierarchicalContentNodeEnqueuedStylesheetsArgs = {
 
 /** Connection between the HierarchicalContentNode type and the ContentNode type */
 export type HierarchicalContentNodeToContentNodeAncestorsConnection = Connection & ContentNodeConnection & {
-  __typename?: 'HierarchicalContentNodeToContentNodeAncestorsConnection';
   /** Edges for the HierarchicalContentNodeToContentNodeAncestorsConnection connection */
   edges: Array<HierarchicalContentNodeToContentNodeAncestorsConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -4781,7 +4638,6 @@ export type HierarchicalContentNodeToContentNodeAncestorsConnection = Connection
 
 /** An edge in a connection */
 export type HierarchicalContentNodeToContentNodeAncestorsConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'HierarchicalContentNodeToContentNodeAncestorsConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -4790,7 +4646,6 @@ export type HierarchicalContentNodeToContentNodeAncestorsConnectionEdge = Conten
 
 /** Page Info on the &quot;HierarchicalContentNodeToContentNodeAncestorsConnection&quot; */
 export type HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -4843,7 +4698,6 @@ export type HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs = {
 
 /** Connection between the HierarchicalContentNode type and the ContentNode type */
 export type HierarchicalContentNodeToContentNodeChildrenConnection = Connection & ContentNodeConnection & {
-  __typename?: 'HierarchicalContentNodeToContentNodeChildrenConnection';
   /** Edges for the HierarchicalContentNodeToContentNodeChildrenConnection connection */
   edges: Array<HierarchicalContentNodeToContentNodeChildrenConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -4854,7 +4708,6 @@ export type HierarchicalContentNodeToContentNodeChildrenConnection = Connection 
 
 /** An edge in a connection */
 export type HierarchicalContentNodeToContentNodeChildrenConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'HierarchicalContentNodeToContentNodeChildrenConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -4863,7 +4716,6 @@ export type HierarchicalContentNodeToContentNodeChildrenConnectionEdge = Content
 
 /** Page Info on the &quot;HierarchicalContentNodeToContentNodeChildrenConnection&quot; */
 export type HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -4916,7 +4768,6 @@ export type HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs = {
 
 /** Connection between the HierarchicalContentNode type and the ContentNode type */
 export type HierarchicalContentNodeToParentContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'HierarchicalContentNodeToParentContentNodeConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -5001,7 +4852,6 @@ export type HierarchicalTermNodeEnqueuedStylesheetsArgs = {
 
 /** The journalIssue type */
 export type JournalIssue = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & WithAcfJournalIssueDetails & {
-  __typename?: 'JournalIssue';
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /** Connection between the HierarchicalContentNode type and the ContentNode type */
@@ -5181,7 +5031,6 @@ export type JournalIssueConnectionPageInfo = {
 
 /** The &quot;JournalIssueDetails&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type JournalIssueDetails = AcfFieldGroup & AcfFieldGroupFields & JournalIssueDetails_Fields & {
-  __typename?: 'JournalIssueDetails';
   /** Field of the &quot;relationship&quot; Field Type added to the schema as part of the &quot;JournalIssueDetails&quot; Field Group */
   articlesInJournal?: Maybe<AcfContentNodeConnection>;
   /**
@@ -5225,18 +5074,16 @@ export type JournalIssueDetails_FieldsArticlesInJournalArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum JournalIssueIdType {
+export type JournalIssueIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the JournalIssue type and the journalIssue type */
 export type JournalIssueToPreviewConnectionEdge = Edge & JournalIssueConnectionEdge & OneToOneConnection & {
-  __typename?: 'JournalIssueToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -5245,7 +5092,6 @@ export type JournalIssueToPreviewConnectionEdge = Edge & JournalIssueConnectionE
 
 /** Language (Polylang) */
 export type Language = {
-  __typename?: 'Language';
   /** Language code (Polylang) */
   code?: Maybe<LanguageCodeEnum>;
   /** Language term front page URL */
@@ -5261,22 +5107,19 @@ export type Language = {
 };
 
 /** Enum of all available language codes */
-export enum LanguageCodeEnum {
-  En = 'EN',
-  Fr = 'FR'
-}
+export type LanguageCodeEnum =
+  | 'EN'
+  | 'FR';
 
 /** Filter item by specific language, default language or list all languages */
-export enum LanguageCodeFilterEnum {
-  All = 'ALL',
-  Default = 'DEFAULT',
-  En = 'EN',
-  Fr = 'FR'
-}
+export type LanguageCodeFilterEnum =
+  | 'ALL'
+  | 'DEFAULT'
+  | 'EN'
+  | 'FR';
 
 /** File details for a Media Item */
 export type MediaDetails = {
-  __typename?: 'MediaDetails';
   /** The filename of the mediaItem */
   file?: Maybe<Scalars['String']['output']>;
   /** The path to the mediaItem relative to the uploads directory */
@@ -5300,7 +5143,6 @@ export type MediaDetailsSizesArgs = {
 
 /** The mediaItem type */
 export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & Node & NodeWithAuthor & NodeWithComments & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
-  __typename?: 'MediaItem';
   /** Alternative text to display when resource is not displayed */
   altText?: Maybe<Scalars['String']['output']>;
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
@@ -5555,22 +5397,20 @@ export type MediaItemConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum MediaItemIdType {
+export type MediaItemIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Identify a media item by its source url */
-  SourceUrl = 'SOURCE_URL',
+  | 'SOURCE_URL'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Meta connected to a MediaItem */
 export type MediaItemMeta = {
-  __typename?: 'MediaItemMeta';
   /** Aperture measurement of the media item. */
   aperture?: Maybe<Scalars['Float']['output']>;
   /** Information about the camera used to create the media item. */
@@ -5598,38 +5438,35 @@ export type MediaItemMeta = {
 };
 
 /** The size of the media item object. */
-export enum MediaItemSizeEnum {
+export type MediaItemSizeEnum =
   /** MediaItem with the large size */
-  Large = 'LARGE',
+  | 'LARGE'
   /** MediaItem with the medium size */
-  Medium = 'MEDIUM',
+  | 'MEDIUM'
   /** MediaItem with the medium_large size */
-  MediumLarge = 'MEDIUM_LARGE',
+  | 'MEDIUM_LARGE'
   /** MediaItem with the post-thumbnail size */
-  PostThumbnail = 'POST_THUMBNAIL',
+  | 'POST_THUMBNAIL'
   /** MediaItem with the thumbnail size */
-  Thumbnail = 'THUMBNAIL',
+  | 'THUMBNAIL'
   /** MediaItem with the 1536x1536 size */
-  '1536X1536' = '_1536X1536',
+  | '_1536X1536'
   /** MediaItem with the 2048x2048 size */
-  '2048X2048' = '_2048X2048'
-}
+  | '_2048X2048';
 
 /** The status of the media item object. */
-export enum MediaItemStatusEnum {
+export type MediaItemStatusEnum =
   /** Objects with the auto-draft status */
-  AutoDraft = 'AUTO_DRAFT',
+  | 'AUTO_DRAFT'
   /** Objects with the inherit status */
-  Inherit = 'INHERIT',
+  | 'INHERIT'
   /** Objects with the private status */
-  Private = 'PRIVATE',
+  | 'PRIVATE'
   /** Objects with the trash status */
-  Trash = 'TRASH'
-}
+  | 'TRASH';
 
 /** Connection between the MediaItem type and the Comment type */
 export type MediaItemToCommentConnection = CommentConnection & Connection & {
-  __typename?: 'MediaItemToCommentConnection';
   /** Edges for the MediaItemToCommentConnection connection */
   edges: Array<MediaItemToCommentConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -5640,7 +5477,6 @@ export type MediaItemToCommentConnection = CommentConnection & Connection & {
 
 /** An edge in a connection */
 export type MediaItemToCommentConnectionEdge = CommentConnectionEdge & Edge & {
-  __typename?: 'MediaItemToCommentConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -5649,7 +5485,6 @@ export type MediaItemToCommentConnectionEdge = CommentConnectionEdge & Edge & {
 
 /** Page Info on the &quot;MediaItemToCommentConnection&quot; */
 export type MediaItemToCommentConnectionPageInfo = CommentConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'MediaItemToCommentConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -5726,7 +5561,6 @@ export type MediaItemToCommentConnectionWhereArgs = {
 
 /** Details of an available size for a media item */
 export type MediaSize = {
-  __typename?: 'MediaSize';
   /** The filename of the referenced size */
   file?: Maybe<Scalars['String']['output']>;
   /** The path of the file for the referenced size (default size is full) */
@@ -5747,7 +5581,6 @@ export type MediaSize = {
 
 /** Menus are the containers for navigation items. Menus can be assigned to menu locations, which are typically registered by the active theme. */
 export type Menu = DatabaseIdentifier & Node & {
-  __typename?: 'Menu';
   /** The number of items in the menu */
   count?: Maybe<Scalars['Int']['output']>;
   /** The unique identifier stored in the database */
@@ -5813,7 +5646,6 @@ export type MenuConnectionPageInfo = {
 
 /** Navigation menu items are the individual items assigned to a menu. These are rendered as the links in a navigation menu. */
 export type MenuItem = DatabaseIdentifier & Node & {
-  __typename?: 'MenuItem';
   /** Connection between the MenuItem type and the MenuItem type */
   childItems?: Maybe<MenuItemToMenuItemConnection>;
   /** Connection from MenuItem to it&#039;s connected node */
@@ -5933,19 +5765,17 @@ export type MenuItemLinkableConnectionEdge = {
 };
 
 /** The Type of Identifier used to fetch a single node. Default is "ID". To be used along with the "id" field. */
-export enum MenuItemNodeIdTypeEnum {
+export type MenuItemNodeIdTypeEnum =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID'
-}
+  | 'ID';
 
 /** Deprecated in favor of MenuItemLinkeable Interface */
 export type MenuItemObjectUnion = Article | AudioItem | Book | Category | Collection | JournalIssue | Page | PdfItem | Place | Post | PostFormat | Tag | Topic | VideoItem;
 
 /** Connection between the MenuItem type and the Menu type */
 export type MenuItemToMenuConnectionEdge = Edge & MenuConnectionEdge & OneToOneConnection & {
-  __typename?: 'MenuItemToMenuConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -5954,7 +5784,6 @@ export type MenuItemToMenuConnectionEdge = Edge & MenuConnectionEdge & OneToOneC
 
 /** Connection between the MenuItem type and the MenuItem type */
 export type MenuItemToMenuItemConnection = Connection & MenuItemConnection & {
-  __typename?: 'MenuItemToMenuItemConnection';
   /** Edges for the MenuItemToMenuItemConnection connection */
   edges: Array<MenuItemToMenuItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -5965,7 +5794,6 @@ export type MenuItemToMenuItemConnection = Connection & MenuItemConnection & {
 
 /** An edge in a connection */
 export type MenuItemToMenuItemConnectionEdge = Edge & MenuItemConnectionEdge & {
-  __typename?: 'MenuItemToMenuItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -5974,7 +5802,6 @@ export type MenuItemToMenuItemConnectionEdge = Edge & MenuItemConnectionEdge & {
 
 /** Page Info on the &quot;MenuItemToMenuItemConnection&quot; */
 export type MenuItemToMenuItemConnectionPageInfo = MenuItemConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'MenuItemToMenuItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -5999,7 +5826,6 @@ export type MenuItemToMenuItemConnectionWhereArgs = {
 
 /** Connection between the MenuItem type and the MenuItemLinkable type */
 export type MenuItemToMenuItemLinkableConnectionEdge = Edge & MenuItemLinkableConnectionEdge & OneToOneConnection & {
-  __typename?: 'MenuItemToMenuItemLinkableConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -6007,34 +5833,31 @@ export type MenuItemToMenuItemLinkableConnectionEdge = Edge & MenuItemLinkableCo
 };
 
 /** Registered menu locations */
-export enum MenuLocationEnum {
+export type MenuLocationEnum =
   /** Put the menu in the footer location */
-  Footer = 'FOOTER',
+  | 'FOOTER'
   /** Put the menu in the footer___fr location */
-  FooterFr = 'FOOTER___FR',
+  | 'FOOTER___FR'
   /** Put the menu in the primary location */
-  Primary = 'PRIMARY',
+  | 'PRIMARY'
   /** Put the menu in the primary___fr location */
-  PrimaryFr = 'PRIMARY___FR'
-}
+  | 'PRIMARY___FR';
 
 /** The Type of Identifier used to fetch a single node. Default is "ID". To be used along with the "id" field. */
-export enum MenuNodeIdTypeEnum {
+export type MenuNodeIdTypeEnum =
   /** Identify a menu node by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a menu node by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a menu node by the slug of menu location to which it is assigned */
-  Location = 'LOCATION',
+  | 'LOCATION'
   /** Identify a menu node by its name */
-  Name = 'NAME',
+  | 'NAME'
   /** Identify a menu node by its slug */
-  Slug = 'SLUG'
-}
+  | 'SLUG';
 
 /** Connection between the Menu type and the MenuItem type */
 export type MenuToMenuItemConnection = Connection & MenuItemConnection & {
-  __typename?: 'MenuToMenuItemConnection';
   /** Edges for the MenuToMenuItemConnection connection */
   edges: Array<MenuToMenuItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -6045,7 +5868,6 @@ export type MenuToMenuItemConnection = Connection & MenuItemConnection & {
 
 /** An edge in a connection */
 export type MenuToMenuItemConnectionEdge = Edge & MenuItemConnectionEdge & {
-  __typename?: 'MenuToMenuItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -6054,7 +5876,6 @@ export type MenuToMenuItemConnectionEdge = Edge & MenuItemConnectionEdge & {
 
 /** Page Info on the &quot;MenuToMenuItemConnection&quot; */
 export type MenuToMenuItemConnectionPageInfo = MenuItemConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'MenuToMenuItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -6090,194 +5911,193 @@ export type MetaQueryInput = {
 };
 
 /** The MimeType of the object */
-export enum MimeTypeEnum {
+export type MimeTypeEnum =
   /** application/java mime type. */
-  ApplicationJava = 'APPLICATION_JAVA',
+  | 'APPLICATION_JAVA'
   /** application/msword mime type. */
-  ApplicationMsword = 'APPLICATION_MSWORD',
+  | 'APPLICATION_MSWORD'
   /** application/octet-stream mime type. */
-  ApplicationOctetStream = 'APPLICATION_OCTET_STREAM',
+  | 'APPLICATION_OCTET_STREAM'
   /** application/onenote mime type. */
-  ApplicationOnenote = 'APPLICATION_ONENOTE',
+  | 'APPLICATION_ONENOTE'
   /** application/oxps mime type. */
-  ApplicationOxps = 'APPLICATION_OXPS',
+  | 'APPLICATION_OXPS'
   /** application/pdf mime type. */
-  ApplicationPdf = 'APPLICATION_PDF',
+  | 'APPLICATION_PDF'
   /** application/rar mime type. */
-  ApplicationRar = 'APPLICATION_RAR',
+  | 'APPLICATION_RAR'
   /** application/rtf mime type. */
-  ApplicationRtf = 'APPLICATION_RTF',
+  | 'APPLICATION_RTF'
   /** application/ttaf+xml mime type. */
-  ApplicationTtafXml = 'APPLICATION_TTAF_XML',
+  | 'APPLICATION_TTAF_XML'
   /** application/vnd.apple.keynote mime type. */
-  ApplicationVndAppleKeynote = 'APPLICATION_VND_APPLE_KEYNOTE',
+  | 'APPLICATION_VND_APPLE_KEYNOTE'
   /** application/vnd.apple.numbers mime type. */
-  ApplicationVndAppleNumbers = 'APPLICATION_VND_APPLE_NUMBERS',
+  | 'APPLICATION_VND_APPLE_NUMBERS'
   /** application/vnd.apple.pages mime type. */
-  ApplicationVndApplePages = 'APPLICATION_VND_APPLE_PAGES',
+  | 'APPLICATION_VND_APPLE_PAGES'
   /** application/vnd.ms-access mime type. */
-  ApplicationVndMsAccess = 'APPLICATION_VND_MS_ACCESS',
+  | 'APPLICATION_VND_MS_ACCESS'
   /** application/vnd.ms-excel mime type. */
-  ApplicationVndMsExcel = 'APPLICATION_VND_MS_EXCEL',
+  | 'APPLICATION_VND_MS_EXCEL'
   /** application/vnd.ms-excel.addin.macroEnabled.12 mime type. */
-  ApplicationVndMsExcelAddinMacroenabled_12 = 'APPLICATION_VND_MS_EXCEL_ADDIN_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_EXCEL_ADDIN_MACROENABLED_12'
   /** application/vnd.ms-excel.sheet.binary.macroEnabled.12 mime type. */
-  ApplicationVndMsExcelSheetBinaryMacroenabled_12 = 'APPLICATION_VND_MS_EXCEL_SHEET_BINARY_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_EXCEL_SHEET_BINARY_MACROENABLED_12'
   /** application/vnd.ms-excel.sheet.macroEnabled.12 mime type. */
-  ApplicationVndMsExcelSheetMacroenabled_12 = 'APPLICATION_VND_MS_EXCEL_SHEET_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_EXCEL_SHEET_MACROENABLED_12'
   /** application/vnd.ms-excel.template.macroEnabled.12 mime type. */
-  ApplicationVndMsExcelTemplateMacroenabled_12 = 'APPLICATION_VND_MS_EXCEL_TEMPLATE_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_EXCEL_TEMPLATE_MACROENABLED_12'
   /** application/vnd.ms-powerpoint mime type. */
-  ApplicationVndMsPowerpoint = 'APPLICATION_VND_MS_POWERPOINT',
+  | 'APPLICATION_VND_MS_POWERPOINT'
   /** application/vnd.ms-powerpoint.addin.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointAddinMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_ADDIN_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_ADDIN_MACROENABLED_12'
   /** application/vnd.ms-powerpoint.presentation.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointPresentationMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_PRESENTATION_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_PRESENTATION_MACROENABLED_12'
   /** application/vnd.ms-powerpoint.slideshow.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointSlideshowMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_SLIDESHOW_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_SLIDESHOW_MACROENABLED_12'
   /** application/vnd.ms-powerpoint.slide.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointSlideMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_SLIDE_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_SLIDE_MACROENABLED_12'
   /** application/vnd.ms-powerpoint.template.macroEnabled.12 mime type. */
-  ApplicationVndMsPowerpointTemplateMacroenabled_12 = 'APPLICATION_VND_MS_POWERPOINT_TEMPLATE_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_POWERPOINT_TEMPLATE_MACROENABLED_12'
   /** application/vnd.ms-project mime type. */
-  ApplicationVndMsProject = 'APPLICATION_VND_MS_PROJECT',
+  | 'APPLICATION_VND_MS_PROJECT'
   /** application/vnd.ms-word.document.macroEnabled.12 mime type. */
-  ApplicationVndMsWordDocumentMacroenabled_12 = 'APPLICATION_VND_MS_WORD_DOCUMENT_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_WORD_DOCUMENT_MACROENABLED_12'
   /** application/vnd.ms-word.template.macroEnabled.12 mime type. */
-  ApplicationVndMsWordTemplateMacroenabled_12 = 'APPLICATION_VND_MS_WORD_TEMPLATE_MACROENABLED_12',
+  | 'APPLICATION_VND_MS_WORD_TEMPLATE_MACROENABLED_12'
   /** application/vnd.ms-write mime type. */
-  ApplicationVndMsWrite = 'APPLICATION_VND_MS_WRITE',
+  | 'APPLICATION_VND_MS_WRITE'
   /** application/vnd.ms-xpsdocument mime type. */
-  ApplicationVndMsXpsdocument = 'APPLICATION_VND_MS_XPSDOCUMENT',
+  | 'APPLICATION_VND_MS_XPSDOCUMENT'
   /** application/vnd.oasis.opendocument.chart mime type. */
-  ApplicationVndOasisOpendocumentChart = 'APPLICATION_VND_OASIS_OPENDOCUMENT_CHART',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_CHART'
   /** application/vnd.oasis.opendocument.database mime type. */
-  ApplicationVndOasisOpendocumentDatabase = 'APPLICATION_VND_OASIS_OPENDOCUMENT_DATABASE',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_DATABASE'
   /** application/vnd.oasis.opendocument.formula mime type. */
-  ApplicationVndOasisOpendocumentFormula = 'APPLICATION_VND_OASIS_OPENDOCUMENT_FORMULA',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_FORMULA'
   /** application/vnd.oasis.opendocument.graphics mime type. */
-  ApplicationVndOasisOpendocumentGraphics = 'APPLICATION_VND_OASIS_OPENDOCUMENT_GRAPHICS',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_GRAPHICS'
   /** application/vnd.oasis.opendocument.presentation mime type. */
-  ApplicationVndOasisOpendocumentPresentation = 'APPLICATION_VND_OASIS_OPENDOCUMENT_PRESENTATION',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_PRESENTATION'
   /** application/vnd.oasis.opendocument.spreadsheet mime type. */
-  ApplicationVndOasisOpendocumentSpreadsheet = 'APPLICATION_VND_OASIS_OPENDOCUMENT_SPREADSHEET',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_SPREADSHEET'
   /** application/vnd.oasis.opendocument.text mime type. */
-  ApplicationVndOasisOpendocumentText = 'APPLICATION_VND_OASIS_OPENDOCUMENT_TEXT',
+  | 'APPLICATION_VND_OASIS_OPENDOCUMENT_TEXT'
   /** application/vnd.openxmlformats-officedocument.presentationml.presentation mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentPresentationmlPresentation = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_PRESENTATION',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_PRESENTATION'
   /** application/vnd.openxmlformats-officedocument.presentationml.slide mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentPresentationmlSlide = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_SLIDE',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_SLIDE'
   /** application/vnd.openxmlformats-officedocument.presentationml.slideshow mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentPresentationmlSlideshow = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_SLIDESHOW',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_SLIDESHOW'
   /** application/vnd.openxmlformats-officedocument.presentationml.template mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentPresentationmlTemplate = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_TEMPLATE',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_TEMPLATE'
   /** application/vnd.openxmlformats-officedocument.spreadsheetml.sheet mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_SHEET',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_SHEET'
   /** application/vnd.openxmlformats-officedocument.spreadsheetml.template mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlTemplate = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_TEMPLATE',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_TEMPLATE'
   /** application/vnd.openxmlformats-officedocument.wordprocessingml.document mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentWordprocessingmlDocument = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_DOCUMENT',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_DOCUMENT'
   /** application/vnd.openxmlformats-officedocument.wordprocessingml.template mime type. */
-  ApplicationVndOpenxmlformatsOfficedocumentWordprocessingmlTemplate = 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_TEMPLATE',
+  | 'APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_TEMPLATE'
   /** application/wordperfect mime type. */
-  ApplicationWordperfect = 'APPLICATION_WORDPERFECT',
+  | 'APPLICATION_WORDPERFECT'
   /** application/x-7z-compressed mime type. */
-  ApplicationX_7ZCompressed = 'APPLICATION_X_7Z_COMPRESSED',
+  | 'APPLICATION_X_7Z_COMPRESSED'
   /** application/x-gzip mime type. */
-  ApplicationXGzip = 'APPLICATION_X_GZIP',
+  | 'APPLICATION_X_GZIP'
   /** application/x-tar mime type. */
-  ApplicationXTar = 'APPLICATION_X_TAR',
+  | 'APPLICATION_X_TAR'
   /** application/zip mime type. */
-  ApplicationZip = 'APPLICATION_ZIP',
+  | 'APPLICATION_ZIP'
   /** audio/aac mime type. */
-  AudioAac = 'AUDIO_AAC',
+  | 'AUDIO_AAC'
   /** audio/flac mime type. */
-  AudioFlac = 'AUDIO_FLAC',
+  | 'AUDIO_FLAC'
   /** audio/midi mime type. */
-  AudioMidi = 'AUDIO_MIDI',
+  | 'AUDIO_MIDI'
   /** audio/mpeg mime type. */
-  AudioMpeg = 'AUDIO_MPEG',
+  | 'AUDIO_MPEG'
   /** audio/ogg mime type. */
-  AudioOgg = 'AUDIO_OGG',
+  | 'AUDIO_OGG'
   /** audio/wav mime type. */
-  AudioWav = 'AUDIO_WAV',
+  | 'AUDIO_WAV'
   /** audio/x-matroska mime type. */
-  AudioXMatroska = 'AUDIO_X_MATROSKA',
+  | 'AUDIO_X_MATROSKA'
   /** audio/x-ms-wax mime type. */
-  AudioXMsWax = 'AUDIO_X_MS_WAX',
+  | 'AUDIO_X_MS_WAX'
   /** audio/x-ms-wma mime type. */
-  AudioXMsWma = 'AUDIO_X_MS_WMA',
+  | 'AUDIO_X_MS_WMA'
   /** audio/x-realaudio mime type. */
-  AudioXRealaudio = 'AUDIO_X_REALAUDIO',
+  | 'AUDIO_X_REALAUDIO'
   /** image/avif mime type. */
-  ImageAvif = 'IMAGE_AVIF',
+  | 'IMAGE_AVIF'
   /** image/bmp mime type. */
-  ImageBmp = 'IMAGE_BMP',
+  | 'IMAGE_BMP'
   /** image/gif mime type. */
-  ImageGif = 'IMAGE_GIF',
+  | 'IMAGE_GIF'
   /** image/heic mime type. */
-  ImageHeic = 'IMAGE_HEIC',
+  | 'IMAGE_HEIC'
   /** image/heic-sequence mime type. */
-  ImageHeicSequence = 'IMAGE_HEIC_SEQUENCE',
+  | 'IMAGE_HEIC_SEQUENCE'
   /** image/heif mime type. */
-  ImageHeif = 'IMAGE_HEIF',
+  | 'IMAGE_HEIF'
   /** image/heif-sequence mime type. */
-  ImageHeifSequence = 'IMAGE_HEIF_SEQUENCE',
+  | 'IMAGE_HEIF_SEQUENCE'
   /** image/jpeg mime type. */
-  ImageJpeg = 'IMAGE_JPEG',
+  | 'IMAGE_JPEG'
   /** image/png mime type. */
-  ImagePng = 'IMAGE_PNG',
+  | 'IMAGE_PNG'
   /** image/tiff mime type. */
-  ImageTiff = 'IMAGE_TIFF',
+  | 'IMAGE_TIFF'
   /** image/webp mime type. */
-  ImageWebp = 'IMAGE_WEBP',
+  | 'IMAGE_WEBP'
   /** image/x-icon mime type. */
-  ImageXIcon = 'IMAGE_X_ICON',
+  | 'IMAGE_X_ICON'
   /** text/calendar mime type. */
-  TextCalendar = 'TEXT_CALENDAR',
+  | 'TEXT_CALENDAR'
   /** text/css mime type. */
-  TextCss = 'TEXT_CSS',
+  | 'TEXT_CSS'
   /** text/csv mime type. */
-  TextCsv = 'TEXT_CSV',
+  | 'TEXT_CSV'
   /** text/plain mime type. */
-  TextPlain = 'TEXT_PLAIN',
+  | 'TEXT_PLAIN'
   /** text/richtext mime type. */
-  TextRichtext = 'TEXT_RICHTEXT',
+  | 'TEXT_RICHTEXT'
   /** text/tab-separated-values mime type. */
-  TextTabSeparatedValues = 'TEXT_TAB_SEPARATED_VALUES',
+  | 'TEXT_TAB_SEPARATED_VALUES'
   /** text/vtt mime type. */
-  TextVtt = 'TEXT_VTT',
+  | 'TEXT_VTT'
   /** video/3gpp mime type. */
-  Video_3Gpp = 'VIDEO_3GPP',
+  | 'VIDEO_3GPP'
   /** video/3gpp2 mime type. */
-  Video_3Gpp2 = 'VIDEO_3GPP2',
+  | 'VIDEO_3GPP2'
   /** video/avi mime type. */
-  VideoAvi = 'VIDEO_AVI',
+  | 'VIDEO_AVI'
   /** video/divx mime type. */
-  VideoDivx = 'VIDEO_DIVX',
+  | 'VIDEO_DIVX'
   /** video/mp4 mime type. */
-  VideoMp4 = 'VIDEO_MP4',
+  | 'VIDEO_MP4'
   /** video/mpeg mime type. */
-  VideoMpeg = 'VIDEO_MPEG',
+  | 'VIDEO_MPEG'
   /** video/ogg mime type. */
-  VideoOgg = 'VIDEO_OGG',
+  | 'VIDEO_OGG'
   /** video/quicktime mime type. */
-  VideoQuicktime = 'VIDEO_QUICKTIME',
+  | 'VIDEO_QUICKTIME'
   /** video/webm mime type. */
-  VideoWebm = 'VIDEO_WEBM',
+  | 'VIDEO_WEBM'
   /** video/x-flv mime type. */
-  VideoXFlv = 'VIDEO_X_FLV',
+  | 'VIDEO_X_FLV'
   /** video/x-matroska mime type. */
-  VideoXMatroska = 'VIDEO_X_MATROSKA',
+  | 'VIDEO_X_MATROSKA'
   /** video/x-ms-asf mime type. */
-  VideoXMsAsf = 'VIDEO_X_MS_ASF',
+  | 'VIDEO_X_MS_ASF'
   /** video/x-ms-wm mime type. */
-  VideoXMsWm = 'VIDEO_X_MS_WM',
+  | 'VIDEO_X_MS_WM'
   /** video/x-ms-wmv mime type. */
-  VideoXMsWmv = 'VIDEO_X_MS_WMV',
+  | 'VIDEO_X_MS_WMV'
   /** video/x-ms-wmx mime type. */
-  VideoXMsWmx = 'VIDEO_X_MS_WMX'
-}
+  | 'VIDEO_X_MS_WMX';
 
 /** An object with an ID */
 export type Node = {
@@ -6299,7 +6119,6 @@ export type NodeWithAuthor = {
 
 /** Connection between the NodeWithAuthor type and the User type */
 export type NodeWithAuthorToUserConnectionEdge = Edge & OneToOneConnection & UserConnectionEdge & {
-  __typename?: 'NodeWithAuthorToUserConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -6358,7 +6177,6 @@ export type NodeWithFeaturedImage = {
 
 /** Connection between the NodeWithFeaturedImage type and the MediaItem type */
 export type NodeWithFeaturedImageToMediaItemConnectionEdge = Edge & MediaItemConnectionEdge & OneToOneConnection & {
-  __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -6385,7 +6203,6 @@ export type NodeWithRevisions = {
 
 /** Connection between the NodeWithRevisions type and the ContentNode type */
 export type NodeWithRevisionsToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & OneToOneConnection & {
-  __typename?: 'NodeWithRevisionsToContentNodeConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -6435,16 +6252,14 @@ export type OneToOneConnection = {
 };
 
 /** The cardinality of the connection order */
-export enum OrderEnum {
+export type OrderEnum =
   /** Sort the query result set in an ascending order */
-  Asc = 'ASC',
+  | 'ASC'
   /** Sort the query result set in a descending order */
-  Desc = 'DESC'
-}
+  | 'DESC';
 
 /** The page type */
 export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & {
-  __typename?: 'Page';
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /** Connection between the NodeWithAuthor type and the User type */
@@ -6671,14 +6486,13 @@ export type PageConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PageIdType {
+export type PageIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Information about pagination in a connection. */
 export type PageInfo = {
@@ -6694,7 +6508,6 @@ export type PageInfo = {
 
 /** Connection between the Page type and the Comment type */
 export type PageToCommentConnection = CommentConnection & Connection & {
-  __typename?: 'PageToCommentConnection';
   /** Edges for the PageToCommentConnection connection */
   edges: Array<PageToCommentConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -6705,7 +6518,6 @@ export type PageToCommentConnection = CommentConnection & Connection & {
 
 /** An edge in a connection */
 export type PageToCommentConnectionEdge = CommentConnectionEdge & Edge & {
-  __typename?: 'PageToCommentConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -6714,7 +6526,6 @@ export type PageToCommentConnectionEdge = CommentConnectionEdge & Edge & {
 
 /** Page Info on the &quot;PageToCommentConnection&quot; */
 export type PageToCommentConnectionPageInfo = CommentConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'PageToCommentConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -6791,7 +6602,6 @@ export type PageToCommentConnectionWhereArgs = {
 
 /** Connection between the Page type and the page type */
 export type PageToPreviewConnectionEdge = Edge & OneToOneConnection & PageConnectionEdge & {
-  __typename?: 'PageToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -6800,7 +6610,6 @@ export type PageToPreviewConnectionEdge = Edge & OneToOneConnection & PageConnec
 
 /** Connection between the Page type and the page type */
 export type PageToRevisionConnection = Connection & PageConnection & {
-  __typename?: 'PageToRevisionConnection';
   /** Edges for the PageToRevisionConnection connection */
   edges: Array<PageToRevisionConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -6811,7 +6620,6 @@ export type PageToRevisionConnection = Connection & PageConnection & {
 
 /** An edge in a connection */
 export type PageToRevisionConnectionEdge = Edge & PageConnectionEdge & {
-  __typename?: 'PageToRevisionConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -6820,7 +6628,6 @@ export type PageToRevisionConnectionEdge = Edge & PageConnectionEdge & {
 
 /** Page Info on the &quot;PageToRevisionConnection&quot; */
 export type PageToRevisionConnectionPageInfo = PageConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'PageToRevisionConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -6879,7 +6686,6 @@ export type PageToRevisionConnectionWhereArgs = {
 
 /** The pdfItem type */
 export type PdfItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & WithAcfPdfItemDetails & {
-  __typename?: 'PdfItem';
   /**
    * The ancestors of the content node.
    * @deprecated This content type is not hierarchical and typically will not have ancestors
@@ -7078,7 +6884,6 @@ export type PdfItemConnectionPageInfo = {
 
 /** The &quot;PdfItemDetails&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PdfItemDetails = AcfFieldGroup & AcfFieldGroupFields & PdfItemDetails_Fields & {
-  __typename?: 'PdfItemDetails';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -7086,6 +6891,8 @@ export type PdfItemDetails = AcfFieldGroup & AcfFieldGroupFields & PdfItemDetail
   fieldGroupName?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;PdfItemDetails&quot; Field Group */
   pdfFile?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Paste the extracted text content from the PDF here for search indexing. An attempt will be made to extract this text automatically but it may not work. */
+  pdfTextContent?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;post_object&quot; Field Type added to the schema as part of the &quot;PdfItemDetails&quot; Field Group */
   relatedArticle?: Maybe<AcfContentNodeConnection>;
 };
@@ -7108,6 +6915,8 @@ export type PdfItemDetails_Fields = {
   fieldGroupName?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;PdfItemDetails&quot; Field Group */
   pdfFile?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Paste the extracted text content from the PDF here for search indexing. An attempt will be made to extract this text automatically but it may not work. */
+  pdfTextContent?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;post_object&quot; Field Type added to the schema as part of the &quot;PdfItemDetails&quot; Field Group */
   relatedArticle?: Maybe<AcfContentNodeConnection>;
 };
@@ -7122,16 +6931,15 @@ export type PdfItemDetails_FieldsRelatedArticleArgs = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PdfItemIdType {
+export type PdfItemIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Set relationships between the pdfItem to places */
 export type PdfItemPlacesInput = {
@@ -7155,7 +6963,6 @@ export type PdfItemPlacesNodeInput = {
 
 /** Connection between the PdfItem type and the pdfItem type */
 export type PdfItemToParentConnectionEdge = Edge & OneToOneConnection & PdfItemConnectionEdge & {
-  __typename?: 'PdfItemToParentConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /**
@@ -7167,7 +6974,6 @@ export type PdfItemToParentConnectionEdge = Edge & OneToOneConnection & PdfItemC
 
 /** Connection between the PdfItem type and the pdfItem type */
 export type PdfItemToPdfItemConnection = Connection & PdfItemConnection & {
-  __typename?: 'PdfItemToPdfItemConnection';
   /** Edges for the PdfItemToPdfItemConnection connection */
   edges: Array<PdfItemToPdfItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7178,7 +6984,6 @@ export type PdfItemToPdfItemConnection = Connection & PdfItemConnection & {
 
 /** An edge in a connection */
 export type PdfItemToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
-  __typename?: 'PdfItemToPdfItemConnectionEdge';
   /**
    * A cursor for use in pagination
    * @deprecated This content type is not hierarchical and typically will not have ancestors
@@ -7193,7 +6998,6 @@ export type PdfItemToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
 
 /** Page Info on the &quot;PdfItemToPdfItemConnection&quot; */
 export type PdfItemToPdfItemConnectionPageInfo = PageInfo & PdfItemConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PdfItemToPdfItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -7206,7 +7010,6 @@ export type PdfItemToPdfItemConnectionPageInfo = PageInfo & PdfItemConnectionPag
 
 /** Connection between the PdfItem type and the place type */
 export type PdfItemToPlaceConnection = Connection & PlaceConnection & {
-  __typename?: 'PdfItemToPlaceConnection';
   /** Edges for the PdfItemToPlaceConnection connection */
   edges: Array<PdfItemToPlaceConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7217,7 +7020,6 @@ export type PdfItemToPlaceConnection = Connection & PlaceConnection & {
 
 /** An edge in a connection */
 export type PdfItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
-  __typename?: 'PdfItemToPlaceConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -7226,7 +7028,6 @@ export type PdfItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
 
 /** Page Info on the &quot;PdfItemToPlaceConnection&quot; */
 export type PdfItemToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PdfItemToPlaceConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -7285,7 +7086,6 @@ export type PdfItemToPlaceConnectionWhereArgs = {
 
 /** Connection between the PdfItem type and the pdfItem type */
 export type PdfItemToPreviewConnectionEdge = Edge & OneToOneConnection & PdfItemConnectionEdge & {
-  __typename?: 'PdfItemToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -7294,7 +7094,6 @@ export type PdfItemToPreviewConnectionEdge = Edge & OneToOneConnection & PdfItem
 
 /** Connection between the PdfItem type and the TermNode type */
 export type PdfItemToTermNodeConnection = Connection & TermNodeConnection & {
-  __typename?: 'PdfItemToTermNodeConnection';
   /** Edges for the PdfItemToTermNodeConnection connection */
   edges: Array<PdfItemToTermNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7305,7 +7104,6 @@ export type PdfItemToTermNodeConnection = Connection & TermNodeConnection & {
 
 /** An edge in a connection */
 export type PdfItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
-  __typename?: 'PdfItemToTermNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -7314,7 +7112,6 @@ export type PdfItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
 
 /** Page Info on the &quot;PdfItemToTermNodeConnection&quot; */
 export type PdfItemToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PdfItemToTermNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -7375,7 +7172,6 @@ export type PdfItemToTermNodeConnectionWhereArgs = {
 
 /** Connection between the PdfItem type and the topic type */
 export type PdfItemToTopicConnection = Connection & TopicConnection & {
-  __typename?: 'PdfItemToTopicConnection';
   /** Edges for the PdfItemToTopicConnection connection */
   edges: Array<PdfItemToTopicConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7386,7 +7182,6 @@ export type PdfItemToTopicConnection = Connection & TopicConnection & {
 
 /** An edge in a connection */
 export type PdfItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
-  __typename?: 'PdfItemToTopicConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -7395,7 +7190,6 @@ export type PdfItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
 
 /** Page Info on the &quot;PdfItemToTopicConnection&quot; */
 export type PdfItemToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PdfItemToTopicConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -7474,7 +7268,6 @@ export type PdfItemTopicsNodeInput = {
 
 /** The place type */
 export type Place = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
-  __typename?: 'Place';
   /** The ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<PlaceToAncestorsPlaceConnection>;
   /** Connection between the Place type and the article type */
@@ -7672,22 +7465,20 @@ export type PlaceConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PlaceIdType {
+export type PlaceIdType =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Place type and the place type */
 export type PlaceToAncestorsPlaceConnection = Connection & PlaceConnection & {
-  __typename?: 'PlaceToAncestorsPlaceConnection';
   /** Edges for the PlaceToAncestorsPlaceConnection connection */
   edges: Array<PlaceToAncestorsPlaceConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7698,7 +7489,6 @@ export type PlaceToAncestorsPlaceConnection = Connection & PlaceConnection & {
 
 /** An edge in a connection */
 export type PlaceToAncestorsPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
-  __typename?: 'PlaceToAncestorsPlaceConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -7707,7 +7497,6 @@ export type PlaceToAncestorsPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
 
 /** Page Info on the &quot;PlaceToAncestorsPlaceConnection&quot; */
 export type PlaceToAncestorsPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PlaceToAncestorsPlaceConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -7720,7 +7509,6 @@ export type PlaceToAncestorsPlaceConnectionPageInfo = PageInfo & PlaceConnection
 
 /** Connection between the Place type and the article type */
 export type PlaceToArticleConnection = ArticleConnection & Connection & {
-  __typename?: 'PlaceToArticleConnection';
   /** Edges for the PlaceToArticleConnection connection */
   edges: Array<PlaceToArticleConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7731,7 +7519,6 @@ export type PlaceToArticleConnection = ArticleConnection & Connection & {
 
 /** An edge in a connection */
 export type PlaceToArticleConnectionEdge = ArticleConnectionEdge & Edge & {
-  __typename?: 'PlaceToArticleConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -7740,7 +7527,6 @@ export type PlaceToArticleConnectionEdge = ArticleConnectionEdge & Edge & {
 
 /** Page Info on the &quot;PlaceToArticleConnection&quot; */
 export type PlaceToArticleConnectionPageInfo = ArticleConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'PlaceToArticleConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -7791,7 +7577,6 @@ export type PlaceToArticleConnectionWhereArgs = {
 
 /** Connection between the Place type and the audioItem type */
 export type PlaceToAudioItemConnection = AudioItemConnection & Connection & {
-  __typename?: 'PlaceToAudioItemConnection';
   /** Edges for the PlaceToAudioItemConnection connection */
   edges: Array<PlaceToAudioItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7802,7 +7587,6 @@ export type PlaceToAudioItemConnection = AudioItemConnection & Connection & {
 
 /** An edge in a connection */
 export type PlaceToAudioItemConnectionEdge = AudioItemConnectionEdge & Edge & {
-  __typename?: 'PlaceToAudioItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -7811,7 +7595,6 @@ export type PlaceToAudioItemConnectionEdge = AudioItemConnectionEdge & Edge & {
 
 /** Page Info on the &quot;PlaceToAudioItemConnection&quot; */
 export type PlaceToAudioItemConnectionPageInfo = AudioItemConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'PlaceToAudioItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -7862,7 +7645,6 @@ export type PlaceToAudioItemConnectionWhereArgs = {
 
 /** Connection between the Place type and the ContentNode type */
 export type PlaceToContentNodeConnection = Connection & ContentNodeConnection & {
-  __typename?: 'PlaceToContentNodeConnection';
   /** Edges for the PlaceToContentNodeConnection connection */
   edges: Array<PlaceToContentNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7873,7 +7655,6 @@ export type PlaceToContentNodeConnection = Connection & ContentNodeConnection & 
 
 /** An edge in a connection */
 export type PlaceToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'PlaceToContentNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -7882,7 +7663,6 @@ export type PlaceToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge 
 
 /** Page Info on the &quot;PlaceToContentNodeConnection&quot; */
 export type PlaceToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'PlaceToContentNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -7935,7 +7715,6 @@ export type PlaceToContentNodeConnectionWhereArgs = {
 
 /** Connection between the Place type and the place type */
 export type PlaceToParentPlaceConnectionEdge = Edge & OneToOneConnection & PlaceConnectionEdge & {
-  __typename?: 'PlaceToParentPlaceConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -7944,7 +7723,6 @@ export type PlaceToParentPlaceConnectionEdge = Edge & OneToOneConnection & Place
 
 /** Connection between the Place type and the pdfItem type */
 export type PlaceToPdfItemConnection = Connection & PdfItemConnection & {
-  __typename?: 'PlaceToPdfItemConnection';
   /** Edges for the PlaceToPdfItemConnection connection */
   edges: Array<PlaceToPdfItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -7955,7 +7733,6 @@ export type PlaceToPdfItemConnection = Connection & PdfItemConnection & {
 
 /** An edge in a connection */
 export type PlaceToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
-  __typename?: 'PlaceToPdfItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -7964,7 +7741,6 @@ export type PlaceToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
 
 /** Page Info on the &quot;PlaceToPdfItemConnection&quot; */
 export type PlaceToPdfItemConnectionPageInfo = PageInfo & PdfItemConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PlaceToPdfItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -8015,7 +7791,6 @@ export type PlaceToPdfItemConnectionWhereArgs = {
 
 /** Connection between the Place type and the place type */
 export type PlaceToPlaceConnection = Connection & PlaceConnection & {
-  __typename?: 'PlaceToPlaceConnection';
   /** Edges for the PlaceToPlaceConnection connection */
   edges: Array<PlaceToPlaceConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -8026,7 +7801,6 @@ export type PlaceToPlaceConnection = Connection & PlaceConnection & {
 
 /** An edge in a connection */
 export type PlaceToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
-  __typename?: 'PlaceToPlaceConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -8035,7 +7809,6 @@ export type PlaceToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
 
 /** Page Info on the &quot;PlaceToPlaceConnection&quot; */
 export type PlaceToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PlaceToPlaceConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -8094,7 +7867,6 @@ export type PlaceToPlaceConnectionWhereArgs = {
 
 /** Connection between the Place type and the Taxonomy type */
 export type PlaceToTaxonomyConnectionEdge = Edge & OneToOneConnection & TaxonomyConnectionEdge & {
-  __typename?: 'PlaceToTaxonomyConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -8103,7 +7875,6 @@ export type PlaceToTaxonomyConnectionEdge = Edge & OneToOneConnection & Taxonomy
 
 /** Connection between the Place type and the videoItem type */
 export type PlaceToVideoItemConnection = Connection & VideoItemConnection & {
-  __typename?: 'PlaceToVideoItemConnection';
   /** Edges for the PlaceToVideoItemConnection connection */
   edges: Array<PlaceToVideoItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -8114,7 +7885,6 @@ export type PlaceToVideoItemConnection = Connection & VideoItemConnection & {
 
 /** An edge in a connection */
 export type PlaceToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge & {
-  __typename?: 'PlaceToVideoItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -8123,7 +7893,6 @@ export type PlaceToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge & {
 
 /** Page Info on the &quot;PlaceToVideoItemConnection&quot; */
 export type PlaceToVideoItemConnectionPageInfo = PageInfo & VideoItemConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PlaceToVideoItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -8173,7 +7942,6 @@ export type PlaceToVideoItemConnectionWhereArgs = {
 };
 
 export type PlaceholderSettings = AcfOptionsPage & Node & WithAcfPlaceholderSettingsFields & {
-  __typename?: 'PlaceholderSettings';
   /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
   menuTitle?: Maybe<Scalars['String']['output']>;
@@ -8185,7 +7953,6 @@ export type PlaceholderSettings = AcfOptionsPage & Node & WithAcfPlaceholderSett
 
 /** The &quot;PlaceholderSettingsFields&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSettingsFields = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSettingsFields_Fields & {
-  __typename?: 'PlaceholderSettingsFields';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8197,7 +7964,6 @@ export type PlaceholderSettingsFields = AcfFieldGroup & AcfFieldGroupFields & Pl
 
 /** The &quot;PlaceholderSettingsFieldsPlaceholderSetup&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSettingsFieldsPlaceholderSetup = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSettingsFieldsPlaceholderSetup_Fields & {
-  __typename?: 'PlaceholderSettingsFieldsPlaceholderSetup';
   /** Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;PlaceholderSettingsFieldsPlaceholderSetup&quot; Field Group */
   contentSelector: Array<Maybe<Scalars['String']['output']>>;
   /**
@@ -8213,7 +7979,6 @@ export type PlaceholderSettingsFieldsPlaceholderSetup = AcfFieldGroup & AcfField
 
 /** The &quot;PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup_Fields & {
-  __typename?: 'PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8292,7 +8057,6 @@ export type PlaceholderSettingsFields_Fields = {
 
 /** The &quot;PlaceholderSetup&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetup = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetup_Fields & {
-  __typename?: 'PlaceholderSetup';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8314,7 +8078,6 @@ export type PlaceholderSetup = AcfFieldGroup & AcfFieldGroupFields & Placeholder
 
 /** The &quot;PlaceholderSetupPlaceholder1&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder1 = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder1_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder1';
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder1&quot; Field Group */
   active?: Maybe<Scalars['Boolean']['output']>;
   /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder1&quot; Field Group */
@@ -8334,7 +8097,6 @@ export type PlaceholderSetupPlaceholder1 = AcfFieldGroup & AcfFieldGroupFields &
 
 /** The &quot;PlaceholderSetupPlaceholder1BooksWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder1BooksWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder1BooksWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder1BooksWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8353,7 +8115,6 @@ export type PlaceholderSetupPlaceholder1BooksWidgetSettings_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder1FreeTextWidget&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder1FreeTextWidget = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder1FreeTextWidget_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder1FreeTextWidget';
   /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder1FreeTextWidget&quot; Field Group */
   content?: Maybe<Scalars['String']['output']>;
   /**
@@ -8384,7 +8145,6 @@ export type PlaceholderSetupPlaceholder1FreeTextWidget_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder1JournalWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder1JournalWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder1JournalWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder1JournalWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8422,7 +8182,6 @@ export type PlaceholderSetupPlaceholder1_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder2&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder2 = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder2_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder2';
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder2&quot; Field Group */
   active?: Maybe<Scalars['Boolean']['output']>;
   /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder2&quot; Field Group */
@@ -8442,7 +8201,6 @@ export type PlaceholderSetupPlaceholder2 = AcfFieldGroup & AcfFieldGroupFields &
 
 /** The &quot;PlaceholderSetupPlaceholder2BooksWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder2BooksWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder2BooksWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder2BooksWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8461,7 +8219,6 @@ export type PlaceholderSetupPlaceholder2BooksWidgetSettings_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder2FreeTextWidget&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder2FreeTextWidget = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder2FreeTextWidget_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder2FreeTextWidget';
   /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder2FreeTextWidget&quot; Field Group */
   content?: Maybe<Scalars['String']['output']>;
   /**
@@ -8492,7 +8249,6 @@ export type PlaceholderSetupPlaceholder2FreeTextWidget_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder2JournalWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder2JournalWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder2JournalWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder2JournalWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8530,7 +8286,6 @@ export type PlaceholderSetupPlaceholder2_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder3&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder3 = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder3_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder3';
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder3&quot; Field Group */
   active?: Maybe<Scalars['Boolean']['output']>;
   /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder3&quot; Field Group */
@@ -8550,7 +8305,6 @@ export type PlaceholderSetupPlaceholder3 = AcfFieldGroup & AcfFieldGroupFields &
 
 /** The &quot;PlaceholderSetupPlaceholder3BooksWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder3BooksWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder3BooksWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder3BooksWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8569,7 +8323,6 @@ export type PlaceholderSetupPlaceholder3BooksWidgetSettings_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder3FreeTextWidget&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder3FreeTextWidget = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder3FreeTextWidget_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder3FreeTextWidget';
   /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder3FreeTextWidget&quot; Field Group */
   content?: Maybe<Scalars['String']['output']>;
   /**
@@ -8600,7 +8353,6 @@ export type PlaceholderSetupPlaceholder3FreeTextWidget_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder3JournalWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder3JournalWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder3JournalWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder3JournalWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8638,7 +8390,6 @@ export type PlaceholderSetupPlaceholder3_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder4&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder4 = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder4_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder4';
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder4&quot; Field Group */
   active?: Maybe<Scalars['Boolean']['output']>;
   /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder4&quot; Field Group */
@@ -8658,7 +8409,6 @@ export type PlaceholderSetupPlaceholder4 = AcfFieldGroup & AcfFieldGroupFields &
 
 /** The &quot;PlaceholderSetupPlaceholder4BooksWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder4BooksWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder4BooksWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder4BooksWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8677,7 +8427,6 @@ export type PlaceholderSetupPlaceholder4BooksWidgetSettings_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder4FreeTextWidget&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder4FreeTextWidget = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder4FreeTextWidget_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder4FreeTextWidget';
   /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder4FreeTextWidget&quot; Field Group */
   content?: Maybe<Scalars['String']['output']>;
   /**
@@ -8708,7 +8457,6 @@ export type PlaceholderSetupPlaceholder4FreeTextWidget_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder4JournalWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder4JournalWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder4JournalWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder4JournalWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8746,7 +8494,6 @@ export type PlaceholderSetupPlaceholder4_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder5&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder5 = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder5_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder5';
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder5&quot; Field Group */
   active?: Maybe<Scalars['Boolean']['output']>;
   /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder5&quot; Field Group */
@@ -8766,7 +8513,6 @@ export type PlaceholderSetupPlaceholder5 = AcfFieldGroup & AcfFieldGroupFields &
 
 /** The &quot;PlaceholderSetupPlaceholder5BooksWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder5BooksWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder5BooksWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder5BooksWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8785,7 +8531,6 @@ export type PlaceholderSetupPlaceholder5BooksWidgetSettings_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder5FreeTextWidget&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder5FreeTextWidget = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder5FreeTextWidget_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder5FreeTextWidget';
   /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder5FreeTextWidget&quot; Field Group */
   content?: Maybe<Scalars['String']['output']>;
   /**
@@ -8816,7 +8561,6 @@ export type PlaceholderSetupPlaceholder5FreeTextWidget_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder5JournalWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder5JournalWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder5JournalWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder5JournalWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8854,7 +8598,6 @@ export type PlaceholderSetupPlaceholder5_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder6&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder6 = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder6_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder6';
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder6&quot; Field Group */
   active?: Maybe<Scalars['Boolean']['output']>;
   /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder6&quot; Field Group */
@@ -8874,7 +8617,6 @@ export type PlaceholderSetupPlaceholder6 = AcfFieldGroup & AcfFieldGroupFields &
 
 /** The &quot;PlaceholderSetupPlaceholder6BooksWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder6BooksWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder6BooksWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder6BooksWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8893,7 +8635,6 @@ export type PlaceholderSetupPlaceholder6BooksWidgetSettings_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder6FreeTextWidget&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder6FreeTextWidget = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder6FreeTextWidget_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder6FreeTextWidget';
   /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;PlaceholderSetupPlaceholder6FreeTextWidget&quot; Field Group */
   content?: Maybe<Scalars['String']['output']>;
   /**
@@ -8924,7 +8665,6 @@ export type PlaceholderSetupPlaceholder6FreeTextWidget_Fields = {
 
 /** The &quot;PlaceholderSetupPlaceholder6JournalWidgetSettings&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type PlaceholderSetupPlaceholder6JournalWidgetSettings = AcfFieldGroup & AcfFieldGroupFields & PlaceholderSetupPlaceholder6JournalWidgetSettings_Fields & {
-  __typename?: 'PlaceholderSetupPlaceholder6JournalWidgetSettings';
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -8983,7 +8723,6 @@ export type PlaceholderSetup_Fields = {
 
 /** An plugin object */
 export type Plugin = Node & {
-  __typename?: 'Plugin';
   /** Name of the plugin author(s), may also be a company name. */
   author?: Maybe<Scalars['String']['output']>;
   /** URI for the related author(s)/company website. */
@@ -9035,26 +8774,24 @@ export type PluginConnectionPageInfo = {
 };
 
 /** The status of the WordPress plugin. */
-export enum PluginStatusEnum {
+export type PluginStatusEnum =
   /** The plugin is currently active. */
-  Active = 'ACTIVE',
+  | 'ACTIVE'
   /** The plugin is a drop-in plugin. */
-  DropIn = 'DROP_IN',
+  | 'DROP_IN'
   /** The plugin is currently inactive. */
-  Inactive = 'INACTIVE',
+  | 'INACTIVE'
   /** The plugin is a must-use plugin. */
-  MustUse = 'MUST_USE',
+  | 'MUST_USE'
   /** The plugin is technically active but was paused while loading. */
-  Paused = 'PAUSED',
+  | 'PAUSED'
   /** The plugin was active recently. */
-  RecentlyActive = 'RECENTLY_ACTIVE',
+  | 'RECENTLY_ACTIVE'
   /** The plugin has an upgrade available. */
-  Upgrade = 'UPGRADE'
-}
+  | 'UPGRADE';
 
 /** The post type */
 export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & NodeWithTrackbacks & Previewable & UniformResourceIdentifiable & {
-  __typename?: 'Post';
   /**
    * The ancestors of the content node.
    * @deprecated This content type is not hierarchical and typically will not have ancestors
@@ -9351,7 +9088,6 @@ export type PostConnectionPageInfo = {
 
 /** The postFormat type */
 export type PostFormat = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
-  __typename?: 'PostFormat';
   /** Connection between the PostFormat type and the ContentNode type */
   contentNodes?: Maybe<PostFormatToContentNodeConnection>;
   /** The number of objects connected to the object */
@@ -9472,22 +9208,20 @@ export type PostFormatConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PostFormatIdType {
+export type PostFormatIdType =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the PostFormat type and the ContentNode type */
 export type PostFormatToContentNodeConnection = Connection & ContentNodeConnection & {
-  __typename?: 'PostFormatToContentNodeConnection';
   /** Edges for the PostFormatToContentNodeConnection connection */
   edges: Array<PostFormatToContentNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -9498,7 +9232,6 @@ export type PostFormatToContentNodeConnection = Connection & ContentNodeConnecti
 
 /** An edge in a connection */
 export type PostFormatToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'PostFormatToContentNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -9507,7 +9240,6 @@ export type PostFormatToContentNodeConnectionEdge = ContentNodeConnectionEdge & 
 
 /** Page Info on the &quot;PostFormatToContentNodeConnection&quot; */
 export type PostFormatToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'PostFormatToContentNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -9560,7 +9292,6 @@ export type PostFormatToContentNodeConnectionWhereArgs = {
 
 /** Connection between the PostFormat type and the post type */
 export type PostFormatToPostConnection = Connection & PostConnection & {
-  __typename?: 'PostFormatToPostConnection';
   /** Edges for the PostFormatToPostConnection connection */
   edges: Array<PostFormatToPostConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -9571,7 +9302,6 @@ export type PostFormatToPostConnection = Connection & PostConnection & {
 
 /** An edge in a connection */
 export type PostFormatToPostConnectionEdge = Edge & PostConnectionEdge & {
-  __typename?: 'PostFormatToPostConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -9580,7 +9310,6 @@ export type PostFormatToPostConnectionEdge = Edge & PostConnectionEdge & {
 
 /** Page Info on the &quot;PostFormatToPostConnection&quot; */
 export type PostFormatToPostConnectionPageInfo = PageInfo & PostConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PostFormatToPostConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -9659,7 +9388,6 @@ export type PostFormatToPostConnectionWhereArgs = {
 
 /** Connection between the PostFormat type and the Taxonomy type */
 export type PostFormatToTaxonomyConnectionEdge = Edge & OneToOneConnection & TaxonomyConnectionEdge & {
-  __typename?: 'PostFormatToTaxonomyConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -9667,60 +9395,56 @@ export type PostFormatToTaxonomyConnectionEdge = Edge & OneToOneConnection & Tax
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum PostIdType {
+export type PostIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** The format of post field data. */
-export enum PostObjectFieldFormatEnum {
+export type PostObjectFieldFormatEnum =
   /** Provide the field value directly from database. Null on unauthenticated requests. */
-  Raw = 'RAW',
+  | 'RAW'
   /** Provide the field value as rendered by WordPress. Default. */
-  Rendered = 'RENDERED'
-}
+  | 'RENDERED';
 
 /** The column to use when filtering by date */
-export enum PostObjectsConnectionDateColumnEnum {
+export type PostObjectsConnectionDateColumnEnum =
   /** The date the comment was created in local time. */
-  Date = 'DATE',
+  | 'DATE'
   /** The most recent modification date of the comment. */
-  Modified = 'MODIFIED'
-}
+  | 'MODIFIED';
 
 /** Field to order the connection by */
-export enum PostObjectsConnectionOrderbyEnum {
+export type PostObjectsConnectionOrderbyEnum =
   /** Order by author */
-  Author = 'AUTHOR',
+  | 'AUTHOR'
   /** Order by the number of comments it has acquired */
-  CommentCount = 'COMMENT_COUNT',
+  | 'COMMENT_COUNT'
   /** Order by publish date */
-  Date = 'DATE',
+  | 'DATE'
   /** Preserve the ID order given in the IN array */
-  In = 'IN',
+  | 'IN'
   /** Order by the menu order value */
-  MenuOrder = 'MENU_ORDER',
+  | 'MENU_ORDER'
   /** Order by meta value */
-  MetaValue = 'META_VALUE',
+  | 'META_VALUE'
   /** Order by numeric meta value */
-  MetaValueNum = 'META_VALUE_NUM',
+  | 'META_VALUE_NUM'
   /** Order by last modified date */
-  Modified = 'MODIFIED',
+  | 'MODIFIED'
   /** Preserve slug order given in the NAME_IN array */
-  NameIn = 'NAME_IN',
+  | 'NAME_IN'
   /** Order by parent ID */
-  Parent = 'PARENT',
+  | 'PARENT'
   /** Order by slug */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Order by title */
-  Title = 'TITLE'
-}
+  | 'TITLE';
 
 /** Options for ordering the connection */
 export type PostObjectsConnectionOrderbyInput = {
@@ -9751,34 +9475,33 @@ export type PostPostFormatsNodeInput = {
 };
 
 /** The status of the object. */
-export enum PostStatusEnum {
+export type PostStatusEnum =
   /** Objects with the acf-disabled status */
-  AcfDisabled = 'ACF_DISABLED',
+  | 'ACF_DISABLED'
   /** Objects with the auto-draft status */
-  AutoDraft = 'AUTO_DRAFT',
+  | 'AUTO_DRAFT'
   /** Objects with the draft status */
-  Draft = 'DRAFT',
+  | 'DRAFT'
   /** Objects with the future status */
-  Future = 'FUTURE',
+  | 'FUTURE'
   /** Objects with the inherit status */
-  Inherit = 'INHERIT',
+  | 'INHERIT'
   /** Objects with the pending status */
-  Pending = 'PENDING',
+  | 'PENDING'
   /** Objects with the private status */
-  Private = 'PRIVATE',
+  | 'PRIVATE'
   /** Objects with the publish status */
-  Publish = 'PUBLISH',
+  | 'PUBLISH'
   /** Objects with the request-completed status */
-  RequestCompleted = 'REQUEST_COMPLETED',
+  | 'REQUEST_COMPLETED'
   /** Objects with the request-confirmed status */
-  RequestConfirmed = 'REQUEST_CONFIRMED',
+  | 'REQUEST_CONFIRMED'
   /** Objects with the request-failed status */
-  RequestFailed = 'REQUEST_FAILED',
+  | 'REQUEST_FAILED'
   /** Objects with the request-pending status */
-  RequestPending = 'REQUEST_PENDING',
+  | 'REQUEST_PENDING'
   /** Objects with the trash status */
-  Trash = 'TRASH'
-}
+  | 'TRASH';
 
 /** Set relationships between the post to tags */
 export type PostTagsInput = {
@@ -9802,7 +9525,6 @@ export type PostTagsNodeInput = {
 
 /** Connection between the Post type and the category type */
 export type PostToCategoryConnection = CategoryConnection & Connection & {
-  __typename?: 'PostToCategoryConnection';
   /** Edges for the PostToCategoryConnection connection */
   edges: Array<PostToCategoryConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -9813,7 +9535,6 @@ export type PostToCategoryConnection = CategoryConnection & Connection & {
 
 /** An edge in a connection */
 export type PostToCategoryConnectionEdge = CategoryConnectionEdge & Edge & {
-  __typename?: 'PostToCategoryConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -9822,7 +9543,6 @@ export type PostToCategoryConnectionEdge = CategoryConnectionEdge & Edge & {
 
 /** Page Info on the &quot;PostToCategoryConnection&quot; */
 export type PostToCategoryConnectionPageInfo = CategoryConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'PostToCategoryConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -9881,7 +9601,6 @@ export type PostToCategoryConnectionWhereArgs = {
 
 /** Connection between the Post type and the Comment type */
 export type PostToCommentConnection = CommentConnection & Connection & {
-  __typename?: 'PostToCommentConnection';
   /** Edges for the PostToCommentConnection connection */
   edges: Array<PostToCommentConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -9892,7 +9611,6 @@ export type PostToCommentConnection = CommentConnection & Connection & {
 
 /** An edge in a connection */
 export type PostToCommentConnectionEdge = CommentConnectionEdge & Edge & {
-  __typename?: 'PostToCommentConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -9901,7 +9619,6 @@ export type PostToCommentConnectionEdge = CommentConnectionEdge & Edge & {
 
 /** Page Info on the &quot;PostToCommentConnection&quot; */
 export type PostToCommentConnectionPageInfo = CommentConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'PostToCommentConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -9978,7 +9695,6 @@ export type PostToCommentConnectionWhereArgs = {
 
 /** Connection between the Post type and the post type */
 export type PostToParentConnectionEdge = Edge & OneToOneConnection & PostConnectionEdge & {
-  __typename?: 'PostToParentConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /**
@@ -9990,7 +9706,6 @@ export type PostToParentConnectionEdge = Edge & OneToOneConnection & PostConnect
 
 /** Connection between the Post type and the post type */
 export type PostToPostConnection = Connection & PostConnection & {
-  __typename?: 'PostToPostConnection';
   /** Edges for the PostToPostConnection connection */
   edges: Array<PostToPostConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -10001,7 +9716,6 @@ export type PostToPostConnection = Connection & PostConnection & {
 
 /** An edge in a connection */
 export type PostToPostConnectionEdge = Edge & PostConnectionEdge & {
-  __typename?: 'PostToPostConnectionEdge';
   /**
    * A cursor for use in pagination
    * @deprecated This content type is not hierarchical and typically will not have ancestors
@@ -10016,7 +9730,6 @@ export type PostToPostConnectionEdge = Edge & PostConnectionEdge & {
 
 /** Page Info on the &quot;PostToPostConnection&quot; */
 export type PostToPostConnectionPageInfo = PageInfo & PostConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PostToPostConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -10029,7 +9742,6 @@ export type PostToPostConnectionPageInfo = PageInfo & PostConnectionPageInfo & W
 
 /** Connection between the Post type and the postFormat type */
 export type PostToPostFormatConnection = Connection & PostFormatConnection & {
-  __typename?: 'PostToPostFormatConnection';
   /** Edges for the PostToPostFormatConnection connection */
   edges: Array<PostToPostFormatConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -10040,7 +9752,6 @@ export type PostToPostFormatConnection = Connection & PostFormatConnection & {
 
 /** An edge in a connection */
 export type PostToPostFormatConnectionEdge = Edge & PostFormatConnectionEdge & {
-  __typename?: 'PostToPostFormatConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -10049,7 +9760,6 @@ export type PostToPostFormatConnectionEdge = Edge & PostFormatConnectionEdge & {
 
 /** Page Info on the &quot;PostToPostFormatConnection&quot; */
 export type PostToPostFormatConnectionPageInfo = PageInfo & PostFormatConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PostToPostFormatConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -10108,7 +9818,6 @@ export type PostToPostFormatConnectionWhereArgs = {
 
 /** Connection between the Post type and the post type */
 export type PostToPreviewConnectionEdge = Edge & OneToOneConnection & PostConnectionEdge & {
-  __typename?: 'PostToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -10117,7 +9826,6 @@ export type PostToPreviewConnectionEdge = Edge & OneToOneConnection & PostConnec
 
 /** Connection between the Post type and the post type */
 export type PostToRevisionConnection = Connection & PostConnection & {
-  __typename?: 'PostToRevisionConnection';
   /** Edges for the PostToRevisionConnection connection */
   edges: Array<PostToRevisionConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -10128,7 +9836,6 @@ export type PostToRevisionConnection = Connection & PostConnection & {
 
 /** An edge in a connection */
 export type PostToRevisionConnectionEdge = Edge & PostConnectionEdge & {
-  __typename?: 'PostToRevisionConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -10137,7 +9844,6 @@ export type PostToRevisionConnectionEdge = Edge & PostConnectionEdge & {
 
 /** Page Info on the &quot;PostToRevisionConnection&quot; */
 export type PostToRevisionConnectionPageInfo = PageInfo & PostConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PostToRevisionConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -10216,7 +9922,6 @@ export type PostToRevisionConnectionWhereArgs = {
 
 /** Connection between the Post type and the tag type */
 export type PostToTagConnection = Connection & TagConnection & {
-  __typename?: 'PostToTagConnection';
   /** Edges for the PostToTagConnection connection */
   edges: Array<PostToTagConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -10227,7 +9932,6 @@ export type PostToTagConnection = Connection & TagConnection & {
 
 /** An edge in a connection */
 export type PostToTagConnectionEdge = Edge & TagConnectionEdge & {
-  __typename?: 'PostToTagConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -10236,7 +9940,6 @@ export type PostToTagConnectionEdge = Edge & TagConnectionEdge & {
 
 /** Page Info on the &quot;PostToTagConnection&quot; */
 export type PostToTagConnectionPageInfo = PageInfo & TagConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PostToTagConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -10295,7 +9998,6 @@ export type PostToTagConnectionWhereArgs = {
 
 /** Connection between the Post type and the TermNode type */
 export type PostToTermNodeConnection = Connection & TermNodeConnection & {
-  __typename?: 'PostToTermNodeConnection';
   /** Edges for the PostToTermNodeConnection connection */
   edges: Array<PostToTermNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -10306,7 +10008,6 @@ export type PostToTermNodeConnection = Connection & TermNodeConnection & {
 
 /** An edge in a connection */
 export type PostToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
-  __typename?: 'PostToTermNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -10315,7 +10016,6 @@ export type PostToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
 
 /** Page Info on the &quot;PostToTermNodeConnection&quot; */
 export type PostToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
-  __typename?: 'PostToTermNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -10376,7 +10076,6 @@ export type PostToTermNodeConnectionWhereArgs = {
 
 /** Details for labels of the PostType */
 export type PostTypeLabelDetails = {
-  __typename?: 'PostTypeLabelDetails';
   /** Default is ‘Add New’ for both hierarchical and non-hierarchical types. */
   addNew?: Maybe<Scalars['String']['output']>;
   /** Label for adding a new singular item. */
@@ -10441,7 +10140,6 @@ export type Previewable = {
 
 /** The reading setting type */
 export type ReadingSettings = {
-  __typename?: 'ReadingSettings';
   /** The ID of the page that should display the latest posts */
   pageForPosts?: Maybe<Scalars['Int']['output']>;
   /** The ID of the page that should be displayed on the front page */
@@ -10492,7 +10190,6 @@ export type RegisterUserInput = {
 
 /** The payload for the registerUser mutation. */
 export type RegisterUserPayload = {
-  __typename?: 'RegisterUserPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The User object mutation type. */
@@ -10500,12 +10197,11 @@ export type RegisterUserPayload = {
 };
 
 /** The logical relation between each item in the array when there are more than one. */
-export enum RelationEnum {
+export type RelationEnum =
   /** The logical AND condition returns true if both operands are true, otherwise, it returns false. */
-  And = 'AND',
+  | 'AND'
   /** The logical OR condition returns false if both operands are false, otherwise, it returns true. */
-  Or = 'OR'
-}
+  | 'OR';
 
 /** Input for the resetUserPassword mutation. */
 export type ResetUserPasswordInput = {
@@ -10521,7 +10217,6 @@ export type ResetUserPasswordInput = {
 
 /** The payload for the resetUserPassword mutation. */
 export type ResetUserPasswordPayload = {
-  __typename?: 'ResetUserPasswordPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The User object mutation type. */
@@ -10538,7 +10233,6 @@ export type RestoreCommentInput = {
 
 /** The payload for the restoreComment mutation. */
 export type RestoreCommentPayload = {
-  __typename?: 'RestoreCommentPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The restored comment object */
@@ -10549,7 +10243,6 @@ export type RestoreCommentPayload = {
 
 /** The root mutation */
 export type RootMutation = {
-  __typename?: 'RootMutation';
   /** The createArticle mutation */
   createArticle?: Maybe<CreateArticlePayload>;
   /** The createAudioItem mutation */
@@ -11010,7 +10703,6 @@ export type RootMutationUpdateVideoItemArgs = {
 
 /** The root entry point into the Graph */
 export type RootQuery = WithAcfOptionsPageGlobalSettings & WithAcfOptionsPagePlaceholderSettings & {
-  __typename?: 'RootQuery';
   /** Entry point to get all settings for the site */
   allSettings?: Maybe<Settings>;
   /** Connection between the RootQuery type and the videoItem type */
@@ -11778,7 +11470,6 @@ export type RootQueryVideoItemByArgs = {
 
 /** Connection between the RootQuery type and the article type */
 export type RootQueryToArticleConnection = ArticleConnection & Connection & {
-  __typename?: 'RootQueryToArticleConnection';
   /** Edges for the RootQueryToArticleConnection connection */
   edges: Array<RootQueryToArticleConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -11789,7 +11480,6 @@ export type RootQueryToArticleConnection = ArticleConnection & Connection & {
 
 /** An edge in a connection */
 export type RootQueryToArticleConnectionEdge = ArticleConnectionEdge & Edge & {
-  __typename?: 'RootQueryToArticleConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -11798,7 +11488,6 @@ export type RootQueryToArticleConnectionEdge = ArticleConnectionEdge & Edge & {
 
 /** Page Info on the &quot;RootQueryToArticleConnection&quot; */
 export type RootQueryToArticleConnectionPageInfo = ArticleConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToArticleConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -11857,7 +11546,6 @@ export type RootQueryToArticleConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the audioItem type */
 export type RootQueryToAudioItemConnection = AudioItemConnection & Connection & {
-  __typename?: 'RootQueryToAudioItemConnection';
   /** Edges for the RootQueryToAudioItemConnection connection */
   edges: Array<RootQueryToAudioItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -11868,7 +11556,6 @@ export type RootQueryToAudioItemConnection = AudioItemConnection & Connection & 
 
 /** An edge in a connection */
 export type RootQueryToAudioItemConnectionEdge = AudioItemConnectionEdge & Edge & {
-  __typename?: 'RootQueryToAudioItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -11877,7 +11564,6 @@ export type RootQueryToAudioItemConnectionEdge = AudioItemConnectionEdge & Edge 
 
 /** Page Info on the &quot;RootQueryToAudioItemConnection&quot; */
 export type RootQueryToAudioItemConnectionPageInfo = AudioItemConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToAudioItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -11932,7 +11618,6 @@ export type RootQueryToAudioItemConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the book type */
 export type RootQueryToBookConnection = BookConnection & Connection & {
-  __typename?: 'RootQueryToBookConnection';
   /** Edges for the RootQueryToBookConnection connection */
   edges: Array<RootQueryToBookConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -11943,7 +11628,6 @@ export type RootQueryToBookConnection = BookConnection & Connection & {
 
 /** An edge in a connection */
 export type RootQueryToBookConnectionEdge = BookConnectionEdge & Edge & {
-  __typename?: 'RootQueryToBookConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -11952,7 +11636,6 @@ export type RootQueryToBookConnectionEdge = BookConnectionEdge & Edge & {
 
 /** Page Info on the &quot;RootQueryToBookConnection&quot; */
 export type RootQueryToBookConnectionPageInfo = BookConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToBookConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12007,7 +11690,6 @@ export type RootQueryToBookConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the category type */
 export type RootQueryToCategoryConnection = CategoryConnection & Connection & {
-  __typename?: 'RootQueryToCategoryConnection';
   /** Edges for the RootQueryToCategoryConnection connection */
   edges: Array<RootQueryToCategoryConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12018,7 +11700,6 @@ export type RootQueryToCategoryConnection = CategoryConnection & Connection & {
 
 /** An edge in a connection */
 export type RootQueryToCategoryConnectionEdge = CategoryConnectionEdge & Edge & {
-  __typename?: 'RootQueryToCategoryConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12027,7 +11708,6 @@ export type RootQueryToCategoryConnectionEdge = CategoryConnectionEdge & Edge & 
 
 /** Page Info on the &quot;RootQueryToCategoryConnection&quot; */
 export type RootQueryToCategoryConnectionPageInfo = CategoryConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToCategoryConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12090,7 +11770,6 @@ export type RootQueryToCategoryConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the collection type */
 export type RootQueryToCollectionConnection = CollectionConnection & Connection & {
-  __typename?: 'RootQueryToCollectionConnection';
   /** Edges for the RootQueryToCollectionConnection connection */
   edges: Array<RootQueryToCollectionConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12101,7 +11780,6 @@ export type RootQueryToCollectionConnection = CollectionConnection & Connection 
 
 /** An edge in a connection */
 export type RootQueryToCollectionConnectionEdge = CollectionConnectionEdge & Edge & {
-  __typename?: 'RootQueryToCollectionConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12110,7 +11788,6 @@ export type RootQueryToCollectionConnectionEdge = CollectionConnectionEdge & Edg
 
 /** Page Info on the &quot;RootQueryToCollectionConnection&quot; */
 export type RootQueryToCollectionConnectionPageInfo = CollectionConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToCollectionConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12165,7 +11842,6 @@ export type RootQueryToCollectionConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the Comment type */
 export type RootQueryToCommentConnection = CommentConnection & Connection & {
-  __typename?: 'RootQueryToCommentConnection';
   /** Edges for the RootQueryToCommentConnection connection */
   edges: Array<RootQueryToCommentConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12176,7 +11852,6 @@ export type RootQueryToCommentConnection = CommentConnection & Connection & {
 
 /** An edge in a connection */
 export type RootQueryToCommentConnectionEdge = CommentConnectionEdge & Edge & {
-  __typename?: 'RootQueryToCommentConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12185,7 +11860,6 @@ export type RootQueryToCommentConnectionEdge = CommentConnectionEdge & Edge & {
 
 /** Page Info on the &quot;RootQueryToCommentConnection&quot; */
 export type RootQueryToCommentConnectionPageInfo = CommentConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToCommentConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12262,7 +11936,6 @@ export type RootQueryToCommentConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the ContentNode type */
 export type RootQueryToContentNodeConnection = Connection & ContentNodeConnection & {
-  __typename?: 'RootQueryToContentNodeConnection';
   /** Edges for the RootQueryToContentNodeConnection connection */
   edges: Array<RootQueryToContentNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12273,7 +11946,6 @@ export type RootQueryToContentNodeConnection = Connection & ContentNodeConnectio
 
 /** An edge in a connection */
 export type RootQueryToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'RootQueryToContentNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12282,7 +11954,6 @@ export type RootQueryToContentNodeConnectionEdge = ContentNodeConnectionEdge & E
 
 /** Page Info on the &quot;RootQueryToContentNodeConnection&quot; */
 export type RootQueryToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToContentNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12339,7 +12010,6 @@ export type RootQueryToContentNodeConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the ContentType type */
 export type RootQueryToContentTypeConnection = Connection & ContentTypeConnection & {
-  __typename?: 'RootQueryToContentTypeConnection';
   /** Edges for the RootQueryToContentTypeConnection connection */
   edges: Array<RootQueryToContentTypeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12350,7 +12020,6 @@ export type RootQueryToContentTypeConnection = Connection & ContentTypeConnectio
 
 /** An edge in a connection */
 export type RootQueryToContentTypeConnectionEdge = ContentTypeConnectionEdge & Edge & {
-  __typename?: 'RootQueryToContentTypeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12359,7 +12028,6 @@ export type RootQueryToContentTypeConnectionEdge = ContentTypeConnectionEdge & E
 
 /** Page Info on the &quot;RootQueryToContentTypeConnection&quot; */
 export type RootQueryToContentTypeConnectionPageInfo = ContentTypeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToContentTypeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12372,7 +12040,6 @@ export type RootQueryToContentTypeConnectionPageInfo = ContentTypeConnectionPage
 
 /** Connection between the RootQuery type and the EnqueuedScript type */
 export type RootQueryToEnqueuedScriptConnection = Connection & EnqueuedScriptConnection & {
-  __typename?: 'RootQueryToEnqueuedScriptConnection';
   /** Edges for the RootQueryToEnqueuedScriptConnection connection */
   edges: Array<RootQueryToEnqueuedScriptConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12383,7 +12050,6 @@ export type RootQueryToEnqueuedScriptConnection = Connection & EnqueuedScriptCon
 
 /** An edge in a connection */
 export type RootQueryToEnqueuedScriptConnectionEdge = Edge & EnqueuedScriptConnectionEdge & {
-  __typename?: 'RootQueryToEnqueuedScriptConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12392,7 +12058,6 @@ export type RootQueryToEnqueuedScriptConnectionEdge = Edge & EnqueuedScriptConne
 
 /** Page Info on the &quot;RootQueryToEnqueuedScriptConnection&quot; */
 export type RootQueryToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToEnqueuedScriptConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12405,7 +12070,6 @@ export type RootQueryToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnecti
 
 /** Connection between the RootQuery type and the EnqueuedStylesheet type */
 export type RootQueryToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheetConnection & {
-  __typename?: 'RootQueryToEnqueuedStylesheetConnection';
   /** Edges for the RootQueryToEnqueuedStylesheetConnection connection */
   edges: Array<RootQueryToEnqueuedStylesheetConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12416,7 +12080,6 @@ export type RootQueryToEnqueuedStylesheetConnection = Connection & EnqueuedStyle
 
 /** An edge in a connection */
 export type RootQueryToEnqueuedStylesheetConnectionEdge = Edge & EnqueuedStylesheetConnectionEdge & {
-  __typename?: 'RootQueryToEnqueuedStylesheetConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12425,7 +12088,6 @@ export type RootQueryToEnqueuedStylesheetConnectionEdge = Edge & EnqueuedStylesh
 
 /** Page Info on the &quot;RootQueryToEnqueuedStylesheetConnection&quot; */
 export type RootQueryToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToEnqueuedStylesheetConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12438,7 +12100,6 @@ export type RootQueryToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheet
 
 /** Connection between the RootQuery type and the journalIssue type */
 export type RootQueryToJournalIssueConnection = Connection & JournalIssueConnection & {
-  __typename?: 'RootQueryToJournalIssueConnection';
   /** Edges for the RootQueryToJournalIssueConnection connection */
   edges: Array<RootQueryToJournalIssueConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12449,7 +12110,6 @@ export type RootQueryToJournalIssueConnection = Connection & JournalIssueConnect
 
 /** An edge in a connection */
 export type RootQueryToJournalIssueConnectionEdge = Edge & JournalIssueConnectionEdge & {
-  __typename?: 'RootQueryToJournalIssueConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12458,7 +12118,6 @@ export type RootQueryToJournalIssueConnectionEdge = Edge & JournalIssueConnectio
 
 /** Page Info on the &quot;RootQueryToJournalIssueConnection&quot; */
 export type RootQueryToJournalIssueConnectionPageInfo = JournalIssueConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToJournalIssueConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12517,7 +12176,6 @@ export type RootQueryToJournalIssueConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the mediaItem type */
 export type RootQueryToMediaItemConnection = Connection & MediaItemConnection & {
-  __typename?: 'RootQueryToMediaItemConnection';
   /** Edges for the RootQueryToMediaItemConnection connection */
   edges: Array<RootQueryToMediaItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12528,7 +12186,6 @@ export type RootQueryToMediaItemConnection = Connection & MediaItemConnection & 
 
 /** An edge in a connection */
 export type RootQueryToMediaItemConnectionEdge = Edge & MediaItemConnectionEdge & {
-  __typename?: 'RootQueryToMediaItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12537,7 +12194,6 @@ export type RootQueryToMediaItemConnectionEdge = Edge & MediaItemConnectionEdge 
 
 /** Page Info on the &quot;RootQueryToMediaItemConnection&quot; */
 export type RootQueryToMediaItemConnectionPageInfo = MediaItemConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToMediaItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12596,7 +12252,6 @@ export type RootQueryToMediaItemConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the Menu type */
 export type RootQueryToMenuConnection = Connection & MenuConnection & {
-  __typename?: 'RootQueryToMenuConnection';
   /** Edges for the RootQueryToMenuConnection connection */
   edges: Array<RootQueryToMenuConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12607,7 +12262,6 @@ export type RootQueryToMenuConnection = Connection & MenuConnection & {
 
 /** An edge in a connection */
 export type RootQueryToMenuConnectionEdge = Edge & MenuConnectionEdge & {
-  __typename?: 'RootQueryToMenuConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12616,7 +12270,6 @@ export type RootQueryToMenuConnectionEdge = Edge & MenuConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToMenuConnection&quot; */
 export type RootQueryToMenuConnectionPageInfo = MenuConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToMenuConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12639,7 +12292,6 @@ export type RootQueryToMenuConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the MenuItem type */
 export type RootQueryToMenuItemConnection = Connection & MenuItemConnection & {
-  __typename?: 'RootQueryToMenuItemConnection';
   /** Edges for the RootQueryToMenuItemConnection connection */
   edges: Array<RootQueryToMenuItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12650,7 +12302,6 @@ export type RootQueryToMenuItemConnection = Connection & MenuItemConnection & {
 
 /** An edge in a connection */
 export type RootQueryToMenuItemConnectionEdge = Edge & MenuItemConnectionEdge & {
-  __typename?: 'RootQueryToMenuItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12659,7 +12310,6 @@ export type RootQueryToMenuItemConnectionEdge = Edge & MenuItemConnectionEdge & 
 
 /** Page Info on the &quot;RootQueryToMenuItemConnection&quot; */
 export type RootQueryToMenuItemConnectionPageInfo = MenuItemConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToMenuItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12685,7 +12335,6 @@ export type RootQueryToMenuItemConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the page type */
 export type RootQueryToPageConnection = Connection & PageConnection & {
-  __typename?: 'RootQueryToPageConnection';
   /** Edges for the RootQueryToPageConnection connection */
   edges: Array<RootQueryToPageConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12696,7 +12345,6 @@ export type RootQueryToPageConnection = Connection & PageConnection & {
 
 /** An edge in a connection */
 export type RootQueryToPageConnectionEdge = Edge & PageConnectionEdge & {
-  __typename?: 'RootQueryToPageConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12705,7 +12353,6 @@ export type RootQueryToPageConnectionEdge = Edge & PageConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToPageConnection&quot; */
 export type RootQueryToPageConnectionPageInfo = PageConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToPageConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12768,7 +12415,6 @@ export type RootQueryToPageConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the pdfItem type */
 export type RootQueryToPdfItemConnection = Connection & PdfItemConnection & {
-  __typename?: 'RootQueryToPdfItemConnection';
   /** Edges for the RootQueryToPdfItemConnection connection */
   edges: Array<RootQueryToPdfItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12779,7 +12425,6 @@ export type RootQueryToPdfItemConnection = Connection & PdfItemConnection & {
 
 /** An edge in a connection */
 export type RootQueryToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
-  __typename?: 'RootQueryToPdfItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12788,7 +12433,6 @@ export type RootQueryToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToPdfItemConnection&quot; */
 export type RootQueryToPdfItemConnectionPageInfo = PageInfo & PdfItemConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToPdfItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12843,7 +12487,6 @@ export type RootQueryToPdfItemConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the place type */
 export type RootQueryToPlaceConnection = Connection & PlaceConnection & {
-  __typename?: 'RootQueryToPlaceConnection';
   /** Edges for the RootQueryToPlaceConnection connection */
   edges: Array<RootQueryToPlaceConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12854,7 +12497,6 @@ export type RootQueryToPlaceConnection = Connection & PlaceConnection & {
 
 /** An edge in a connection */
 export type RootQueryToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
-  __typename?: 'RootQueryToPlaceConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12863,7 +12505,6 @@ export type RootQueryToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToPlaceConnection&quot; */
 export type RootQueryToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToPlaceConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12926,7 +12567,6 @@ export type RootQueryToPlaceConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the Plugin type */
 export type RootQueryToPluginConnection = Connection & PluginConnection & {
-  __typename?: 'RootQueryToPluginConnection';
   /** Edges for the RootQueryToPluginConnection connection */
   edges: Array<RootQueryToPluginConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12937,7 +12577,6 @@ export type RootQueryToPluginConnection = Connection & PluginConnection & {
 
 /** An edge in a connection */
 export type RootQueryToPluginConnectionEdge = Edge & PluginConnectionEdge & {
-  __typename?: 'RootQueryToPluginConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12946,7 +12585,6 @@ export type RootQueryToPluginConnectionEdge = Edge & PluginConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToPluginConnection&quot; */
 export type RootQueryToPluginConnectionPageInfo = PageInfo & PluginConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToPluginConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -12969,7 +12607,6 @@ export type RootQueryToPluginConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the post type */
 export type RootQueryToPostConnection = Connection & PostConnection & {
-  __typename?: 'RootQueryToPostConnection';
   /** Edges for the RootQueryToPostConnection connection */
   edges: Array<RootQueryToPostConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -12980,7 +12617,6 @@ export type RootQueryToPostConnection = Connection & PostConnection & {
 
 /** An edge in a connection */
 export type RootQueryToPostConnectionEdge = Edge & PostConnectionEdge & {
-  __typename?: 'RootQueryToPostConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -12989,7 +12625,6 @@ export type RootQueryToPostConnectionEdge = Edge & PostConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToPostConnection&quot; */
 export type RootQueryToPostConnectionPageInfo = PageInfo & PostConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToPostConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13072,7 +12707,6 @@ export type RootQueryToPostConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the postFormat type */
 export type RootQueryToPostFormatConnection = Connection & PostFormatConnection & {
-  __typename?: 'RootQueryToPostFormatConnection';
   /** Edges for the RootQueryToPostFormatConnection connection */
   edges: Array<RootQueryToPostFormatConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13083,7 +12717,6 @@ export type RootQueryToPostFormatConnection = Connection & PostFormatConnection 
 
 /** An edge in a connection */
 export type RootQueryToPostFormatConnectionEdge = Edge & PostFormatConnectionEdge & {
-  __typename?: 'RootQueryToPostFormatConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13092,7 +12725,6 @@ export type RootQueryToPostFormatConnectionEdge = Edge & PostFormatConnectionEdg
 
 /** Page Info on the &quot;RootQueryToPostFormatConnection&quot; */
 export type RootQueryToPostFormatConnectionPageInfo = PageInfo & PostFormatConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToPostFormatConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13151,7 +12783,6 @@ export type RootQueryToPostFormatConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the ContentNode type */
 export type RootQueryToRevisionsConnection = Connection & ContentNodeConnection & {
-  __typename?: 'RootQueryToRevisionsConnection';
   /** Edges for the RootQueryToRevisionsConnection connection */
   edges: Array<RootQueryToRevisionsConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13162,7 +12793,6 @@ export type RootQueryToRevisionsConnection = Connection & ContentNodeConnection 
 
 /** An edge in a connection */
 export type RootQueryToRevisionsConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'RootQueryToRevisionsConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13171,7 +12801,6 @@ export type RootQueryToRevisionsConnectionEdge = ContentNodeConnectionEdge & Edg
 
 /** Page Info on the &quot;RootQueryToRevisionsConnection&quot; */
 export type RootQueryToRevisionsConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToRevisionsConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13224,7 +12853,6 @@ export type RootQueryToRevisionsConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the tag type */
 export type RootQueryToTagConnection = Connection & TagConnection & {
-  __typename?: 'RootQueryToTagConnection';
   /** Edges for the RootQueryToTagConnection connection */
   edges: Array<RootQueryToTagConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13235,7 +12863,6 @@ export type RootQueryToTagConnection = Connection & TagConnection & {
 
 /** An edge in a connection */
 export type RootQueryToTagConnectionEdge = Edge & TagConnectionEdge & {
-  __typename?: 'RootQueryToTagConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13244,7 +12871,6 @@ export type RootQueryToTagConnectionEdge = Edge & TagConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToTagConnection&quot; */
 export type RootQueryToTagConnectionPageInfo = PageInfo & TagConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToTagConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13307,7 +12933,6 @@ export type RootQueryToTagConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the Taxonomy type */
 export type RootQueryToTaxonomyConnection = Connection & TaxonomyConnection & {
-  __typename?: 'RootQueryToTaxonomyConnection';
   /** Edges for the RootQueryToTaxonomyConnection connection */
   edges: Array<RootQueryToTaxonomyConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13318,7 +12943,6 @@ export type RootQueryToTaxonomyConnection = Connection & TaxonomyConnection & {
 
 /** An edge in a connection */
 export type RootQueryToTaxonomyConnectionEdge = Edge & TaxonomyConnectionEdge & {
-  __typename?: 'RootQueryToTaxonomyConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13327,7 +12951,6 @@ export type RootQueryToTaxonomyConnectionEdge = Edge & TaxonomyConnectionEdge & 
 
 /** Page Info on the &quot;RootQueryToTaxonomyConnection&quot; */
 export type RootQueryToTaxonomyConnectionPageInfo = PageInfo & TaxonomyConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToTaxonomyConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13340,7 +12963,6 @@ export type RootQueryToTaxonomyConnectionPageInfo = PageInfo & TaxonomyConnectio
 
 /** Connection between the RootQuery type and the TermNode type */
 export type RootQueryToTermNodeConnection = Connection & TermNodeConnection & {
-  __typename?: 'RootQueryToTermNodeConnection';
   /** Edges for the RootQueryToTermNodeConnection connection */
   edges: Array<RootQueryToTermNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13351,7 +12973,6 @@ export type RootQueryToTermNodeConnection = Connection & TermNodeConnection & {
 
 /** An edge in a connection */
 export type RootQueryToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
-  __typename?: 'RootQueryToTermNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13360,7 +12981,6 @@ export type RootQueryToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & 
 
 /** Page Info on the &quot;RootQueryToTermNodeConnection&quot; */
 export type RootQueryToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToTermNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13421,7 +13041,6 @@ export type RootQueryToTermNodeConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the Theme type */
 export type RootQueryToThemeConnection = Connection & ThemeConnection & {
-  __typename?: 'RootQueryToThemeConnection';
   /** Edges for the RootQueryToThemeConnection connection */
   edges: Array<RootQueryToThemeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13432,7 +13051,6 @@ export type RootQueryToThemeConnection = Connection & ThemeConnection & {
 
 /** An edge in a connection */
 export type RootQueryToThemeConnectionEdge = Edge & ThemeConnectionEdge & {
-  __typename?: 'RootQueryToThemeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13441,7 +13059,6 @@ export type RootQueryToThemeConnectionEdge = Edge & ThemeConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToThemeConnection&quot; */
 export type RootQueryToThemeConnectionPageInfo = PageInfo & ThemeConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToThemeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13454,7 +13071,6 @@ export type RootQueryToThemeConnectionPageInfo = PageInfo & ThemeConnectionPageI
 
 /** Connection between the RootQuery type and the topic type */
 export type RootQueryToTopicConnection = Connection & TopicConnection & {
-  __typename?: 'RootQueryToTopicConnection';
   /** Edges for the RootQueryToTopicConnection connection */
   edges: Array<RootQueryToTopicConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13465,7 +13081,6 @@ export type RootQueryToTopicConnection = Connection & TopicConnection & {
 
 /** An edge in a connection */
 export type RootQueryToTopicConnectionEdge = Edge & TopicConnectionEdge & {
-  __typename?: 'RootQueryToTopicConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13474,7 +13089,6 @@ export type RootQueryToTopicConnectionEdge = Edge & TopicConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToTopicConnection&quot; */
 export type RootQueryToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToTopicConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13537,7 +13151,6 @@ export type RootQueryToTopicConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the User type */
 export type RootQueryToUserConnection = Connection & UserConnection & {
-  __typename?: 'RootQueryToUserConnection';
   /** Edges for the RootQueryToUserConnection connection */
   edges: Array<RootQueryToUserConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13548,7 +13161,6 @@ export type RootQueryToUserConnection = Connection & UserConnection & {
 
 /** An edge in a connection */
 export type RootQueryToUserConnectionEdge = Edge & UserConnectionEdge & {
-  __typename?: 'RootQueryToUserConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13557,7 +13169,6 @@ export type RootQueryToUserConnectionEdge = Edge & UserConnectionEdge & {
 
 /** Page Info on the &quot;RootQueryToUserConnection&quot; */
 export type RootQueryToUserConnectionPageInfo = PageInfo & UserConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToUserConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13604,7 +13215,6 @@ export type RootQueryToUserConnectionWhereArgs = {
 
 /** Connection between the RootQuery type and the UserRole type */
 export type RootQueryToUserRoleConnection = Connection & UserRoleConnection & {
-  __typename?: 'RootQueryToUserRoleConnection';
   /** Edges for the RootQueryToUserRoleConnection connection */
   edges: Array<RootQueryToUserRoleConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13615,7 +13225,6 @@ export type RootQueryToUserRoleConnection = Connection & UserRoleConnection & {
 
 /** An edge in a connection */
 export type RootQueryToUserRoleConnectionEdge = Edge & UserRoleConnectionEdge & {
-  __typename?: 'RootQueryToUserRoleConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13624,7 +13233,6 @@ export type RootQueryToUserRoleConnectionEdge = Edge & UserRoleConnectionEdge & 
 
 /** Page Info on the &quot;RootQueryToUserRoleConnection&quot; */
 export type RootQueryToUserRoleConnectionPageInfo = PageInfo & UserRoleConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToUserRoleConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13637,7 +13245,6 @@ export type RootQueryToUserRoleConnectionPageInfo = PageInfo & UserRoleConnectio
 
 /** Connection between the RootQuery type and the videoItem type */
 export type RootQueryToVideoItemConnection = Connection & VideoItemConnection & {
-  __typename?: 'RootQueryToVideoItemConnection';
   /** Edges for the RootQueryToVideoItemConnection connection */
   edges: Array<RootQueryToVideoItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13648,7 +13255,6 @@ export type RootQueryToVideoItemConnection = Connection & VideoItemConnection & 
 
 /** An edge in a connection */
 export type RootQueryToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge & {
-  __typename?: 'RootQueryToVideoItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13657,7 +13263,6 @@ export type RootQueryToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge 
 
 /** Page Info on the &quot;RootQueryToVideoItemConnection&quot; */
 export type RootQueryToVideoItemConnectionPageInfo = PageInfo & VideoItemConnectionPageInfo & WpPageInfo & {
-  __typename?: 'RootQueryToVideoItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -13711,20 +13316,18 @@ export type RootQueryToVideoItemConnectionWhereArgs = {
 };
 
 /** Location in the document where the script to be loaded */
-export enum ScriptLoadingGroupLocationEnum {
+export type ScriptLoadingGroupLocationEnum =
   /** A script to be loaded in document at right before the closing `<body>` tag */
-  Footer = 'FOOTER',
+  | 'FOOTER'
   /** A script to be loaded in document `<head>` tag */
-  Header = 'HEADER'
-}
+  | 'HEADER';
 
 /** The strategy to use when loading the script */
-export enum ScriptLoadingStrategyEnum {
+export type ScriptLoadingStrategyEnum =
   /** Use the script `async` attribute */
-  Async = 'ASYNC',
+  | 'ASYNC'
   /** Use the script `defer` attribute */
-  Defer = 'DEFER'
-}
+  | 'DEFER';
 
 /** Input for the sendPasswordResetEmail mutation. */
 export type SendPasswordResetEmailInput = {
@@ -13736,7 +13339,6 @@ export type SendPasswordResetEmailInput = {
 
 /** The payload for the sendPasswordResetEmail mutation. */
 export type SendPasswordResetEmailPayload = {
-  __typename?: 'SendPasswordResetEmailPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Whether the mutation completed successfully. This does NOT necessarily mean that an email was sent. */
@@ -13750,7 +13352,6 @@ export type SendPasswordResetEmailPayload = {
 
 /** All of the registered settings */
 export type Settings = {
-  __typename?: 'Settings';
   /** Settings of the the string Settings Group */
   discussionSettingsDefaultCommentStatus?: Maybe<Scalars['String']['output']>;
   /** Settings of the the string Settings Group */
@@ -13791,7 +13392,6 @@ export type Settings = {
 
 /** The tag type */
 export type Tag = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
-  __typename?: 'Tag';
   /** Connection between the Tag type and the ContentNode type */
   contentNodes?: Maybe<TagToContentNodeConnection>;
   /** The number of objects connected to the object */
@@ -13924,22 +13524,20 @@ export type TagConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum TagIdType {
+export type TagIdType =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Tag type and the ContentNode type */
 export type TagToContentNodeConnection = Connection & ContentNodeConnection & {
-  __typename?: 'TagToContentNodeConnection';
   /** Edges for the TagToContentNodeConnection connection */
   edges: Array<TagToContentNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -13950,7 +13548,6 @@ export type TagToContentNodeConnection = Connection & ContentNodeConnection & {
 
 /** An edge in a connection */
 export type TagToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'TagToContentNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -13959,7 +13556,6 @@ export type TagToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & 
 
 /** Page Info on the &quot;TagToContentNodeConnection&quot; */
 export type TagToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'TagToContentNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14012,7 +13608,6 @@ export type TagToContentNodeConnectionWhereArgs = {
 
 /** Connection between the Tag type and the post type */
 export type TagToPostConnection = Connection & PostConnection & {
-  __typename?: 'TagToPostConnection';
   /** Edges for the TagToPostConnection connection */
   edges: Array<TagToPostConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14023,7 +13618,6 @@ export type TagToPostConnection = Connection & PostConnection & {
 
 /** An edge in a connection */
 export type TagToPostConnectionEdge = Edge & PostConnectionEdge & {
-  __typename?: 'TagToPostConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14032,7 +13626,6 @@ export type TagToPostConnectionEdge = Edge & PostConnectionEdge & {
 
 /** Page Info on the &quot;TagToPostConnection&quot; */
 export type TagToPostConnectionPageInfo = PageInfo & PostConnectionPageInfo & WpPageInfo & {
-  __typename?: 'TagToPostConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14111,7 +13704,6 @@ export type TagToPostConnectionWhereArgs = {
 
 /** Connection between the Tag type and the Taxonomy type */
 export type TagToTaxonomyConnectionEdge = Edge & OneToOneConnection & TaxonomyConnectionEdge & {
-  __typename?: 'TagToTaxonomyConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -14120,7 +13712,6 @@ export type TagToTaxonomyConnectionEdge = Edge & OneToOneConnection & TaxonomyCo
 
 /** A taxonomy object */
 export type Taxonomy = Node & {
-  __typename?: 'Taxonomy';
   /** List of Content Types associated with the Taxonomy */
   connectedContentTypes?: Maybe<TaxonomyToContentTypeConnection>;
   /** List of Term Nodes associated with the Taxonomy */
@@ -14214,30 +13805,27 @@ export type TaxonomyConnectionPageInfo = {
 };
 
 /** Allowed taxonomies */
-export enum TaxonomyEnum {
+export type TaxonomyEnum =
   /** Taxonomy enum category */
-  Category = 'CATEGORY',
+  | 'CATEGORY'
   /** Taxonomy enum place */
-  Place = 'PLACE',
+  | 'PLACE'
   /** Taxonomy enum post_format */
-  Postformat = 'POSTFORMAT',
+  | 'POSTFORMAT'
   /** Taxonomy enum post_tag */
-  Tag = 'TAG',
+  | 'TAG'
   /** Taxonomy enum topic */
-  Topic = 'TOPIC'
-}
+  | 'TOPIC';
 
 /** The Type of Identifier used to fetch a single Taxonomy node. To be used along with the "id" field. Default is "ID". */
-export enum TaxonomyIdTypeEnum {
+export type TaxonomyIdTypeEnum =
   /** The globally unique ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the taxonomy */
-  Name = 'NAME'
-}
+  | 'NAME';
 
 /** Connection between the Taxonomy type and the ContentType type */
 export type TaxonomyToContentTypeConnection = Connection & ContentTypeConnection & {
-  __typename?: 'TaxonomyToContentTypeConnection';
   /** Edges for the TaxonomyToContentTypeConnection connection */
   edges: Array<TaxonomyToContentTypeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14248,7 +13836,6 @@ export type TaxonomyToContentTypeConnection = Connection & ContentTypeConnection
 
 /** An edge in a connection */
 export type TaxonomyToContentTypeConnectionEdge = ContentTypeConnectionEdge & Edge & {
-  __typename?: 'TaxonomyToContentTypeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14257,7 +13844,6 @@ export type TaxonomyToContentTypeConnectionEdge = ContentTypeConnectionEdge & Ed
 
 /** Page Info on the &quot;TaxonomyToContentTypeConnection&quot; */
 export type TaxonomyToContentTypeConnectionPageInfo = ContentTypeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'TaxonomyToContentTypeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14270,7 +13856,6 @@ export type TaxonomyToContentTypeConnectionPageInfo = ContentTypeConnectionPageI
 
 /** Connection between the Taxonomy type and the TermNode type */
 export type TaxonomyToTermNodeConnection = Connection & TermNodeConnection & {
-  __typename?: 'TaxonomyToTermNodeConnection';
   /** Edges for the TaxonomyToTermNodeConnection connection */
   edges: Array<TaxonomyToTermNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14281,7 +13866,6 @@ export type TaxonomyToTermNodeConnection = Connection & TermNodeConnection & {
 
 /** An edge in a connection */
 export type TaxonomyToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
-  __typename?: 'TaxonomyToTermNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14290,7 +13874,6 @@ export type TaxonomyToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
 
 /** Page Info on the &quot;TaxonomyToTermNodeConnection&quot; */
 export type TaxonomyToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
-  __typename?: 'TaxonomyToTermNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14392,22 +13975,20 @@ export type TermNodeConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is "ID". To be used along with the "id" field. */
-export enum TermNodeIdTypeEnum {
+export type TermNodeIdTypeEnum =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the TermNode type and the EnqueuedScript type */
 export type TermNodeToEnqueuedScriptConnection = Connection & EnqueuedScriptConnection & {
-  __typename?: 'TermNodeToEnqueuedScriptConnection';
   /** Edges for the TermNodeToEnqueuedScriptConnection connection */
   edges: Array<TermNodeToEnqueuedScriptConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14418,7 +13999,6 @@ export type TermNodeToEnqueuedScriptConnection = Connection & EnqueuedScriptConn
 
 /** An edge in a connection */
 export type TermNodeToEnqueuedScriptConnectionEdge = Edge & EnqueuedScriptConnectionEdge & {
-  __typename?: 'TermNodeToEnqueuedScriptConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14427,7 +14007,6 @@ export type TermNodeToEnqueuedScriptConnectionEdge = Edge & EnqueuedScriptConnec
 
 /** Page Info on the &quot;TermNodeToEnqueuedScriptConnection&quot; */
 export type TermNodeToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'TermNodeToEnqueuedScriptConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14440,7 +14019,6 @@ export type TermNodeToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnectio
 
 /** Connection between the TermNode type and the EnqueuedStylesheet type */
 export type TermNodeToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheetConnection & {
-  __typename?: 'TermNodeToEnqueuedStylesheetConnection';
   /** Edges for the TermNodeToEnqueuedStylesheetConnection connection */
   edges: Array<TermNodeToEnqueuedStylesheetConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14451,7 +14029,6 @@ export type TermNodeToEnqueuedStylesheetConnection = Connection & EnqueuedStyles
 
 /** An edge in a connection */
 export type TermNodeToEnqueuedStylesheetConnectionEdge = Edge & EnqueuedStylesheetConnectionEdge & {
-  __typename?: 'TermNodeToEnqueuedStylesheetConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14460,7 +14037,6 @@ export type TermNodeToEnqueuedStylesheetConnectionEdge = Edge & EnqueuedStyleshe
 
 /** Page Info on the &quot;TermNodeToEnqueuedStylesheetConnection&quot; */
 export type TermNodeToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'TermNodeToEnqueuedStylesheetConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14472,26 +14048,24 @@ export type TermNodeToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetC
 };
 
 /** Options for ordering the connection by */
-export enum TermObjectsConnectionOrderbyEnum {
+export type TermObjectsConnectionOrderbyEnum =
   /** Order the connection by item count. */
-  Count = 'COUNT',
+  | 'COUNT'
   /** Order the connection by description. */
-  Description = 'DESCRIPTION',
+  | 'DESCRIPTION'
   /** Order the connection by name. */
-  Name = 'NAME',
+  | 'NAME'
   /** Order the connection by slug. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Order the connection by term group. */
-  TermGroup = 'TERM_GROUP',
+  | 'TERM_GROUP'
   /** Order the connection by term id. */
-  TermId = 'TERM_ID',
+  | 'TERM_ID'
   /** Order the connection by term order. */
-  TermOrder = 'TERM_ORDER'
-}
+  | 'TERM_ORDER';
 
 /** A theme object */
 export type Theme = Node & {
-  __typename?: 'Theme';
   /** Name of the theme author(s), could also be a company name. This field is equivalent to WP_Theme-&gt;get( &quot;Author&quot; ). */
   author?: Maybe<Scalars['String']['output']>;
   /** URI for the author/company website. This field is equivalent to WP_Theme-&gt;get( &quot;AuthorURI&quot; ). */
@@ -14548,7 +14122,6 @@ export type ThemeConnectionPageInfo = {
 
 /** The topic type */
 export type Topic = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
-  __typename?: 'Topic';
   /** The ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<TopicToAncestorsTopicConnection>;
   /** Connection between the Topic type and the article type */
@@ -14746,22 +14319,20 @@ export type TopicConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum TopicIdType {
+export type TopicIdType =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The name of the node */
-  Name = 'NAME',
+  | 'NAME'
   /** Url friendly name of the node */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Connection between the Topic type and the topic type */
 export type TopicToAncestorsTopicConnection = Connection & TopicConnection & {
-  __typename?: 'TopicToAncestorsTopicConnection';
   /** Edges for the TopicToAncestorsTopicConnection connection */
   edges: Array<TopicToAncestorsTopicConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14772,7 +14343,6 @@ export type TopicToAncestorsTopicConnection = Connection & TopicConnection & {
 
 /** An edge in a connection */
 export type TopicToAncestorsTopicConnectionEdge = Edge & TopicConnectionEdge & {
-  __typename?: 'TopicToAncestorsTopicConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14781,7 +14351,6 @@ export type TopicToAncestorsTopicConnectionEdge = Edge & TopicConnectionEdge & {
 
 /** Page Info on the &quot;TopicToAncestorsTopicConnection&quot; */
 export type TopicToAncestorsTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
-  __typename?: 'TopicToAncestorsTopicConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14794,7 +14363,6 @@ export type TopicToAncestorsTopicConnectionPageInfo = PageInfo & TopicConnection
 
 /** Connection between the Topic type and the article type */
 export type TopicToArticleConnection = ArticleConnection & Connection & {
-  __typename?: 'TopicToArticleConnection';
   /** Edges for the TopicToArticleConnection connection */
   edges: Array<TopicToArticleConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14805,7 +14373,6 @@ export type TopicToArticleConnection = ArticleConnection & Connection & {
 
 /** An edge in a connection */
 export type TopicToArticleConnectionEdge = ArticleConnectionEdge & Edge & {
-  __typename?: 'TopicToArticleConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14814,7 +14381,6 @@ export type TopicToArticleConnectionEdge = ArticleConnectionEdge & Edge & {
 
 /** Page Info on the &quot;TopicToArticleConnection&quot; */
 export type TopicToArticleConnectionPageInfo = ArticleConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'TopicToArticleConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14865,7 +14431,6 @@ export type TopicToArticleConnectionWhereArgs = {
 
 /** Connection between the Topic type and the audioItem type */
 export type TopicToAudioItemConnection = AudioItemConnection & Connection & {
-  __typename?: 'TopicToAudioItemConnection';
   /** Edges for the TopicToAudioItemConnection connection */
   edges: Array<TopicToAudioItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14876,7 +14441,6 @@ export type TopicToAudioItemConnection = AudioItemConnection & Connection & {
 
 /** An edge in a connection */
 export type TopicToAudioItemConnectionEdge = AudioItemConnectionEdge & Edge & {
-  __typename?: 'TopicToAudioItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14885,7 +14449,6 @@ export type TopicToAudioItemConnectionEdge = AudioItemConnectionEdge & Edge & {
 
 /** Page Info on the &quot;TopicToAudioItemConnection&quot; */
 export type TopicToAudioItemConnectionPageInfo = AudioItemConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'TopicToAudioItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -14936,7 +14499,6 @@ export type TopicToAudioItemConnectionWhereArgs = {
 
 /** Connection between the Topic type and the ContentNode type */
 export type TopicToContentNodeConnection = Connection & ContentNodeConnection & {
-  __typename?: 'TopicToContentNodeConnection';
   /** Edges for the TopicToContentNodeConnection connection */
   edges: Array<TopicToContentNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -14947,7 +14509,6 @@ export type TopicToContentNodeConnection = Connection & ContentNodeConnection & 
 
 /** An edge in a connection */
 export type TopicToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'TopicToContentNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -14956,7 +14517,6 @@ export type TopicToContentNodeConnectionEdge = ContentNodeConnectionEdge & Edge 
 
 /** Page Info on the &quot;TopicToContentNodeConnection&quot; */
 export type TopicToContentNodeConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'TopicToContentNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -15009,7 +14569,6 @@ export type TopicToContentNodeConnectionWhereArgs = {
 
 /** Connection between the Topic type and the topic type */
 export type TopicToParentTopicConnectionEdge = Edge & OneToOneConnection & TopicConnectionEdge & {
-  __typename?: 'TopicToParentTopicConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -15018,7 +14577,6 @@ export type TopicToParentTopicConnectionEdge = Edge & OneToOneConnection & Topic
 
 /** Connection between the Topic type and the pdfItem type */
 export type TopicToPdfItemConnection = Connection & PdfItemConnection & {
-  __typename?: 'TopicToPdfItemConnection';
   /** Edges for the TopicToPdfItemConnection connection */
   edges: Array<TopicToPdfItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -15029,7 +14587,6 @@ export type TopicToPdfItemConnection = Connection & PdfItemConnection & {
 
 /** An edge in a connection */
 export type TopicToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
-  __typename?: 'TopicToPdfItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -15038,7 +14595,6 @@ export type TopicToPdfItemConnectionEdge = Edge & PdfItemConnectionEdge & {
 
 /** Page Info on the &quot;TopicToPdfItemConnection&quot; */
 export type TopicToPdfItemConnectionPageInfo = PageInfo & PdfItemConnectionPageInfo & WpPageInfo & {
-  __typename?: 'TopicToPdfItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -15089,7 +14645,6 @@ export type TopicToPdfItemConnectionWhereArgs = {
 
 /** Connection between the Topic type and the Taxonomy type */
 export type TopicToTaxonomyConnectionEdge = Edge & OneToOneConnection & TaxonomyConnectionEdge & {
-  __typename?: 'TopicToTaxonomyConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -15098,7 +14653,6 @@ export type TopicToTaxonomyConnectionEdge = Edge & OneToOneConnection & Taxonomy
 
 /** Connection between the Topic type and the topic type */
 export type TopicToTopicConnection = Connection & TopicConnection & {
-  __typename?: 'TopicToTopicConnection';
   /** Edges for the TopicToTopicConnection connection */
   edges: Array<TopicToTopicConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -15109,7 +14663,6 @@ export type TopicToTopicConnection = Connection & TopicConnection & {
 
 /** An edge in a connection */
 export type TopicToTopicConnectionEdge = Edge & TopicConnectionEdge & {
-  __typename?: 'TopicToTopicConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -15118,7 +14671,6 @@ export type TopicToTopicConnectionEdge = Edge & TopicConnectionEdge & {
 
 /** Page Info on the &quot;TopicToTopicConnection&quot; */
 export type TopicToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
-  __typename?: 'TopicToTopicConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -15177,7 +14729,6 @@ export type TopicToTopicConnectionWhereArgs = {
 
 /** Connection between the Topic type and the videoItem type */
 export type TopicToVideoItemConnection = Connection & VideoItemConnection & {
-  __typename?: 'TopicToVideoItemConnection';
   /** Edges for the TopicToVideoItemConnection connection */
   edges: Array<TopicToVideoItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -15188,7 +14739,6 @@ export type TopicToVideoItemConnection = Connection & VideoItemConnection & {
 
 /** An edge in a connection */
 export type TopicToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge & {
-  __typename?: 'TopicToVideoItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -15197,7 +14747,6 @@ export type TopicToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge & {
 
 /** Page Info on the &quot;TopicToVideoItemConnection&quot; */
 export type TopicToVideoItemConnectionPageInfo = PageInfo & VideoItemConnectionPageInfo & WpPageInfo & {
-  __typename?: 'TopicToVideoItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -15297,7 +14846,6 @@ export type UpdateArticleInput = {
 
 /** The payload for the updateArticle mutation. */
 export type UpdateArticlePayload = {
-  __typename?: 'UpdateArticlePayload';
   /** The Post object mutation type. */
   article?: Maybe<Article>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -15335,7 +14883,6 @@ export type UpdateAudioItemInput = {
 
 /** The payload for the updateAudioItem mutation. */
 export type UpdateAudioItemPayload = {
-  __typename?: 'UpdateAudioItemPayload';
   /** The Post object mutation type. */
   audioItem?: Maybe<AudioItem>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -15369,7 +14916,6 @@ export type UpdateBookInput = {
 
 /** The payload for the updateBook mutation. */
 export type UpdateBookPayload = {
-  __typename?: 'UpdateBookPayload';
   /** The Post object mutation type. */
   book?: Maybe<Book>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -15399,7 +14945,6 @@ export type UpdateCategoryInput = {
 
 /** The payload for the updateCategory mutation. */
 export type UpdateCategoryPayload = {
-  __typename?: 'UpdateCategoryPayload';
   /** The created category */
   category?: Maybe<Category>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -15431,7 +14976,6 @@ export type UpdateCollectionInput = {
 
 /** The payload for the updateCollection mutation. */
 export type UpdateCollectionPayload = {
-  __typename?: 'UpdateCollectionPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -15468,7 +15012,6 @@ export type UpdateCommentInput = {
 
 /** The payload for the updateComment mutation. */
 export type UpdateCommentPayload = {
-  __typename?: 'UpdateCommentPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The comment that was created */
@@ -15504,7 +15047,6 @@ export type UpdateJournalIssueInput = {
 
 /** The payload for the updateJournalIssue mutation. */
 export type UpdateJournalIssuePayload = {
-  __typename?: 'UpdateJournalIssuePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -15549,7 +15091,6 @@ export type UpdateMediaItemInput = {
 
 /** The payload for the updateMediaItem mutation. */
 export type UpdateMediaItemPayload = {
-  __typename?: 'UpdateMediaItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The MediaItem object mutation type. */
@@ -15589,7 +15130,6 @@ export type UpdatePageInput = {
 
 /** The payload for the updatePage mutation. */
 export type UpdatePagePayload = {
-  __typename?: 'UpdatePagePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -15625,7 +15165,6 @@ export type UpdatePdfItemInput = {
 
 /** The payload for the updatePdfItem mutation. */
 export type UpdatePdfItemPayload = {
-  __typename?: 'UpdatePdfItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -15655,7 +15194,6 @@ export type UpdatePlaceInput = {
 
 /** The payload for the updatePlace mutation. */
 export type UpdatePlacePayload = {
-  __typename?: 'UpdatePlacePayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The created place */
@@ -15680,7 +15218,6 @@ export type UpdatePostFormatInput = {
 
 /** The payload for the updatePostFormat mutation. */
 export type UpdatePostFormatPayload = {
-  __typename?: 'UpdatePostFormatPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The created post_format */
@@ -15732,7 +15269,6 @@ export type UpdatePostInput = {
 
 /** The payload for the updatePost mutation. */
 export type UpdatePostPayload = {
-  __typename?: 'UpdatePostPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -15783,7 +15319,6 @@ export type UpdateSettingsInput = {
 
 /** The payload for the updateSettings mutation. */
 export type UpdateSettingsPayload = {
-  __typename?: 'UpdateSettingsPayload';
   /** Update all settings. */
   allSettings?: Maybe<Settings>;
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -15817,7 +15352,6 @@ export type UpdateTagInput = {
 
 /** The payload for the updateTag mutation. */
 export type UpdateTagPayload = {
-  __typename?: 'UpdateTagPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The created post_tag */
@@ -15847,7 +15381,6 @@ export type UpdateTopicInput = {
 
 /** The payload for the updateTopic mutation. */
 export type UpdateTopicPayload = {
-  __typename?: 'UpdateTopicPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The created topic */
@@ -15896,7 +15429,6 @@ export type UpdateUserInput = {
 
 /** The payload for the updateUser mutation. */
 export type UpdateUserPayload = {
-  __typename?: 'UpdateUserPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The User object mutation type. */
@@ -15932,7 +15464,6 @@ export type UpdateVideoItemInput = {
 
 /** The payload for the updateVideoItem mutation. */
 export type UpdateVideoItemPayload = {
-  __typename?: 'UpdateVideoItemPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The Post object mutation type. */
@@ -15941,7 +15472,6 @@ export type UpdateVideoItemPayload = {
 
 /** A User object */
 export type User = Commenter & DatabaseIdentifier & Node & UniformResourceIdentifiable & {
-  __typename?: 'User';
   /** Avatar object for user. The avatar object can be retrieved in different sizes by specifying the size argument. */
   avatar?: Maybe<Avatar>;
   /** User metadata option name. Usually it will be &quot;wp_capabilities&quot;. */
@@ -16133,24 +15663,22 @@ export type UserConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single User node. To be used along with the "id" field. Default is "ID". */
-export enum UserNodeIdTypeEnum {
+export type UserNodeIdTypeEnum =
   /** The Database ID for the node */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** The Email of the User */
-  Email = 'EMAIL',
+  | 'EMAIL'
   /** The hashed Global ID */
-  Id = 'ID',
+  | 'ID'
   /** The slug of the User */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** The URI for the node */
-  Uri = 'URI',
+  | 'URI'
   /** The username the User uses to login with */
-  Username = 'USERNAME'
-}
+  | 'USERNAME';
 
 /** A user role object */
 export type UserRole = Node & {
-  __typename?: 'UserRole';
   /** The capabilities that belong to this role */
   capabilities?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   /** The display name of the role */
@@ -16194,22 +15722,20 @@ export type UserRoleConnectionPageInfo = {
 };
 
 /** Names of available user roles */
-export enum UserRoleEnum {
+export type UserRoleEnum =
   /** User role with specific capabilities */
-  Administrator = 'ADMINISTRATOR',
+  | 'ADMINISTRATOR'
   /** User role with specific capabilities */
-  Author = 'AUTHOR',
+  | 'AUTHOR'
   /** User role with specific capabilities */
-  Contributor = 'CONTRIBUTOR',
+  | 'CONTRIBUTOR'
   /** User role with specific capabilities */
-  Editor = 'EDITOR',
+  | 'EDITOR'
   /** User role with specific capabilities */
-  Subscriber = 'SUBSCRIBER'
-}
+  | 'SUBSCRIBER';
 
 /** Connection between the User type and the Comment type */
 export type UserToCommentConnection = CommentConnection & Connection & {
-  __typename?: 'UserToCommentConnection';
   /** Edges for the UserToCommentConnection connection */
   edges: Array<UserToCommentConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -16220,7 +15746,6 @@ export type UserToCommentConnection = CommentConnection & Connection & {
 
 /** An edge in a connection */
 export type UserToCommentConnectionEdge = CommentConnectionEdge & Edge & {
-  __typename?: 'UserToCommentConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -16229,7 +15754,6 @@ export type UserToCommentConnectionEdge = CommentConnectionEdge & Edge & {
 
 /** Page Info on the &quot;UserToCommentConnection&quot; */
 export type UserToCommentConnectionPageInfo = CommentConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'UserToCommentConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -16306,7 +15830,6 @@ export type UserToCommentConnectionWhereArgs = {
 
 /** Connection between the User type and the EnqueuedScript type */
 export type UserToEnqueuedScriptConnection = Connection & EnqueuedScriptConnection & {
-  __typename?: 'UserToEnqueuedScriptConnection';
   /** Edges for the UserToEnqueuedScriptConnection connection */
   edges: Array<UserToEnqueuedScriptConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -16317,7 +15840,6 @@ export type UserToEnqueuedScriptConnection = Connection & EnqueuedScriptConnecti
 
 /** An edge in a connection */
 export type UserToEnqueuedScriptConnectionEdge = Edge & EnqueuedScriptConnectionEdge & {
-  __typename?: 'UserToEnqueuedScriptConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -16326,7 +15848,6 @@ export type UserToEnqueuedScriptConnectionEdge = Edge & EnqueuedScriptConnection
 
 /** Page Info on the &quot;UserToEnqueuedScriptConnection&quot; */
 export type UserToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'UserToEnqueuedScriptConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -16339,7 +15860,6 @@ export type UserToEnqueuedScriptConnectionPageInfo = EnqueuedScriptConnectionPag
 
 /** Connection between the User type and the EnqueuedStylesheet type */
 export type UserToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheetConnection & {
-  __typename?: 'UserToEnqueuedStylesheetConnection';
   /** Edges for the UserToEnqueuedStylesheetConnection connection */
   edges: Array<UserToEnqueuedStylesheetConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -16350,7 +15870,6 @@ export type UserToEnqueuedStylesheetConnection = Connection & EnqueuedStylesheet
 
 /** An edge in a connection */
 export type UserToEnqueuedStylesheetConnectionEdge = Edge & EnqueuedStylesheetConnectionEdge & {
-  __typename?: 'UserToEnqueuedStylesheetConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -16359,7 +15878,6 @@ export type UserToEnqueuedStylesheetConnectionEdge = Edge & EnqueuedStylesheetCo
 
 /** Page Info on the &quot;UserToEnqueuedStylesheetConnection&quot; */
 export type UserToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'UserToEnqueuedStylesheetConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -16372,7 +15890,6 @@ export type UserToEnqueuedStylesheetConnectionPageInfo = EnqueuedStylesheetConne
 
 /** Connection between the User type and the mediaItem type */
 export type UserToMediaItemConnection = Connection & MediaItemConnection & {
-  __typename?: 'UserToMediaItemConnection';
   /** Edges for the UserToMediaItemConnection connection */
   edges: Array<UserToMediaItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -16383,7 +15900,6 @@ export type UserToMediaItemConnection = Connection & MediaItemConnection & {
 
 /** An edge in a connection */
 export type UserToMediaItemConnectionEdge = Edge & MediaItemConnectionEdge & {
-  __typename?: 'UserToMediaItemConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -16392,7 +15908,6 @@ export type UserToMediaItemConnectionEdge = Edge & MediaItemConnectionEdge & {
 
 /** Page Info on the &quot;UserToMediaItemConnection&quot; */
 export type UserToMediaItemConnectionPageInfo = MediaItemConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'UserToMediaItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -16451,7 +15966,6 @@ export type UserToMediaItemConnectionWhereArgs = {
 
 /** Connection between the User type and the page type */
 export type UserToPageConnection = Connection & PageConnection & {
-  __typename?: 'UserToPageConnection';
   /** Edges for the UserToPageConnection connection */
   edges: Array<UserToPageConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -16462,7 +15976,6 @@ export type UserToPageConnection = Connection & PageConnection & {
 
 /** An edge in a connection */
 export type UserToPageConnectionEdge = Edge & PageConnectionEdge & {
-  __typename?: 'UserToPageConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -16471,7 +15984,6 @@ export type UserToPageConnectionEdge = Edge & PageConnectionEdge & {
 
 /** Page Info on the &quot;UserToPageConnection&quot; */
 export type UserToPageConnectionPageInfo = PageConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'UserToPageConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -16530,7 +16042,6 @@ export type UserToPageConnectionWhereArgs = {
 
 /** Connection between the User type and the post type */
 export type UserToPostConnection = Connection & PostConnection & {
-  __typename?: 'UserToPostConnection';
   /** Edges for the UserToPostConnection connection */
   edges: Array<UserToPostConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -16541,7 +16052,6 @@ export type UserToPostConnection = Connection & PostConnection & {
 
 /** An edge in a connection */
 export type UserToPostConnectionEdge = Edge & PostConnectionEdge & {
-  __typename?: 'UserToPostConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -16550,7 +16060,6 @@ export type UserToPostConnectionEdge = Edge & PostConnectionEdge & {
 
 /** Page Info on the &quot;UserToPostConnection&quot; */
 export type UserToPostConnectionPageInfo = PageInfo & PostConnectionPageInfo & WpPageInfo & {
-  __typename?: 'UserToPostConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -16629,7 +16138,6 @@ export type UserToPostConnectionWhereArgs = {
 
 /** Connection between the User type and the ContentNode type */
 export type UserToRevisionsConnection = Connection & ContentNodeConnection & {
-  __typename?: 'UserToRevisionsConnection';
   /** Edges for the UserToRevisionsConnection connection */
   edges: Array<UserToRevisionsConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -16640,7 +16148,6 @@ export type UserToRevisionsConnection = Connection & ContentNodeConnection & {
 
 /** An edge in a connection */
 export type UserToRevisionsConnectionEdge = ContentNodeConnectionEdge & Edge & {
-  __typename?: 'UserToRevisionsConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -16649,7 +16156,6 @@ export type UserToRevisionsConnectionEdge = ContentNodeConnectionEdge & Edge & {
 
 /** Page Info on the &quot;UserToRevisionsConnection&quot; */
 export type UserToRevisionsConnectionPageInfo = ContentNodeConnectionPageInfo & PageInfo & WpPageInfo & {
-  __typename?: 'UserToRevisionsConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -16702,7 +16208,6 @@ export type UserToRevisionsConnectionWhereArgs = {
 
 /** Connection between the User type and the UserRole type */
 export type UserToUserRoleConnection = Connection & UserRoleConnection & {
-  __typename?: 'UserToUserRoleConnection';
   /** Edges for the UserToUserRoleConnection connection */
   edges: Array<UserToUserRoleConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -16713,7 +16218,6 @@ export type UserToUserRoleConnection = Connection & UserRoleConnection & {
 
 /** An edge in a connection */
 export type UserToUserRoleConnectionEdge = Edge & UserRoleConnectionEdge & {
-  __typename?: 'UserToUserRoleConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -16722,7 +16226,6 @@ export type UserToUserRoleConnectionEdge = Edge & UserRoleConnectionEdge & {
 
 /** Page Info on the &quot;UserToUserRoleConnection&quot; */
 export type UserToUserRoleConnectionPageInfo = PageInfo & UserRoleConnectionPageInfo & WpPageInfo & {
-  __typename?: 'UserToUserRoleConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -16734,24 +16237,23 @@ export type UserToUserRoleConnectionPageInfo = PageInfo & UserRoleConnectionPage
 };
 
 /** Field to order the connection by */
-export enum UsersConnectionOrderbyEnum {
+export type UsersConnectionOrderbyEnum =
   /** Order by display name */
-  DisplayName = 'DISPLAY_NAME',
+  | 'DISPLAY_NAME'
   /** Order by email address */
-  Email = 'EMAIL',
+  | 'EMAIL'
   /** Order by login */
-  Login = 'LOGIN',
+  | 'LOGIN'
   /** Preserve the login order given in the LOGIN_IN array */
-  LoginIn = 'LOGIN_IN',
+  | 'LOGIN_IN'
   /** Order by nice name */
-  NiceName = 'NICE_NAME',
+  | 'NICE_NAME'
   /** Preserve the nice name order given in the NICE_NAME_IN array */
-  NiceNameIn = 'NICE_NAME_IN',
+  | 'NICE_NAME_IN'
   /** Order by registration date */
-  Registered = 'REGISTERED',
+  | 'REGISTERED'
   /** Order by URL */
-  Url = 'URL'
-}
+  | 'URL';
 
 /** Options for ordering the connection */
 export type UsersConnectionOrderbyInput = {
@@ -16762,22 +16264,20 @@ export type UsersConnectionOrderbyInput = {
 };
 
 /** Column used for searching for users. */
-export enum UsersConnectionSearchColumnEnum {
+export type UsersConnectionSearchColumnEnum =
   /** The user's email address. */
-  Email = 'EMAIL',
+  | 'EMAIL'
   /** The globally unique ID. */
-  Id = 'ID',
+  | 'ID'
   /** The username the User uses to login with. */
-  Login = 'LOGIN',
+  | 'LOGIN'
   /** A URL-friendly name for the user. The default is the user's username. */
-  Nicename = 'NICENAME',
+  | 'NICENAME'
   /** The URL of the user's website. */
-  Url = 'URL'
-}
+  | 'URL';
 
 /** The &quot;VideoDetails&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type VideoDetails = AcfFieldGroup & AcfFieldGroupFields & VideoDetails_Fields & {
-  __typename?: 'VideoDetails';
   /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;VideoDetails&quot; Field Group */
   articlePageCaption?: Maybe<Scalars['String']['output']>;
   /**
@@ -16830,7 +16330,6 @@ export type VideoDetails_FieldsRelatedArticleArgs = {
 
 /** The videoItem type */
 export type VideoItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & WithAcfVideoDetails & {
-  __typename?: 'VideoItem';
   /**
    * The ancestors of the content node.
    * @deprecated This content type is not hierarchical and typically will not have ancestors
@@ -17028,16 +16527,15 @@ export type VideoItemConnectionPageInfo = {
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum VideoItemIdType {
+export type VideoItemIdType =
   /** Identify a resource by the Database ID. */
-  DatabaseId = 'DATABASE_ID',
+  | 'DATABASE_ID'
   /** Identify a resource by the (hashed) Global ID. */
-  Id = 'ID',
+  | 'ID'
   /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  Slug = 'SLUG',
+  | 'SLUG'
   /** Identify a resource by the URI. */
-  Uri = 'URI'
-}
+  | 'URI';
 
 /** Set relationships between the videoItem to places */
 export type VideoItemPlacesInput = {
@@ -17061,7 +16559,6 @@ export type VideoItemPlacesNodeInput = {
 
 /** Connection between the VideoItem type and the videoItem type */
 export type VideoItemToParentConnectionEdge = Edge & OneToOneConnection & VideoItemConnectionEdge & {
-  __typename?: 'VideoItemToParentConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /**
@@ -17073,7 +16570,6 @@ export type VideoItemToParentConnectionEdge = Edge & OneToOneConnection & VideoI
 
 /** Connection between the VideoItem type and the place type */
 export type VideoItemToPlaceConnection = Connection & PlaceConnection & {
-  __typename?: 'VideoItemToPlaceConnection';
   /** Edges for the VideoItemToPlaceConnection connection */
   edges: Array<VideoItemToPlaceConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -17084,7 +16580,6 @@ export type VideoItemToPlaceConnection = Connection & PlaceConnection & {
 
 /** An edge in a connection */
 export type VideoItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
-  __typename?: 'VideoItemToPlaceConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -17093,7 +16588,6 @@ export type VideoItemToPlaceConnectionEdge = Edge & PlaceConnectionEdge & {
 
 /** Page Info on the &quot;VideoItemToPlaceConnection&quot; */
 export type VideoItemToPlaceConnectionPageInfo = PageInfo & PlaceConnectionPageInfo & WpPageInfo & {
-  __typename?: 'VideoItemToPlaceConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -17152,7 +16646,6 @@ export type VideoItemToPlaceConnectionWhereArgs = {
 
 /** Connection between the VideoItem type and the videoItem type */
 export type VideoItemToPreviewConnectionEdge = Edge & OneToOneConnection & VideoItemConnectionEdge & {
-  __typename?: 'VideoItemToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
@@ -17161,7 +16654,6 @@ export type VideoItemToPreviewConnectionEdge = Edge & OneToOneConnection & Video
 
 /** Connection between the VideoItem type and the TermNode type */
 export type VideoItemToTermNodeConnection = Connection & TermNodeConnection & {
-  __typename?: 'VideoItemToTermNodeConnection';
   /** Edges for the VideoItemToTermNodeConnection connection */
   edges: Array<VideoItemToTermNodeConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -17172,7 +16664,6 @@ export type VideoItemToTermNodeConnection = Connection & TermNodeConnection & {
 
 /** An edge in a connection */
 export type VideoItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & {
-  __typename?: 'VideoItemToTermNodeConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -17181,7 +16672,6 @@ export type VideoItemToTermNodeConnectionEdge = Edge & TermNodeConnectionEdge & 
 
 /** Page Info on the &quot;VideoItemToTermNodeConnection&quot; */
 export type VideoItemToTermNodeConnectionPageInfo = PageInfo & TermNodeConnectionPageInfo & WpPageInfo & {
-  __typename?: 'VideoItemToTermNodeConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -17242,7 +16732,6 @@ export type VideoItemToTermNodeConnectionWhereArgs = {
 
 /** Connection between the VideoItem type and the topic type */
 export type VideoItemToTopicConnection = Connection & TopicConnection & {
-  __typename?: 'VideoItemToTopicConnection';
   /** Edges for the VideoItemToTopicConnection connection */
   edges: Array<VideoItemToTopicConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -17253,7 +16742,6 @@ export type VideoItemToTopicConnection = Connection & TopicConnection & {
 
 /** An edge in a connection */
 export type VideoItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
-  __typename?: 'VideoItemToTopicConnectionEdge';
   /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The item at the end of the edge */
@@ -17262,7 +16750,6 @@ export type VideoItemToTopicConnectionEdge = Edge & TopicConnectionEdge & {
 
 /** Page Info on the &quot;VideoItemToTopicConnection&quot; */
 export type VideoItemToTopicConnectionPageInfo = PageInfo & TopicConnectionPageInfo & WpPageInfo & {
-  __typename?: 'VideoItemToTopicConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -17321,7 +16808,6 @@ export type VideoItemToTopicConnectionWhereArgs = {
 
 /** Connection between the VideoItem type and the videoItem type */
 export type VideoItemToVideoItemConnection = Connection & VideoItemConnection & {
-  __typename?: 'VideoItemToVideoItemConnection';
   /** Edges for the VideoItemToVideoItemConnection connection */
   edges: Array<VideoItemToVideoItemConnectionEdge>;
   /** The nodes of the connection, without the edges */
@@ -17332,7 +16818,6 @@ export type VideoItemToVideoItemConnection = Connection & VideoItemConnection & 
 
 /** An edge in a connection */
 export type VideoItemToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge & {
-  __typename?: 'VideoItemToVideoItemConnectionEdge';
   /**
    * A cursor for use in pagination
    * @deprecated This content type is not hierarchical and typically will not have ancestors
@@ -17347,7 +16832,6 @@ export type VideoItemToVideoItemConnectionEdge = Edge & VideoItemConnectionEdge 
 
 /** Page Info on the &quot;VideoItemToVideoItemConnection&quot; */
 export type VideoItemToVideoItemConnectionPageInfo = PageInfo & VideoItemConnectionPageInfo & WpPageInfo & {
-  __typename?: 'VideoItemToVideoItemConnectionPageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
@@ -17456,7 +16940,6 @@ export type WithAcfVideoDetails = {
 
 /** The writing setting type */
 export type WritingSettings = {
-  __typename?: 'WritingSettings';
   /** Default post category. */
   defaultCategory?: Maybe<Scalars['Int']['output']>;
   /** Default post format. */
@@ -17470,116 +16953,116 @@ export type BookByUriQueryVariables = Exact<{
 }>;
 
 
-export type BookByUriQuery = { __typename?: 'RootQuery', bookBy?: { __typename?: 'Book', contentTypeName: string, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, summary?: string | null, subheading?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', contentTypeName: string, guid?: string | null, id: string, link?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', tableOfContentsTitle?: string | null, subtitle?: string | null, displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | null };
+export type BookByUriQuery = { bookBy?: { contentTypeName: string, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, bookDetails?: { displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, summary?: string | null, subheading?: string | null, relatedArticles?: { nodes: Array<{ contentTypeName: string, guid?: string | null, id: string, link?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { tableOfContentsTitle?: string | null, subtitle?: string | null, displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string } | null } | {}> } | null } | null, featuredImage?: { node: { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | null };
 
-export type FragmentAudioItemFragment = { __typename?: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { __typename?: 'AudioItemDetails', articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null };
+export type FragmentAudioItemFragment = { audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null };
 
-export type FragmentBookFragment = { __typename?: 'Book', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
+export type FragmentBookFragment = { contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | {}> } | null } | null };
 
-export type FragmentJournalIssueFragment = { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null };
+export type FragmentJournalIssueFragment = { contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null };
 
-export type FragmentJournalIssueDetailsFragment = { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null };
+export type FragmentJournalIssueDetailsFragment = { fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null };
 
-export type FragmentPdfItemFragment = { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null } | null };
+export type FragmentPdfItemFragment = { contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { pdfTextContent?: string | null, fieldGroupName?: string | null, pdfFile?: { cursor?: string | null, node: { __typename: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null } | null };
 
 export type FragmentRelatedArticleFragment = { __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null };
 
-export type FragmentTerms_Category_Fragment = { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
+type FragmentTerms_Category_Fragment = { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
 
-export type FragmentTerms_Place_Fragment = { __typename?: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
+type FragmentTerms_Place_Fragment = { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
 
-export type FragmentTerms_PostFormat_Fragment = { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
+type FragmentTerms_PostFormat_Fragment = { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
 
-export type FragmentTerms_Tag_Fragment = { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
+type FragmentTerms_Tag_Fragment = { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
 
-export type FragmentTerms_Topic_Fragment = { __typename?: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
+type FragmentTerms_Topic_Fragment = { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null };
 
 export type FragmentTermsFragment = FragmentTerms_Category_Fragment | FragmentTerms_Place_Fragment | FragmentTerms_PostFormat_Fragment | FragmentTerms_Tag_Fragment | FragmentTerms_Topic_Fragment;
 
-export type FragmentVideoItemFragment = { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { __typename?: 'VideoDetails', videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null };
+export type FragmentVideoItemFragment = { contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null };
 
-export type FragmentFeaturedImageFragment = { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
+export type FragmentFeaturedImageFragment = { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null };
 
 export type GetArticleByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetArticleByIdQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | null };
+export type GetArticleByIdQuery = { article?: { articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isTermNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null, featuredImage?: { node: { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | null };
 
 export type GetArticleByUriQueryVariables = Exact<{
   uri: Scalars['ID']['input'];
 }>;
 
 
-export type GetArticleByUriQuery = { __typename?: 'RootQuery', article?: { __typename?: 'Article', articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { __typename?: 'PdfItemDetails', fieldGroupName?: string | null, pdfFile?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null } | null } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedAudio?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { __typename?: 'AudioItemDetails', articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedArticle?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null, relatedVideo?: { __typename: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', contentTypeName: string } | { __typename?: 'AudioItem', contentTypeName: string } | { __typename?: 'Book', contentTypeName: string } | { __typename?: 'Collection', contentTypeName: string } | { __typename?: 'JournalIssue', contentTypeName: string } | { __typename?: 'MediaItem', contentTypeName: string } | { __typename?: 'Page', contentTypeName: string } | { __typename?: 'PdfItem', contentTypeName: string } | { __typename?: 'Post', contentTypeName: string } | { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { __typename?: 'VideoDetails', videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null }> } | null, relatedBook?: { __typename: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, terms?: { __typename?: 'ArticleToTermNodeConnection', nodes: Array<{ __typename: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null }> } | null } | null };
+export type GetArticleByUriQuery = { article?: { articleId: number, content?: string | null, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedPdf?: { nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, pdfItemId: number, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, pdfItemDetails?: { pdfTextContent?: string | null, fieldGroupName?: string | null, pdfFile?: { cursor?: string | null, node: { __typename: 'MediaItem', fileSize?: number | null, link?: string | null, slug?: string | null, contentTypeName: string, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, mimeType?: string | null, uri?: string | null, title?: string | null } } | null, relatedArticle?: { nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null } | null } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedAudio?: { nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem', audioItemId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, title?: string | null, uri?: string | null, audioItemDetails?: { articlePageCaption?: string | null, audioEmbedCode?: string | null, fieldGroupName?: string | null, landingPageDescription?: string | null } | null } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue' } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedJournal?: { nodes: Array<{ __typename: 'Article' } | { __typename: 'AudioItem' } | { __typename: 'Book' } | { __typename: 'Collection' } | { __typename: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, journalIssueId: number, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, journalIssueDetails?: { fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null } | { __typename: 'MediaItem' } | { __typename: 'Page' } | { __typename: 'PdfItem' } | { __typename: 'Post' } | { __typename: 'VideoItem' }> } | null, relatedArticle?: { nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | {}> } | null, relatedVideo?: { __typename: 'AcfContentNodeConnection', nodes: Array<{ contentTypeName: string } | { contentTypeName: string } | { contentTypeName: string } | { contentTypeName: string } | { contentTypeName: string } | { contentTypeName: string } | { contentTypeName: string } | { contentTypeName: string } | { contentTypeName: string } | { contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, guid?: string | null, id: string, link?: string | null, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, videoDetails?: { videoEmbedCode?: string | null, landingPageDescription?: string | null, fieldGroupName?: string | null, articlePageCaption?: string | null } | null }> } | null, relatedBook?: { __typename: 'AcfContentNodeConnection', nodes: Array<{ contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, featuredImage?: { node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, bookDetails?: { displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { nodes: Array<{ __typename: 'Article', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, desiredSlug?: string | null, enclosure?: string | null, guid?: string | null, id: string, modified?: string | null, modifiedGmt?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null } | {}> } | null } | null } | {}> } | null } | null, featuredImage?: { node: { __typename: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, terms?: { nodes: Array<{ __typename: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termTaxonomyId?: number | null, uri?: string | null }> } | null } | null };
 
 export type GetArticlesQueryVariables = Exact<{
   language: LanguageCodeFilterEnum;
 }>;
 
 
-export type GetArticlesQuery = { __typename?: 'RootQuery', articles?: { __typename?: 'RootQueryToArticleConnection', nodes: Array<{ __typename?: 'Article', id: string, title?: string | null, content?: string | null, slug?: string | null, uri?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedJournal?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article' } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, isContentNode: boolean, journalIssueId: number, link?: string | null, slug?: string | null, status?: string | null, uri?: string | null, title?: string | null } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null, language?: { __typename?: 'Language', code?: LanguageCodeEnum | null, homeUrl?: string | null, id: string, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
+export type GetArticlesQuery = { articles?: { nodes: Array<{ id: string, title?: string | null, content?: string | null, slug?: string | null, uri?: string | null, featuredImage?: { node: { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null, relatedJournal?: { edges: Array<{ node: { contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, guid?: string | null, id: string, isContentNode: boolean, journalIssueId: number, link?: string | null, slug?: string | null, status?: string | null, uri?: string | null, title?: string | null } | {} }> } | null } | null, language?: { code?: LanguageCodeEnum | null, homeUrl?: string | null, id: string, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
 
 export type GetArticlesByPlaceSlugQueryVariables = Exact<{
   slug: Scalars['ID']['input'];
 }>;
 
 
-export type GetArticlesByPlaceSlugQuery = { __typename?: 'RootQuery', termNode?: { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Place', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { __typename?: 'PlaceToContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Topic', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | null };
+export type GetArticlesByPlaceSlugQuery = { termNode?: { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Place', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | {}> } | null } | { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | null };
 
 export type GetArticlesByTopicSlugQueryVariables = Exact<{
   slug: Scalars['ID']['input'];
 }>;
 
 
-export type GetArticlesByTopicSlugQuery = { __typename?: 'RootQuery', termNode?: { __typename?: 'Category', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Place', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'PostFormat', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename?: 'Tag', count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { __typename?: 'TopicToContentNodeConnection', nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' }> } | null } | null };
+export type GetArticlesByTopicSlugQuery = { termNode?: { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, name?: string | null, slug?: string | null, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, uri?: string | null } | { __typename: 'Topic', name?: string | null, slug?: string | null, uri?: string | null, count?: number | null, databaseId: number, description?: string | null, id: string, isTermNode: boolean, taxonomyName?: string | null, termGroupId?: number | null, termTaxonomyId?: number | null, contentNodes?: { nodes: Array<{ __typename: 'Article', articleId: number, contentTypeName: string, databaseId: number, date?: string | null, dateGmt?: string | null, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isContentNode: boolean, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | {}> } | null } | null };
 
 export type GetAvailableLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAvailableLanguagesQuery = { __typename?: 'RootQuery', languages?: Array<{ __typename?: 'Language', code?: LanguageCodeEnum | null, homeUrl?: string | null, id: string, locale?: string | null, name?: string | null, slug?: string | null } | null> | null };
+export type GetAvailableLanguagesQuery = { languages?: Array<{ code?: LanguageCodeEnum | null, homeUrl?: string | null, id: string, locale?: string | null, name?: string | null, slug?: string | null } | null> | null };
 
 export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBooksQuery = { __typename?: 'RootQuery', books?: { __typename?: 'RootQueryToBookConnection', nodes: Array<{ __typename?: 'Book', contentTypeName: string, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, bookDetails?: { __typename?: 'BookDetails', displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { __typename?: 'AcfContentNodeConnection', edges: Array<{ __typename?: 'AcfContentNodeConnectionEdge', node: { __typename?: 'Article', contentTypeName: string, guid?: string | null, id: string, link?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { __typename?: 'ArticleDetails', tableOfContentsTitle?: string | null, subtitle?: string | null, displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string } | null } | { __typename?: 'AudioItem' } | { __typename?: 'Book' } | { __typename?: 'Collection' } | { __typename?: 'JournalIssue' } | { __typename?: 'MediaItem' } | { __typename?: 'Page' } | { __typename?: 'PdfItem' } | { __typename?: 'Post' } | { __typename?: 'VideoItem' } }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null }> } | null };
+export type GetBooksQuery = { books?: { nodes: Array<{ contentTypeName: string, featuredImageDatabaseId?: number | null, featuredImageId?: string | null, id: string, isComment: boolean, isContentNode: boolean, isFrontPage: boolean, isPostsPage: boolean, isPreview?: boolean | null, isRestricted?: boolean | null, isTermNode: boolean, link?: string | null, modified?: string | null, modifiedGmt?: string | null, parentDatabaseId?: number | null, parentId?: string | null, password?: string | null, previewRevisionDatabaseId?: number | null, previewRevisionId?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, bookDetails?: { displayOnIbtBooks?: boolean | null, fieldGroupName?: string | null, subheading?: string | null, summary?: string | null, relatedArticles?: { edges: Array<{ node: { contentTypeName: string, guid?: string | null, id: string, link?: string | null, slug?: string | null, status?: string | null, title?: string | null, uri?: string | null, articleDetails?: { tableOfContentsTitle?: string | null, subtitle?: string | null, displayDate?: string | null, displayOnFrontPage?: boolean | null, publicationDate: string } | null } | {} }> } | null } | null, featuredImage?: { node: { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null }> } | null };
 
 export type GetGlobalSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGlobalSettingsQuery = { __typename?: 'RootQuery', globalSettings?: { __typename?: 'GlobalSettings', fGGlobalSettings?: { __typename?: 'FGGlobalSettings', bannerImage?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, notificationBar?: { __typename?: 'FGGlobalSettingsNotificationBar', fieldGroupName?: string | null, notificationMessage?: string | null, notificationOnoff?: boolean | null } | null, bannerImageTwitter?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } } | null, bannerImageTwitterSquare?: { __typename?: 'AcfMediaItemConnectionEdge', cursor?: string | null, node: { __typename?: 'MediaItem', altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } } | null } | null } | null };
+export type GetGlobalSettingsQuery = { globalSettings?: { fGGlobalSettings?: { bannerImage?: { cursor?: string | null, node: { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, notificationBar?: { fieldGroupName?: string | null, notificationMessage?: string | null, notificationOnoff?: boolean | null } | null, bannerImageTwitter?: { cursor?: string | null, node: { altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { height?: number | null, width?: number | null } | null } } | null, bannerImageTwitterSquare?: { cursor?: string | null, node: { altText?: string | null, srcSet?: string | null, sourceUrl?: string | null, mediaDetails?: { height?: number | null, width?: number | null } | null } } | null } | null } | null };
 
 export type GetJournalByUriQueryVariables = Exact<{
   uri: Scalars['String']['input'];
 }>;
 
 
-export type GetJournalByUriQuery = { __typename?: 'RootQuery', journalIssueBy?: { __typename?: 'JournalIssue', title?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null } | null };
+export type GetJournalByUriQuery = { journalIssueBy?: { title?: string | null, featuredImage?: { node: { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, journalIssueDetails?: { fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null } | null };
 
 export type GetJournalIssuesQueryVariables = Exact<{
   language: LanguageCodeFilterEnum;
 }>;
 
 
-export type GetJournalIssuesQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { __typename?: 'ArticleDetails', displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, language?: { __typename?: 'Language', code?: LanguageCodeEnum | null, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
+export type GetJournalIssuesQuery = { journalIssues?: { nodes: Array<{ slug?: string | null, title?: string | null, journalIssueDetails?: { fieldGroupName?: string | null, publicationDate?: string | null, articlesInJournal?: { nodes: Array<{ __typename: 'Article', id: string, title?: string | null, uri?: string | null, slug?: string | null, articleDetails?: { displayDate?: string | null, displayOnFrontPage?: boolean | null, fieldGroupName?: string | null, publicationDate: string, source?: string | null, subtitle?: string | null, suppressDate?: boolean | null, tableOfContentsTitle?: string | null } | null } | { __typename: 'AudioItem', slug?: string | null } | { __typename: 'Book', slug?: string | null } | { __typename: 'Collection', slug?: string | null } | { __typename: 'JournalIssue', slug?: string | null } | { __typename: 'MediaItem', slug?: string | null } | { __typename: 'Page', slug?: string | null } | { __typename: 'PdfItem', slug?: string | null } | { __typename: 'Post', slug?: string | null } | { __typename: 'VideoItem', slug?: string | null }> } | null } | null, featuredImage?: { node: { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null, language?: { code?: LanguageCodeEnum | null, locale?: string | null, name?: string | null, slug?: string | null } | null }> } | null };
 
 export type GetJournalIssuesLatestQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetJournalIssuesLatestQuery = { __typename?: 'RootQuery', journalIssues?: { __typename?: 'RootQueryToJournalIssueConnection', nodes: Array<{ __typename?: 'JournalIssue', slug?: string | null, title?: string | null, journalIssueDetails?: { __typename?: 'JournalIssueDetails', fieldGroupName?: string | null, publicationDate?: string | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null, sizes?: Array<{ __typename?: 'MediaSize', file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null }> } | null };
+export type GetJournalIssuesLatestQuery = { journalIssues?: { nodes: Array<{ slug?: string | null, title?: string | null, journalIssueDetails?: { fieldGroupName?: string | null, publicationDate?: string | null } | null, featuredImage?: { node: { altText?: string | null, link?: string | null, caption?: string | null, mediaItemId: number, mediaItemUrl?: string | null, description?: string | null, guid?: string | null, id: string, sizes?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, thumbhash?: string | null, mediaDetails?: { height?: number | null, width?: number | null, sizes?: Array<{ file?: string | null, fileSize?: number | null, height?: string | null, mimeType?: string | null, name?: string | null, sourceUrl?: string | null, width?: string | null } | null> | null } | null } } | null }> } | null };
 
 export type GetPageByUriQueryVariables = Exact<{
   uri: Scalars['String']['input'];
 }>;
 
 
-export type GetPageByUriQuery = { __typename?: 'RootQuery', pageBy?: { __typename?: 'Page', title?: string | null, contentTypeName: string, content?: string | null, date?: string | null, dateGmt?: string | null, modified?: string | null, modifiedGmt?: string | null, pageId: number, uri?: string | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', cursor?: string | null } | null } | null };
+export type GetPageByUriQuery = { pageBy?: { title?: string | null, contentTypeName: string, content?: string | null, date?: string | null, dateGmt?: string | null, modified?: string | null, modifiedGmt?: string | null, pageId: number, uri?: string | null, author?: { cursor?: string | null } | null } | null };
 
 export type GetPlaceholderSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPlaceholderSettingsQuery = { __typename?: 'RootQuery', placeholderSettings?: { __typename?: 'PlaceholderSettings', placeholderSettingsFields?: { __typename?: 'PlaceholderSettingsFields', placeholderSetup: Array<{ __typename?: 'PlaceholderSettingsFieldsPlaceholderSetup', contentSelector: Array<string | null>, placeholderSelector: Array<string | null>, textContentGroup: { __typename?: 'PlaceholderSettingsFieldsPlaceholderSetupTextContentGroup', freeTextHeading?: string | null, freeTextContent?: string | null, freeTextImage?: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, caption?: string | null, contentTypeName: string, databaseId: number, description?: string | null, guid?: string | null, id: string, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, uri?: string | null, dateGmt?: string | null } } | null, freeTextLink?: { __typename?: 'AcfContentNodeConnection', nodes: Array<{ __typename?: 'Article', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'AudioItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Book', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Collection', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'JournalIssue', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'MediaItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Page', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'PdfItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'Post', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { __typename?: 'VideoItem', contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null }> } | null } } | null> } | null } | null };
+export type GetPlaceholderSettingsQuery = { placeholderSettings?: { placeholderSettingsFields?: { placeholderSetup: Array<{ contentSelector: Array<string | null>, placeholderSelector: Array<string | null>, textContentGroup: { freeTextHeading?: string | null, freeTextContent?: string | null, freeTextImage?: { node: { altText?: string | null, caption?: string | null, contentTypeName: string, databaseId: number, description?: string | null, guid?: string | null, id: string, link?: string | null, mediaItemId: number, mediaItemUrl?: string | null, mediaType?: string | null, slug?: string | null, sourceUrl?: string | null, srcSet?: string | null, uri?: string | null, dateGmt?: string | null } } | null, freeTextLink?: { nodes: Array<{ contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null } | { contentTypeName: string, databaseId: number, id: string, modifiedGmt?: string | null, slug?: string | null, status?: string | null, uri?: string | null, dateGmt?: string | null }> } | null } } | null> } | null } | null };
 
 
 export const FragmentAudioItemFragmentDoc = `
@@ -17759,6 +17242,7 @@ export const FragmentPdfItemFragmentDoc = `
   title
   uri
   pdfItemDetails {
+    pdfTextContent
     fieldGroupName
     pdfFile {
       cursor

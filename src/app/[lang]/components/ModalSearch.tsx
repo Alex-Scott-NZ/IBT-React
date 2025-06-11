@@ -1,3 +1,4 @@
+// src\app\[lang]\components\ModalSearch.tsx
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -13,6 +14,8 @@ interface SearchHit {
   slug: string;
   uri: string;
   content?: string;
+  pdfContent?: string; // Add PDF content field
+  contentForSearch?: string; // Add combined content field
   hasRelatedPdf: boolean;
   hasRelatedAudio: boolean;
   hasRelatedVideo: boolean;
@@ -25,6 +28,8 @@ interface SearchHit {
     title?: string;
     subtitle?: string;
     content?: string;
+    pdfContent?: string; // Add formatted PDF content
+    contentForSearch?: string; // Add formatted combined content
   };
 }
 
@@ -186,8 +191,8 @@ const ModalSearch: React.FC = () => {
           limit: resultsPerPage,
           offset: offset,
           filter: `language = "${currentLang}"`,
-          attributesToHighlight: ['title', 'subtitle', 'content'],
-          attributesToCrop: ['content'],
+          attributesToHighlight: ['title', 'subtitle', 'content', 'pdfContent', 'contentForSearch'], // Add PDF fields
+          attributesToCrop: ['content', 'pdfContent', 'contentForSearch'], // Crop PDF content too
           cropLength: 150,
           highlightPreTag: '<mark>',
           highlightPostTag: '</mark>',
@@ -427,10 +432,19 @@ const ModalSearch: React.FC = () => {
                               )}
                             </div>
 
-                            {/* Content snippet */}
-                            {hit._formatted?.content && (
+                            {/* Content snippet - prioritize regular content, then PDF content */}
+                            {(hit._formatted?.content || hit._formatted?.pdfContent || hit._formatted?.contentForSearch) && (
                               <p className="text-sm text-gray-600 mb-3 line-clamp-2 font-helvetica">
-                                {renderHighlighted(hit._formatted.content)}
+                                {hit._formatted?.content ? (
+                                  renderHighlighted(hit._formatted.content)
+                                ) : hit._formatted?.contentForSearch ? (
+                                  renderHighlighted(hit._formatted.contentForSearch)
+                                ) : hit._formatted?.pdfContent ? (
+                                  <>
+                                    <span className="text-xs text-gray-500 italic">[PDF] </span>
+                                    {renderHighlighted(hit._formatted.pdfContent)}
+                                  </>
+                                ) : null}
                               </p>
                             )}
 

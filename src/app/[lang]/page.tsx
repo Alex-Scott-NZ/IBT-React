@@ -1,4 +1,4 @@
-// /app/[lang]/page.tsx
+// src\app\[lang]\page.tsx
 import HomeLayout from './layouts/HomeLayout';
 import {
   GetArticlesQuery,
@@ -88,7 +88,7 @@ interface PageProps {
 
 const Home = async ({ params: { lang } }: PageProps) => {
   // Fetch all data in parallel using Promise.all
-  const language = lang.toUpperCase() === 'EN' ? LanguageCodeFilterEnum.En : LanguageCodeFilterEnum.Fr
+  const language = lang.toUpperCase() as LanguageCodeFilterEnum;
 
   const [
     articlesData,
