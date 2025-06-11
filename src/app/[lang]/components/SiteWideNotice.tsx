@@ -1,6 +1,6 @@
+// src\app\[lang]\components\SiteWideNotice.tsx
 import React from 'react';
-
-import { FgGlobalSettingsNotificationBar } from '@/gql/graphql';
+import { FgGlobalSettingsNotificationBar } from '@/gql/gql-generated';
 
 interface SiteWideNoticeProps {
   notificationData: FgGlobalSettingsNotificationBar | null | undefined
