@@ -28,7 +28,7 @@ const config: CodegenConfig = {
         },
         useTypeImports: false,
         dedupeFragments: true,
-        skipTypename: true,
+        skipTypename: false,
         enumsAsTypes: true,
       },
     },
