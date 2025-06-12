@@ -1,3 +1,4 @@
+// src\app\[lang]\layouts\PdfViewerComponent.tsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -11,7 +12,6 @@ import {
 } from '@react-pdf-viewer/core';
 import { toolbarPlugin, ToolbarSlot } from '@react-pdf-viewer/toolbar';
 import { pageNavigationPlugin, RenderCurrentPageLabelProps } from '@react-pdf-viewer/page-navigation';
-import { zoomPlugin } from '@react-pdf-viewer/zoom';
 
 const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -19,6 +19,7 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
   const [currentScale, setCurrentScale] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const viewerRef = useRef<any>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -48,21 +49,25 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
   // Create plugins
   const toolbarPluginInstance = toolbarPlugin();
   const pageNavigationPluginInstance = pageNavigationPlugin();
-  const zoomPluginInstance = zoomPlugin();
   
   const { Toolbar } = toolbarPluginInstance;
   const { CurrentPageLabel } = pageNavigationPluginInstance;
-  const { ZoomIn: PluginZoomIn, ZoomOut: PluginZoomOut } = zoomPluginInstance;
 
-  // Custom zoom handlers for mobile
+  // Custom zoom handlers using toolbar plugin methods
   const handleZoomIn = () => {
-    const newScale = Math.min(currentScale * 1.2, 3);
-    setCurrentScale(newScale);
+    // Find and click the zoom in button programmatically
+    const zoomInButton = document.querySelector('.rpv-zoom__in-button');
+    if (zoomInButton instanceof HTMLElement) {
+      zoomInButton.click();
+    }
   };
 
   const handleZoomOut = () => {
-    const newScale = Math.max(currentScale / 1.2, 0.5);
-    setCurrentScale(newScale);
+    // Find and click the zoom out button programmatically
+    const zoomOutButton = document.querySelector('.rpv-zoom__out-button');
+    if (zoomOutButton instanceof HTMLElement) {
+      zoomOutButton.click();
+    }
   };
 
   return (
@@ -77,10 +82,6 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           top: 0 !important;
           left: 0 !important;
           z-index: 99999 !important;
-          /* Enable touch gestures in fullscreen */
-          touch-action: pan-x pan-y pinch-zoom !important;
-          -webkit-user-select: none !important;
-          user-select: none !important;
         }
         
         .pdf-container:fullscreen {
@@ -91,10 +92,6 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           top: 0 !important;
           left: 0 !important;
           z-index: 99999 !important;
-          /* Enable touch gestures in fullscreen */
-          touch-action: pan-x pan-y pinch-zoom !important;
-          -webkit-user-select: none !important;
-          user-select: none !important;
         }
 
         /* Header in fullscreen */
@@ -118,18 +115,14 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
         .pdf-container:-webkit-full-screen .viewer-wrapper {
           height: calc(100vh - 120px) !important;
           margin-top: 50px !important;
-          /* Enable pinch zoom in fullscreen */
-          touch-action: pan-x pan-y pinch-zoom !important;
         }
         
         .pdf-container:fullscreen .viewer-wrapper {
           height: calc(100vh - 120px) !important;
           margin-top: 50px !important;
-          /* Enable pinch zoom in fullscreen */
-          touch-action: pan-x pan-y pinch-zoom !important;
         }
 
-        /* Toolbar in fullscreen - moved to top for mobile */
+        /* Toolbar in fullscreen */
         .pdf-container:-webkit-full-screen .toolbar-wrapper {
           position: fixed !important;
           bottom: 20px !important;
@@ -146,19 +139,6 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           z-index: 999999 !important;
         }
 
-        /* Mobile fullscreen toolbar at top */
-        @media (max-width: 767px) {
-          .pdf-container:-webkit-full-screen .toolbar-wrapper {
-            top: 60px !important;
-            bottom: auto !important;
-          }
-          
-          .pdf-container:fullscreen .toolbar-wrapper {
-            top: 60px !important;
-            bottom: auto !important;
-          }
-        }
-
         /* Smooth scrolling */
         .rpv-core__viewer {
           scroll-behavior: smooth;
@@ -168,17 +148,6 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
         @media (max-width: 767px) {
           .rpv-toolbar__item {
             min-width: 30px !important;
-          }
-          
-          /* Force enable pinch zoom on all elements */
-          .rpv-core__viewer,
-          .rpv-core__page-layer,
-          .rpv-core__inner-page,
-          .rpv-core__text-layer,
-          .rpv-core__annotation-layer {
-            touch-action: pan-x pan-y pinch-zoom !important;
-            -webkit-user-select: none !important;
-            user-select: none !important;
           }
         }
 
@@ -209,6 +178,11 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           touch-action: manipulation;
         }
 
+        .zoom-button:active {
+          background: rgba(0, 0, 0, 0.9);
+          transform: scale(0.95);
+        }
+
         .zoom-indicator {
           position: absolute;
           top: 60px;
@@ -220,6 +194,13 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           font-size: 14px;
           z-index: 5;
           pointer-events: none;
+        }
+
+        /* Hide the toolbar zoom buttons but keep them in DOM */
+        .toolbar-wrapper.mobile-fullscreen .rpv-zoom__in-button,
+        .toolbar-wrapper.mobile-fullscreen .rpv-zoom__out-button {
+          position: absolute !important;
+          left: -9999px !important;
         }
       `}</style>
       
@@ -268,10 +249,18 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
         {/* Mobile zoom controls for fullscreen */}
         {isMobile && isFullscreen && !loading && (
           <div className="mobile-zoom-controls">
-            <button className="zoom-button" onClick={handleZoomIn}>
+            <button 
+              className="zoom-button" 
+              onClick={handleZoomIn}
+              aria-label="Zoom in"
+            >
               +
             </button>
-            <button className="zoom-button" onClick={handleZoomOut}>
+            <button 
+              className="zoom-button" 
+              onClick={handleZoomOut}
+              aria-label="Zoom out"
+            >
               −
             </button>
           </div>
@@ -299,17 +288,20 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
             <Viewer
               fileUrl={pdfUrl}
-              plugins={[toolbarPluginInstance, pageNavigationPluginInstance, zoomPluginInstance]}
+              plugins={[toolbarPluginInstance, pageNavigationPluginInstance]}
               scrollMode={ScrollMode.Vertical}
               viewMode={ViewMode.SinglePage}
               defaultScale={
                 isMobile ? SpecialZoomLevel.PageWidth : SpecialZoomLevel.PageFit
               }
-              onDocumentLoad={() => {
+              onDocumentLoad={(e) => {
                 console.log('PDF loaded successfully');
                 setLoading(false);
+                // Store viewer reference if needed
+                viewerRef.current = e;
               }}
               onZoom={(e) => {
+                // Update our state when zoom changes
                 setCurrentScale(e.scale);
               }}
               renderLoader={(percentages: number) => (
@@ -363,7 +355,7 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
 
         {/* Toolbar */}
         <div 
-          className="toolbar-wrapper"
+          className={`toolbar-wrapper ${isMobile && isFullscreen ? 'mobile-fullscreen' : ''}`}
           style={{
             position: 'absolute',
             bottom: '16px',
@@ -402,17 +394,13 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
               
               return (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  {/* Hide zoom buttons on mobile in fullscreen (using floating buttons instead) */}
-                  {(!isMobile || !isFullscreen) && (
-                    <>
-                      <div style={{ padding: '0 2px' }}>
-                        <ZoomOut />
-                      </div>
-                      <div style={{ padding: '0 2px' }}>
-                        <ZoomIn />
-                      </div>
-                    </>
-                  )}
+                  {/* Always render zoom buttons but hide them visually on mobile fullscreen */}
+                  <div style={{ padding: '0 2px' }} className="rpv-zoom__out-button">
+                    <ZoomOut />
+                  </div>
+                  <div style={{ padding: '0 2px' }} className="rpv-zoom__in-button">
+                    <ZoomIn />
+                  </div>
                   <div style={{ padding: '0 2px' }}>
                     <button
                       className="rpv-core__minimal-button"
@@ -427,13 +415,7 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
                         viewBox="0 0 16 16"
                         width="16"
                       >
-                        {isFullscreen ? (
-                          // Exit fullscreen icon
-                          <path d="M1.5,6 L1.5,1.5 L6,1.5 L6,2.5 L2.5,2.5 L2.5,6 L1.5,6 Z M10,1.5 L14.5,1.5 L14.5,6 L13.5,6 L13.5,2.5 L10,2.5 L10,1.5 Z M2.5,10 L2.5,13.5 L6,13.5 L6,14.5 L1.5,14.5 L1.5,10 L2.5,10 Z M13.5,10 L14.5,10 L14.5,14.5 L10,14.5 L10,13.5 L13.5,13.5 L13.5,10 Z" />
-                        ) : (
-                          // Enter fullscreen icon
-                          <path d="M1.5,1 L6,1 L6,2 L2.5,2 L2.5,5.5 L1.5,5.5 L1.5,1 Z M10,1 L14.5,1 L14.5,5.5 L13.5,5.5 L13.5,2 L10,2 L10,1 Z M2.5,10.5 L2.5,14 L6,14 L6,15 L1.5,15 L1.5,10.5 L2.5,10.5 Z M13.5,10.5 L14.5,10.5 L14.5,15 L10,15 L10,14 L13.5,14 L13.5,10.5 Z" />
-                        )}
+                        <path d="M1.5,1 L6,1 L6,2 L2.5,2 L2.5,5.5 L1.5,5.5 L1.5,1 Z M10,1 L14.5,1 L14.5,5.5 L13.5,5.5 L13.5,2 L10,2 L10,1 Z M2.5,10.5 L2.5,14 L6,14 L6,15 L1.5,15 L1.5,10.5 L2.5,10.5 Z M13.5,10.5 L14.5,10.5 L14.5,15 L10,15 L10,14 L13.5,14 L13.5,10.5 Z" />
                       </svg>
                     </button>
                   </div>
