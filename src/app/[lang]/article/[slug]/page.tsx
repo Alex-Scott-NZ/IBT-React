@@ -1,4 +1,4 @@
-// [lang]/article/[slug]/page.tsx
+// src\app\[lang]\article\[slug]\page.tsx
 import {
   GetArticleByUriQuery,
   useGetArticleByUriQuery,

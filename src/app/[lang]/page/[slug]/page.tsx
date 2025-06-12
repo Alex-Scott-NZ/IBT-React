@@ -1,3 +1,4 @@
+// src\app\[lang]\page\[slug]\page.tsx
 import {
   GetPageByUriQuery,
   useGetPageByUriQuery,
