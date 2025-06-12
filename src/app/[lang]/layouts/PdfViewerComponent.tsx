@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Worker,
   Viewer,
@@ -15,6 +15,8 @@ import { pageNavigationPlugin, RenderCurrentPageLabelProps } from '@react-pdf-vi
 const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentScale, setCurrentScale] = useState(1);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -107,14 +109,65 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           scroll-behavior: smooth;
         }
         
+        /* Mobile specific styles */
         @media (max-width: 767px) {
           .rpv-toolbar__item {
             min-width: 30px !important;
           }
+          
+          /* Enable native pinch zoom on mobile */
+          .rpv-core__viewer {
+            touch-action: manipulation !important;
+          }
+          
+          .rpv-core__page-layer {
+            touch-action: manipulation !important;
+          }
+
+          /* Allow pinch zoom on the entire container */
+          .pdf-container {
+            touch-action: manipulation !important;
+          }
+
+          /* Ensure pages can be pinch-zoomed */
+          .rpv-core__inner-page {
+            touch-action: manipulation !important;
+          }
+        }
+
+        /* Zoom indicator */
+        .zoom-indicator {
+          position: absolute;
+          top: 60px;
+          right: 10px;
+          background: rgba(0, 0, 0, 0.7);
+          color: white;
+          padding: 5px 10px;
+          border-radius: 4px;
+          font-size: 14px;
+          z-index: 5;
+          pointer-events: none;
+          transition: opacity 0.3s;
+        }
+
+        /* Help text for mobile */
+        .mobile-help {
+          position: absolute;
+          bottom: 70px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(0, 0, 0, 0.7);
+          color: white;
+          padding: 5px 10px;
+          border-radius: 4px;
+          font-size: 12px;
+          z-index: 5;
+          pointer-events: none;
         }
       `}</style>
       
       <div 
+        ref={containerRef}
         className="pdf-container"
         style={{
           border: '1px solid rgba(0, 0, 0, 0.3)',
@@ -148,6 +201,20 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           </CurrentPageLabel>
         </div>
 
+        {/* Zoom indicator for mobile */}
+        {isMobile && currentScale !== 1 && !loading && (
+          <div className="zoom-indicator">
+            {Math.round(currentScale * 100)}%
+          </div>
+        )}
+
+        {/* Mobile help text */}
+        {isMobile && !loading && (
+          <div className="mobile-help">
+            Use zoom buttons below to enlarge text
+          </div>
+        )}
+
         {/* Loading state */}
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
@@ -163,21 +230,25 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           className="viewer-wrapper"
           style={{
             flex: 1,
-            overflow: 'hidden',
+            overflow: 'auto',
+            WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
           }}
         >
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
             <Viewer
               fileUrl={pdfUrl}
               plugins={[toolbarPluginInstance, pageNavigationPluginInstance]}
-              scrollMode={ScrollMode.Vertical}  // Continuous vertical scrolling
-              viewMode={ViewMode.SinglePage}    // Can change to DualPage if preferred
+              scrollMode={ScrollMode.Vertical}
+              viewMode={ViewMode.SinglePage}
               defaultScale={
                 isMobile ? SpecialZoomLevel.PageWidth : SpecialZoomLevel.PageFit
               }
               onDocumentLoad={() => {
                 console.log('PDF loaded successfully');
                 setLoading(false);
+              }}
+              onZoom={(e) => {
+                setCurrentScale(e.scale);
               }}
               renderLoader={(percentages: number) => (
                 <div className="flex items-center justify-center h-full">
@@ -228,7 +299,7 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           </Worker>
         </div>
 
-        {/* Minimal toolbar - just essentials */}
+        {/* Minimal toolbar - with prominent mobile zoom buttons */}
         <div 
           className="toolbar-wrapper"
           style={{
@@ -240,7 +311,7 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
             background: '#eeeeee',
             border: '1px solid rgba(0, 0, 0, 0.2)',
             borderRadius: '4px',
-            padding: isMobile ? '2px' : '4px',
+            padding: isMobile ? '4px' : '4px',
             fontSize: isMobile ? '14px' : '16px',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
             display: loading ? 'none' : 'block',
@@ -268,22 +339,29 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
               };
               
               return (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  {!isMobile && (
-                    <>
-                      <div style={{ padding: '0 2px' }}>
-                        <ZoomOut />
-                      </div>
-                      <div style={{ padding: '0 2px' }}>
-                        <ZoomIn />
-                      </div>
-                    </>
+                <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '8px' : '4px' }}>
+                  {/* Larger zoom buttons on mobile */}
+                  <div style={{ padding: '0 2px' }}>
+                    <div style={isMobile ? { transform: 'scale(1.2)' } : {}}>
+                      <ZoomOut />
+                    </div>
+                  </div>
+                  {isMobile && (
+                    <span style={{ fontSize: '14px', minWidth: '50px', textAlign: 'center' }}>
+                      {Math.round(currentScale * 100)}%
+                    </span>
                   )}
+                  <div style={{ padding: '0 2px' }}>
+                    <div style={isMobile ? { transform: 'scale(1.2)' } : {}}>
+                      <ZoomIn />
+                    </div>
+                  </div>
                   <div style={{ padding: '0 2px' }}>
                     <button
                       className="rpv-core__minimal-button"
                       onClick={handleFullScreen}
                       title="Enter fullscreen"
+                      style={isMobile ? { transform: 'scale(1.2)' } : {}}
                     >
                       <svg
                         aria-hidden="true"
