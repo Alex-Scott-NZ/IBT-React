@@ -289,7 +289,7 @@ const ArticleLayout = ({
         <div className="relative">
           {/* Share button at top for PDFs */}
           {pdfUrl && (
-            <div className="flex justify-end mt-1 mb-4">
+            <div className="hidden md:flex justify-end mt-1 mb-4">
               <ShareButton />
             </div>
           )}
@@ -432,7 +432,7 @@ const ArticleLayout = ({
           ) : (
             <>
               <div
-                className="font-helvetica text-lg leading-relaxed text-gray-800"
+                className="font-helvetica text-lg leading-normal text-gray-800"
                 dangerouslySetInnerHTML={{ __html: article?.content || '' }}
               />
 

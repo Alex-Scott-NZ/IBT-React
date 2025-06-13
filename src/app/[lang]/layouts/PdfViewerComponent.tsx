@@ -12,6 +12,7 @@ import {
 } from '@react-pdf-viewer/core';
 import { toolbarPlugin, ToolbarSlot } from '@react-pdf-viewer/toolbar';
 import { pageNavigationPlugin, RenderCurrentPageLabelProps } from '@react-pdf-viewer/page-navigation';
+import { zoomPlugin } from '@react-pdf-viewer/zoom';
 
 const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -46,28 +47,24 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
     };
   }, []);
 
-  // Create plugins
+  // Create plugins with zoom plugin for better control
+  const zoomPluginInstance = zoomPlugin();
   const toolbarPluginInstance = toolbarPlugin();
   const pageNavigationPluginInstance = pageNavigationPlugin();
   
   const { Toolbar } = toolbarPluginInstance;
   const { CurrentPageLabel } = pageNavigationPluginInstance;
+  const { zoomTo } = zoomPluginInstance;
 
-  // Custom zoom handlers using toolbar plugin methods
+  // Enhanced zoom handlers using zoom plugin
   const handleZoomIn = () => {
-    // Find and click the zoom in button programmatically
-    const zoomInButton = document.querySelector('.rpv-zoom__in-button');
-    if (zoomInButton instanceof HTMLElement) {
-      zoomInButton.click();
-    }
+    const newScale = Math.min(currentScale * 1.25, 4); // Max 400%
+    zoomTo(newScale);
   };
 
   const handleZoomOut = () => {
-    // Find and click the zoom out button programmatically
-    const zoomOutButton = document.querySelector('.rpv-zoom__out-button');
-    if (zoomOutButton instanceof HTMLElement) {
-      zoomOutButton.click();
-    }
+    const newScale = Math.max(currentScale * 0.8, 0.25); // Min 25%
+    zoomTo(newScale);
   };
 
   return (
@@ -151,56 +148,86 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           }
         }
 
-        /* Zoom controls overlay for mobile fullscreen */
-        .mobile-zoom-controls {
-          position: fixed;
-          right: 10px;
-          top: 50%;
-          transform: translateY(-50%);
+        /* Header zoom controls for mobile fullscreen */
+        .header-zoom-controls {
           display: flex;
-          flex-direction: column;
-          gap: 10px;
-          z-index: 1000000;
+          align-items: center;
+          gap: 8px;
         }
 
-        .zoom-button {
-          width: 50px;
-          height: 50px;
-          border-radius: 25px;
-          background: rgba(0, 0, 0, 0.8);
-          color: white;
-          border: none;
-          font-size: 24px;
+        .header-zoom-button {
+          width: 32px;
+          height: 32px;
+          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.9);
+          color: #333;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          font-size: 18px;
+          font-weight: bold;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
           touch-action: manipulation;
+          user-select: none;
+          -webkit-user-select: none;
+          -webkit-tap-highlight-color: transparent;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+          transition: all 0.1s ease;
         }
 
-        .zoom-button:active {
-          background: rgba(0, 0, 0, 0.9);
+        .header-zoom-button:active {
+          background: rgba(255, 255, 255, 1);
           transform: scale(0.95);
         }
 
-        .zoom-indicator {
-          position: absolute;
-          top: 60px;
-          right: 10px;
-          background: rgba(0, 0, 0, 0.7);
-          color: white;
-          padding: 5px 10px;
-          border-radius: 4px;
-          font-size: 14px;
-          z-index: 5;
-          pointer-events: none;
+        .header-zoom-button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
         }
 
-        /* Hide the toolbar zoom buttons but keep them in DOM */
-        .toolbar-wrapper.mobile-fullscreen .rpv-zoom__in-button,
-        .toolbar-wrapper.mobile-fullscreen .rpv-zoom__out-button {
-          position: absolute !important;
-          left: -9999px !important;
+        .zoom-percentage {
+          font-size: 12px;
+          color: #666;
+          min-width: 40px;
+          text-align: center;
+          background: rgba(255, 255, 255, 0.9);
+          padding: 2px 6px;
+          border-radius: 3px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          transition: all 0.1s ease;
+        }
+
+        /* Enhanced page info header layout */
+        .page-info-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .page-info-left {
+          flex: 1;
+          display: flex;
+          justify-content: flex-start;
+        }
+
+        .page-info-center {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+        }
+
+        .page-info-right {
+          flex: 1;
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        /* Hide zoom controls on desktop or when not in fullscreen */
+        .header-zoom-controls.hidden {
+          display: none;
         }
       `}</style>
       
@@ -218,7 +245,7 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           marginBottom: isMobile ? '20px' : '50px',
         }}
       >
-        {/* Page info header */}
+        {/* Enhanced page info header with zoom controls */}
         <div
           className="page-info-header"
           style={{
@@ -227,44 +254,60 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
             borderBottom: '1px solid rgba(0, 0, 0, 0.3)',
             display: loading ? 'none' : 'flex',
             justifyContent: 'center',
-            padding: '8px',
+            padding: '8px 12px',
           }}
         >
-          <CurrentPageLabel>
-            {(props: RenderCurrentPageLabelProps) => (
-              <span style={{ fontSize: '16px', fontWeight: '500' }}>
-                Page {props.currentPage + 1} of {props.numberOfPages}
-              </span>
-            )}
-          </CurrentPageLabel>
+          <div className="page-info-content">
+            {/* Left side - zoom controls for mobile fullscreen */}
+            <div className="page-info-left">
+              <div className={`header-zoom-controls ${!(isMobile && isFullscreen) ? 'hidden' : ''}`}>
+                <button 
+                  className="header-zoom-button" 
+                  onClick={handleZoomOut}
+                  disabled={currentScale <= 0.25}
+                  aria-label="Zoom out"
+                >
+                  −
+                </button>
+                <div className="zoom-percentage">
+                  {Math.round(currentScale * 100)}%
+                </div>
+                <button 
+                  className="header-zoom-button" 
+                  onClick={handleZoomIn}
+                  disabled={currentScale >= 4}
+                  aria-label="Zoom in"
+                >
+                  +
+                </button>
+                <button 
+                  className="header-zoom-button" 
+                  onClick={() => zoomTo(1)}
+                  aria-label="Reset zoom"
+                  style={{ fontSize: '14px', width: '36px' }}
+                >
+                  ⌂
+                </button>
+              </div>
+            </div>
+
+            {/* Center - page info */}
+            <div className="page-info-center">
+              <CurrentPageLabel>
+                {(props: RenderCurrentPageLabelProps) => (
+                  <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                    Page {props.currentPage + 1} of {props.numberOfPages}
+                  </span>
+                )}
+              </CurrentPageLabel>
+            </div>
+
+            {/* Right side - reserved for future controls */}
+            <div className="page-info-right">
+              {/* Could add exit fullscreen button here if needed */}
+            </div>
+          </div>
         </div>
-
-        {/* Zoom indicator */}
-        {currentScale !== 1 && !loading && (
-          <div className="zoom-indicator">
-            {Math.round(currentScale * 100)}%
-          </div>
-        )}
-
-        {/* Mobile zoom controls for fullscreen */}
-        {isMobile && isFullscreen && !loading && (
-          <div className="mobile-zoom-controls">
-            <button 
-              className="zoom-button" 
-              onClick={handleZoomIn}
-              aria-label="Zoom in"
-            >
-              +
-            </button>
-            <button 
-              className="zoom-button" 
-              onClick={handleZoomOut}
-              aria-label="Zoom out"
-            >
-              −
-            </button>
-          </div>
-        )}
 
         {/* Loading state */}
         {loading && (
@@ -288,7 +331,7 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
             <Viewer
               fileUrl={pdfUrl}
-              plugins={[toolbarPluginInstance, pageNavigationPluginInstance]}
+              plugins={[toolbarPluginInstance, pageNavigationPluginInstance, zoomPluginInstance]}
               scrollMode={ScrollMode.Vertical}
               viewMode={ViewMode.SinglePage}
               defaultScale={
@@ -297,11 +340,9 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
               onDocumentLoad={(e) => {
                 console.log('PDF loaded successfully');
                 setLoading(false);
-                // Store viewer reference if needed
                 viewerRef.current = e;
               }}
               onZoom={(e) => {
-                // Update our state when zoom changes
                 setCurrentScale(e.scale);
               }}
               renderLoader={(percentages: number) => (
@@ -355,7 +396,7 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
 
         {/* Toolbar */}
         <div 
-          className={`toolbar-wrapper ${isMobile && isFullscreen ? 'mobile-fullscreen' : ''}`}
+          className="toolbar-wrapper"
           style={{
             position: 'absolute',
             bottom: '16px',
@@ -394,13 +435,17 @@ const PdfViewerComponent = ({ pdfUrl }: { pdfUrl: string }) => {
               
               return (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  {/* Always render zoom buttons but hide them visually on mobile fullscreen */}
-                  <div style={{ padding: '0 2px' }} className="rpv-zoom__out-button">
-                    <ZoomOut />
-                  </div>
-                  <div style={{ padding: '0 2px' }} className="rpv-zoom__in-button">
-                    <ZoomIn />
-                  </div>
+                  {/* Show zoom buttons only on desktop or when not in mobile fullscreen */}
+                  {(!isMobile || !isFullscreen) && (
+                    <>
+                      <div style={{ padding: '0 2px' }}>
+                        <ZoomOut />
+                      </div>
+                      <div style={{ padding: '0 2px' }}>
+                        <ZoomIn />
+                      </div>
+                    </>
+                  )}
                   <div style={{ padding: '0 2px' }}>
                     <button
                       className="rpv-core__minimal-button"

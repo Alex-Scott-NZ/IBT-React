@@ -1,6 +1,6 @@
 // src\app\[lang]\admin\meilisearch\page.tsx
 
-import MeilisearchAdmin from '@/app/[lang]/components/MeilisearchAdmin';
+import MeilisearchAdmin from "../../components/MeilisearchAdmin";
 
 export default function MeilisearchAdminPage() {
   return <MeilisearchAdmin />;

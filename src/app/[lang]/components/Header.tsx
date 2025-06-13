@@ -47,17 +47,11 @@ const Header = ({ globalSettings, lang }: HeaderProps) => {
               </Link>
             </div>
             
-            {/* Right side controls - now in a row */}
+            {/* Right side controls - desktop only */}
             <div className="hidden md:flex items-center gap-3">
               <ModalSearch />
               <LanguageSwitcher currentLang={lang} />
             </div>
-          </div>
-          
-          {/* Mobile controls - also in a row */}
-          <div className="md:hidden mt-3 flex justify-end items-center gap-3">
-            <ModalSearch />
-            <LanguageSwitcher currentLang={lang} />
           </div>
         </header>
       </div>

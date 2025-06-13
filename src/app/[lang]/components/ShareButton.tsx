@@ -1,3 +1,4 @@
+// src\app\[lang]\components\ShareButton.tsx
 "use client";
 import React, { useState } from 'react';
 import {

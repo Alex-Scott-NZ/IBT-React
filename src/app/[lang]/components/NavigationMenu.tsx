@@ -30,6 +30,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import LanguageSwitcher from './LanguageSwitcher';
+import ModalSearch from './ModalSearch';
 
 // Constants
 const SOCIAL_LINKS = [
@@ -47,12 +48,12 @@ const SOCIAL_LINKS = [
 const MENU_TRANSLATIONS = {
   JOURNAL: {
     EN: '1917 Journal',
-    FR: '1917 édition française'
+    FR: '1917 édition française',
   },
   JOURNAL_HOME: {
     EN: 'journal home',
-    FR: 'accueil du journal'
-  }
+    FR: 'accueil du journal',
+  },
 } as const;
 
 // Fetcher for SWR
@@ -60,12 +61,14 @@ const fetcher = async ([url, lang]: [string, string]) => {
   // Convert lang to uppercase and append as query parameter
   const apiUrl = `${url}?lang=${lang.toUpperCase()}`;
   const response = await fetch(apiUrl);
-  
+
   if (!response.ok) throw new Error('Failed to fetch journal issues');
   const data = await response.json();
 
   // No need to filter by language anymore since the API handles it
-  return Array.isArray(data) ? data.sort((a, b) => b.slug.localeCompare(a.slug)) : [];
+  return Array.isArray(data)
+    ? data.sort((a, b) => b.slug.localeCompare(a.slug))
+    : [];
 };
 
 interface NavigationMenuProps {
@@ -75,30 +78,39 @@ interface NavigationMenuProps {
 const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
   // State management
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(null);
-  const [anchorElCollection, setAnchorElCollection] = useState<null | HTMLElement>(null);
+  const [anchorElJournal, setAnchorElJournal] = useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElCollection, setAnchorElCollection] =
+    useState<null | HTMLElement>(null);
   const [journalOpen, setJournalOpen] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
 
   // Helper function to get translation
-  const getTranslation = useCallback((key: keyof typeof MENU_TRANSLATIONS) => {
-    return MENU_TRANSLATIONS[key][lang.toUpperCase() as 'EN' | 'FR'] || MENU_TRANSLATIONS[key]['EN'];
-  }, [lang]);
+  const getTranslation = useCallback(
+    (key: keyof typeof MENU_TRANSLATIONS) => {
+      return (
+        MENU_TRANSLATIONS[key][lang.toUpperCase() as 'EN' | 'FR'] ||
+        MENU_TRANSLATIONS[key]['EN']
+      );
+    },
+    [lang]
+  );
 
   // SWR for data fetching
-  const { data: journalIssues = [], error, isLoading } = useSWR<JournalIssueNode[]>(
-    ['/api/journal-issues', lang],
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 60000,
-      dedupingInterval: 60000,
-    }
-  );
+  const {
+    data: journalIssues = [],
+    error,
+    isLoading,
+  } = useSWR<JournalIssueNode[]>(['/api/journal-issues', lang], fetcher, {
+    revalidateOnFocus: false,
+    refreshInterval: 60000,
+    dedupingInterval: 60000,
+  });
 
   // Memoized handlers
   const handleDrawerToggle = useCallback(() => {
-    setMobileOpen(prev => !prev);
+    setMobileOpen((prev) => !prev);
   }, []);
 
   const handleMenuOpen = useCallback(
@@ -121,153 +133,184 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
     (setState: React.Dispatch<React.SetStateAction<boolean>>) =>
       (event: React.MouseEvent) => {
         event.stopPropagation();
-        setState(prev => !prev);
+        setState((prev) => !prev);
       },
     []
   );
 
   // Memoized drawer content
-  const drawer = useMemo(() => (
-    <Box sx={{ textAlign: 'center' }}>
-      <List>
-        <ListItemButton
-          sx={{
-            p: 0,
-            '& .MuiSelect-select': {
-              width: '100%',
-              py: 2, // Add vertical padding to match other items
-              pl: 2, // Left padding to align with other items
-            }
-          }}
-        >
-          <LanguageSwitcher
-            currentLang={lang}
-            isMobile={true}
+  const drawer = useMemo(
+    () => (
+      <Box
+        sx={{
+          textAlign: 'center',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <List sx={{ flexGrow: 1 }}>
+          <ListItemButton
             sx={{
-              width: '100%',
-              '& .MuiOutlinedInput-root': {
+              p: 0,
+              '& .MuiSelect-select': {
                 width: '100%',
+                py: 2,
+                pl: 2,
               },
             }}
-          />
-        </ListItemButton>
-        <ListItemButton component={Link} href={`/${lang}`} onClick={handleDrawerToggle}>
-          <ListItemText primary="home" />
-        </ListItemButton>
+          >
+            <LanguageSwitcher
+              currentLang={lang}
+              isMobile={true}
+              sx={{
+                width: '100%',
+                '& .MuiOutlinedInput-root': {
+                  width: '100%',
+                },
+              }}
+            />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            href={`/${lang}`}
+            onClick={handleDrawerToggle}
+          >
+            <ListItemText primary="home" />
+          </ListItemButton>
 
-        <ListItemButton onClick={handleNestedListToggle(setJournalOpen)}>
-          <ListItemText primary={getTranslation('JOURNAL')} />
-          {journalOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-        <Collapse in={journalOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton
-              component={Link}
-              href={`/${lang}/journal`}
-              sx={{ pl: 4 }}
-              onClick={handleDrawerToggle}
-            >
-              <ListItemText primary={getTranslation('JOURNAL_HOME')} />
-            </ListItemButton>
-            {isLoading ? (
-              <ListItemButton disabled sx={{ pl: 6 }}>
-                <ListItemText primary="Loading..." />
-              </ListItemButton>
-            ) : (
-              journalIssues.map((issue) => (
-                <ListItemButton
-                  key={issue.slug}
-                  component={Link}
-                  href={`/${lang}/journal/${issue.slug}`}
-                  sx={{ pl: 6 }}
-                  onClick={handleDrawerToggle}
-                >
-                  <ListItemText primary={issue.title} />
-                </ListItemButton>
-              ))
-            )}
-          </List>
-        </Collapse>
-
-        <ListItemButton
-          component={Link}
-          href={`/${lang}/book`}
-          onClick={handleDrawerToggle}
-        >
-          <ListItemText primary="books" />
-        </ListItemButton>
-
-        {/* <ListItemButton onClick={handleNestedListToggle(setCollectionOpen)}>
-          <ListItemText primary="collection" />
-          {collectionOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-        <Collapse in={collectionOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {COLLECTION_ITEMS.map(({ label, href }) => (
+          <ListItemButton onClick={handleNestedListToggle(setJournalOpen)}>
+            <ListItemText primary={getTranslation('JOURNAL')} />
+            {journalOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={journalOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
               <ListItemButton
-                key={label}
                 component={Link}
-                href={href(lang)}
+                href={`/${lang}/journal`}
                 sx={{ pl: 4 }}
                 onClick={handleDrawerToggle}
               >
-                <ListItemText primary={label} />
+                <ListItemText primary={getTranslation('JOURNAL_HOME')} />
               </ListItemButton>
-            ))}
-          </List>
-        </Collapse> */}
+              {isLoading ? (
+                <ListItemButton disabled sx={{ pl: 6 }}>
+                  <ListItemText primary="Loading..." />
+                </ListItemButton>
+              ) : (
+                journalIssues.map((issue) => (
+                  <ListItemButton
+                    key={issue.slug}
+                    component={Link}
+                    href={`/${lang}/journal/${issue.slug}`}
+                    sx={{ pl: 6 }}
+                    onClick={handleDrawerToggle}
+                  >
+                    <ListItemText primary={issue.title} />
+                  </ListItemButton>
+                ))
+              )}
+            </List>
+          </Collapse>
 
-        <ListItemButton
-          component={Link}
-          href={`/${lang}/page/marxist-archive`}
-          onClick={handleDrawerToggle}
+          <ListItemButton
+            component={Link}
+            href={`/${lang}/book`}
+            onClick={handleDrawerToggle}
+          >
+            <ListItemText primary="books" />
+          </ListItemButton>
+
+          <ListItemButton
+            component={Link}
+            href={`/${lang}/page/marxist-archive`}
+            onClick={handleDrawerToggle}
+          >
+            <ListItemText primary="marxist archive" />
+          </ListItemButton>
+
+          <ListItemButton
+            component={Link}
+            href={`/${lang}/page/about`}
+            onClick={handleDrawerToggle}
+          >
+            <ListItemText primary="about" />
+          </ListItemButton>
+
+          <ListItemButton
+            component={Link}
+            href={`/${lang}/page/donate`}
+            onClick={handleDrawerToggle}
+          >
+            <ListItemText primary="donate" />
+          </ListItemButton>
+        </List>
+
+        {/* Social icons at the bottom of drawer */}
+        <Box
+          sx={{
+            p: 2,
+            borderTop: '1px solid rgba(0, 0, 0, 0.12)',
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 1,
+            '& .MuiIconButton-root': {
+              fontSize: '1.5rem', // Slightly smaller in drawer
+            },
+          }}
         >
-          <ListItemText primary="marxist archive" />
-        </ListItemButton>
-
-        <ListItemButton
-          component={Link}
-          href={`/${lang}/page/about`}
-          onClick={handleDrawerToggle}
-        >
-          <ListItemText primary="about" />
-        </ListItemButton>
-
-        <ListItemButton
-          component={Link}
-          href={`/${lang}/page/donate`}
-          onClick={handleDrawerToggle}
-        >
-          <ListItemText primary="donate" />
-        </ListItemButton>
-      </List>
-    </Box>
-  ), [lang, journalIssues, journalOpen, isLoading, handleDrawerToggle, handleNestedListToggle, getTranslation]);
-
+          {SOCIAL_LINKS.map(({ Icon, href }, index) => (
+            <IconButton
+              key={index}
+              color="inherit"
+              component={Link}
+              href={href}
+              target="_blank"
+              onClick={handleDrawerToggle} // Close drawer when clicking social links
+            >
+              <Icon fontSize="inherit" />
+            </IconButton>
+          ))}
+        </Box>
+      </Box>
+    ),
+    [
+      lang,
+      journalIssues,
+      journalOpen,
+      isLoading,
+      handleDrawerToggle,
+      handleNestedListToggle,
+      getTranslation,
+    ]
+  );
 
   // Memoized social icons
-  const socialIcons = useMemo(() => (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        gap: '1',
-        '& .MuiIconButton-root': { fontSize: '2rem' },
-      }}
-    >
-      {SOCIAL_LINKS.map(({ Icon, href }, index) => (
-        <IconButton
-          key={index}
-          color="inherit"
-          component={Link}
-          href={href}
-          target="_blank"
-        >
-          <Icon fontSize="inherit" />
-        </IconButton>
-      ))}
-    </Box>
-  ), []);
+  const socialIcons = useMemo(
+    () => (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: '1',
+          '& .MuiIconButton-root': { fontSize: '2rem' },
+        }}
+      >
+        {SOCIAL_LINKS.map(({ Icon, href }, index) => (
+          <IconButton
+            key={index}
+            color="inherit"
+            component={Link}
+            href={href}
+            target="_blank"
+          >
+            <Icon fontSize="inherit" />
+          </IconButton>
+        ))}
+      </Box>
+    ),
+    []
+  );
 
   // Error handling
   if (error) {
@@ -279,7 +322,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
       <AppBar position="static" color="default" component="nav">
         <Toolbar
           sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}
-          className="-ml-2 mt-4"
+          className="-ml-2 md:mt-4"
           disableGutters
           variant="dense"
         >
@@ -296,6 +339,8 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
           >
             <MenuIcon fontSize="large" />
           </IconButton>
+
+          {/* Desktop layout - no search here anymore */}
           <Box
             sx={{
               display: { xs: 'none', md: 'flex' },
@@ -354,34 +399,6 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
               <Button component={Link} href={`/${lang}/page/marxist-archive`}>
                 marxist archive
               </Button>
-              {/* <Button
-                onClick={(event) => {
-                  event.preventDefault();
-                  handleMenuOpen(setAnchorElCollection)(
-                    event as React.MouseEvent<HTMLButtonElement>
-                  );
-                }}
-                endIcon={<KeyboardArrowDownIcon />}
-              >
-                collection
-              </Button>
-              <Menu
-                anchorEl={anchorElCollection}
-                open={Boolean(anchorElCollection)}
-                onClose={handleMenuClose(setAnchorElCollection)}
-                disableScrollLock={true}
-              >
-                {COLLECTION_ITEMS.map(({ label, href }) => (
-                  <MenuItem
-                    key={label}
-                    onClick={handleMenuClose(setAnchorElCollection)}
-                    component={Link}
-                    href={href(lang)}
-                  >
-                    {label}
-                  </MenuItem>
-                ))}
-              </Menu> */}
               <Button component={Link} href={`/${lang}/page/about`}>
                 about
               </Button>
@@ -390,7 +407,44 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
               </Button>
             </ButtonGroup>
           </Box>
-          {socialIcons}
+
+{/* Mobile layout - search only */}
+<Box
+  sx={{
+    display: { xs: 'flex' }, // Always show on mobile
+    alignItems: 'center',
+    '@media (min-width: 768px)': { // Hide at 768px to match Tailwind md:
+      display: 'none'
+    }
+  }}
+>
+  <Box
+    sx={{
+      // Create a neutral context like the Header
+      backgroundColor: 'transparent',
+      '& .MuiButton-root': {
+        color: '#000000', // Pure black instead of rgba
+        fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+        fontSize: '0.875rem',
+        fontWeight: 400,
+        lineHeight: 1.75,
+        textTransform: 'none',
+        opacity: 1, // Ensure no opacity reduction
+        '&:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+        },
+        '& .MuiButton-startIcon': {
+          color: '#000000', // Make sure icon is also pure black
+        },
+      },
+    }}
+  >
+    <ModalSearch />
+  </Box>
+</Box>
+
+          {/* Desktop social icons */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>{socialIcons}</Box>
         </Toolbar>
         <Drawer
           variant="temporary"
@@ -409,7 +463,6 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ lang }) => {
       </AppBar>
     </ThemeProvider>
   );
-
 };
 
 export default NavigationMenu;

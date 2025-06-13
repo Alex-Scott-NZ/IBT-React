@@ -20,7 +20,7 @@ interface BaseLayoutProps {
 }
 
 const NavigationMenu = dynamic(() => import('../components/NavigationMenu'), {
-  suspense: true,
+  ssr: true, // Enable SSR for immediate rendering
 });
 
 const PrintLayout = dynamic(() => import('./PrintLayout'), {
@@ -34,7 +34,7 @@ const BaseLayout = ({
   rightSidebar,
   slug,
   isLoading,
-  lang
+  lang,
 }: BaseLayoutProps) => {
   if (isLoading) {
     return <LoadingFallback variant="default" />;
@@ -57,35 +57,35 @@ const BaseLayout = ({
         <div className="w-full max-w-[1108px] mx-auto pl-2 pr-2 flex-grow flex flex-col print:max-w-none print:px-4">
           <div className="print:hidden">
             <Header globalSettings={globalSettings} lang={lang} />
-            <Suspense fallback={<LoadingFallback variant="compact" />}>
-              <NavigationMenu lang={lang} />
-            </Suspense>
+            <NavigationMenu lang={lang} />
             <SiteWideNotice
-              notificationData={globalSettings?.fGGlobalSettings?.notificationBar}
+              notificationData={
+                globalSettings?.fGGlobalSettings?.notificationBar
+              }
             />
           </div>
 
-          <div className="flex flex-col nav:flex-row nav:justify-between pt-2 print:w-full">
+          <div className="flex flex-col nav:flex-row nav:justify-between pt-4 print:w-full">
             {/* Left Sidebar */}
-            <aside className={`hidden nav:block w-full ${leftSidebarWidth} print:hidden`}>
-              <div 
+            <aside
+              className={`hidden nav:block w-full ${leftSidebarWidth} print:hidden`}
+            >
+              <div
                 className="sticky custom-scrollbar nav:top-4 overflow-y-auto max-h-[calc(100vh_-_var(--header-height)_-_var(--footer-height))] mr-10"
                 style={{ paddingRight: '10px' }}
               >
                 <Suspense fallback={<LoadingFallback variant="sidebar" />}>
-                  <ErrorBoundary>
-                    {leftSidebar}
-                  </ErrorBoundary>
+                  <ErrorBoundary>{leftSidebar}</ErrorBoundary>
                 </Suspense>
               </div>
             </aside>
 
             {/* Main Content */}
-            <main className={`w-full ${mainContentWidth} print:mt-4 print:bg-white bg-custom-bg mb-4`}>
+            <main
+              className={`w-full ${mainContentWidth} print:mt-4 print:bg-white bg-custom-bg mb-4`}
+            >
               <Suspense fallback={<LoadingFallback variant="article" />}>
-                <ErrorBoundary>
-                  {mainContent}
-                </ErrorBoundary>
+                <ErrorBoundary>{mainContent}</ErrorBoundary>
               </Suspense>
             </main>
 
@@ -94,9 +94,7 @@ const BaseLayout = ({
               <aside className="hidden nav:block w-full nav:w-[20%] print:hidden">
                 <div className="sticky custom-scrollbar nav:top-4 overflow-y-auto max-h-[calc(100vh_-_var(--header-height)_-_var(--footer-height))] ml-4">
                   <Suspense fallback={<LoadingFallback variant="sidebar" />}>
-                    <ErrorBoundary>
-                      {rightSidebar}
-                    </ErrorBoundary>
+                    <ErrorBoundary>{rightSidebar}</ErrorBoundary>
                   </Suspense>
                 </div>
               </aside>

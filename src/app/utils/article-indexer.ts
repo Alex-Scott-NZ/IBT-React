@@ -492,6 +492,7 @@ export class ArticleIndexer {
           source: 'openAi',
           apiKey: process.env.OPENAI_API_KEY,
           model: 'text-embedding-3-large',
+          documentTemplateMaxBytes: 3000, // ~400-500 words
           // Include PDF content in embeddings
           documentTemplate:
             '{{doc.title}} {{doc.subtitle}} {{doc.content}} {{doc.pdfContent}}',

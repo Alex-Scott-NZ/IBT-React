@@ -15,6 +15,24 @@ import {
 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
+// Search configuration constants
+const SEARCH_CONFIG = {
+  DEBOUNCE_DELAY: 200,
+  RESULTS_PER_PAGE: 20,
+  CROP_LENGTH: 100,
+  CACHE_SIZE_LIMIT: 100,
+  HIGHLIGHT_PRE_TAG: '<mark>',
+  HIGHLIGHT_POST_TAG: '</mark>',
+  SEARCHABLE_ATTRIBUTES: [
+    'title',
+    'subtitle',
+    'content',
+    'pdfContent',
+    'contentForSearch',
+  ],
+  CROP_ATTRIBUTES: ['content', 'pdfContent', 'contentForSearch'],
+} as const;
+
 interface SearchHit {
   id: string;
   title: string;
@@ -22,8 +40,8 @@ interface SearchHit {
   slug: string;
   uri: string;
   content?: string;
-  pdfContent?: string; // Add PDF content field
-  contentForSearch?: string; // Add combined content field
+  pdfContent?: string;
+  contentForSearch?: string;
   hasRelatedPdf: boolean;
   hasRelatedAudio: boolean;
   hasRelatedVideo: boolean;
@@ -36,8 +54,8 @@ interface SearchHit {
     title?: string;
     subtitle?: string;
     content?: string;
-    pdfContent?: string; // Add formatted PDF content
-    contentForSearch?: string; // Add formatted combined content
+    pdfContent?: string;
+    contentForSearch?: string;
   };
 }
 
@@ -59,9 +77,12 @@ const ModalSearch: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [totalHits, setTotalHits] = useState(0);
   const [isMac, setIsMac] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false); // New state for next page detection
+  const [useSemanticSearch, setUseSemanticSearch] = useState(false);
 
-  const resultsPerPage = 20;
+  const resultsPerPage = SEARCH_CONFIG.RESULTS_PER_PAGE;
   const triggerRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -76,6 +97,19 @@ const ModalSearch: React.FC = () => {
 
   // Cache for recent searches
   const searchCache = useRef<Map<string, SearchResponse>>(new Map());
+
+  // Cache management
+  const manageCacheSize = useCallback(() => {
+    if (searchCache.current.size > SEARCH_CONFIG.CACHE_SIZE_LIMIT) {
+      // Remove oldest entries (simple LRU)
+      const entries = Array.from(searchCache.current.entries());
+      const toDelete = entries.slice(
+        0,
+        entries.length - SEARCH_CONFIG.CACHE_SIZE_LIMIT
+      );
+      toDelete.forEach(([key]) => searchCache.current.delete(key));
+    }
+  }, []);
 
   // Helper function to get scrollbar width
   const getScrollbarWidth = () => {
@@ -93,9 +127,17 @@ const ModalSearch: React.FC = () => {
   // Handle client-side mounting and OS detection
   useEffect(() => {
     setMounted(true);
-    // Detect if user is on Mac
     if (typeof navigator !== 'undefined') {
+      // Detect if user is on Mac
       setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0);
+
+      // Detect if user is on mobile device (no physical keyboard)
+      const isMobileDevice =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        ) ||
+        (navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform));
+      setIsMobile(isMobileDevice);
     }
   }, []);
 
@@ -166,7 +208,8 @@ const ModalSearch: React.FC = () => {
 
   const closeModal = () => {
     setIsOpen(false);
-    setCurrentPage(1); // Reset page when closing
+    setCurrentPage(1);
+    setHasNextPage(false);
     if (typeof document !== 'undefined') {
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
@@ -174,90 +217,133 @@ const ModalSearch: React.FC = () => {
     triggerRef.current?.focus();
   };
 
-  // Perform search
-  const performSearch = useCallback(
-    async (query: string, page: number = 1) => {
-      if (!query.trim() || query.length < 2) {
-        setResults([]);
-        setTotalHits(0);
-        return;
-      }
+  // Perform search with Meilisearch best practices
+const performSearch = useCallback(
+  async (query: string, page: number = 1) => {
+    if (!query.trim() || query.length < 2) {
+      setResults([]);
+      setTotalHits(0);
+      setHasNextPage(false);
+      return;
+    }
 
-      // Create cache key with page number
-      const cacheKey = `${query}-page${page}`;
-      const cached = searchCache.current.get(cacheKey);
-      if (cached) {
-        setResults(cached.hits);
-        setTotalHits(cached.estimatedTotalHits);
-        return;
-      }
+    // Create cache key with page number
+    const cacheKey = `${query}-page${page}-semantic${useSemanticSearch}`;
+    const cached = searchCache.current.get(cacheKey);
+    if (cached) {
+      // Handle cached results with +1 trick
+      const hasNext = cached.hits.length > resultsPerPage;
+      const displayHits = cached.hits.slice(0, resultsPerPage);
+      setResults(displayHits);
+      setTotalHits(cached.estimatedTotalHits);
+      setHasNextPage(hasNext);
+      return;
+    }
 
-      setLoading(true);
+    setLoading(true);
 
-      try {
-        const offset = (page - 1) * resultsPerPage;
-        const response = await fetch(`${searchHost}/indexes/articles/search`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${searchKey}`,
-            'Content-Type': 'application/json',
+    try {
+      const offset = (page - 1) * resultsPerPage;
+      
+      // Build the request body
+      const requestBody = {
+        q: query,
+        limit: resultsPerPage + 1,
+        offset: offset,
+        filter: `language = "${currentLang}"`,
+        attributesToHighlight: SEARCH_CONFIG.SEARCHABLE_ATTRIBUTES,
+        attributesToCrop: SEARCH_CONFIG.CROP_ATTRIBUTES,
+        cropLength: SEARCH_CONFIG.CROP_LENGTH,
+        highlightPreTag: SEARCH_CONFIG.HIGHLIGHT_PRE_TAG,
+        highlightPostTag: SEARCH_CONFIG.HIGHLIGHT_POST_TAG,
+        // Only add hybrid search when the toggle is enabled
+        ...(useSemanticSearch && {
+          hybrid: {
+            semanticRatio: 1,
+            embedder: 'default',
           },
-          body: JSON.stringify({
-            q: query,
-            limit: resultsPerPage,
-            offset: offset,
-            filter: `language = "${currentLang}"`,
-            attributesToHighlight: [
-              'title',
-              'subtitle',
-              'content',
-              'pdfContent',
-              'contentForSearch',
-            ], // Add PDF fields
-            attributesToCrop: ['content', 'pdfContent', 'contentForSearch'], // Crop PDF content too
-            cropLength: 150,
-            highlightPreTag: '<mark>',
-            highlightPostTag: '</mark>',
-            hybrid: {
-              semanticRatio: 0.5,
-              embedder: 'default',
-            },
-          }),
-        });
+        }),
+      };
 
-        const data: SearchResponse = await response.json();
+      const response = await fetch(`${searchHost}/indexes/articles/search`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${searchKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
 
-        // Cache the results
-        searchCache.current.set(cacheKey, data);
+      const data: SearchResponse = await response.json();
 
-        setResults(data.hits || []);
-        setTotalHits(data.estimatedTotalHits || 0);
-      } catch (error) {
-        console.error('Search error:', error);
-        setResults([]);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [searchHost, searchKey, currentLang, resultsPerPage]
-  );
+      // Add this debug logging:
+      console.log('🔍 Search Debug:', {
+        query,
+        useSemanticSearch,
+        hasHybrid: !!requestBody.hybrid,
+        processingTime: data.processingTimeMs,
+        totalHits: data.estimatedTotalHits,
+        cacheKey,
+        requestBody: requestBody,
+        firstThreeResults: data.hits.slice(0, 3).map((hit) => ({
+          id: hit.id,
+          title: hit.title,
+        })),
+      });
+
+      // Implement the +1 trick for pagination
+      const hasNext = data.hits.length > resultsPerPage;
+      const displayHits = data.hits.slice(0, resultsPerPage);
+
+      // Cache the full results (including the +1)
+      searchCache.current.set(cacheKey, data);
+      manageCacheSize();
+
+      setResults(displayHits);
+      setTotalHits(data.estimatedTotalHits || 0);
+      setHasNextPage(hasNext);
+    } catch (error) {
+      console.error('Search error:', error);
+      setResults([]);
+      setTotalHits(0);
+      setHasNextPage(false);
+    } finally {
+      setLoading(false);
+    }
+  },
+  [
+    searchHost,
+    searchKey,
+    currentLang,
+    resultsPerPage,
+    manageCacheSize,
+    useSemanticSearch,
+  ]
+);
 
   // Debounced search - reset to page 1 when query changes
   useEffect(() => {
-    setCurrentPage(1);
+    // Reset to page 1 when query changes
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+      return;
+    }
+
+    // Only search if we're on page 1
     const timer = setTimeout(() => {
       performSearch(searchQuery, 1);
-    }, 200);
+    }, SEARCH_CONFIG.DEBOUNCE_DELAY);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, performSearch]); // Added performSearch
+  }, [searchQuery, useSemanticSearch, performSearch]);
 
   // Search when page changes
   useEffect(() => {
-    if (searchQuery) {
+    // Only search on page changes (not initial page 1 from query change)
+    if (currentPage > 1 && searchQuery) {
       performSearch(searchQuery, currentPage);
     }
-  }, [currentPage, performSearch, searchQuery]); // Added searchQuery
+  }, [currentPage, useSemanticSearch, performSearch, searchQuery]);
 
   // Helper functions
   const renderHighlighted = (text: string | undefined) => {
@@ -271,11 +357,6 @@ const ModalSearch: React.FC = () => {
     closeModal();
     window.location.href = getArticleUrl(uri);
   };
-
-  // Pagination calculations
-  const totalPages = Math.ceil(totalHits / resultsPerPage);
-  const startResult = (currentPage - 1) * resultsPerPage + 1;
-  const endResult = Math.min(currentPage * resultsPerPage, totalHits);
 
   // Custom badge components
   const MediaBadge = ({
@@ -302,7 +383,7 @@ const ModalSearch: React.FC = () => {
 
   return (
     <>
-      {/* Search button using MUI to match LanguageSwitcher */}
+      {/* Search button */}
       <Button
         ref={triggerRef}
         onClick={openModal}
@@ -319,17 +400,25 @@ const ModalSearch: React.FC = () => {
           },
           '& .MuiButton-endIcon': {
             ml: 1,
+            display: { xs: 'none', md: 'flex' },
+          },
+          '& .MuiButton-startIcon': {
+            '& svg': {
+              fontSize: { xs: '1.4rem', md: '1.2rem' },
+              color: { xs: '#d32f2f', md: 'inherit' },
+            },
           },
         }}
         endIcon={
-          mounted && (
-            <kbd className="px-1.5 py-0.5 text-[11px] bg-gray-100 text-gray-600 rounded border border-gray-300 font-mono">
-              {isMac ? '⌘' : 'Ctrl'}+K
-            </kbd>
-          )
+          <kbd className="hidden md:inline px-1.5 py-0.5 text-[11px] bg-gray-100 text-gray-600 rounded border border-gray-300 font-mono">
+            {mounted && isMac ? '⌘' : 'Ctrl'}+K
+          </kbd>
         }
       >
-        Search
+        <span className="md:hidden px-4 py-0.5 text-[11px] bg-gray-100 text-gray-600 rounded border border-gray-300 font-mono min-w-[80px]">
+          Search
+        </span>
+        <span className="hidden md:inline">Search</span>
       </Button>
 
       {/* Modal - only render on client and when open */}
@@ -398,6 +487,34 @@ const ModalSearch: React.FC = () => {
                 </button>
               </div>
 
+              <div className="flex items-center justify-between px-6 py-2 border-b border-gray-200 bg-gray-50">
+                <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={useSemanticSearch}
+                    onChange={(e) => {
+                      setUseSemanticSearch(e.target.checked);
+                      // Clear cache when switching modes
+                      searchCache.current.clear();
+                    }}
+                    className="w-4 h-4 text-communist-red bg-gray-100 border-gray-300 rounded focus:ring-communist-red focus:ring-2"
+                  />
+                  <span className="select-none">
+                    AI-powered search
+                    <span className="text-xs text-gray-500 ml-1">
+                      (find related concepts)
+                    </span>
+                  </span>
+                </label>
+
+                {/* Optional: Show processing time if available */}
+                {results.length > 0 && (
+                  <span className="text-xs text-gray-500">
+                    {useSemanticSearch ? 'Semantic + Keyword' : 'Keyword only'}
+                  </span>
+                )}
+              </div>
+
               {/* Results - Fixed height with flex layout */}
               <div className="h-[60vh] overflow-y-auto bg-white flex flex-col">
                 {/* Initial loading state */}
@@ -436,12 +553,15 @@ const ModalSearch: React.FC = () => {
                 {/* Results layout - shown when we have results OR when loading with existing results */}
                 {(results.length > 0 || (loading && totalHits > 0)) && (
                   <div className="flex flex-col h-full">
-                    {/* Results count */}
+                    {/* Results count - updated */}
                     <div className="px-6 py-3 text-sm text-gray-600 border-b border-gray-200 flex-shrink-0">
                       {loading ? (
                         <span className="text-gray-500">Loading...</span>
                       ) : (
-                        `Showing ${startResult}-${endResult} of ${totalHits} results`
+                        <>
+                          Showing {results.length} results
+                          {totalHits > 0 && ` (${totalHits} total found)`}
+                        </>
                       )}
                     </div>
 
@@ -579,87 +699,60 @@ const ModalSearch: React.FC = () => {
                       )}
                     </div>
 
-                    {/* Pagination - always visible when we have multiple pages */}
-                    {totalPages > 1 && (
-                      <div className="flex items-center justify-center gap-2 p-4 border-t border-gray-200 flex-shrink-0">
-                        <button
-                          onClick={() =>
-                            setCurrentPage((prev) => Math.max(1, prev - 1))
-                          }
-                          disabled={currentPage === 1 || loading}
-                          className="p-2 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                          style={{
-                            border: 'none',
-                            outline: 'none',
-                            appearance: 'none',
-                            WebkitAppearance: 'none',
-                            MozAppearance: 'none',
-                          }}
-                        >
-                          <ChevronLeft size={16} className="text-gray-600" />
-                        </button>
-
-                        <div className="flex items-center gap-1">
-                          {Array.from(
-                            { length: Math.min(7, totalPages) },
-                            (_, i) => {
-                              let pageNum;
-                              if (totalPages <= 7) {
-                                pageNum = i + 1;
-                              } else if (currentPage <= 4) {
-                                pageNum = i + 1;
-                              } else if (currentPage >= totalPages - 3) {
-                                pageNum = totalPages - 6 + i;
-                              } else {
-                                pageNum = currentPage - 3 + i;
-                              }
-
-                              if (pageNum < 1 || pageNum > totalPages)
-                                return null;
-
-                              return (
-                                <button
-                                  key={pageNum}
-                                  onClick={() => setCurrentPage(pageNum)}
-                                  disabled={loading}
-                                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                                    currentPage === pageNum
-                                      ? 'bg-communist-red text-white'
-                                      : 'hover:bg-gray-100 text-gray-700'
-                                  } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                  style={{
-                                    border: 'none',
-                                    outline: 'none',
-                                    appearance: 'none',
-                                    WebkitAppearance: 'none',
-                                    MozAppearance: 'none',
-                                  }}
-                                >
-                                  {pageNum}
-                                </button>
-                              );
-                            }
+                    {/* Updated Pagination - show when we have results and potential for more pages */}
+                    {(totalHits > resultsPerPage ||
+                      hasNextPage ||
+                      currentPage > 1) && (
+                      <div className="flex items-center justify-between p-4 border-t border-gray-200 flex-shrink-0">
+                        {/* Results info */}
+                        <div className="text-sm text-gray-600">
+                          {loading ? (
+                            <span className="text-gray-500">Loading...</span>
+                          ) : (
+                            `Page ${currentPage} • ${totalHits} total results`
                           )}
                         </div>
 
-                        <button
-                          onClick={() =>
-                            setCurrentPage((prev) =>
-                              Math.min(totalPages, prev + 1)
-                            )
-                          }
-                          disabled={currentPage === totalPages || loading}
-                          className="p-2 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                          style={{
-                            border: 'none',
-                            outline: 'none',
-                            appearance: 'none',
-                            WebkitAppearance: 'none',
-                            MozAppearance: 'none',
-                          }}
-                        >
-                          <ChevronRight size={16} className="text-gray-600" />
-                        </button>
+                        {/* Navigation buttons */}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() =>
+                              setCurrentPage((prev) => Math.max(1, prev - 1))
+                            }
+                            disabled={currentPage === 1 || loading}
+                            className="flex items-center gap-1 px-3 py-1 rounded text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            style={{
+                              border: 'none',
+                              outline: 'none',
+                              appearance: 'none',
+                              WebkitAppearance: 'none',
+                              MozAppearance: 'none',
+                            }}
+                          >
+                            <ChevronLeft size={16} className="text-gray-600" />
+                            Previous
+                          </button>
+
+                          <span className="px-3 py-1 text-sm text-gray-600">
+                            Page {currentPage}
+                          </span>
+
+                          <button
+                            onClick={() => setCurrentPage((prev) => prev + 1)}
+                            disabled={!hasNextPage || loading}
+                            className="flex items-center gap-1 px-3 py-1 rounded text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            style={{
+                              border: 'none',
+                              outline: 'none',
+                              appearance: 'none',
+                              WebkitAppearance: 'none',
+                              MozAppearance: 'none',
+                            }}
+                          >
+                            Next
+                            <ChevronRight size={16} className="text-gray-600" />
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
